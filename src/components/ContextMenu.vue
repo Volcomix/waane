@@ -1,12 +1,13 @@
 <template>
   <div
     v-if="value"
+    ref="scrim"
     class="scrim"
     @contextmenu.prevent.stop
     @mouseenter.once="translate"
     @mousedown.self="hide"
   >
-    <ul v-show="hasPosition" class="menu body2" :style="position">
+    <ul ref="menu" class="menu body2" :class="visibility" :style="position">
       <slot />
     </ul>
   </div>
@@ -20,9 +21,9 @@ export default {
   },
   data() {
     return {
-      hasPosition: false,
       x: 0,
       y: 0,
+      hasPosition: false,
     }
   },
   computed: {
@@ -32,12 +33,18 @@ export default {
         left: `${this.x}px`,
       }
     },
+    visibility() {
+      return {
+        hidden: !this.hasPosition,
+      }
+    },
   },
   methods: {
     translate(event) {
+      const { scrim, menu } = this.$refs
+      this.x = Math.min(event.clientX, scrim.clientWidth - menu.clientWidth)
+      this.y = Math.min(event.clientY, scrim.clientHeight - menu.clientHeight)
       this.hasPosition = true
-      this.x = event.clientX
-      this.y = event.clientY
     },
     hide() {
       this.hasPosition = false
@@ -60,5 +67,8 @@ export default {
   background-color: rgb(var(--background));
   color: rgb(var(--on-background));
   list-style-type: none;
+}
+.hidden {
+  visibility: hidden;
 }
 </style>
