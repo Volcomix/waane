@@ -7,9 +7,9 @@
     @mouseenter.once="translate"
     @mousedown.self="hide"
   >
-    <ul ref="menu" class="menu body2" :class="visibility" :style="position">
+    <ol ref="menu" class="menu body2" :class="visibility" :style="position">
       <slot />
-    </ul>
+    </ol>
   </div>
 </template>
 
@@ -63,7 +63,8 @@ export default {
 .menu {
   position: absolute;
   margin: 0;
-  padding: 8px 16px;
+  min-width: 112px;
+  padding: 8px 0;
   background-color: rgb(var(--background));
   color: rgb(var(--on-background));
   list-style-type: none;
