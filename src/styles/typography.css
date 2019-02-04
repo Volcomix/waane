@@ -1,0 +1,66 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500');
+
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+.headline1,
+h1 {
+  font-size: 96px;
+  font-weight: 300;
+}
+.headline2,
+h2 {
+  font-size: 60px;
+  font-weight: 300;
+}
+.headline3,
+h3 {
+  font-size: 48px;
+  font-weight: 400;
+}
+.headline4,
+h4 {
+  font-size: 34px;
+  font-weight: 400;
+}
+.headline5,
+h5 {
+  font-size: 24px;
+  font-weight: 400;
+}
+.headline6,
+h6 {
+  font-size: 20px;
+  font-weight: 500;
+}
+.subtitle1 {
+  font-size: 16px;
+  font-weight: 400;
+}
+.subtitle2 {
+  font-size: 14px;
+  font-weight: 500;
+}
+.body1 {
+  font-size: 16px;
+  font-weight: 400;
+}
+.body2 {
+  font-size: 14px;
+  font-weight: 400;
+}
+.button {
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+.caption {
+  font-size: 12px;
+  font-weight: 400;
+}
+.overline {
+  font-size: 14px;
+  font-weight: 400;
+  text-transform: uppercase;
+}
