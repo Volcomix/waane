@@ -1,7 +1,7 @@
 <template>
   <ContextMenu :value="value" v-on="$listeners">
-    <MenuItem>Sloubi</MenuItem>
-    <MenuItem>Testouille</MenuItem>
+    <MenuItem @click="log('Sloubi')">Sloubi</MenuItem>
+    <MenuItem @click="log('Pipoup')">Pipoup</MenuItem>
   </ContextMenu>
 </template>
 
@@ -17,6 +17,11 @@ export default {
   },
   props: {
     value: Boolean,
+  },
+  methods: {
+    log(message) {
+      console.log(message)
+    },
   },
 }
 </script>

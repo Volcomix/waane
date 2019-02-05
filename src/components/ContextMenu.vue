@@ -7,7 +7,13 @@
     @mouseenter.once="translate"
     @mousedown.self="hide"
   >
-    <ol ref="menu" class="menu body2" :class="visibility" :style="position">
+    <ol
+      ref="menu"
+      class="menu body2"
+      :class="visibility"
+      :style="position"
+      @click="hide"
+    >
       <slot />
     </ol>
   </div>
