@@ -68,6 +68,7 @@ export default {
 }
 .menu {
   position: absolute;
+  transition: opacity 150ms var(--easing-decelerate);
   margin: 0;
   min-width: 112px;
   padding: 8px 0;
@@ -76,6 +77,6 @@ export default {
   list-style-type: none;
 }
 .hidden {
-  visibility: hidden;
+  opacity: 0;
 }
 </style>
