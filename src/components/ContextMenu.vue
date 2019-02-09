@@ -3,7 +3,6 @@
     v-if="value"
     ref="scrim"
     class="scrim"
-    @contextmenu.prevent.stop
     @mouseenter.once="translate"
     @mousedown.self="hide"
   >
@@ -12,7 +11,7 @@
       class="menu body2"
       :class="visibility"
       :style="position"
-      @click="hide"
+      @mouseup="hide"
     >
       <slot />
     </ol>
@@ -49,7 +48,11 @@ export default {
     translate(event) {
       const { scrim, menu } = this.$refs
       this.x = Math.min(event.clientX, scrim.clientWidth - menu.clientWidth)
-      this.y = Math.min(event.clientY, scrim.clientHeight - menu.clientHeight)
+      if (event.clientY + menu.clientHeight > scrim.clientHeight) {
+        this.y = event.clientY - menu.clientHeight
+      } else {
+        this.y = event.clientY
+      }
       this.hasPosition = true
     },
     hide() {
@@ -75,6 +78,10 @@ export default {
   background-color: rgb(var(--background));
   color: rgb(var(--on-background));
   list-style-type: none;
+  pointer-events: none;
+}
+.menu > * {
+  pointer-events: auto;
 }
 .hidden {
   opacity: 0;

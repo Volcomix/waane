@@ -1,5 +1,7 @@
 <template>
-  <li class="list-item" v-on="$listeners"><slot /></li>
+  <li class="menu-item" @mouseup="$emit('click', $event)">
+    <slot />
+  </li>
 </template>
 
 <script>
@@ -9,13 +11,13 @@ export default {
 </script>
 
 <style scoped>
-.list-item {
+.menu-item {
   padding: 0 16px;
   cursor: pointer;
   user-select: none;
   line-height: 48px;
 }
-.list-item:hover {
-  background-color: rgba(var(--primary), 0.09);
+.menu-item:hover {
+  background-color: rgba(var(--primary), 0.08);
 }
 </style>
