@@ -52,7 +52,7 @@ html {
 body {
   margin: 0;
   height: 100%;
-  background-color: rgba(var(--background), 0.85);
+  background-color: rgba(var(--background), 0.87);
 }
 #app {
   display: flex;

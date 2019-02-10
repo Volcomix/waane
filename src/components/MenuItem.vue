@@ -18,6 +18,6 @@ export default {
   line-height: 36px;
 }
 .menu-item:hover {
-  background-color: rgba(var(--primary), 0.08);
+  background-color: rgba(var(--primary), 0.04);
 }
 </style>

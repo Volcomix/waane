@@ -95,7 +95,7 @@ export default {
   border-radius: 4px;
   min-width: 112px;
   height: auto;
-  background-color: rgba(var(--background), 0.85);
+  background-color: rgba(var(--background), 0.95);
   color: rgb(var(--on-background));
   pointer-events: none;
 }

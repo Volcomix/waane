@@ -1,11 +1,11 @@
 :root {
-  --primary: 0, 229, 255;
-  --primary-light: 110, 255, 255;
-  --primary-dark: 0, 178, 204;
+  --primary: 0, 150, 136;
+  --primary-light: 82, 199, 184;
+  --primary-dark: 0, 103, 91;
   --on-primary: 0, 0, 0;
-  --on-primary-light: var(--on-primary);
-  --on-primary-dark: var(--on-primary);
+  --on-primary-light: 0, 0, 0;
+  --on-primary-dark: 255, 255, 255;
 
-  --background: 0, 10, 18;
+  --background: 38, 40, 47;
   --on-background: 255, 255, 255;
 }

@@ -18,7 +18,7 @@ export default {
   border-radius: 4px;
   min-width: 150px;
   padding: 0 16px 24px 16px;
-  background-color: rgba(var(--background), 0.5);
+  background-color: rgba(var(--background), 0.54);
   color: rgb(var(--on-background));
 }
 .header {
