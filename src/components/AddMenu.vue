@@ -2,10 +2,10 @@
   <ContextMenu :value="value" v-on="$listeners">
     <MenuItem
       v-for="audioNode in audioNodes"
-      :key="audioNode"
+      :key="audioNode.method"
       @click="log(audioNode)"
     >
-      {{ audioNode }}
+      {{ audioNode.name }}
     </MenuItem>
   </ContextMenu>
 </template>
@@ -27,9 +27,16 @@ export default {
     audioNodes() {
       return Object.keys(BaseAudioContext.prototype)
         .filter(method => method.startsWith('create'))
-        .map(method => method.substring('create'.length))
-        .filter(nodeName => window[`${nodeName}Node`])
-        .sort()
+        .map(method => ({
+          name: method.substring('create'.length),
+          method,
+        }))
+        .filter(({ name }) => window[`${name}Node`])
+        .map(({ name, method }) => ({
+          name: name.replace(/(.)([A-Z][a-z])/g, '$1 $2'),
+          method,
+        }))
+        .sort((a, b) => a.name.localeCompare(b.name))
     },
   },
   methods: {
