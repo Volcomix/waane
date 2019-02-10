@@ -15,7 +15,7 @@ export default {
   padding: 0 16px;
   cursor: pointer;
   user-select: none;
-  line-height: 48px;
+  line-height: 36px;
 }
 .menu-item:hover {
   background-color: rgba(var(--primary), 0.08);

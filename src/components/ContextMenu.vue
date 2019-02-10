@@ -92,9 +92,10 @@ export default {
   display: flex;
   flex-direction: column;
   transition: opacity 150ms var(--easing-decelerate);
+  border-radius: 4px;
   min-width: 112px;
   height: auto;
-  background-color: rgb(var(--background));
+  background-color: rgba(var(--background), 0.85);
   color: rgb(var(--on-background));
   pointer-events: none;
 }

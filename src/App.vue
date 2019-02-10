@@ -1,33 +1,40 @@
 <template>
   <div id="app" @contextmenu.prevent="showAddMenu">
     <StartIcon v-if="isStartIconVisible" />
-    <AddMenu v-model="isAddMenuVisible" />
+    <AddMenu v-model="isAddMenuVisible" @add="add" />
+    <AudioNode v-if="newAudioNode" v-bind="newAudioNode" />
   </div>
 </template>
 
 <script>
 import StartIcon from './components/StartIcon.vue'
 import AddMenu from './components/AddMenu.vue'
+import AudioNode from './components/AudioNode.vue'
 
 export default {
   name: 'app',
   components: {
     StartIcon,
     AddMenu,
+    AudioNode,
   },
   data() {
     return {
       isAddMenuVisible: false,
+      newAudioNode: undefined,
     }
   },
   computed: {
     isStartIconVisible() {
-      return !this.isAddMenuVisible
+      return !this.isAddMenuVisible && !this.newAudioNode
     },
   },
   methods: {
     showAddMenu() {
       this.isAddMenuVisible = true
+    },
+    add(audioNode) {
+      this.newAudioNode = audioNode
     },
   },
 }
