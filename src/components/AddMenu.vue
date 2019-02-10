@@ -1,7 +1,12 @@
 <template>
   <ContextMenu :value="value" v-on="$listeners">
-    <MenuItem @click="log('Sloubi')">Sloubi</MenuItem>
-    <MenuItem @click="log('Pipoup')">Pipoup</MenuItem>
+    <MenuItem
+      v-for="audioNode in audioNodes"
+      :key="audioNode"
+      @click="log(audioNode)"
+    >
+      {{ audioNode }}
+    </MenuItem>
   </ContextMenu>
 </template>
 
@@ -17,6 +22,15 @@ export default {
   },
   props: {
     value: Boolean,
+  },
+  computed: {
+    audioNodes() {
+      return Object.keys(BaseAudioContext.prototype)
+        .filter(method => method.startsWith('create'))
+        .map(method => method.substring('create'.length))
+        .filter(nodeName => window[`${nodeName}Node`])
+        .sort()
+    },
   },
   methods: {
     log(message) {

@@ -6,15 +6,17 @@
     @mouseenter.once="translate"
     @mousedown.self="hide"
   >
-    <ol
-      ref="menu"
-      class="menu body2"
+    <div
+      ref="container"
+      class="container"
       :class="visibility"
       :style="position"
       @mouseup="hide"
     >
-      <slot />
-    </ol>
+      <ol class="menu body2" @mouseup.self.stop>
+        <slot />
+      </ol>
+    </div>
   </div>
 </template>
 
@@ -28,15 +30,20 @@ export default {
     return {
       x: 0,
       y: 0,
+      height: undefined,
       hasPosition: false,
     }
   },
   computed: {
     position() {
-      return {
-        top: `${this.y}px`,
-        left: `${this.x}px`,
+      if (this.hasPosition) {
+        return {
+          top: `${this.y}px`,
+          left: `${this.x}px`,
+          height: this.height ? `${this.height}px` : undefined,
+        }
       }
+      return undefined
     },
     visibility() {
       return {
@@ -46,12 +53,21 @@ export default {
   },
   methods: {
     translate(event) {
-      const { scrim, menu } = this.$refs
-      this.x = Math.min(event.clientX, scrim.clientWidth - menu.clientWidth)
-      if (event.clientY + menu.clientHeight > scrim.clientHeight) {
-        this.y = event.clientY - menu.clientHeight
+      const { clientX: mouseX, clientY: mouseY } = event
+      const { scrim, container } = this.$refs
+      this.x = Math.min(mouseX, scrim.clientWidth - container.clientWidth)
+      if (mouseY + container.clientHeight <= scrim.clientHeight) {
+        this.y = mouseY
+        this.height = undefined
+      } else if (mouseY - container.clientHeight >= 0) {
+        this.y = mouseY - container.clientHeight
+        this.height = undefined
+      } else if (mouseY > scrim.clientHeight / 2) {
+        this.y = 0
+        this.height = mouseY
       } else {
-        this.y = event.clientY
+        this.y = mouseY
+        this.height = scrim.clientHeight - mouseY
       }
       this.hasPosition = true
     },
@@ -71,18 +87,22 @@ export default {
   bottom: 0;
   left: 0;
 }
-.menu {
+.container {
   position: absolute;
+  display: flex;
+  flex-direction: column;
   transition: opacity 150ms var(--easing-decelerate);
-  margin: 0;
   min-width: 112px;
-  padding: 8px 0;
+  height: auto;
   background-color: rgb(var(--background));
   color: rgb(var(--on-background));
-  list-style-type: none;
   pointer-events: none;
 }
-.menu > * {
+.menu {
+  overflow: auto;
+  margin: 8px 0;
+  padding: 0;
+  list-style-type: none;
   pointer-events: auto;
 }
 .hidden {
