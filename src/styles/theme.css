@@ -1,10 +1,10 @@
 :root {
-  --primary: 0, 150, 136;
-  --primary-light: 82, 199, 184;
-  --primary-dark: 0, 103, 91;
+  --primary: 0, 188, 212;
+  --primary-light: 98, 239, 255;
+  --primary-dark: 0, 139, 163;
   --on-primary: 0, 0, 0;
-  --on-primary-light: 0, 0, 0;
-  --on-primary-dark: 255, 255, 255;
+  --on-primary-light: var(--on-primary);
+  --on-primary-dark: var(--on-primary);
 
   --background: 38, 40, 47;
   --on-background: 255, 255, 255;
