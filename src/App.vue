@@ -15,7 +15,11 @@
     />
     <StartIcon v-if="isStartIconVisible" />
     <AddMenu v-model="isAddMenuVisible" @add="add" />
-    <AudioNode v-if="newAudioNode" v-bind="newAudioNode" />
+    <AudioNode
+      v-if="newAudioNode"
+      v-bind="newAudioNode"
+      :key="audioNodes.length"
+    />
   </div>
 </template>
 
@@ -95,5 +99,8 @@ body {
   overflow: hidden;
   height: 100%;
   user-select: none;
+}
+#app:focus {
+  outline: none;
 }
 </style>
