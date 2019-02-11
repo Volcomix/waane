@@ -3,9 +3,7 @@
     <MenuItem
       v-for="audioNode in audioNodes"
       :key="audioNode.method"
-      @click="
-        $emit('add', { ...audioNode, x: $event.clientX, y: $event.clientY })
-      "
+      @click="add(audioNode, $event)"
     >
       {{ audioNode.name }}
     </MenuItem>
@@ -39,6 +37,11 @@ export default {
           method,
         }))
         .sort((a, b) => a.name.localeCompare(b.name))
+    },
+  },
+  methods: {
+    add(audioNode, event) {
+      this.$emit('add', { ...audioNode, x: event.clientX, y: event.clientY })
     },
   },
 }
