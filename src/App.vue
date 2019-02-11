@@ -1,10 +1,12 @@
 <template>
   <div
     id="app"
+    tabindex="-1"
     @contextmenu.prevent="showAddMenu"
     @mousemove="move"
     @mousedown.left="endMove"
     @mousedown.right="cancel"
+    @keydown.escape="cancel"
   >
     <AudioNode
       v-for="(audioNode, index) in audioNodes"
@@ -44,7 +46,9 @@ export default {
     },
   },
   methods: {
-    showAddMenu() {
+    showAddMenu(event) {
+      // Required to handle keydown events
+      event.target.focus()
       this.isAddMenuVisible = true
     },
     add(audioNode) {
@@ -63,9 +67,8 @@ export default {
       }
     },
     cancel() {
-      if (this.newAudioNode) {
-        this.newAudioNode = undefined
-      }
+      this.isAddMenuVisible = false
+      this.newAudioNode = undefined
     },
   },
 }

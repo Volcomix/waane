@@ -51,6 +51,13 @@ export default {
       }
     },
   },
+  watch: {
+    value(value) {
+      if (!value) {
+        this.hasPosition = false
+      }
+    },
+  },
   methods: {
     translate(event) {
       const { clientX: mouseX, clientY: mouseY } = event
@@ -72,7 +79,6 @@ export default {
       this.hasPosition = true
     },
     hide() {
-      this.hasPosition = false
       this.$emit('input', false)
     },
   },
