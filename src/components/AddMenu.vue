@@ -3,7 +3,9 @@
     <MenuItem
       v-for="audioNode in audioNodes"
       :key="audioNode.method"
-      @click="$emit('add', audioNode)"
+      @click="
+        $emit('add', { ...audioNode, x: $event.clientX, y: $event.clientY })
+      "
     >
       {{ audioNode.name }}
     </MenuItem>

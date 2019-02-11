@@ -1,5 +1,16 @@
 <template>
-  <div id="app" @contextmenu.prevent="showAddMenu">
+  <div
+    id="app"
+    @contextmenu.prevent="showAddMenu"
+    @mousemove="move"
+    @mousedown.left="endMove"
+    @mousedown.right="cancel"
+  >
+    <AudioNode
+      v-for="(audioNode, index) in audioNodes"
+      :key="index"
+      v-bind="audioNode"
+    />
     <StartIcon v-if="isStartIconVisible" />
     <AddMenu v-model="isAddMenuVisible" @add="add" />
     <AudioNode v-if="newAudioNode" v-bind="newAudioNode" />
@@ -22,11 +33,14 @@ export default {
     return {
       isAddMenuVisible: false,
       newAudioNode: undefined,
+      audioNodes: [],
     }
   },
   computed: {
     isStartIconVisible() {
-      return !this.isAddMenuVisible && !this.newAudioNode
+      return (
+        !this.isAddMenuVisible && !this.newAudioNode && !this.audioNodes.length
+      )
     },
   },
   methods: {
@@ -35,6 +49,23 @@ export default {
     },
     add(audioNode) {
       this.newAudioNode = audioNode
+    },
+    move(event) {
+      if (this.newAudioNode) {
+        this.newAudioNode.x = event.clientX
+        this.newAudioNode.y = event.clientY
+      }
+    },
+    endMove() {
+      if (this.newAudioNode) {
+        this.audioNodes.push(this.newAudioNode)
+        this.newAudioNode = undefined
+      }
+    },
+    cancel() {
+      if (this.newAudioNode) {
+        this.newAudioNode = undefined
+      }
     },
   },
 }
@@ -60,5 +91,6 @@ body {
   align-items: center;
   overflow: hidden;
   height: 100%;
+  user-select: none;
 }
 </style>

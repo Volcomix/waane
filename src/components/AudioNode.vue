@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" :style="position">
     <span class="header subtitle2">{{ name }}</span>
   </div>
 </template>
@@ -9,12 +9,23 @@ export default {
   name: 'AudioNode',
   props: {
     name: String,
+    x: Number,
+    y: Number,
+  },
+  computed: {
+    position() {
+      return {
+        top: `${this.y}px`,
+        left: `${this.x}px`,
+      }
+    },
   },
 }
 </script>
 
 <style scoped>
 .container {
+  position: absolute;
   border-radius: 4px;
   min-width: 150px;
   padding: 0 16px 24px 16px;
