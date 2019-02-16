@@ -1,5 +1,5 @@
 <template>
-  <div class="container" :style="position">
+  <div class="container" tabindex="-1" :style="position" v-on="$listeners">
     <span class="header subtitle2">{{ name }}</span>
   </div>
 </template>
@@ -20,17 +20,25 @@ export default {
       }
     },
   },
+  mounted() {
+    this.$el.focus()
+  },
 }
 </script>
 
 <style scoped>
 .container {
   position: absolute;
+  transition: box-shadow 100ms var(--easing-standard);
   border-radius: 4px;
   min-width: 150px;
   padding: 0 16px 24px 16px;
   background-color: rgba(var(--background), 0.54);
   color: rgb(var(--on-background));
+}
+.container:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgb(var(--primary));
 }
 .header {
   display: flex;

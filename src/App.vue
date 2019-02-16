@@ -3,8 +3,9 @@
     id="app"
     tabindex="-1"
     @contextmenu.prevent="showAddMenu"
-    @mousemove="move"
-    @mousedown.left="endMove"
+    @mousemove="moveNode"
+    @mouseup.left="endMovingNode"
+    @mousedown.left="endAddingNode"
     @mousedown.right="cancel"
     @keydown.escape="cancel"
   >
@@ -12,14 +13,16 @@
       v-for="(audioNode, index) in audioNodes"
       :key="index"
       v-bind="audioNode"
+      @mousedown.left="startMovingNode(audioNode, $event)"
+      @keydown.delete="deleteNode(index)"
     />
-    <StartIcon v-if="isStartIconVisible" />
-    <AddMenu v-model="isAddMenuVisible" @add="add" />
     <AudioNode
       v-if="newAudioNode"
-      v-bind="newAudioNode"
       :key="audioNodes.length"
+      v-bind="newAudioNode"
     />
+    <StartIcon v-if="isStartIconVisible" />
+    <AddMenu v-model="isAddMenuVisible" @add="startAddingNode" />
   </div>
 </template>
 
@@ -37,9 +40,14 @@ export default {
   },
   data() {
     return {
+      audioNodes: [],
       isAddMenuVisible: false,
       newAudioNode: undefined,
-      audioNodes: [],
+      movingAudioNode: undefined,
+      movingOffset: {
+        x: 0,
+        y: 0,
+      },
     }
   },
   computed: {
@@ -50,29 +58,46 @@ export default {
     },
   },
   methods: {
-    showAddMenu(event) {
-      // Required to handle keydown events
-      event.target.focus()
+    showAddMenu() {
       this.isAddMenuVisible = true
     },
-    add(audioNode) {
+    startAddingNode(audioNode) {
       this.newAudioNode = audioNode
     },
-    move(event) {
+    startMovingNode(audioNode, event) {
+      this.movingAudioNode = audioNode
+      this.movingOffset.x = audioNode.x - event.clientX
+      this.movingOffset.y = audioNode.y - event.clientY
+    },
+    moveNode(event) {
       if (this.newAudioNode) {
-        this.newAudioNode.x = event.clientX
-        this.newAudioNode.y = event.clientY
+        // -2 to keep focus when pressing mouse down on Firefox
+        this.newAudioNode.x = event.clientX - 2
+        this.newAudioNode.y = event.clientY - 2
+      }
+      if (this.movingAudioNode) {
+        this.movingAudioNode.x = event.clientX + this.movingOffset.x
+        this.movingAudioNode.y = event.clientY + this.movingOffset.y
       }
     },
-    endMove() {
+    endAddingNode() {
       if (this.newAudioNode) {
         this.audioNodes.push(this.newAudioNode)
         this.newAudioNode = undefined
       }
     },
+    endMovingNode() {
+      if (this.movingAudioNode) {
+        this.movingAudioNode = undefined
+      }
+    },
     cancel() {
       this.isAddMenuVisible = false
       this.newAudioNode = undefined
+      this.movingAudioNode = undefined
+    },
+    deleteNode(index) {
+      this.audioNodes.splice(index, 1)
     },
   },
 }
