@@ -11,14 +11,14 @@
   >
     <AudioNode
       v-for="(audioNode, index) in audioNodes"
-      :key="index"
+      :key="audioNode.id"
       v-bind="audioNode"
-      @mousedown.left="startMovingNode(audioNode, $event)"
+      @mousedown.left="startMovingNode(index, $event)"
       @keydown.delete="deleteNode(index)"
     />
     <AudioNode
       v-if="newAudioNode"
-      :key="audioNodes.length"
+      :key="newAudioNode.id"
       v-bind="newAudioNode"
     />
     <StartIcon v-if="isStartIconVisible" />
@@ -62,9 +62,15 @@ export default {
       this.isAddMenuVisible = true
     },
     startAddingNode(audioNode) {
-      this.newAudioNode = audioNode
+      const maxId = this.audioNodes.reduce(
+        (maxId, audioNode) => Math.max(maxId, audioNode.id),
+        0,
+      )
+      this.newAudioNode = { ...audioNode, id: maxId + 1 }
     },
-    startMovingNode(audioNode, event) {
+    startMovingNode(index, event) {
+      const [audioNode] = this.audioNodes.splice(index, 1)
+      this.audioNodes.push(audioNode)
       this.movingAudioNode = audioNode
       this.movingOffset.x = audioNode.x - event.clientX
       this.movingOffset.y = audioNode.y - event.clientY
