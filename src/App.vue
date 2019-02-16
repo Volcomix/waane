@@ -93,9 +93,7 @@ export default {
       }
     },
     endMovingNode() {
-      if (this.movingAudioNode) {
-        this.movingAudioNode = undefined
-      }
+      this.movingAudioNode = undefined
     },
     cancel() {
       this.isAddMenuVisible = false
