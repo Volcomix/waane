@@ -8,6 +8,7 @@
     @mousedown.left="endAddingNode"
     @mousedown.right="cancel"
     @keydown.escape="cancel"
+    @keydown.ctrl.86="pasteNode"
   >
     <AudioNode
       v-for="(audioNode, index) in audioNodes"
@@ -15,6 +16,7 @@
       v-bind="audioNode"
       @mousedown.left="startMovingNode(index, $event)"
       @keydown.delete="deleteNode(index)"
+      @keydown.ctrl.67="copyNode(audioNode)"
     />
     <AudioNode
       v-if="newAudioNode"
@@ -48,6 +50,7 @@ export default {
         x: 0,
         y: 0,
       },
+      clipboard: undefined,
     }
   },
   computed: {
@@ -62,11 +65,7 @@ export default {
       this.isAddMenuVisible = true
     },
     startAddingNode(audioNode) {
-      const maxId = this.audioNodes.reduce(
-        (maxId, audioNode) => Math.max(maxId, audioNode.id),
-        0,
-      )
-      this.newAudioNode = { ...audioNode, id: maxId + 1 }
+      this.newAudioNode = this.createNode(audioNode)
     },
     startMovingNode(index, event) {
       const [audioNode] = this.audioNodes.splice(index, 1)
@@ -102,6 +101,23 @@ export default {
     },
     deleteNode(index) {
       this.audioNodes.splice(index, 1)
+    },
+    copyNode(audioNode) {
+      this.clipboard = { ...audioNode }
+    },
+    pasteNode() {
+      if (this.clipboard) {
+        this.clipboard.x += 8
+        this.clipboard.y += 8
+        this.audioNodes.push(this.createNode(this.clipboard))
+      }
+    },
+    createNode(audioNode) {
+      const maxId = this.audioNodes.reduce(
+        (maxId, audioNode) => Math.max(maxId, audioNode.id),
+        0,
+      )
+      return { ...audioNode, id: maxId + 1 }
     },
   },
 }
