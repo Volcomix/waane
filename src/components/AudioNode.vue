@@ -1,8 +1,8 @@
 <template>
   <div class="container" tabindex="-1" :style="position" v-on="$listeners">
-    <span class="header subtitle2">
+    <h1 class="header subtitle2">
       {{ name }}
-    </span>
+    </h1>
     <ul class="outputs body2">
       <li v-for="outputName in audioOutputs" :key="outputName" class="output">
         {{ outputName }}
