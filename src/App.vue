@@ -42,6 +42,7 @@ export default {
   },
   data() {
     return {
+      audioContext: undefined,
       audioNodes: [],
       isAddMenuVisible: false,
       newAudioNode: undefined,
@@ -65,6 +66,9 @@ export default {
       this.isAddMenuVisible = true
     },
     startAddingNode(audioNode) {
+      if (!this.audioContext) {
+        this.audioContext = new AudioContext()
+      }
       this.newAudioNode = this.createNode(audioNode)
     },
     startMovingNode(index, event) {
@@ -117,7 +121,8 @@ export default {
         (maxId, audioNode) => Math.max(maxId, audioNode.id),
         0,
       )
-      return { ...audioNode, id: maxId + 1 }
+      const nativeAudioNode = this.audioContext[audioNode.method]()
+      return { ...audioNode, id: maxId + 1, nativeAudioNode }
     },
   },
 }
@@ -133,6 +138,7 @@ html {
   height: 100%;
 }
 body {
+  overflow: hidden;
   margin: 0;
   height: 100%;
   background-color: rgba(var(--background), 0.87);
@@ -141,7 +147,6 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
   height: 100%;
   user-select: none;
 }

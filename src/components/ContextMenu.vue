@@ -61,20 +61,21 @@ export default {
   methods: {
     translate(event) {
       const { clientX: mouseX, clientY: mouseY } = event
-      const { scrim, container } = this.$refs
-      this.x = Math.min(mouseX, scrim.clientWidth - container.clientWidth)
-      if (mouseY + container.clientHeight <= scrim.clientHeight) {
+      const scrim = this.$refs.scrim.getBoundingClientRect()
+      const container = this.$refs.container.getBoundingClientRect()
+      this.x = Math.min(mouseX, scrim.width - container.width)
+      if (mouseY + container.height <= scrim.height) {
         this.y = mouseY
         this.height = undefined
-      } else if (mouseY - container.clientHeight >= 0) {
-        this.y = mouseY - container.clientHeight
+      } else if (mouseY - container.height >= 0) {
+        this.y = mouseY - container.height
         this.height = undefined
-      } else if (mouseY > scrim.clientHeight / 2) {
+      } else if (mouseY > scrim.height / 2) {
         this.y = 0
         this.height = mouseY
       } else {
         this.y = mouseY
-        this.height = scrim.clientHeight - mouseY
+        this.height = scrim.height - mouseY
       }
       this.hasPosition = true
     },

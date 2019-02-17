@@ -1,6 +1,11 @@
 <template>
   <div class="container" tabindex="-1" :style="position" v-on="$listeners">
     <span class="header subtitle2">{{ name }}</span>
+    <ul class="params body2">
+      <li v-for="paramName in audioParams" :key="paramName">
+        {{ paramName }}
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -11,6 +16,7 @@ export default {
     name: String,
     x: Number,
     y: Number,
+    nativeAudioNode: AudioNode,
   },
   computed: {
     position() {
@@ -18,6 +24,11 @@ export default {
         top: `${this.y}px`,
         left: `${this.x}px`,
       }
+    },
+    audioParams() {
+      return Object.keys(Object.getPrototypeOf(this.nativeAudioNode)).filter(
+        paramName => this.nativeAudioNode[paramName] instanceof AudioParam,
+      )
     },
   },
   mounted() {
@@ -44,5 +55,13 @@ export default {
   display: flex;
   align-items: flex-end;
   height: 34px;
+}
+.params {
+  margin: 14px 0 0 0;
+  padding: 0;
+  list-style-type: none;
+  line-height: 28px;
+  text-transform: capitalize;
+  color: rgba(var(--on-background), 0.6);
 }
 </style>
