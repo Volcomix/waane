@@ -1,7 +1,17 @@
 <template>
   <div class="container" tabindex="-1" :style="position" v-on="$listeners">
-    <span class="header subtitle2">{{ name }}</span>
-    <ul class="params body2">
+    <span class="header subtitle2">
+      {{ name }}
+    </span>
+    <ul class="list outputs body2">
+      <li v-for="outputName in audioOutputs" :key="outputName">
+        {{ outputName }}
+      </li>
+    </ul>
+    <ul class="list body2">
+      <li v-for="inputName in audioInputs" :key="inputName">
+        {{ inputName }}
+      </li>
       <li v-for="paramName in audioParams" :key="paramName">
         {{ paramName }}
       </li>
@@ -23,6 +33,26 @@ export default {
       return {
         top: `${this.y}px`,
         left: `${this.x}px`,
+      }
+    },
+    audioOutputs() {
+      if (this.nativeAudioNode.numberOfOutputs === 1) {
+        return ['output']
+      } else {
+        return Array.from(
+          { length: this.nativeAudioNode.numberOfOutputs },
+          (v, k) => `output${k + 1}`,
+        )
+      }
+    },
+    audioInputs() {
+      if (this.nativeAudioNode.numberOfInputs === 1) {
+        return ['input']
+      } else {
+        return Array.from(
+          { length: this.nativeAudioNode.numberOfInputs },
+          (v, k) => `input${k + 1}`,
+        )
       }
     },
     audioParams() {
@@ -54,14 +84,20 @@ export default {
 .header {
   display: flex;
   align-items: flex-end;
+  margin-bottom: 14px;
   height: 34px;
 }
-.params {
-  margin: 14px 0 0 0;
+.list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
   padding: 0;
   list-style-type: none;
   line-height: 28px;
   text-transform: capitalize;
   color: rgba(var(--on-background), 0.6);
+}
+.outputs {
+  align-items: flex-end;
 }
 </style>
