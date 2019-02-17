@@ -3,16 +3,16 @@
     <span class="header subtitle2">
       {{ name }}
     </span>
-    <ul class="list outputs body2">
-      <li v-for="outputName in audioOutputs" :key="outputName">
+    <ul class="outputs body2">
+      <li v-for="outputName in audioOutputs" :key="outputName" class="output">
         {{ outputName }}
       </li>
     </ul>
-    <ul class="list body2">
-      <li v-for="inputName in audioInputs" :key="inputName">
+    <ul class="inputs body2">
+      <li v-for="inputName in audioInputs" :key="inputName" class="input">
         {{ inputName }}
       </li>
-      <li v-for="paramName in audioParams" :key="paramName">
+      <li v-for="paramName in audioParams" :key="paramName" class="param">
         {{ paramName }}
       </li>
     </ul>
@@ -73,7 +73,7 @@ export default {
   transition: box-shadow 100ms var(--easing-standard);
   border-radius: 4px;
   min-width: 150px;
-  padding: 0 16px 24px 16px;
+  padding: 0 0 24px 0;
   background-color: rgba(var(--background), 0.54);
   color: rgb(var(--on-background));
 }
@@ -84,10 +84,11 @@ export default {
 .header {
   display: flex;
   align-items: flex-end;
-  margin-bottom: 14px;
+  margin: 0 16px 14px 16px;
   height: 34px;
 }
-.list {
+.outputs,
+.inputs {
   display: flex;
   flex-direction: column;
   margin: 0;
@@ -99,5 +100,30 @@ export default {
 }
 .outputs {
   align-items: flex-end;
+}
+.output,
+.input {
+  display: flex;
+  align-items: center;
+}
+.output::after,
+.input::before {
+  content: ' ';
+  display: block;
+  border-radius: 5px;
+  width: 10px;
+  height: 10px;
+  background-color: #cddc39;
+}
+.output::after {
+  margin-right: -5px;
+  margin-left: 11px;
+}
+.input::before {
+  margin-right: 11px;
+  margin-left: -5px;
+}
+.param {
+  margin-left: 16px;
 }
 </style>
