@@ -17,6 +17,8 @@
       @mousedown.left="startMovingNode(index, $event)"
       @keydown.delete="deleteNode(index)"
       @keydown.ctrl.67="copyNode(audioNode)"
+      @link-start="startAddingLink(audioNode, $event)"
+      @link-snap="snapLink(audioNode, ...arguments)"
     />
     <AudioNode
       v-if="newAudioNode"
@@ -24,7 +26,10 @@
       v-bind="newAudioNode"
     />
     <StartIcon v-if="isStartIconVisible" />
-    <AddMenu v-model="isAddMenuVisible" @add="startAddingNode" />
+    <AddMenu v-model="isAddMenuVisible" @node-add="startAddingNode" />
+    <svg v-if="newLink" class="links">
+      <path class="link" :d="newLinkPath" />
+    </svg>
   </div>
 </template>
 
@@ -52,6 +57,7 @@ export default {
         y: 0,
       },
       clipboard: undefined,
+      newLink: undefined,
     }
   },
   computed: {
@@ -59,6 +65,19 @@ export default {
       return (
         !this.isAddMenuVisible && !this.newAudioNode && !this.audioNodes.length
       )
+    },
+    newLinkPath() {
+      const { x: startX, y: startY } = this.newLink.start
+      const { x: endX, y: endY } = this.newLink.end
+      const curveWidth = Math.abs(endX - startX) / 2
+      return [
+        `M ${startX} ${startY}`,
+        [
+          `C ${startX + curveWidth} ${startY}`,
+          `${endX - curveWidth} ${endY}`,
+          `${endX} ${endY}`,
+        ].join(', '),
+      ].join(' ')
     },
   },
   methods: {
@@ -88,6 +107,15 @@ export default {
         this.movingAudioNode.x = event.clientX + this.movingOffset.x
         this.movingAudioNode.y = event.clientY + this.movingOffset.y
       }
+      if (this.newLink) {
+        if (this.newLink.start.audioNode) {
+          this.newLink.end.x = event.clientX
+          this.newLink.end.y = event.clientY
+        } else {
+          this.newLink.start.x = event.clientX
+          this.newLink.start.y = event.clientY
+        }
+      }
     },
     endAddingNode() {
       if (this.newAudioNode) {
@@ -97,11 +125,13 @@ export default {
     },
     endMovingNode() {
       this.movingAudioNode = undefined
+      this.newLink = undefined
     },
     cancel() {
       this.isAddMenuVisible = false
       this.newAudioNode = undefined
       this.movingAudioNode = undefined
+      this.newLink = undefined
     },
     deleteNode(index) {
       this.audioNodes.splice(index, 1)
@@ -123,6 +153,45 @@ export default {
       )
       const nativeAudioNode = this.audioContext[audioNode.method]()
       return { ...audioNode, id: maxId + 1, nativeAudioNode }
+    },
+    startAddingLink(audioNode, link) {
+      if (link.start.outputName) {
+        link.start.audioNode = audioNode
+      } else {
+        link.end.audioNode = audioNode
+      }
+      this.newLink = link
+    },
+    snapLink(audioNode, link, event) {
+      if (!this.isValidLink(audioNode, link)) {
+        return
+      }
+      event.stopPropagation()
+      if (link.start) {
+        this.newLink.start.x = link.start.x
+        this.newLink.start.y = link.start.y
+      } else {
+        this.newLink.end.x = link.end.x
+        this.newLink.end.y = link.end.y
+      }
+    },
+    isValidLink(audioNode, link) {
+      if (!this.newLink) {
+        return false
+      }
+      if (link.start && this.newLink.start.audioNode) {
+        return false
+      }
+      if (link.end && this.newLink.end.audioNode) {
+        return false
+      }
+      if (link.start && audioNode === this.newLink.end.audioNode) {
+        return false
+      }
+      if (link.end && audioNode === this.newLink.start.audioNode) {
+        return false
+      }
+      return true
     },
   },
 }
@@ -152,5 +221,15 @@ body {
 }
 #app:focus {
   outline: none;
+}
+.links {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: visible;
+}
+.link {
+  fill: none;
+  stroke: rgb(var(--on-background));
 }
 </style>

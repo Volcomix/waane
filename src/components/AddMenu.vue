@@ -41,7 +41,11 @@ export default {
   },
   methods: {
     add(audioNode, event) {
-      this.$emit('add', { ...audioNode, x: event.clientX, y: event.clientY })
+      this.$emit('node-add', {
+        ...audioNode,
+        x: event.clientX,
+        y: event.clientY,
+      })
     },
   },
 }
