@@ -10,6 +10,7 @@
           class="link-point"
           @mousedown.left.stop="startOutputLink(outputName, $event)"
           @mousemove="snapOutputLink(outputName, $event)"
+          @mouseup.left="endOutputLink(outputName, $event)"
         />
       </li>
     </ul>
@@ -19,6 +20,7 @@
           class="link-point"
           @mousedown.left.stop="startInputLink(inputName, $event)"
           @mousemove="snapInputLink(inputName, $event)"
+          @mouseup.left="endInputLink(inputName, $event)"
         />
         {{ inputName }}
       </li>
@@ -122,6 +124,22 @@ export default {
         },
         event,
       )
+    },
+    endOutputLink(outputName, event) {
+      this.$emit('link-end', {
+        start: {
+          outputName,
+          ...this.linkPointCenter(event),
+        },
+      })
+    },
+    endInputLink(inputName, event) {
+      this.$emit('link-end', {
+        end: {
+          inputName,
+          ...this.linkPointCenter(event),
+        },
+      })
     },
     linkPointCenter(event) {
       const { x, y, width, height } = event.target.getBoundingClientRect()

@@ -10,6 +10,14 @@
     @keydown.escape="cancel"
     @keydown.ctrl.86="pasteNode"
   >
+    <svg class="links">
+      <path
+        v-for="(link, index) in links"
+        :key="index"
+        class="link"
+        :d="linkPath(link)"
+      />
+    </svg>
     <AudioNode
       v-for="(audioNode, index) in audioNodes"
       :key="audioNode.id"
@@ -19,6 +27,7 @@
       @keydown.ctrl.67="copyNode(audioNode)"
       @link-start="startAddingLink(audioNode, $event)"
       @link-snap="snapLink(audioNode, ...arguments)"
+      @link-end="endAddingLink(audioNode, $event)"
     />
     <AudioNode
       v-if="newAudioNode"
@@ -28,7 +37,7 @@
     <StartIcon v-if="isStartIconVisible" />
     <AddMenu v-model="isAddMenuVisible" @node-add="startAddingNode" />
     <svg v-if="newLink" class="links">
-      <path class="link" :d="newLinkPath" />
+      <path class="link link-new" :d="newLinkPath" />
     </svg>
   </div>
 </template>
@@ -57,6 +66,7 @@ export default {
         y: 0,
       },
       clipboard: undefined,
+      links: [],
       newLink: undefined,
     }
   },
@@ -67,17 +77,7 @@ export default {
       )
     },
     newLinkPath() {
-      const { x: startX, y: startY } = this.newLink.start
-      const { x: endX, y: endY } = this.newLink.end
-      const curveWidth = Math.abs(endX - startX) / 2
-      return [
-        `M ${startX} ${startY}`,
-        [
-          `C ${startX + curveWidth} ${startY}`,
-          `${endX - curveWidth} ${endY}`,
-          `${endX} ${endY}`,
-        ].join(', '),
-      ].join(' ')
+      return this.linkPath(this.newLink)
     },
   },
   methods: {
@@ -134,7 +134,12 @@ export default {
       this.newLink = undefined
     },
     deleteNode(index) {
-      this.audioNodes.splice(index, 1)
+      const [audioNode] = this.audioNodes.splice(index, 1)
+      this.links = this.links.filter(
+        link =>
+          link.start.audioNode !== audioNode &&
+          link.end.audioNode !== audioNode,
+      )
     },
     copyNode(audioNode) {
       this.clipboard = { ...audioNode }
@@ -157,8 +162,12 @@ export default {
     startAddingLink(audioNode, link) {
       if (link.start.outputName) {
         link.start.audioNode = audioNode
+        link.start.x -= audioNode.x
+        link.start.y -= audioNode.y
       } else {
         link.end.audioNode = audioNode
+        link.end.x -= audioNode.x
+        link.end.y -= audioNode.y
       }
       this.newLink = link
     },
@@ -174,6 +183,23 @@ export default {
         this.newLink.end.x = link.end.x
         this.newLink.end.y = link.end.y
       }
+    },
+    endAddingLink(audioNode, link) {
+      if (!this.isValidLink(audioNode, link)) {
+        return
+      }
+      if (link.start) {
+        link.start.audioNode = audioNode
+        link.start.x -= audioNode.x
+        link.start.y -= audioNode.y
+        this.newLink.start = link.start
+      } else {
+        link.end.audioNode = audioNode
+        link.end.x -= audioNode.x
+        link.end.y -= audioNode.y
+        this.newLink.end = link.end
+      }
+      this.links.push(this.newLink)
     },
     isValidLink(audioNode, link) {
       if (!this.newLink) {
@@ -192,6 +218,27 @@ export default {
         return false
       }
       return true
+    },
+    linkPath(link) {
+      let { audioNode: startAudioNode, x: startX, y: startY } = link.start
+      let { audioNode: endAudioNode, x: endX, y: endY } = link.end
+      if (startAudioNode) {
+        startX += startAudioNode.x
+        startY += startAudioNode.y
+      }
+      if (endAudioNode) {
+        endX += endAudioNode.x
+        endY += endAudioNode.y
+      }
+      const curveWidth = Math.abs(endX - startX) / 2
+      return [
+        `M ${startX} ${startY}`,
+        [
+          `C ${startX + curveWidth} ${startY}`,
+          `${endX - curveWidth} ${endY}`,
+          `${endX} ${endY}`,
+        ].join(', '),
+      ].join(' ')
     },
   },
 }
@@ -230,6 +277,9 @@ body {
 }
 .link {
   fill: none;
+  stroke: rgba(var(--on-background), 0.4);
+}
+.link-new {
   stroke: rgb(var(--on-background));
 }
 </style>
