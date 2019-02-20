@@ -3,8 +3,8 @@
     id="app"
     tabindex="-1"
     @contextmenu.prevent="showAddMenu"
-    @mousemove="moveNode"
-    @mouseup.left="endMovingNode"
+    @mousemove="move"
+    @mouseup.left="endMoving"
     @mousedown.left="endAddingNode"
     @mousedown.right="cancel"
     @keydown.escape="cancel"
@@ -97,7 +97,7 @@ export default {
       this.movingOffset.x = audioNode.x - event.clientX
       this.movingOffset.y = audioNode.y - event.clientY
     },
-    moveNode(event) {
+    move(event) {
       if (this.newAudioNode) {
         // -2 to keep focus when pressing mouse down on Firefox
         this.newAudioNode.x = event.clientX - 2
@@ -123,7 +123,7 @@ export default {
         this.newAudioNode = undefined
       }
     },
-    endMovingNode() {
+    endMoving() {
       this.movingAudioNode = undefined
       this.newLink = undefined
     },
@@ -277,7 +277,7 @@ body {
 }
 .link {
   fill: none;
-  stroke: rgba(var(--on-background), 0.4);
+  stroke: rgba(var(--on-background), 0.5);
 }
 .link-new {
   stroke: rgb(var(--on-background));
