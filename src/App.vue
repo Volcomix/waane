@@ -159,17 +159,30 @@ export default {
       const nativeAudioNode = this.audioContext[audioNode.method]()
       return { ...audioNode, id: maxId + 1, nativeAudioNode }
     },
-    startAddingLink(audioNode, link) {
-      if (link.start.outputName) {
-        link.start.audioNode = audioNode
-        link.start.x -= audioNode.x
-        link.start.y -= audioNode.y
+    startAddingLink(audioNode, newLink) {
+      if (newLink.start.outputName) {
+        newLink.start.audioNode = audioNode
+        newLink.start.x -= audioNode.x
+        newLink.start.y -= audioNode.y
       } else {
-        link.end.audioNode = audioNode
-        link.end.x -= audioNode.x
-        link.end.y -= audioNode.y
+        const linkIndex = this.links.findIndex(
+          link =>
+            link.end.audioNode === audioNode &&
+            link.end.inputName === newLink.end.inputName,
+        )
+        if (linkIndex > -1) {
+          const [link] = this.links.splice(linkIndex, 1)
+          newLink = link
+          newLink.end.audioNode = undefined
+          newLink.end.x += audioNode.x
+          newLink.end.y += audioNode.y
+        } else {
+          newLink.end.audioNode = audioNode
+          newLink.end.x -= audioNode.x
+          newLink.end.y -= audioNode.y
+        }
       }
-      this.newLink = link
+      this.newLink = newLink
     },
     snapLink(audioNode, link, event) {
       if (!this.isValidLink(audioNode, link)) {
@@ -278,6 +291,7 @@ body {
 .link {
   fill: none;
   stroke: rgba(var(--on-background), 0.5);
+  pointer-events: none;
 }
 .link-new {
   stroke: rgb(var(--on-background));
