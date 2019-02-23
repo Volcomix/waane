@@ -135,6 +135,9 @@ export default {
     },
     deleteNode(index) {
       const [audioNode] = this.audioNodes.splice(index, 1)
+      if (audioNode.nativeAudioNode instanceof OscillatorNode) {
+        audioNode.nativeAudioNode.stop()
+      }
       const disconnectedNodes = new WeakSet()
       this.links = this.links.filter(link => {
         if (
@@ -173,6 +176,9 @@ export default {
       let nativeAudioNode
       if (audioNode.method) {
         nativeAudioNode = this.audioContext[audioNode.method]()
+        if (nativeAudioNode instanceof OscillatorNode) {
+          nativeAudioNode.start()
+        }
       } else {
         nativeAudioNode = this.audioContext.destination
       }
