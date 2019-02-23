@@ -135,11 +135,25 @@ export default {
     },
     deleteNode(index) {
       const [audioNode] = this.audioNodes.splice(index, 1)
-      this.links = this.links.filter(
-        link =>
-          link.start.audioNode !== audioNode &&
-          link.end.audioNode !== audioNode,
-      )
+      const disconnectedNodes = new WeakSet()
+      this.links = this.links.filter(link => {
+        if (
+          link.start.audioNode === audioNode ||
+          link.end.audioNode === audioNode
+        ) {
+          link.start.audioNode.nativeAudioNode.disconnect()
+          disconnectedNodes.add(link.start.audioNode)
+          return false
+        }
+        return true
+      })
+      this.links.forEach(link => {
+        if (disconnectedNodes.has(link.start.audioNode)) {
+          const startNode = link.start.audioNode.nativeAudioNode
+          const endNode = link.end.audioNode.nativeAudioNode
+          startNode.connect(endNode)
+        }
+      })
     },
     copyNode(audioNode) {
       this.clipboard = { ...audioNode }
@@ -176,6 +190,14 @@ export default {
           newLink.end.audioNode = undefined
           newLink.end.x += audioNode.x
           newLink.end.y += audioNode.y
+          newLink.start.audioNode.nativeAudioNode.disconnect()
+          this.links.forEach(link => {
+            if (link.start.audioNode === newLink.start.audioNode) {
+              const startNode = link.start.audioNode.nativeAudioNode
+              const endNode = link.end.audioNode.nativeAudioNode
+              startNode.connect(endNode)
+            }
+          })
         } else {
           newLink.end.audioNode = audioNode
           newLink.end.x -= audioNode.x
@@ -212,6 +234,9 @@ export default {
         link.end.y -= audioNode.y
         this.newLink.end = link.end
       }
+      const startNode = this.newLink.start.audioNode.nativeAudioNode
+      const endNode = this.newLink.end.audioNode.nativeAudioNode
+      startNode.connect(endNode)
       this.links.push(this.newLink)
     },
     isValidLink(audioNode, link) {
