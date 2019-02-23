@@ -192,18 +192,18 @@ export default {
   align-items: center;
 }
 .link-point {
-  border-radius: 12px;
-  width: 24px;
-  height: 24px;
+  border-radius: 13px;
+  width: 26px;
+  height: 26px;
   background: radial-gradient(#cddc39 4px, transparent 4px);
 }
 .output .link-point {
-  margin-right: -12px;
-  margin-left: 4px;
+  margin-right: -13px;
+  margin-left: 3px;
 }
 .input .link-point {
-  margin-right: 4px;
-  margin-left: -12px;
+  margin-right: 3px;
+  margin-left: -13px;
 }
 .param {
   margin-left: 16px;
