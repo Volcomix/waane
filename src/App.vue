@@ -170,7 +170,12 @@ export default {
         (maxId, audioNode) => Math.max(maxId, audioNode.id),
         0,
       )
-      const nativeAudioNode = this.audioContext[audioNode.method]()
+      let nativeAudioNode
+      if (audioNode.method) {
+        nativeAudioNode = this.audioContext[audioNode.method]()
+      } else {
+        nativeAudioNode = this.audioContext.destination
+      }
       return { ...audioNode, id: maxId + 1, nativeAudioNode }
     },
     startAddingLink(audioNode, newLink) {

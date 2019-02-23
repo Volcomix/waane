@@ -36,6 +36,7 @@ export default {
           name: name.replace(/(.)([A-Z][a-z])/g, '$1 $2'),
           method,
         }))
+        .concat({ name: 'Audio Destination' })
         .sort((a, b) => a.name.localeCompare(b.name))
     },
   },
