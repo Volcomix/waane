@@ -308,6 +308,9 @@ body {
   height: 100%;
   background-color: rgba(var(--background), 0.87);
 }
+::selection {
+  background-color: rgb(var(--primary));
+}
 #app {
   display: flex;
   justify-content: center;

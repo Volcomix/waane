@@ -25,15 +25,24 @@
         {{ inputName }}
       </li>
       <li v-for="paramName in audioParams" :key="paramName" class="param">
-        {{ paramName }}
+        <NumberField
+          v-model="nativeAudioNode[paramName].value"
+          :label="paramName"
+          @keydown.stop
+        />
       </li>
     </ul>
   </div>
 </template>
 
 <script>
+import NumberField from './NumberField.vue'
+
 export default {
   name: 'AudioNode',
+  components: {
+    NumberField,
+  },
   props: {
     name: String,
     x: Number,
@@ -206,6 +215,10 @@ export default {
   margin-left: -13px;
 }
 .param {
-  margin-left: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  margin: 2px 16px;
+  line-height: 24px;
 }
 </style>
