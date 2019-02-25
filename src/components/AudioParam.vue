@@ -1,5 +1,10 @@
 <template>
-  <NumberField :label="name" v-model="value" />
+  <NumberField
+    :label="name"
+    :min="nativeAudioParam.minValue"
+    :max="nativeAudioParam.maxValue"
+    v-model="value"
+  />
 </template>
 
 <script>

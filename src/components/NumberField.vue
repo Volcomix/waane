@@ -5,6 +5,8 @@
     <input
       class="input body2"
       type="number"
+      :min="min"
+      :max="max"
       v-model.number="validValue"
       @focus="$event.target.select()"
       @keydown.enter="$event.target.blur()"
@@ -19,6 +21,8 @@ export default {
   props: {
     label: String,
     value: Number,
+    min: Number,
+    max: Number,
   },
   computed: {
     validValue: {
@@ -26,9 +30,15 @@ export default {
         return this.value
       },
       set(value) {
-        if (value !== '') {
-          this.$emit('input', value)
+        if (value === '') {
+          return
         }
+        if (value < this.min) {
+          value = this.min
+        } else if (value > this.max) {
+          value = this.max
+        }
+        this.$emit('input', value)
       },
     },
   },
