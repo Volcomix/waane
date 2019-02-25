@@ -2,7 +2,14 @@
   <label class="number-field">
     <span class="label">{{ label }}</span
     >:<span class="value">{{ value }}</span>
-    <input class="input body2" type="number" :value="value" v-on="listeners" />
+    <input
+      class="input body2"
+      type="number"
+      v-model.number="validValue"
+      @focus="$event.target.select()"
+      @keydown.enter="$event.target.blur()"
+      @keydown.stop
+    />
   </label>
 </template>
 
@@ -14,16 +21,15 @@ export default {
     value: Number,
   },
   computed: {
-    listeners() {
-      return {
-        ...this.$listeners,
-        focus: event => {
-          event.target.select()
-        },
-        input: event => {
-          this.$emit('input', event.target.value)
-        },
-      }
+    validValue: {
+      get() {
+        return this.value
+      },
+      set(value) {
+        if (value !== '') {
+          this.$emit('input', value)
+        }
+      },
     },
   },
 }

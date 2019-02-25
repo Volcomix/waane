@@ -25,10 +25,9 @@
         {{ inputName }}
       </li>
       <li v-for="paramName in audioParams" :key="paramName" class="param">
-        <NumberField
-          v-model="nativeAudioNode[paramName].value"
-          :label="paramName"
-          @keydown.stop
+        <AudioParam
+          :name="paramName"
+          :nativeAudioParam="nativeAudioNode[paramName]"
         />
       </li>
     </ul>
@@ -36,12 +35,12 @@
 </template>
 
 <script>
-import NumberField from './NumberField.vue'
+import AudioParam from './AudioParam.vue'
 
 export default {
   name: 'AudioNode',
   components: {
-    NumberField,
+    AudioParam,
   },
   props: {
     name: String,
@@ -78,7 +77,8 @@ export default {
     },
     audioParams() {
       return Object.keys(Object.getPrototypeOf(this.nativeAudioNode)).filter(
-        paramName => this.nativeAudioNode[paramName] instanceof AudioParam,
+        paramName =>
+          this.nativeAudioNode[paramName] instanceof window.AudioParam,
       )
     },
   },
@@ -188,7 +188,7 @@ export default {
   margin: 0;
   padding: 0;
   list-style-type: none;
-  line-height: 28px;
+  line-height: 32px;
   text-transform: capitalize;
   color: rgba(var(--on-background), 0.6);
 }
@@ -218,7 +218,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  margin: 2px 16px;
+  margin: 4px 16px;
   line-height: 24px;
 }
 </style>
