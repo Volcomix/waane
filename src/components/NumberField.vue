@@ -5,8 +5,8 @@
     <input
       class="input body2"
       type="number"
-      :min="min"
-      :max="max"
+      :min="singleFloatMin"
+      :max="singleFloatMax"
       v-model.number="validValue"
       @focus="$event.target.select()"
       @keydown.enter="$event.target.blur()"
@@ -20,11 +20,23 @@ export default {
   name: 'NumberField',
   props: {
     label: String,
-    value: Number,
     min: Number,
     max: Number,
+    value: Number,
   },
   computed: {
+    singleFloatMin() {
+      if (this.min > -3.4028234663852886e38) {
+        return this.min
+      }
+      return undefined
+    },
+    singleFloatMax() {
+      if (this.max < 3.4028234663852886e38) {
+        return this.max
+      }
+      return undefined
+    },
     validValue: {
       get() {
         return this.value
