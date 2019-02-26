@@ -1,7 +1,9 @@
 <template>
   <label class="number-field">
+    <i class="arrow material-icons">arrow_left</i>
     <span class="label">{{ label }}</span
     >:<span class="value">{{ value }}</span>
+    <i class="arrow material-icons">arrow_right</i>
     <input
       class="input body2"
       type="number"
@@ -61,7 +63,6 @@ export default {
 .number-field {
   position: relative;
   display: flex;
-  padding: 0 8px;
   white-space: nowrap;
 }
 .number-field:focus-within {
@@ -75,6 +76,9 @@ export default {
   flex-grow: 1;
   margin-left: 2px;
   text-align: right;
+}
+.arrow {
+  color: rgba(var(--on-background), 0.2);
 }
 .input {
   position: absolute;
