@@ -80,6 +80,9 @@ export default {
 .arrow {
   color: rgba(var(--on-background), 0.2);
 }
+.number-field:focus-within .arrow {
+  color: transparent;
+}
 .input {
   position: absolute;
   top: 0;
@@ -92,6 +95,7 @@ export default {
   height: 100%;
   padding: 0 8px;
   background-color: rgba(var(--on-background), 0.04);
+  cursor: default;
   color: transparent;
 }
 .input::-webkit-inner-spin-button,
@@ -100,12 +104,14 @@ export default {
   margin: 0;
 }
 .input:focus {
+  cursor: auto;
   color: rgb(var(--on-background));
 }
 .input:not(:focus)::selection {
   background-color: transparent;
 }
 .number-field,
+.arrow,
 .input {
   transition: color 100ms var(--easing-standard);
 }
