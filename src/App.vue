@@ -306,7 +306,11 @@ body {
   overflow: hidden;
   margin: 0;
   height: 100%;
-  background-color: rgba(var(--background), 0.87);
+  background-color: rgb(var(--on-background));
+  background-image: linear-gradient(
+    rgba(var(--background), 0.87),
+    rgba(var(--background), 0.87)
+  );
 }
 ::selection {
   background-color: rgba(var(--primary), 0.996);
