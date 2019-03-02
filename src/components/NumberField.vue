@@ -31,13 +31,13 @@ export default {
       if (this.min > -3.4028234663852886e38) {
         return this.min
       }
-      return undefined
+      return null
     },
     singleFloatMax() {
       if (this.max < 3.4028234663852886e38) {
         return this.max
       }
-      return undefined
+      return null
     },
     validValue: {
       get() {

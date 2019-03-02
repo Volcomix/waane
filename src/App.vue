@@ -56,18 +56,18 @@ export default {
   },
   data() {
     return {
-      audioContext: undefined,
+      audioContext: null,
       audioNodes: [],
       isAddMenuVisible: false,
-      newAudioNode: undefined,
-      movingAudioNode: undefined,
+      newAudioNode: null,
+      movingAudioNode: null,
       movingOffset: {
         x: 0,
         y: 0,
       },
-      clipboard: undefined,
+      clipboard: null,
       links: [],
-      newLink: undefined,
+      newLink: null,
     }
   },
   computed: {
@@ -120,18 +120,18 @@ export default {
     endAddingNode() {
       if (this.newAudioNode) {
         this.audioNodes.push(this.newAudioNode)
-        this.newAudioNode = undefined
+        this.newAudioNode = null
       }
     },
     endMoving() {
-      this.movingAudioNode = undefined
-      this.newLink = undefined
+      this.movingAudioNode = null
+      this.newLink = null
     },
     cancel() {
       this.isAddMenuVisible = false
-      this.newAudioNode = undefined
-      this.movingAudioNode = undefined
-      this.newLink = undefined
+      this.newAudioNode = null
+      this.movingAudioNode = null
+      this.newLink = null
     },
     deleteNode(index) {
       const [audioNode] = this.audioNodes.splice(index, 1)
@@ -198,7 +198,7 @@ export default {
         if (linkIndex > -1) {
           const [link] = this.links.splice(linkIndex, 1)
           newLink = link
-          newLink.end.audioNode = undefined
+          newLink.end.audioNode = null
           newLink.end.x += audioNode.x
           newLink.end.y += audioNode.y
           newLink.start.audioNode.nativeAudioNode.disconnect()

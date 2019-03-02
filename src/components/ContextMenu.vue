@@ -30,7 +30,7 @@ export default {
     return {
       x: 0,
       y: 0,
-      height: undefined,
+      height: null,
       hasPosition: false,
     }
   },
@@ -40,10 +40,10 @@ export default {
         return {
           top: `${this.y}px`,
           left: `${this.x}px`,
-          height: this.height ? `${this.height}px` : undefined,
+          height: this.height ? `${this.height}px` : null,
         }
       }
-      return undefined
+      return null
     },
     visibility() {
       return {
@@ -66,10 +66,10 @@ export default {
       this.x = Math.min(mouseX, scrim.width - container.width)
       if (mouseY + container.height <= scrim.height) {
         this.y = mouseY
-        this.height = undefined
+        this.height = null
       } else if (mouseY - container.height >= 0) {
         this.y = mouseY - container.height
-        this.height = undefined
+        this.height = null
       } else if (mouseY > scrim.height / 2) {
         this.y = 0
         this.height = mouseY
