@@ -309,7 +309,8 @@ body {
   background-color: rgba(var(--background), 0.87);
 }
 ::selection {
-  background-color: rgb(var(--primary));
+  background-color: rgba(var(--primary), 0.996);
+  color: rgb(var(--on-primary));
 }
 #app {
   display: flex;

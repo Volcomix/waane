@@ -124,6 +124,7 @@ export default {
 }
 .input:not(:focus)::selection {
   background-color: transparent;
+  color: transparent;
 }
 .number-field,
 .arrow,
