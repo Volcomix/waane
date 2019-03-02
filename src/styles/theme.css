@@ -6,6 +6,9 @@
   --on-primary-light: var(--on-primary);
   --on-primary-dark: var(--on-primary);
 
+  --additional1: 205, 220, 57;
+  --on-additional1: 0, 0, 0;
+
   --background: 38, 40, 47;
   --on-background: 255, 255, 255;
 }

@@ -204,7 +204,7 @@ export default {
   border-radius: 13px;
   width: 26px;
   height: 26px;
-  background: radial-gradient(#cddc39 4px, transparent 4px);
+  background: radial-gradient(rgb(var(--additional1)) 4px, transparent 4px);
 }
 .output .link-point {
   margin-right: -13px;
