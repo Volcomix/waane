@@ -3,8 +3,8 @@
   --primary-light: 98, 239, 255;
   --primary-dark: 0, 139, 163;
   --on-primary: 0, 0, 0;
-  --on-primary-light: var(--on-primary);
-  --on-primary-dark: var(--on-primary);
+  --on-primary-light: 0, 0, 0;
+  --on-primary-dark: 0, 0, 0;
 
   --additional1: 205, 220, 57;
   --on-additional1: 0, 0, 0;
