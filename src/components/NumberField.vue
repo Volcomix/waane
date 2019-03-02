@@ -98,6 +98,9 @@ export default {
   cursor: default;
   color: transparent;
 }
+.input:hover {
+  background-color: rgba(var(--on-background), 0.08);
+}
 .input::-webkit-inner-spin-button,
 .input::-webkit-outer-spin-button {
   -webkit-appearance: none;
