@@ -1,8 +1,10 @@
 <template>
   <label class="number-field">
     <i class="arrow material-icons">arrow_left</i>
-    <span class="label">{{ label }}</span
-    >:<span class="value">{{ value }}</span>
+    <div class="display">
+      <span class="label">{{ label }}</span
+      >:<span class="value">{{ value }}</span>
+    </div>
     <i class="arrow material-icons">arrow_right</i>
     <input
       class="input body2"
@@ -80,9 +82,14 @@ export default {
 .number-field:focus-within {
   color: transparent;
 }
-.label {
-  flex-shrink: 1;
+.display {
+  flex-grow: 1;
+  display: flex;
   overflow: hidden;
+}
+.label {
+  overflow: hidden;
+  min-width: 24px;
 }
 .value {
   flex-grow: 1;

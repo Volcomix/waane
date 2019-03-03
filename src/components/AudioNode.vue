@@ -166,7 +166,7 @@ export default {
   position: absolute;
   transition: box-shadow 100ms var(--easing-standard);
   border-radius: 4px;
-  min-width: 150px;
+  width: 192px;
   padding: 0 0 12px 0;
   background-color: rgba(var(--background), 0.54);
   color: rgb(var(--on-background));
