@@ -9,9 +9,9 @@
     <input
       class="input body2"
       type="number"
+      step="any"
       :min="singleFloatMin"
       :max="singleFloatMax"
-      :step="step"
       v-model.number="validValue"
       @focus="$event.target.select()"
       @keydown.enter="$event.target.blur()"
@@ -39,17 +39,6 @@ export default {
     singleFloatMax() {
       if (this.max < 3.4028234663852886e38) {
         return this.max
-      }
-      return null
-    },
-    step() {
-      if (
-        this.min >= -10 &&
-        this.min <= 10 &&
-        this.max >= -10 &&
-        this.max <= 10
-      ) {
-        return 0.1
       }
       return null
     },
