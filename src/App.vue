@@ -7,7 +7,7 @@
     @mouseup.left="endMoving"
     @mousedown.left="endAddingNode"
     @mousedown.right="cancel"
-    @keydown.escape="cancel"
+    @keydown.escape.exact="cancel"
     @keydown.ctrl.86="pasteNode"
   >
     <svg class="links">
