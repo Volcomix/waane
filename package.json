@@ -1,8 +1,8 @@
 {
   "private": true,
   "workspaces": [
-    "packages/*",
-    "app"
+    "app",
+    "packages/*"
   ],
   "devDependencies": {
     "husky": "^3.1.0",
@@ -16,6 +16,10 @@
   "lint-staged": {
     "app/**/*.{js,vue,ts}": [
       "yarn workspace waane lint",
+      "git add"
+    ],
+    "packages/**/*.{js,ts,tsx,css}": [
+      "prettier --write",
       "git add"
     ]
   }
