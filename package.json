@@ -4,8 +4,14 @@
     "packages/*",
     "app"
   ],
-  "gitHooks": {
-    "pre-commit": "lint-staged"
+  "devDependencies": {
+    "husky": "^3.1.0",
+    "lint-staged": "^9.5.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "lint-staged": {
     "app/**/*.{js,vue,ts}": [
