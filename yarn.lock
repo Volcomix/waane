@@ -135,9 +135,9 @@
     babel-plugin-dynamic-import-node "^2.3.0"
 
 "@babel/runtime@^7.0.0", "@babel/runtime@^7.3.4":
-  version "7.7.5"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.7.5.tgz#4b087f183f5d83647744d4157f66199081d17a00"
-  integrity sha512-UXhClKWTL7/vlYX49kETXti6VbpPJK/pdsIOqUMhUUES/lqThpNTsmC/0aU/IW4uozDUx17axjeqel7SCYF6EQ==
+  version "7.7.6"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.7.6.tgz#d18c511121aff1b4f2cd1d452f1bac9601dd830f"
+  integrity sha512-BWAJxpNVa0QlE5gZdWjSxXtemZyZ9RmrmVozxt3NUXeZhVIJ5ANyqmMc0JDrivBZyxUuQvFxlvH4OWWOogGfUw==
   dependencies:
     regenerator-runtime "^0.13.2"
 
@@ -6753,9 +6753,9 @@ normalize-url@^3.0.0:
   integrity sha512-U+JJi7duF1o+u2pynbp2zXDW2/PADgC30f0GsHZtRh+HOcXHnw137TrNlyxxRvWW5fjKd3bcLHPxofWuCjaeZg==
 
 npm-bundled@^1.0.1:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/npm-bundled/-/npm-bundled-1.0.6.tgz#e7ba9aadcef962bb61248f91721cd932b3fe6bdd"
-  integrity sha512-8/JCaftHwbd//k6y2rEWp6k1wxVfpFzB6t1p825+cUb7Ym2XQfhwIC5KwhrvzZRJu+LtDE585zVaS32+CGtf0g==
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/npm-bundled/-/npm-bundled-1.1.0.tgz#2e8fdb7e69eff2df963937b696243316537c284b"
+  integrity sha512-ez6dcKBFNo4FvlMqscBEFUum6M2FTLW5grqm3DyBKB5XOyKVCeeWvAuoZtbmW/5Cv8EM2bQUOA6ufxa/TKVN0g==
 
 npm-packlist@^1.1.6:
   version "1.4.6"
