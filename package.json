@@ -3,5 +3,14 @@
   "workspaces": [
     "packages/*",
     "app"
-  ]
+  ],
+  "gitHooks": {
+    "pre-commit": "lint-staged"
+  },
+  "lint-staged": {
+    "app/**/*.{js,vue,ts}": [
+      "yarn workspace waane lint",
+      "git add"
+    ]
+  }
 }
