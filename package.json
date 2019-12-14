@@ -5,6 +5,7 @@
     "packages/*"
   ],
   "devDependencies": {
+    "eslint-plugin-react": "^7.17.0",
     "husky": "^3.1.0",
     "lint-staged": "^9.5.0"
   },
@@ -18,8 +19,8 @@
       "yarn workspace waane lint",
       "git add"
     ],
-    "packages/**/*.{js,ts,tsx,css}": [
-      "prettier --write",
+    "packages/node-editor/**/*.{js,ts,tsx}": [
+      "yarn workspace @waane/node-editor lint",
       "git add"
     ]
   }

@@ -1,7 +1,7 @@
 {
   "name": "@waane/node-editor",
   "version": "0.0.1",
-  "description": "Stencil Component Starter",
+  "description": "Node editor components",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "es2015": "dist/esm/index.mjs",
@@ -19,11 +19,19 @@
     "start": "stencil build --dev --watch --serve",
     "test": "stencil test --spec --e2e",
     "test.watch": "stencil test --spec --e2e --watchAll",
+    "test:ci": "npm run test",
+    "lint": "eslint --fix",
+    "lint:ci": "eslint 'src/**/*.{js,ts,tsx}' --max-warnings 0",
     "generate": "stencil generate"
   },
   "devDependencies": {
     "@stencil/core": "^1.3.3",
     "@types/puppeteer": "1.20.3",
+    "@typescript-eslint/eslint-plugin": "^2.11.0",
+    "@typescript-eslint/parser": "^2.11.0",
+    "eslint": "^6.7.2",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-plugin-prettier": "^3.1.1",
     "puppeteer": "1.20.0"
   },
   "license": "MIT"

@@ -12,10 +12,7 @@ jobs:
         run: yarn
 
       - name: Lint
-        run: yarn workspace waane run lint --no-fix --max-warnings 0
+        run: yarn workspaces run lint:ci
 
-      - name: Run unit tests
-        run: yarn workspace waane run test:unit
-
-      - name: Run e2e tests
-        run: yarn workspace waane run test:e2e --headless
+      - name: Run unit tests and e2e tests
+        run: yarn workspaces run test:ci
