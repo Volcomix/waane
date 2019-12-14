@@ -1,6 +1,6 @@
 import { NodeEditor } from './node-editor'
 
-describe('node-editor', () => {
+describe('w-node-editor', () => {
   it('builds', () => {
     expect(new NodeEditor()).toBeTruthy()
   })

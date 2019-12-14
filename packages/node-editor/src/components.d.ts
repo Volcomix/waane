@@ -10,11 +10,18 @@ import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 
 
 export namespace Components {
+  interface WNode {}
   interface WNodeEditor {}
 }
 
 declare global {
 
+
+  interface HTMLWNodeElement extends Components.WNode, HTMLStencilElement {}
+  var HTMLWNodeElement: {
+    prototype: HTMLWNodeElement;
+    new (): HTMLWNodeElement;
+  };
 
   interface HTMLWNodeEditorElement extends Components.WNodeEditor, HTMLStencilElement {}
   var HTMLWNodeEditorElement: {
@@ -22,14 +29,17 @@ declare global {
     new (): HTMLWNodeEditorElement;
   };
   interface HTMLElementTagNameMap {
+    'w-node': HTMLWNodeElement;
     'w-node-editor': HTMLWNodeEditorElement;
   }
 }
 
 declare namespace LocalJSX {
+  interface WNode {}
   interface WNodeEditor {}
 
   interface IntrinsicElements {
+    'w-node': WNode;
     'w-node-editor': WNodeEditor;
   }
 }
@@ -40,6 +50,7 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
   export namespace JSX {
     interface IntrinsicElements {
+      'w-node': LocalJSX.WNode & JSXBase.HTMLAttributes<HTMLWNodeElement>;
       'w-node-editor': LocalJSX.WNodeEditor & JSXBase.HTMLAttributes<HTMLWNodeEditorElement>;
     }
   }
