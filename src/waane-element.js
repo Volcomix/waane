@@ -4,7 +4,7 @@ export function html(strings, ...substitutions) {
   return template
 }
 
-const templates = {}
+const staticPropertiesCache = {}
 
 export class WaaneElement extends HTMLElement {
   constructor() {
@@ -15,13 +15,11 @@ export class WaaneElement extends HTMLElement {
   }
 
   get _template() {
-    const name = this.constructor.name
-    let template = templates[name]
-    if (!template) {
-      template = this.constructor.template
-      templates[name] = template
-    }
-    return template
+    return this._memoizeStaticProperty('template')
+  }
+
+  get _attributes() {
+    return this._memoizeStaticProperty('observedAttributes')
   }
 
   _initShadowRoot() {
@@ -30,7 +28,7 @@ export class WaaneElement extends HTMLElement {
   }
 
   _initAttributes() {
-    const attributes = this.constructor.observedAttributes
+    const attributes = this._attributes
     if (attributes) {
       for (const attribute of attributes) {
         this._registerUpdateMethod(attribute)
@@ -56,6 +54,26 @@ export class WaaneElement extends HTMLElement {
         this.setAttribute(attribute, value)
       },
     })
+  }
+
+  _memoizeStaticProperty(staticProperty) {
+    const cache = this._getCache(staticProperty)
+    const name = this.constructor.name
+    let value = cache[name]
+    if (!value) {
+      value = this.constructor[staticProperty]
+      cache[name] = value
+    }
+    return value
+  }
+
+  _getCache(name) {
+    let cache = staticPropertiesCache[name]
+    if (!cache) {
+      cache = {}
+      staticPropertiesCache[name] = cache
+    }
+    return cache
   }
 }
 
