@@ -4,12 +4,10 @@ export function html(strings, ...substitutions) {
   return template
 }
 
-const staticPropertiesCache = {}
-
 export class WaaneElement extends HTMLElement {
   constructor() {
     super()
-    this._updateMethods = {}
+    this._setters = {}
     this._initShadowRoot()
     this._initAttributes()
   }
@@ -31,22 +29,23 @@ export class WaaneElement extends HTMLElement {
     const attributes = this._attributes
     if (attributes) {
       for (const attribute of attributes) {
-        this._registerUpdateMethod(attribute)
-        this._registerProperty(attribute)
+        const property = toCamelCase(attribute)
+        this._registerSetter(attribute, property)
+        this._registerProperty(attribute, property)
       }
     }
   }
 
   attributeChangedCallback(name, _oldValue, newValue) {
-    this[this._updateMethods[name]](newValue)
+    this[this._setters[name]] = newValue
   }
 
-  _registerUpdateMethod(attribute) {
-    this._updateMethods[attribute] = `_update${toPascalCase(attribute)}`
+  _registerSetter(attribute, property) {
+    this._setters[attribute] = `_${property}`
   }
 
-  _registerProperty(attribute) {
-    Object.defineProperty(this, toCamelCase(attribute), {
+  _registerProperty(attribute, property) {
+    Object.defineProperty(this, property, {
       get() {
         return this.getAttribute(attribute)
       },
@@ -57,7 +56,7 @@ export class WaaneElement extends HTMLElement {
   }
 
   _memoizeStaticProperty(staticProperty) {
-    const cache = this._getCache(staticProperty)
+    const cache = getCache(staticProperty)
     const name = this.constructor.name
     let value = cache[name]
     if (!value) {
@@ -66,23 +65,19 @@ export class WaaneElement extends HTMLElement {
     }
     return value
   }
-
-  _getCache(name) {
-    let cache = staticPropertiesCache[name]
-    if (!cache) {
-      cache = {}
-      staticPropertiesCache[name] = cache
-    }
-    return cache
-  }
-}
-
-function toPascalCase(string) {
-  return string
-    .toLowerCase()
-    .replace(/(^|-)(.)/g, (_match, _p1, p2) => p2.toUpperCase())
 }
 
 function toCamelCase(string) {
   return string.toLowerCase().replace(/-(.)/g, (_match, p1) => p1.toUpperCase())
+}
+
+const staticPropertiesCache = {}
+
+function getCache(name) {
+  let cache = staticPropertiesCache[name]
+  if (!cache) {
+    cache = {}
+    staticPropertiesCache[name] = cache
+  }
+  return cache
 }

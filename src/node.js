@@ -20,11 +20,11 @@ class Node extends WaaneElement {
     return ['x', 'y']
   }
 
-  _updateX(x) {
+  set _x(x) {
     this.style.left = `${x}px`
   }
 
-  _updateY(y) {
+  set _y(y) {
     this.style.top = `${y}px`
   }
 }
