@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Node editor</title>
+  </head>
+  <body>
+    <w-node-editor>
+      <w-node id="oscillator" x="100" y="200">
+        <span slot="title">Oscillator</span>
+        <w-output id="output">Output</w-output>
+      </w-node>
+      <w-node id="biquad-filter" x="200" y="300">
+        <span slot="title">Biquad Filter</span>
+        <w-output id="output">Output</w-output>
+        <w-input id="input">Input</w-input>
+      </w-node>
+      <w-node id="audio-destination" x="500" y="400">
+        <span slot="title">Audio Destination</span>
+        <w-input id="input">Input</w-input>
+      </w-node>
+      <w-link
+        from-node="oscillator"
+        from-output="output"
+        to-node="biquad-filter"
+        to-input="input"
+      ></w-link>
+      <w-link
+        from-node="biquad-filter"
+        from-output="output"
+        to-node="audio-destination"
+        to-input="input"
+      ></w-link>
+    </w-node-editor>
+    <script async type="module" src="./index.js"></script>
+  </body>
+</html>

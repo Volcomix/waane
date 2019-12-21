@@ -1,0 +1,14 @@
+{
+  "name": "@waane/node-editor",
+  "version": "1.0.0",
+  "description": "Node editor web components",
+  "main": "index.js",
+  "author": "Volcomix",
+  "license": "MIT",
+  "scripts": {
+    "start": "live-server --no-browser src"
+  },
+  "devDependencies": {
+    "live-server": "^1.2.1"
+  }
+}
