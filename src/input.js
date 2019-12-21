@@ -1,19 +1,16 @@
-const template = document.createElement('template')
-template.innerHTML = /* HTML */ `
-  <style>
-    :host {
-      display: flex;
-    }
-  </style>
+import { WaaneElement, html } from './waane-element.js'
 
-  <slot>Input</slot>
-`
+class Input extends WaaneElement {
+  static get template() {
+    return html`
+      <style>
+        :host {
+          display: flex;
+        }
+      </style>
 
-class Input extends HTMLElement {
-  constructor() {
-    super()
-    this.attachShadow({ mode: 'open' })
-    this.shadowRoot.appendChild(template.content.cloneNode(true))
+      <slot>Input</slot>
+    `
   }
 }
 

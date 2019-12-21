@@ -1,19 +1,16 @@
-const template = document.createElement('template')
-template.innerHTML = /* HTML */ `
-  <style>
-    :host {
-      display: block;
-    }
-  </style>
+import { WaaneElement, html } from './waane-element.js'
 
-  <slot></slot>
-`
+class NodeEditor extends WaaneElement {
+  static get template() {
+    return html`
+      <style>
+        :host {
+          display: block;
+        }
+      </style>
 
-class NodeEditor extends HTMLElement {
-  constructor() {
-    super()
-    this.attachShadow({ mode: 'open' })
-    this.shadowRoot.appendChild(template.content.cloneNode(true))
+      <slot></slot>
+    `
   }
 }
 
