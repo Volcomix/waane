@@ -3,19 +3,31 @@
   <head>
     <meta charset="utf-8" />
     <title>Node editor</title>
+    <style>
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+      }
+      .node-editor {
+        height: 100%;
+      }
+    </style>
   </head>
   <body>
-    <w-node-editor>
-      <w-node id="oscillator" x="100" y="200">
+    <w-node-editor class="node-editor">
+      <w-node id="oscillator" x="100" y="50">
         <span slot="title">Oscillator</span>
         <w-output id="output">Output</w-output>
       </w-node>
-      <w-node id="biquad-filter" x="200" y="300">
+      <w-node id="biquad-filter" x="300" y="100">
         <span slot="title">Biquad Filter</span>
         <w-output id="output">Output</w-output>
         <w-input id="input">Input</w-input>
       </w-node>
-      <w-node id="audio-destination" x="500" y="400">
+      <w-node id="audio-destination" x="600" y="150">
         <span slot="title">Audio Destination</span>
         <w-input id="input">Input</w-input>
       </w-node>

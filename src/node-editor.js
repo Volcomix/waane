@@ -1,5 +1,11 @@
 const template = document.createElement('template')
 template.innerHTML = /* HTML */ `
+  <style>
+    :host {
+      display: block;
+    }
+  </style>
+
   <slot>Right click to add a node</slot>
 `
 
