@@ -3,6 +3,8 @@ template.innerHTML = /* HTML */ `
   <style>
     :host {
       position: absolute;
+      display: flex;
+      flex-direction: column;
     }
   </style>
 

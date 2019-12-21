@@ -2,14 +2,14 @@ const template = document.createElement('template')
 template.innerHTML = /* HTML */ `
   <style>
     :host {
-      display: block;
+      display: flex;
     }
   </style>
 
-  <slot></slot>
+  <slot>Input</slot>
 `
 
-class NodeEditor extends HTMLElement {
+class Input extends HTMLElement {
   constructor() {
     super()
     this.attachShadow({ mode: 'open' })
@@ -17,4 +17,4 @@ class NodeEditor extends HTMLElement {
   }
 }
 
-customElements.define('w-node-editor', NodeEditor)
+customElements.define('w-input', Input)

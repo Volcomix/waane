@@ -8,9 +8,11 @@
       body {
         height: 100%;
       }
+
       body {
         margin: 0;
       }
+
       .node-editor {
         height: 100%;
       }
@@ -22,21 +24,25 @@
         <span slot="title">Oscillator</span>
         <w-output id="output">Output</w-output>
       </w-node>
+
       <w-node id="biquad-filter" x="300" y="100">
         <span slot="title">Biquad Filter</span>
         <w-output id="output">Output</w-output>
         <w-input id="input">Input</w-input>
       </w-node>
+
       <w-node id="audio-destination" x="600" y="150">
         <span slot="title">Audio Destination</span>
         <w-input id="input">Input</w-input>
       </w-node>
+
       <w-link
         from-node="oscillator"
         from-output="output"
         to-node="biquad-filter"
         to-input="input"
       ></w-link>
+
       <w-link
         from-node="biquad-filter"
         from-output="output"
@@ -44,6 +50,7 @@
         to-input="input"
       ></w-link>
     </w-node-editor>
+
     <script async type="module" src="./index.js"></script>
   </body>
 </html>
