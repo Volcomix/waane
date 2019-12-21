@@ -44,11 +44,11 @@ export class WaaneElement extends HTMLElement {
   }
 
   _registerUpdateMethod(attribute) {
-    this._updateMethods[attribute] = `_update${this._toPascalCase(attribute)}`
+    this._updateMethods[attribute] = `_update${toPascalCase(attribute)}`
   }
 
   _registerProperty(attribute) {
-    Object.defineProperty(this, this._toCamelCase(attribute), {
+    Object.defineProperty(this, toCamelCase(attribute), {
       get() {
         return this.getAttribute(attribute)
       },
@@ -57,16 +57,14 @@ export class WaaneElement extends HTMLElement {
       },
     })
   }
+}
 
-  _toPascalCase(attribute) {
-    return attribute
-      .toLowerCase()
-      .replace(/(^|-)(.)/g, (_match, _p1, p2) => p2.toUpperCase())
-  }
+function toPascalCase(string) {
+  return string
+    .toLowerCase()
+    .replace(/(^|-)(.)/g, (_match, _p1, p2) => p2.toUpperCase())
+}
 
-  _toCamelCase(attribute) {
-    return attribute
-      .toLowerCase()
-      .replace(/-(.)/g, (_match, p1) => p1.toUpperCase())
-  }
+function toCamelCase(string) {
+  return string.toLowerCase().replace(/-(.)/g, (_match, p1) => p1.toUpperCase())
 }
