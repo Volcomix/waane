@@ -1,4 +1,5 @@
 import './node-editor.js'
 import './node.js'
+import './link.js'
 import './output.js'
 import './input.js'
