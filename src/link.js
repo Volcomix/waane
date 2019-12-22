@@ -25,7 +25,7 @@ class Link extends WaaneElement {
   }
 
   static get observedAttributes() {
-    return ['from-node', 'from-output', 'to-node', 'to-input']
+    return ['from', 'to']
   }
 
   constructor() {
@@ -33,31 +33,31 @@ class Link extends WaaneElement {
     this._path = this.shadowRoot.querySelector('path')
   }
 
-  update(from, to) {
-    const { width, height } = this._updateBoundingBox(from, to)
-    this._updatePath(from, to, width, height)
+  update(fromPosition, toPosition) {
+    const { width, height } = this._updateBoundingBox(fromPosition, toPosition)
+    this._updatePath(fromPosition, toPosition, width, height)
   }
 
-  _updateBoundingBox(from, to) {
-    const width = Math.abs(to.x - from.x)
-    const height = Math.abs(to.y - from.y)
+  _updateBoundingBox(fromPosition, toPosition) {
+    const width = Math.abs(toPosition.x - fromPosition.x)
+    const height = Math.abs(toPosition.y - fromPosition.y)
 
-    this.style.left = `${Math.min(from.x, to.x)}px`
-    this.style.top = `${Math.min(from.y, to.y)}px`
+    this.style.left = `${Math.min(fromPosition.x, toPosition.x)}px`
+    this.style.top = `${Math.min(fromPosition.y, toPosition.y)}px`
     this.style.width = `${width}px`
     this.style.height = `${height}px`
 
     return { width, height }
   }
 
-  _updatePath(from, to, width, height) {
+  _updatePath(fromPosition, toPosition, width, height) {
     const start = {
-      x: to.x > from.x ? 0 : width,
-      y: to.y > from.y ? 0 : height,
+      x: toPosition.x > fromPosition.x ? 0 : width,
+      y: toPosition.y > fromPosition.y ? 0 : height,
     }
     const end = {
-      x: to.x > from.x ? width : 0,
-      y: to.y > from.y ? height : 0,
+      x: toPosition.x > fromPosition.x ? width : 0,
+      y: toPosition.y > fromPosition.y ? height : 0,
     }
     const startControlPoint = {
       x: start.x + width * 0.5,

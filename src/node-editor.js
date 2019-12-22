@@ -17,12 +17,12 @@ class NodeEditor extends WaaneElement {
     await customElements.whenDefined('w-node')
     await customElements.whenDefined('w-link')
     this.querySelectorAll('w-link').forEach(link => {
-      link.update(this._getFrom(link), this._getTo(link))
+      link.update(this._getFromPosition(link), this._getToPosition(link))
     })
   }
 
-  _getFrom(link) {
-    const from = this.querySelector(`#${link.fromNode} #${link.fromOutput}`)
+  _getFromPosition(link) {
+    const from = this.querySelector(`#${link.from}`)
     const fromRect = from.getBoundingClientRect()
     return {
       x: fromRect.x + fromRect.width,
@@ -30,8 +30,8 @@ class NodeEditor extends WaaneElement {
     }
   }
 
-  _getTo(link) {
-    const to = this.querySelector(`#${link.toNode} #${link.toInput}`)
+  _getToPosition(link) {
+    const to = this.querySelector(`#${link.to}`)
     const toRect = to.getBoundingClientRect()
     return {
       x: toRect.x,
