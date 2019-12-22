@@ -9,27 +9,28 @@ class Link extends WaaneElement {
           display: block;
         }
 
-        .container {
+        svg {
           width: 100%;
           height: 100%;
           overflow: visible;
-        }
-
-        .path {
           fill: none;
           stroke: black;
         }
       </style>
 
-      <svg class="container">
-        <path class="path" />
+      <svg>
+        <path />
       </svg>
     `
   }
 
+  static get observedAttributes() {
+    return ['from-node', 'from-output', 'to-node', 'to-input']
+  }
+
   constructor() {
     super()
-    this.path = this.shadowRoot.querySelector('.path')
+    this._path = this.shadowRoot.querySelector('path')
   }
 
   update(from, to) {
@@ -66,7 +67,7 @@ class Link extends WaaneElement {
       x: end.x - width * 0.5,
       y: end.y,
     }
-    this.path.setAttribute(
+    this._path.setAttribute(
       'd',
       `M ${start.x}, ${start.y}
        C ${startControlPoint.x}, ${startControlPoint.y}

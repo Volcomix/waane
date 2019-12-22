@@ -12,6 +12,32 @@ class NodeEditor extends WaaneElement {
       <slot></slot>
     `
   }
+
+  async connectedCallback() {
+    await customElements.whenDefined('w-node')
+    await customElements.whenDefined('w-link')
+    this.querySelectorAll('w-link').forEach(link => {
+      link.update(this._getFrom(link), this._getTo(link))
+    })
+  }
+
+  _getFrom(link) {
+    const from = this.querySelector(`#${link.fromNode} #${link.fromOutput}`)
+    const fromRect = from.getBoundingClientRect()
+    return {
+      x: fromRect.x + fromRect.width,
+      y: fromRect.y + fromRect.height / 2,
+    }
+  }
+
+  _getTo(link) {
+    const to = this.querySelector(`#${link.toNode} #${link.toInput}`)
+    const toRect = to.getBoundingClientRect()
+    return {
+      x: toRect.x,
+      y: toRect.y + toRect.height / 2,
+    }
+  }
 }
 
 customElements.define('w-node-editor', NodeEditor)
