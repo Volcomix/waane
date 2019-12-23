@@ -16,26 +16,33 @@ class NodeEditor extends WaaneElement {
   async connectedCallback() {
     await customElements.whenDefined('w-node')
     await customElements.whenDefined('w-link')
+    const nodeEditorRect = this.getBoundingClientRect()
     this.querySelectorAll('w-link').forEach(link => {
-      link.update(this._getFromPosition(link), this._getToPosition(link))
+      this._updateLink(link, nodeEditorRect)
     })
   }
 
-  _getFromPosition(link) {
+  _updateLink(link, nodeEditorRect) {
+    const fromPosition = this._getFromPosition(link, nodeEditorRect)
+    const toPosition = this._getToPosition(link, nodeEditorRect)
+    link.update(fromPosition, toPosition)
+  }
+
+  _getFromPosition(link, nodeEditorRect) {
     const from = this.querySelector(`#${link.from}`)
     const fromRect = from.getBoundingClientRect()
     return {
-      x: fromRect.x + fromRect.width,
-      y: fromRect.y + fromRect.height / 2,
+      x: fromRect.x + fromRect.width - nodeEditorRect.x,
+      y: fromRect.y + fromRect.height / 2 - nodeEditorRect.y,
     }
   }
 
-  _getToPosition(link) {
+  _getToPosition(link, nodeEditorRect) {
     const to = this.querySelector(`#${link.to}`)
     const toRect = to.getBoundingClientRect()
     return {
-      x: toRect.x,
-      y: toRect.y + toRect.height / 2,
+      x: toRect.x - nodeEditorRect.x,
+      y: toRect.y + toRect.height / 2 - nodeEditorRect.y,
     }
   }
 }
