@@ -12,12 +12,16 @@ export class WaaneElement extends HTMLElement {
     this._initAttributes()
   }
 
+  attributeChangedCallback(name, _oldValue, newValue) {
+    this[this._setters[name]] = newValue
+  }
+
   get _template() {
-    return this._memoizeStaticProperty('template')
+    return getTemplate.call(this, this.constructor.name)
   }
 
   get _attributes() {
-    return this._memoizeStaticProperty('observedAttributes')
+    return getObservedAttributes.call(this, this.constructor.name)
   }
 
   _initShadowRoot() {
@@ -36,10 +40,6 @@ export class WaaneElement extends HTMLElement {
     }
   }
 
-  attributeChangedCallback(name, _oldValue, newValue) {
-    this[this._setters[name]] = newValue
-  }
-
   _registerSetter(attribute, property) {
     this._setters[attribute] = `_${property}`
   }
@@ -54,30 +54,28 @@ export class WaaneElement extends HTMLElement {
       },
     })
   }
-
-  _memoizeStaticProperty(staticProperty) {
-    const cache = getCache(staticProperty)
-    const name = this.constructor.name
-    let value = cache[name]
-    if (!value) {
-      value = this.constructor[staticProperty]
-      cache[name] = value
-    }
-    return value
-  }
 }
 
-function toCamelCase(string) {
+const getTemplate = memoize(function() {
+  return this.constructor.template
+})
+
+const getObservedAttributes = memoize(function() {
+  return this.constructor.observedAttributes
+})
+
+const toCamelCase = memoize(function(string) {
   return string.toLowerCase().replace(/-(.)/g, (_match, p1) => p1.toUpperCase())
-}
+})
 
-const staticPropertiesCache = {}
-
-function getCache(name) {
-  let cache = staticPropertiesCache[name]
-  if (!cache) {
-    cache = {}
-    staticPropertiesCache[name] = cache
+function memoize(fn) {
+  const cache = {}
+  return function(argument) {
+    let result = cache[argument]
+    if (!result) {
+      result = fn.call(this, argument)
+      cache[argument] = result
+    }
+    return result
   }
-  return cache
 }
