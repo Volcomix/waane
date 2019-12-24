@@ -15,6 +15,7 @@ class NodeEditor extends WaaneElement {
 
   constructor() {
     super()
+    this._sockets = new Map()
     this._nodesMoveObserver = new MutationObserver(this._onNodesMove.bind(this))
     this.addEventListener('w-node-resize', this._onNodeResize.bind(this))
   }
@@ -26,11 +27,28 @@ class NodeEditor extends WaaneElement {
     })
     await customElements.whenDefined('w-node')
     await customElements.whenDefined('w-link')
-    this._updateLinks()
+    this._initLinks()
   }
 
   disconnectedCallback() {
     this._nodesMoveObserver.disconnect()
+  }
+
+  get nodes() {
+    return this.querySelectorAll('w-node')
+  }
+
+  get links() {
+    return this.querySelectorAll('w-link')
+  }
+
+  _initLinks() {
+    const outputs = new Set()
+    const inputs = new Set()
+    this.nodes.forEach(node => {
+      this._findSockets(node, outputs, inputs)
+    })
+    this._updateLinks(outputs, inputs)
   }
 
   _onNodesMove(mutations) {
@@ -56,18 +74,27 @@ class NodeEditor extends WaaneElement {
   }
 
   _findSockets(target, outputs, inputs) {
+    let sockets = this._sockets.get(target)
+    if (sockets) {
+      sockets.outputs.forEach(output => outputs.add(output))
+      sockets.inputs.forEach(input => inputs.add(input))
+    }
+    sockets = { outputs: [], inputs: [] }
     target.querySelectorAll('w-output').forEach(output => {
+      sockets.outputs.push(output.id)
       outputs.add(output.id)
     })
     target.querySelectorAll('w-input').forEach(input => {
+      sockets.inputs.push(input.id)
       inputs.add(input.id)
     })
+    this._sockets.set(target, sockets)
   }
 
   _updateLinks(outputs, inputs) {
     const nodeEditorRect = this.getBoundingClientRect()
-    this.querySelectorAll('w-link').forEach(link => {
-      if (!outputs || outputs.has(link.from) || inputs.has(link.to)) {
+    this.links.forEach(link => {
+      if (outputs.has(link.from) || inputs.has(link.to)) {
         this._updateLink(link, nodeEditorRect)
       }
     })
