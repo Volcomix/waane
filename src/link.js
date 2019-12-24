@@ -34,6 +34,9 @@ class Link extends WaaneElement {
   }
 
   update(fromPosition, toPosition) {
+    if (!fromPosition || !toPosition) {
+      return
+    }
     const { width, height } = this._updateBoundingBox(fromPosition, toPosition)
     this._updatePath(fromPosition, toPosition, width, height)
   }

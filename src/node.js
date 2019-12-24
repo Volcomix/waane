@@ -20,12 +20,42 @@ class Node extends WaaneElement {
     return ['x', 'y']
   }
 
+  constructor() {
+    super()
+    this._resizeObserver = new MutationObserver(this._dispatchResize.bind(this))
+  }
+
+  connectedCallback() {
+    this._resizeObserver.observe(this, {
+      attributes: true,
+      childList: true,
+      characterData: true,
+      subtree: true,
+    })
+  }
+
+  disconnectedCallback() {
+    this._resizeObserver.disconnect()
+  }
+
   set _x(x) {
     this.style.left = `${x}px`
   }
 
   set _y(y) {
     this.style.top = `${y}px`
+  }
+
+  _dispatchResize(mutations) {
+    if (this._isResized(mutations)) {
+      this.dispatchEvent(new Event('w-node-resize', { bubbles: true }))
+    }
+  }
+
+  _isResized(mutations) {
+    return mutations.some(mutation => {
+      return mutation.target !== this || mutation.type !== 'attributes'
+    })
   }
 }
 
