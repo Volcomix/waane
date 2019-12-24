@@ -1,8 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <title>Node editor</title>
+    <meta
+      name="description"
+      content="An example using @waane/node-editor web components"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
       html,
       body {
@@ -22,16 +27,19 @@
     <w-node-editor class="node-editor">
       <w-node x="50" y="150">
         <span slot="title">Source</span>
-        <select>
-          <option value="1">One</option>
-          <option value="2">Two</option>
-          <option value="3">Three</option>
-        </select>
+        <label>
+          Property
+          <select>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+          </select>
+        </label>
         <w-output id="source-out-1">Output 1</w-output>
         <w-output id="source-out-2">Output 2</w-output>
       </w-node>
 
-      <w-node x="200" y="50">
+      <w-node x="300" y="50">
         <span slot="title">Filter</span>
         <w-output id="filter-out">Output</w-output>
         <w-input id="filter-in">
@@ -42,7 +50,7 @@
         </w-input>
       </w-node>
 
-      <w-node x="500" y="100">
+      <w-node x="600" y="100">
         <span slot="title">Destination</span>
         <w-input id="dest-in-1">Input 1</w-input>
         <w-input id="dest-in-2">Input 2</w-input>
