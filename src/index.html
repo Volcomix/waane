@@ -20,24 +20,37 @@
   </head>
   <body>
     <w-node-editor class="node-editor">
-      <w-node x="100" y="50">
-        <span slot="title">Oscillator</span>
-        <w-output id="osc-out">Output</w-output>
+      <w-node x="50" y="150">
+        <span slot="title">Source</span>
+        <select>
+          <option value="1">One</option>
+          <option value="2">Two</option>
+          <option value="3">Three</option>
+        </select>
+        <w-output id="source-out-1">Output 1</w-output>
+        <w-output id="source-out-2">Output 2</w-output>
       </w-node>
 
-      <w-node x="300" y="100">
-        <span slot="title">Biquad Filter</span>
+      <w-node x="200" y="50">
+        <span slot="title">Filter</span>
         <w-output id="filter-out">Output</w-output>
-        <w-input id="filter-in">Input</w-input>
+        <w-input id="filter-in">
+          <label>
+            Input
+            <input type="number" name="input" />
+          </label>
+        </w-input>
       </w-node>
 
-      <w-node x="600" y="150">
-        <span slot="title">Audio Destination</span>
-        <w-input id="dest">Input</w-input>
+      <w-node x="500" y="100">
+        <span slot="title">Destination</span>
+        <w-input id="dest-in-1">Input 1</w-input>
+        <w-input id="dest-in-2">Input 2</w-input>
       </w-node>
 
-      <w-link from="osc-out" to="filter-in"></w-link>
-      <w-link from="filter-out" to="dest"></w-link>
+      <w-link from="source-out-1" to="filter-in"></w-link>
+      <w-link from="source-out-2" to="dest-in-2"></w-link>
+      <w-link from="filter-out" to="dest-in-1"></w-link>
     </w-node-editor>
 
     <script async type="module" src="./index.js"></script>
