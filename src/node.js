@@ -38,6 +38,14 @@ class Node extends WaaneElement {
     this._resizeObserver.disconnect()
   }
 
+  get outputs() {
+    return this.querySelectorAll('w-output')
+  }
+
+  get inputs() {
+    return this.querySelectorAll('w-input')
+  }
+
   set _x(x) {
     this.style.left = `${x}px`
   }

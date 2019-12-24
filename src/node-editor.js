@@ -27,7 +27,7 @@ class NodeEditor extends WaaneElement {
     })
     await customElements.whenDefined('w-node')
     await customElements.whenDefined('w-link')
-    this._initLinks()
+    this.drawLinks()
   }
 
   disconnectedCallback() {
@@ -42,7 +42,7 @@ class NodeEditor extends WaaneElement {
     return this.querySelectorAll('w-link')
   }
 
-  _initLinks() {
+  drawLinks() {
     const outputs = new Set()
     const inputs = new Set()
     this.nodes.forEach(node => {
@@ -80,11 +80,11 @@ class NodeEditor extends WaaneElement {
       sockets.inputs.forEach(input => inputs.add(input))
     }
     sockets = { outputs: [], inputs: [] }
-    target.querySelectorAll('w-output').forEach(output => {
+    target.outputs.forEach(output => {
       sockets.outputs.push(output.id)
       outputs.add(output.id)
     })
-    target.querySelectorAll('w-input').forEach(input => {
+    target.inputs.forEach(input => {
       sockets.inputs.push(input.id)
       inputs.add(input.id)
     })
