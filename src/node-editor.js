@@ -107,7 +107,7 @@ class NodeEditor extends WaaneElement {
   }
 
   _getFromPosition(link, nodeEditorRect) {
-    const from = this.querySelector(`#${link.from}`)
+    const from = this.querySelector(`w-output#${link.from}`)
     if (!from) {
       return
     }
@@ -119,7 +119,7 @@ class NodeEditor extends WaaneElement {
   }
 
   _getToPosition(link, nodeEditorRect) {
-    const to = this.querySelector(`#${link.to}`)
+    const to = this.querySelector(`w-input#${link.to}`)
     if (!to) {
       return
     }
