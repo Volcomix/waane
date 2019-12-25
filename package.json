@@ -6,9 +6,14 @@
   "author": "Volcomix",
   "license": "MIT",
   "scripts": {
-    "start": "live-server --no-browser src"
+    "start": "live-server --no-browser src",
+    "test": "jest --watch"
   },
   "devDependencies": {
+    "@babel/core": "^7.7.7",
+    "@babel/preset-env": "^7.7.7",
+    "babel-jest": "^24.9.0",
+    "jest": "^24.9.0",
     "live-server": "^1.2.1"
   }
 }

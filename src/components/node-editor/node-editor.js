@@ -1,4 +1,4 @@
-import { WaaneElement, html } from './waane-element.js'
+import { WaaneElement, html } from '../waane-element.js'
 
 class NodeEditor extends WaaneElement {
   static get template() {
