@@ -1,20 +1,36 @@
-import { html } from './waane-element.js'
-
 describe('html', () => {
-  let template
+  let templateHandle
 
-  beforeEach(() => {
-    template = html`
-      <span>A template content</span>
-    `
+  beforeAll(async () => {
+    await page.goto('http://localhost:8080')
+    await page.setContent('')
   })
 
-  it('returns a template', () => {
-    expect(template).toBeInstanceOf(HTMLTemplateElement)
+  beforeEach(async () => {
+    templateHandle = await page.evaluateHandle(`
+      import('./components/waane-element.js')
+      .then(({ html }) => html\`<span>A template content</span>\`)
+    `)
   })
 
-  it('stores the correct content inside the template', () => {
-    expect(template.content).toMatchSnapshot()
+  afterEach(async () => {
+    await templateHandle.dispose()
+  })
+
+  it('returns a template', async () => {
+    const className = await page.evaluate(
+      template => template.constructor.name,
+      templateHandle,
+    )
+    expect(className).toBe('HTMLTemplateElement')
+  })
+
+  it('stores the correct content inside the template', async () => {
+    const content = await page.evaluateHandle(
+      template => template.content,
+      templateHandle,
+    )
+    await expect(content).toMatchElement('span', { text: 'A template content' })
   })
 })
 

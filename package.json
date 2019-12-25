@@ -14,6 +14,8 @@
     "@babel/preset-env": "^7.7.7",
     "babel-jest": "^24.9.0",
     "jest": "^24.9.0",
-    "live-server": "^1.2.1"
+    "jest-puppeteer": "^4.4.0",
+    "live-server": "^1.2.1",
+    "puppeteer": "^2.0.0"
   }
 }
