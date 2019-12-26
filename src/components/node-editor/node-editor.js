@@ -108,9 +108,8 @@ class NodeEditor extends WaaneElement {
 
   _getFromPosition(link, nodeEditorRect) {
     const from = this.querySelector(`w-output#${link.from}`)
-    if (!from) {
-      return
-    }
+    if (!from) return
+
     const fromRect = from.getBoundingClientRect()
     return {
       x: fromRect.x + fromRect.width - nodeEditorRect.x,
@@ -120,9 +119,8 @@ class NodeEditor extends WaaneElement {
 
   _getToPosition(link, nodeEditorRect) {
     const to = this.querySelector(`w-input#${link.to}`)
-    if (!to) {
-      return
-    }
+    if (!to) return
+
     const toRect = to.getBoundingClientRect()
     return {
       x: toRect.x - nodeEditorRect.x,

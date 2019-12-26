@@ -25,18 +25,21 @@ export class WaaneElement extends HTMLElement {
   }
 
   _initShadowRoot() {
+    const template = this._template
+    if (!template) return
+
     this.attachShadow({ mode: 'open' })
-    this.shadowRoot.appendChild(this._template.content.cloneNode(true))
+    this.shadowRoot.appendChild(template.content.cloneNode(true))
   }
 
   _initAttributes() {
     const attributes = this._attributes
-    if (attributes) {
-      for (const attribute of attributes) {
-        const property = toCamelCase(attribute)
-        this._registerSetter(attribute, property)
-        this._registerProperty(attribute, property)
-      }
+    if (!attributes) return
+
+    for (const attribute of attributes) {
+      const property = toCamelCase(attribute)
+      this._registerSetter(attribute, property)
+      this._registerProperty(attribute, property)
     }
   }
 

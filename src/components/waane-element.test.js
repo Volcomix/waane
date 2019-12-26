@@ -20,11 +20,11 @@ describe('html', () => {
   })
 
   it('returns a template', async () => {
-    const className = await page.evaluate(
-      template => template.constructor.name,
+    const isTemplate = await page.evaluate(
+      template => template instanceof HTMLTemplateElement,
       templateHandle,
     )
-    expect(className).toBe('HTMLTemplateElement')
+    expect(isTemplate).toBe(true)
   })
 
   it('stores the correct content inside the template', async () => {
@@ -39,7 +39,7 @@ describe('html', () => {
 describe('WaaneElement', () => {
   it('initializes the shadow root', async () => {
     const shadowRoot = await page.evaluateHandle(({ WaaneElement, html }) => {
-      class AnElement extends WaaneElement {
+      class ShadowElement extends WaaneElement {
         static get template() {
           return html`
             <span>A shadow</span>
@@ -47,18 +47,23 @@ describe('WaaneElement', () => {
         }
       }
 
-      customElements.define('an-element', AnElement)
-      return document.createElement('an-element').shadowRoot
+      customElements.define('shadow-element', ShadowElement)
+      return document.createElement('shadow-element').shadowRoot
     }, moduleHandle)
 
     await expect(shadowRoot).toMatchElement('span', { text: 'A shadow' })
   })
 
-  it.todo('registers a _setter for each attribute')
+  it('has no shadow root without template', async () => {
+    const hasShadowRoot = await page.evaluate(({ WaaneElement }) => {
+      class NoTemplateElement extends WaaneElement {}
 
-  it.todo('registers a property for each attribute')
+      customElements.define('no-template-element', NoTemplateElement)
+      return !!document.createElement('no-template-element').shadowRoot
+    }, moduleHandle)
 
-  it.todo('does not throw without template')
+    expect(hasShadowRoot).toBe(false)
+  })
 
   it.todo('does not throw without observedAttributes')
 
