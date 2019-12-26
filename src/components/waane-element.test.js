@@ -1,20 +1,22 @@
+let moduleHandle
+
+beforeAll(async () => {
+  await page.goto('http://localhost:8080')
+  moduleHandle = await page.evaluateHandle(`
+    import('./components/waane-element.js')
+  `)
+})
+
 describe('html', () => {
   let templateHandle
 
-  beforeAll(async () => {
-    await page.goto('http://localhost:8080')
-    await page.setContent('')
-  })
-
   beforeEach(async () => {
-    templateHandle = await page.evaluateHandle(`
-      import('./components/waane-element.js')
-      .then(({ html }) => html\`<span>A template content</span>\`)
-    `)
-  })
-
-  afterEach(async () => {
-    await templateHandle.dispose()
+    templateHandle = await page.evaluateHandle(
+      ({ html }) => html`
+        <span>A content</span>
+      `,
+      moduleHandle,
+    )
   })
 
   it('returns a template', async () => {
@@ -30,12 +32,27 @@ describe('html', () => {
       template => template.content,
       templateHandle,
     )
-    await expect(content).toMatchElement('span', { text: 'A template content' })
+    await expect(content).toMatchElement('span', { text: 'A content' })
   })
 })
 
 describe('WaaneElement', () => {
-  it.todo('initializes the shadow root')
+  it('initializes the shadow root', async () => {
+    const shadowRoot = await page.evaluateHandle(({ WaaneElement, html }) => {
+      class AnElement extends WaaneElement {
+        static get template() {
+          return html`
+            <span>A shadow</span>
+          `
+        }
+      }
+
+      customElements.define('an-element', AnElement)
+      return document.createElement('an-element').shadowRoot
+    }, moduleHandle)
+
+    await expect(shadowRoot).toMatchElement('span', { text: 'A shadow' })
+  })
 
   it.todo('registers a _setter for each attribute')
 
