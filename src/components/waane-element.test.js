@@ -59,29 +59,23 @@ describe('WaaneElement', () => {
   })
 
   it('memoizes template', async () => {
-    const templateCallCount = await page.evaluate(({ WaaneElement, html }) => {
+    const tagName = await defineElement(({ WaaneElement, html }) => {
       let templateCallCount = 0
-
-      class MemoizedTemplateElement extends WaaneElement {
+      return class extends WaaneElement {
         static get template() {
-          templateCallCount++
           return html`
-            <span>A memoized template</span>
+            <span>${++templateCallCount}</span>
           `
         }
       }
-
-      customElements.define(
-        'memoized-template-element',
-        MemoizedTemplateElement,
-      )
-      document.createElement('memoized-template-element')
-      document.createElement('memoized-template-element')
-
-      return templateCallCount
-    }, moduleHandle)
-
-    expect(templateCallCount).toBe(1)
+    })
+    await createElement(tagName)
+    await createElement(tagName)
+    const lastElementHandle = await createElement(tagName)
+    const templateCallCount = await lastElementHandle.evaluate(element => {
+      return element.shadowRoot.firstElementChild.textContent
+    })
+    expect(templateCallCount).toBe('1')
   })
 
   it.todo('memoizes observedAttributes')

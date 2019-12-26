@@ -17,11 +17,11 @@ export class WaaneElement extends HTMLElement {
   }
 
   get _template() {
-    return getTemplate.call(this, this.constructor.name)
+    return getTemplate.call(this, this.tagName)
   }
 
   get _attributes() {
-    return getObservedAttributes.call(this, this.constructor.name)
+    return getObservedAttributes.call(this, this.tagName)
   }
 
   _initShadowRoot() {
