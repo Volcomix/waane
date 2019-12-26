@@ -96,11 +96,59 @@ describe('WaaneElement', () => {
     expect(observedAttributesMock).toHaveBeenCalledTimes(2)
   })
 
-  it.todo('calls the associated _setter when an attribute changes')
+  it('calls the associated _setter when an attribute changes', async () => {
+    const setterMock = jest.fn()
+    await page.exposeFunction('setterMock', setterMock)
 
-  it.todo('reflects from property to attribute')
+    const tagName = await defineElement(({ WaaneElement }) => {
+      return class extends WaaneElement {
+        static get observedAttributes() {
+          return ['some-data']
+        }
 
-  it.todo('reflects from attribute to property')
+        set _someData(value) {
+          setterMock(value)
+        }
+      }
+    })
+    const elementHandle = await createElement(tagName)
+    await elementHandle.evaluate(element => {
+      element.setAttribute('some-data', 'aValue')
+    })
+    expect(setterMock).toHaveBeenCalledWith('aValue')
+  })
+
+  it('reflects from property to attribute', async () => {
+    const tagName = await defineElement(({ WaaneElement }) => {
+      return class extends WaaneElement {
+        static get observedAttributes() {
+          return ['some-data']
+        }
+      }
+    })
+    const elementHandle = await createElement(tagName)
+    const attributeValue = await elementHandle.evaluate(element => {
+      element.someData = 'aValue'
+      return element.getAttribute('some-data')
+    })
+    expect(attributeValue).toBe('aValue')
+  })
+
+  it('reflects from attribute to property', async () => {
+    const tagName = await defineElement(({ WaaneElement }) => {
+      return class extends WaaneElement {
+        static get observedAttributes() {
+          return ['some-data']
+        }
+      }
+    })
+    const elementHandle = await createElement(tagName)
+    const propertyValue = await elementHandle.evaluate(element => {
+      element.setAttribute('some-data', 'aValue')
+      return element.someData
+    })
+    expect(propertyValue).toBe('aValue')
+  })
 })
 
 async function evaluateHandle(pageFunction) {
