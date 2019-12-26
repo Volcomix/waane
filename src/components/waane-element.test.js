@@ -11,26 +11,23 @@ describe('html', () => {
   let templateHandle
 
   beforeEach(async () => {
-    templateHandle = await page.evaluateHandle(
+    templateHandle = await evaluateHandle(
       ({ html }) => html`
         <span>A content</span>
       `,
-      moduleHandle,
     )
   })
 
   it('returns a template', async () => {
-    const isTemplate = await page.evaluate(
+    const isTemplate = await templateHandle.evaluate(
       template => template instanceof HTMLTemplateElement,
-      templateHandle,
     )
     expect(isTemplate).toBe(true)
   })
 
   it('stores the correct content inside the template', async () => {
-    const content = await page.evaluateHandle(
+    const content = await templateHandle.evaluateHandle(
       template => template.content,
-      templateHandle,
     )
     await expect(content).toMatchElement('span', { text: 'A content' })
   })
@@ -99,3 +96,11 @@ describe('WaaneElement', () => {
 
   it.todo('reflects from attribute to property')
 })
+
+function evaluateHandle(pageFunction) {
+  return page.evaluateHandle(pageFunction, moduleHandle)
+}
+
+function evaluate(pageFunction) {
+  return page.evaluate(pageFunction, moduleHandle)
+}
