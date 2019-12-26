@@ -74,11 +74,10 @@ const toCamelCase = memoize(function(string) {
 function memoize(fn) {
   const cache = {}
   return function(argument) {
-    let result = cache[argument]
-    if (!result) {
-      result = fn.call(this, argument)
-      cache[argument] = result
+    if (argument in cache) {
+      return cache[argument]
+    } else {
+      return (cache[argument] = fn.call(this, argument))
     }
-    return result
   }
 }

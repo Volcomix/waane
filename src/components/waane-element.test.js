@@ -59,23 +59,19 @@ describe('WaaneElement', () => {
   })
 
   it('memoizes template', async () => {
-    const tagName = await defineElement(({ WaaneElement, html }) => {
-      let templateCallCount = 0
+    const templateMock = jest.fn()
+    await page.exposeFunction('templateMock', templateMock)
+    const tagName = await defineElement(({ WaaneElement }) => {
       return class extends WaaneElement {
         static get template() {
-          return html`
-            <span>${++templateCallCount}</span>
-          `
+          templateMock()
         }
       }
     })
     await createElement(tagName)
     await createElement(tagName)
-    const lastElementHandle = await createElement(tagName)
-    const templateCallCount = await lastElementHandle.evaluate(element => {
-      return element.shadowRoot.firstElementChild.textContent
-    })
-    expect(templateCallCount).toBe('1')
+    await createElement(tagName)
+    expect(templateMock).toHaveBeenCalledTimes(1)
   })
 
   it.todo('memoizes observedAttributes')
