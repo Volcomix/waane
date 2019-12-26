@@ -37,7 +37,18 @@ describe('html', () => {
 })
 
 describe('WaaneElement', () => {
-  it('initializes the shadow root', async () => {
+  it('has no shadow root without template', async () => {
+    const hasShadowRoot = await page.evaluate(({ WaaneElement }) => {
+      class NoTemplateElement extends WaaneElement {}
+
+      customElements.define('no-template-element', NoTemplateElement)
+      return !!document.createElement('no-template-element').shadowRoot
+    }, moduleHandle)
+
+    expect(hasShadowRoot).toBe(false)
+  })
+
+  it('initializes the shadow root without observedAttributes', async () => {
     const shadowRoot = await page.evaluateHandle(({ WaaneElement, html }) => {
       class ShadowElement extends WaaneElement {
         static get template() {
@@ -54,20 +65,31 @@ describe('WaaneElement', () => {
     await expect(shadowRoot).toMatchElement('span', { text: 'A shadow' })
   })
 
-  it('has no shadow root without template', async () => {
-    const hasShadowRoot = await page.evaluate(({ WaaneElement }) => {
-      class NoTemplateElement extends WaaneElement {}
+  it('memoizes template', async () => {
+    const templateCallCount = await page.evaluate(({ WaaneElement, html }) => {
+      let templateCallCount = 0
 
-      customElements.define('no-template-element', NoTemplateElement)
-      return !!document.createElement('no-template-element').shadowRoot
+      class MemoizedTemplateElement extends WaaneElement {
+        static get template() {
+          templateCallCount++
+          return html`
+            <span>A memoized template</span>
+          `
+        }
+      }
+
+      customElements.define(
+        'memoized-template-element',
+        MemoizedTemplateElement,
+      )
+      document.createElement('memoized-template-element')
+      document.createElement('memoized-template-element')
+
+      return templateCallCount
     }, moduleHandle)
 
-    expect(hasShadowRoot).toBe(false)
+    expect(templateCallCount).toBe(1)
   })
-
-  it.todo('does not throw without observedAttributes')
-
-  it.todo('memoizes template')
 
   it.todo('memoizes observedAttributes')
 
