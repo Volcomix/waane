@@ -78,10 +78,12 @@ class Link extends WaaneElement {
       }
       this._path.setAttribute(
         'd',
-        `M ${start.x}, ${start.y}
-       C ${startControlPoint.x}, ${startControlPoint.y}
-         ${endControlPoint.x}, ${endControlPoint.y}
-         ${end.x}, ${end.y}`,
+        [
+          `M ${start.x},${start.y}`,
+          `C ${startControlPoint.x},${startControlPoint.y}`,
+          `${endControlPoint.x},${endControlPoint.y}`,
+          `${end.x},${end.y}`,
+        ].join(' '),
       )
     } else {
       this._path.removeAttribute('d')
