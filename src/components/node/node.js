@@ -47,11 +47,11 @@ class Node extends WaaneElement {
   }
 
   set _x(x) {
-    this.style.left = `${x}px`
+    this.style.left = x === null ? null : `${x}px`
   }
 
   set _y(y) {
-    this.style.top = `${y}px`
+    this.style.top = y === null ? null : `${y}px`
   }
 
   _dispatchResize(mutations) {
