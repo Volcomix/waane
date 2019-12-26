@@ -61,6 +61,7 @@ describe('WaaneElement', () => {
   it('memoizes template', async () => {
     const templateMock = jest.fn()
     await page.exposeFunction('templateMock', templateMock)
+
     const tagName = await defineElement(({ WaaneElement }) => {
       return class extends WaaneElement {
         static get template() {
@@ -74,7 +75,26 @@ describe('WaaneElement', () => {
     expect(templateMock).toHaveBeenCalledTimes(1)
   })
 
-  it.todo('memoizes observedAttributes')
+  it('memoizes observedAttributes', async () => {
+    const observedAttributesMock = jest.fn()
+    await page.exposeFunction('observedAttributesMock', observedAttributesMock)
+
+    const tagName = await defineElement(({ WaaneElement }) => {
+      return class extends WaaneElement {
+        static get observedAttributes() {
+          observedAttributesMock()
+        }
+      }
+    })
+    await createElement(tagName)
+    await createElement(tagName)
+    await createElement(tagName)
+    await createElement(tagName)
+    await createElement(tagName)
+
+    // Expected to be called once by the browser and once by WaaneElement
+    expect(observedAttributesMock).toHaveBeenCalledTimes(2)
+  })
 
   it.todo('calls the associated _setter when an attribute changes')
 
