@@ -2,9 +2,7 @@ let elementHandle, onResizeMock
 
 beforeAll(async () => {
   await page.goto('http://localhost:8080/test.html')
-  await page.evaluateHandle(`
-    import('./components/node/node.js')
-  `)
+  await page.evaluate(`import('./components/node/node.js')`)
 
   onResizeMock = jest.fn()
   await page.exposeFunction('onResizeMock', onResizeMock)

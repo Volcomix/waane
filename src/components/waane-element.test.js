@@ -8,25 +8,23 @@ beforeAll(async () => {
 })
 
 describe('html', () => {
-  let templateHandle
-
-  beforeEach(async () => {
-    templateHandle = await evaluateHandle(({ html }) => {
-      return html`
-        <span>A content</span>
-      `
-    })
-  })
-
   it('returns a template', async () => {
-    const isTemplate = await templateHandle.evaluate(template => {
+    const isTemplate = await page.evaluate(({ html }) => {
+      const template = html`
+        <span>A template</span>
+      `
       return template instanceof HTMLTemplateElement
-    })
+    }, moduleHandle)
     expect(isTemplate).toBe(true)
   })
 
   it('stores the correct content inside the template', async () => {
-    const contentHandle = await templateHandle.getProperty('content')
+    const contentHandle = await page.evaluateHandle(({ html }) => {
+      const template = html`
+        <span>A content</span>
+      `
+      return template.content
+    }, moduleHandle)
     await expect(contentHandle).toMatchElement('span', { text: 'A content' })
   })
 })
@@ -36,10 +34,10 @@ describe('WaaneElement', () => {
     const tagName = await defineElement(({ WaaneElement }) => {
       return class extends WaaneElement {}
     })
-    const elementHandle = await createElement(tagName)
-    const hasShadowRoot = await elementHandle.evaluate(element => {
+    const hasShadowRoot = await page.evaluate(tagName => {
+      const element = document.createElement(tagName)
       return !!element.shadowRoot
-    })
+    }, tagName)
     expect(hasShadowRoot).toBe(false)
   })
 
@@ -53,8 +51,10 @@ describe('WaaneElement', () => {
         }
       }
     })
-    const elementHandle = await createElement(tagName)
-    const shadowRootHandle = await elementHandle.getProperty('shadowRoot')
+    const shadowRootHandle = await page.evaluateHandle(tagName => {
+      const element = document.createElement(tagName)
+      return element.shadowRoot
+    }, tagName)
     await expect(shadowRootHandle).toMatchElement('span', { text: 'A shadow' })
   })
 
@@ -69,9 +69,11 @@ describe('WaaneElement', () => {
         }
       }
     })
-    await createElement(tagName)
-    await createElement(tagName)
-    await createElement(tagName)
+    await page.evaluate(tagName => {
+      document.createElement(tagName)
+      document.createElement(tagName)
+      document.createElement(tagName)
+    }, tagName)
     expect(templateMock).toHaveBeenCalledTimes(1)
   })
 
@@ -86,11 +88,13 @@ describe('WaaneElement', () => {
         }
       }
     })
-    await createElement(tagName)
-    await createElement(tagName)
-    await createElement(tagName)
-    await createElement(tagName)
-    await createElement(tagName)
+    await page.evaluate(tagName => {
+      document.createElement(tagName)
+      document.createElement(tagName)
+      document.createElement(tagName)
+      document.createElement(tagName)
+      document.createElement(tagName)
+    }, tagName)
 
     // Expected to be called once by the browser and once by WaaneElement
     expect(observedAttributesMock).toHaveBeenCalledTimes(2)
@@ -111,10 +115,10 @@ describe('WaaneElement', () => {
         }
       }
     })
-    const elementHandle = await createElement(tagName)
-    await elementHandle.evaluate(element => {
+    await page.evaluate(tagName => {
+      const element = document.createElement(tagName)
       element.setAttribute('some-data', 'aValue')
-    })
+    }, tagName)
     expect(setterMock).toHaveBeenCalledWith('aValue')
   })
 
@@ -126,11 +130,11 @@ describe('WaaneElement', () => {
         }
       }
     })
-    const elementHandle = await createElement(tagName)
-    const attributeValue = await elementHandle.evaluate(element => {
+    const attributeValue = await page.evaluate(tagName => {
+      const element = document.createElement(tagName)
       element.someData = 'aValue'
       return element.getAttribute('some-data')
-    })
+    }, tagName)
     expect(attributeValue).toBe('aValue')
   })
 
@@ -142,36 +146,24 @@ describe('WaaneElement', () => {
         }
       }
     })
-    const elementHandle = await createElement(tagName)
-    const propertyValue = await elementHandle.evaluate(element => {
+    const propertyValue = await page.evaluate(tagName => {
+      const element = document.createElement(tagName)
       element.setAttribute('some-data', 'aValue')
       return element.someData
-    })
+    }, tagName)
     expect(propertyValue).toBe('aValue')
   })
 })
 
-async function evaluateHandle(pageFunction) {
-  return await page.evaluateHandle(pageFunction, moduleHandle)
-}
-
-async function evaluate(pageFunction) {
-  return await page.evaluate(pageFunction, moduleHandle)
-}
-
 async function defineElement(pageFunction) {
-  const elementClassHandle = await evaluateHandle(pageFunction)
-
+  const elementClassHandle = await page.evaluateHandle(
+    pageFunction,
+    moduleHandle,
+  )
   return await elementClassHandle.evaluate(elementClass => {
     window.testTagNameId = (window.testTagNameId || 0) + 1
     const tagName = `test-${testTagNameId}`
     customElements.define(tagName, elementClass)
     return tagName
   })
-}
-
-async function createElement(tagName) {
-  return await page.evaluateHandle(tagName => {
-    return document.createElement(tagName)
-  }, tagName)
 }
