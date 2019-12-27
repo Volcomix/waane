@@ -36,7 +36,7 @@ it('is named Node by default', async () => {
 
 it('gets the outputs', async () => {
   const outputs = await elementHandle.evaluate(element => {
-    element.innerHTML = String.raw`
+    element.innerHTML = /* HTML */ `
       <span slot="title">Node</span>
       <w-output>Output 1</w-output>
       <w-input>Input</w-input>
@@ -49,7 +49,7 @@ it('gets the outputs', async () => {
 
 it('gets the inputs', async () => {
   const inputs = await elementHandle.evaluate(element => {
-    element.innerHTML = String.raw`
+    element.innerHTML = /* HTML */ `
       <span slot="title">Node</span>
       <w-input>Input 1</w-input>
       <w-output>Output</w-output>
@@ -103,7 +103,9 @@ it('dispatches w-node-resize when a child is added', async () => {
 
 it('dispatches w-node-resize when a child attribute changes', async () => {
   await elementHandle.evaluate(element => {
-    element.innerHTML = String.raw`<span>A child element</span>`
+    element.innerHTML = /* HTML */ `
+      <span>A child element</span>
+    `
   })
   await elementHandle.evaluate(element => {
     element.firstElementChild.setAttribute('id', 'a-child-element-id')
