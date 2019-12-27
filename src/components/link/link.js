@@ -7,6 +7,8 @@ class Link extends WaaneElement {
         :host {
           position: absolute;
           display: block;
+          min-width: 1em;
+          min-height: 1em;
         }
 
         svg {
