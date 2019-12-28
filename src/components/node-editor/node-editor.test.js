@@ -96,23 +96,24 @@ it('gets the links', async () => {
   expect(links).toEqual(['Link 1', 'Link 2'])
 })
 
-it('draws the links for all nodes', async () => {
-  await elementHandle.evaluate(element => {
-    element.innerHTML = /* HTML */ `
-      <w-node style="left: 100px; top: 100px;">
-        <w-output id="out-1"></w-output>
-      </w-node>
-      <w-node style="left: 300px; top: 200px;">
-        <w-output id="out-2"></w-output>
-        <w-input id="in-2"></w-input>
-      </w-node>
-      <w-node style="left: 500px; top: 300px;">
-        <w-input id="in-3"></w-input>
-      </w-node>
-      <w-link from="out-1" to="in-2"></w-link>
-      <w-link from="out-2" to="in-3"></w-link>
+it('draws the links for all nodes when connected', async () => {
+  await page.evaluate(() => {
+    document.body.innerHTML = /* HTML */ `
+      <w-node-editor>
+        <w-node style="left: 100px; top: 100px;">
+          <w-output id="out-1"></w-output>
+        </w-node>
+        <w-node style="left: 300px; top: 200px;">
+          <w-output id="out-2"></w-output>
+          <w-input id="in-2"></w-input>
+        </w-node>
+        <w-node style="left: 500px; top: 300px;">
+          <w-input id="in-3"></w-input>
+        </w-node>
+        <w-link from="out-1" to="in-2"></w-link>
+        <w-link from="out-2" to="in-3"></w-link>
+      </w-node-editor>
     `
-    element.drawLinks()
   })
   expect(linkUpdateMock).toHaveBeenCalledTimes(2)
   expect(linkUpdateMock).toHaveBeenNthCalledWith(
