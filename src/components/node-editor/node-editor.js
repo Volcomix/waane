@@ -5,6 +5,7 @@ class NodeEditor extends WaaneElement {
     return html`
       <style>
         :host {
+          position: relative;
           display: block;
         }
       </style>

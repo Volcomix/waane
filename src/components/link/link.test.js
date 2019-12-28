@@ -2,7 +2,9 @@ let elementHandle
 
 beforeAll(async () => {
   await page.goto('http://localhost:8080/test.html')
-  await page.evaluate(`import('./components/link/link.js')`)
+  await page.evaluate(/* js */ `
+    import('./components/link/link.js')
+  `)
 })
 
 beforeEach(async () => {

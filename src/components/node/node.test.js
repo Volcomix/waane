@@ -2,25 +2,21 @@ let elementHandle, onResizeMock
 
 beforeAll(async () => {
   await page.goto('http://localhost:8080/test.html')
-  await page.evaluate(`import('./components/node/node.js')`)
-
+  await page.evaluate(/* js */ `
+    import('./components/node/node.js')
+  `)
   onResizeMock = jest.fn()
   await page.exposeFunction('onResizeMock', onResizeMock)
 })
 
 beforeEach(async () => {
   elementHandle = await page.evaluateHandle(() => {
-    const newElement = document.createElement('w-node')
-    newElement.addEventListener('w-node-resize', onResizeMock)
-
-    const oldElement = document.querySelector('w-node')
-    if (oldElement) {
-      oldElement.replaceWith(newElement)
-    } else {
-      document.body.appendChild(newElement)
-    }
-
-    return newElement
+    document.body.innerHTML = /* HTML */ `
+      <w-node></w-node>
+    `
+    const element = document.body.firstElementChild
+    element.addEventListener('w-node-resize', onResizeMock)
+    return element
   })
   onResizeMock.mockClear()
 })
