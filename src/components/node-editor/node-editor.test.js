@@ -57,6 +57,18 @@ beforeAll(async () => {
         }
       },
     )
+    customElements.define(
+      'something-else',
+      class extends HTMLElement {
+        get outputs() {
+          return this.querySelectorAll('w-output')
+        }
+
+        get inputs() {
+          return this.querySelectorAll('w-input')
+        }
+      },
+    )
   })
 })
 
@@ -110,20 +122,195 @@ it('draws the links for all nodes when connected', async () => {
         <w-node style="left: 500px; top: 300px;">
           <w-input id="in-3"></w-input>
         </w-node>
+        <w-node style="left: 700px; top: 400px;">
+          <w-output id="out-4"></w-output>
+        </w-node>
+
         <w-link from="out-1" to="in-2"></w-link>
         <w-link from="out-2" to="in-3"></w-link>
+        <w-link from="out-3" to="in-4"></w-link>
       </w-node-editor>
     `
   })
-  expect(linkUpdateMock).toHaveBeenCalledTimes(2)
-  expect(linkUpdateMock).toHaveBeenNthCalledWith(
-    1,
-    { x: 200, y: 105 },
-    { x: 300, y: 215 },
-  )
-  expect(linkUpdateMock).toHaveBeenNthCalledWith(
-    2,
-    { x: 400, y: 205 },
-    { x: 500, y: 305 },
-  )
+  expect(linkUpdateMock.mock.calls).toEqual([
+    [
+      { x: 200, y: 105 },
+      { x: 300, y: 215 },
+    ],
+    [
+      { x: 400, y: 205 },
+      { x: 500, y: 305 },
+    ],
+  ])
+})
+
+it('updates links when nodes move', async () => {
+  await elementHandle.evaluate(element => {
+    element.innerHTML = /* HTML */ `
+      <w-node style="left: 100px; top: 100px;">
+        <w-output id="out-1"></w-output>
+      </w-node>
+      <w-node style="left: 300px; top: 200px;">
+        <w-output id="out-2"></w-output>
+        <w-input id="in-2"></w-input>
+      </w-node>
+      <w-node style="left: 500px; top: 300px;">
+        <w-output id="out-3"></w-output>
+        <w-input id="in-3"></w-input>
+      </w-node>
+      <w-node style="left: 700px; top: 400px;">
+        <w-input id="in-4"></w-input>
+      </w-node>
+
+      <w-link from="out-1" to="in-2"></w-link>
+      <w-link from="out-2" to="in-3"></w-link>
+      <w-link from="out-3" to="in-4"></w-link>
+    `
+    const [node1, node2] = element.querySelectorAll('w-node')
+    node1.setAttribute('x', 100)
+    node2.setAttribute('x', 300)
+  })
+  expect(linkUpdateMock.mock.calls).toEqual([
+    [
+      { x: 200, y: 105 },
+      { x: 300, y: 215 },
+    ],
+    [
+      { x: 400, y: 205 },
+      { x: 500, y: 315 },
+    ],
+  ])
+})
+
+it('does not update links when something else moves', async () => {
+  await elementHandle.evaluate(element => {
+    element.innerHTML = /* HTML */ `
+      <w-node>
+        <w-output id="out-1"></w-output>
+      </w-node>
+      <something-else>
+        <w-input id="in-2"></w-input>
+      </something-else>
+
+      <w-link from="out-1" to="in-2"></w-link>
+    `
+    const somethingElse = element.querySelector('something-else')
+    somethingElse.setAttribute('x', 100)
+  })
+  expect(linkUpdateMock).not.toHaveBeenCalled()
+})
+
+it('updates links when a node is resized', async () => {
+  await elementHandle.evaluate(element => {
+    element.innerHTML = /* HTML */ `
+      <w-node style="left: 100px; top: 100px;">
+        <w-output id="out-1"></w-output>
+      </w-node>
+      <w-node style="left: 300px; top: 200px;">
+        <w-output id="out-2"></w-output>
+        <w-input id="in-2"></w-input>
+      </w-node>
+      <w-node style="left: 500px; top: 300px;">
+        <w-output id="out-3"></w-output>
+        <w-input id="in-3"></w-input>
+      </w-node>
+      <w-node style="left: 700px; top: 400px;">
+        <w-input id="in-4"></w-input>
+      </w-node>
+
+      <w-link from="out-1" to="in-2"></w-link>
+      <w-link from="out-2" to="in-3"></w-link>
+      <w-link from="out-3" to="in-4"></w-link>
+    `
+    const node2 = element.querySelector('w-node:nth-of-type(2)')
+    node2.dispatchEvent(new Event('w-node-resize', { bubbles: true }))
+  })
+  expect(linkUpdateMock.mock.calls).toEqual([
+    [
+      { x: 200, y: 105 },
+      { x: 300, y: 215 },
+    ],
+    [
+      { x: 400, y: 205 },
+      { x: 500, y: 315 },
+    ],
+  ])
+})
+
+it('erases links when an output is removed', async () => {
+  await elementHandle.evaluate(element => {
+    element.innerHTML = /* HTML */ `
+      <w-node style="left: 100px; top: 100px;">
+        <w-output id="out-1"></w-output>
+      </w-node>
+      <w-node style="left: 300px; top: 200px;">
+        <w-output id="out-2"></w-output>
+        <w-input id="in-2"></w-input>
+      </w-node>
+      <w-node style="left: 500px; top: 300px;">
+        <w-input id="in-3"></w-input>
+      </w-node>
+
+      <w-link from="out-1" to="in-2"></w-link>
+      <w-link from="out-2" to="in-3"></w-link>
+    `
+    element.drawLinks()
+    const node2 = element.querySelector('w-node:nth-of-type(2)')
+    node2.querySelector('w-output#out-2').remove()
+    node2.dispatchEvent(new Event('w-node-resize', { bubbles: true }))
+  })
+  expect(linkUpdateMock.mock.calls).toEqual([
+    [
+      { x: 200, y: 105 },
+      { x: 300, y: 215 },
+    ],
+    [
+      { x: 400, y: 205 },
+      { x: 500, y: 305 },
+    ],
+    [
+      { x: 200, y: 105 },
+      { x: 300, y: 205 },
+    ],
+    [null, { x: 500, y: 305 }],
+  ])
+})
+
+it('erases links when an input is removed', async () => {
+  await elementHandle.evaluate(element => {
+    element.innerHTML = /* HTML */ `
+      <w-node style="left: 100px; top: 100px;">
+        <w-output id="out-1"></w-output>
+      </w-node>
+      <w-node style="left: 300px; top: 200px;">
+        <w-output id="out-2"></w-output>
+        <w-input id="in-2"></w-input>
+      </w-node>
+      <w-node style="left: 500px; top: 300px;">
+        <w-input id="in-3"></w-input>
+      </w-node>
+
+      <w-link from="out-1" to="in-2"></w-link>
+      <w-link from="out-2" to="in-3"></w-link>
+    `
+    element.drawLinks()
+    const node2 = element.querySelector('w-node:nth-of-type(2)')
+    node2.querySelector('w-input#in-2').remove()
+    node2.dispatchEvent(new Event('w-node-resize', { bubbles: true }))
+  })
+  expect(linkUpdateMock.mock.calls).toEqual([
+    [
+      { x: 200, y: 105 },
+      { x: 300, y: 215 },
+    ],
+    [
+      { x: 400, y: 205 },
+      { x: 500, y: 305 },
+    ],
+    [{ x: 200, y: 105 }, null],
+    [
+      { x: 400, y: 205 },
+      { x: 500, y: 305 },
+    ],
+  ])
 })
