@@ -17,11 +17,18 @@ class NodeEditor extends WaaneElement {
   constructor() {
     super()
     this._sockets = new Map()
+    this._childListObserver = new MutationObserver(
+      this._onChildListChange.bind(this),
+    )
     this._nodesMoveObserver = new MutationObserver(this._onNodesMove.bind(this))
     this.addEventListener('w-node-resize', this._onNodeResize.bind(this))
   }
 
   async connectedCallback() {
+    this._childListObserver.observe(this, {
+      childList: true,
+      subtree: true,
+    })
     this._nodesMoveObserver.observe(this, {
       attributeFilter: ['x', 'y'],
       subtree: true,
@@ -47,7 +54,25 @@ class NodeEditor extends WaaneElement {
     const outputs = new Set()
     const inputs = new Set()
     this.nodes.forEach(node => {
-      this._findSockets(node, outputs, inputs)
+      this._findUpdatedSockets(node, outputs, inputs)
+    })
+    this._updateLinks(outputs, inputs)
+  }
+
+  _onChildListChange(mutations) {
+    const outputs = new Set()
+    const inputs = new Set()
+    mutations.forEach(mutation => {
+      mutation.addedNodes.forEach(child => {
+        if (this._isNode(child)) {
+          this._findUpdatedSockets(child, outputs, inputs)
+        }
+      })
+      mutation.removedNodes.forEach(child => {
+        if (this._isNode(child)) {
+          this._findRemovedSockets(child, outputs, inputs)
+        }
+      })
     })
     this._updateLinks(outputs, inputs)
   }
@@ -56,8 +81,8 @@ class NodeEditor extends WaaneElement {
     const outputs = new Set()
     const inputs = new Set()
     mutations.forEach(mutation => {
-      if (this._isNodeMutation(mutation)) {
-        this._findSockets(mutation.target, outputs, inputs)
+      if (this._isNode(mutation.target)) {
+        this._findUpdatedSockets(mutation.target, outputs, inputs)
       }
     })
     this._updateLinks(outputs, inputs)
@@ -66,15 +91,15 @@ class NodeEditor extends WaaneElement {
   _onNodeResize(event) {
     const outputs = new Set()
     const inputs = new Set()
-    this._findSockets(event.target, outputs, inputs)
+    this._findUpdatedSockets(event.target, outputs, inputs)
     this._updateLinks(outputs, inputs)
   }
 
-  _isNodeMutation(mutation) {
-    return mutation.target.tagName.toLowerCase() === 'w-node'
+  _isNode(target) {
+    return target.nodeName.toLowerCase() === 'w-node'
   }
 
-  _findSockets(target, outputs, inputs) {
+  _findUpdatedSockets(target, outputs, inputs) {
     let sockets = this._sockets.get(target)
     if (sockets) {
       sockets.outputs.forEach(output => outputs.add(output))
@@ -90,6 +115,12 @@ class NodeEditor extends WaaneElement {
       inputs.add(input.id)
     })
     this._sockets.set(target, sockets)
+  }
+
+  _findRemovedSockets(target, outputs, inputs) {
+    target.outputs.forEach(output => outputs.add(output.id))
+    target.inputs.forEach(input => inputs.add(input.id))
+    this._sockets.delete(target)
   }
 
   _updateLinks(outputs, inputs) {
