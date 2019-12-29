@@ -534,7 +534,7 @@ it('does not draw links when the added child is not a link', async () => {
   expect(linkUpdateMock).not.toHaveBeenCalled()
 })
 
-it.skip('updates the link when it starts from another output', async () => {
+it('updates the link when it starts from another output', async () => {
   await elementHandle.evaluate(element => {
     element.innerHTML = /* HTML */ `
       <w-node style="left: 100px; top: 100px;">
@@ -548,7 +548,7 @@ it.skip('updates the link when it starts from another output', async () => {
         <w-input id="in-3"></w-input>
       </w-node>
 
-      <w-link from="out-1" to="in-2"></w-link>
+      <w-link from="out-1" to="in-3"></w-link>
     `
   })
   linkUpdateMock.mockClear()
@@ -558,13 +558,13 @@ it.skip('updates the link when it starts from another output', async () => {
   })
   expect(linkUpdateMock.mock.calls).toEqual([
     [
-      { x: 200, y: 105 },
+      { x: 400, y: 205 },
       { x: 500, y: 305 },
     ],
   ])
 })
 
-it.skip('updates the link when it ends to another input', async () => {
+it('updates the link when it ends to another input', async () => {
   await elementHandle.evaluate(element => {
     element.innerHTML = /* HTML */ `
       <w-node style="left: 100px; top: 100px;">
@@ -588,7 +588,7 @@ it.skip('updates the link when it ends to another input', async () => {
   })
   expect(linkUpdateMock.mock.calls).toEqual([
     [
-      { x: 400, y: 215 },
+      { x: 200, y: 105 },
       { x: 500, y: 305 },
     ],
   ])
