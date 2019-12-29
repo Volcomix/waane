@@ -67,6 +67,9 @@ class NodeEditor extends WaaneElement {
         if (this._isNode(child)) {
           this._findUpdatedSockets(child, outputs, inputs)
         }
+        if (this._isLink(child)) {
+          this._findLinkedSockets(child, outputs, inputs)
+        }
       })
       mutation.removedNodes.forEach(child => {
         if (this._isNode(child)) {
@@ -99,6 +102,10 @@ class NodeEditor extends WaaneElement {
     return target.nodeName.toLowerCase() === 'w-node'
   }
 
+  _isLink(target) {
+    return target.nodeName.toLowerCase() === 'w-link'
+  }
+
   _findUpdatedSockets(target, outputs, inputs) {
     let sockets = this._sockets.get(target)
     if (sockets) {
@@ -121,6 +128,11 @@ class NodeEditor extends WaaneElement {
     target.outputs.forEach(output => outputs.add(output.id))
     target.inputs.forEach(input => inputs.add(input.id))
     this._sockets.delete(target)
+  }
+
+  _findLinkedSockets(link, outputs, inputs) {
+    outputs.add(link.from)
+    inputs.add(link.to)
   }
 
   _updateLinks(outputs, inputs) {

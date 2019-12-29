@@ -108,7 +108,7 @@ it('gets the links', async () => {
   expect(links).toEqual(['Link 1', 'Link 2'])
 })
 
-it('draws the links for all nodes when connected', async () => {
+it('draws all the links when connected', async () => {
   await page.evaluate(() => {
     document.body.innerHTML = /* HTML */ `
       <w-node-editor>
@@ -144,6 +144,41 @@ it('draws the links for all nodes when connected', async () => {
   ])
 })
 
+it('draws all links when node editor innerHTML is set', async () => {
+  await elementHandle.evaluate(element => {
+    element.innerHTML = /* HTML */ `
+      <w-node style="left: 100px; top: 100px;">
+        <w-output id="out-1"></w-output>
+      </w-node>
+      <w-node style="left: 300px; top: 200px;">
+        <w-output id="out-2"></w-output>
+        <w-input id="in-2"></w-input>
+      </w-node>
+      <w-node style="left: 500px; top: 300px;">
+        <w-input id="in-3"></w-input>
+      </w-node>
+      <w-node style="left: 700px; top: 400px;">
+        <w-output id="out-4"></w-output>
+      </w-node>
+
+      <w-link from="out-1" to="in-2"></w-link>
+      <w-link from="out-2" to="in-3"></w-link>
+      <w-link from="out-3" to="in-4"></w-link>
+    `
+  })
+  expect(linkUpdateMock.mock.calls).toEqual([
+    [
+      { x: 200, y: 105 },
+      { x: 300, y: 215 },
+    ],
+    [
+      { x: 400, y: 205 },
+      { x: 500, y: 305 },
+    ],
+    [null, null],
+  ])
+})
+
 it('updates links when nodes are added', async () => {
   await elementHandle.evaluate(element => {
     element.innerHTML = /* HTML */ `
@@ -160,13 +195,6 @@ it('updates links when nodes are added', async () => {
       <w-link from="out-3" to="in-4"></w-link>
     `
   })
-  expect(linkUpdateMock.mock.calls).toEqual([
-    [null, { x: 500, y: 315 }],
-    [
-      { x: 600, y: 305 },
-      { x: 700, y: 405 },
-    ],
-  ])
   linkUpdateMock.mockClear()
   await elementHandle.evaluate(element => {
     const node1 = document.createElement('w-node')
@@ -195,7 +223,7 @@ it('updates links when nodes are added', async () => {
   ])
 })
 
-it('does not update links when something else is added', async () => {
+it('does not update links when the added child is not a node', async () => {
   await elementHandle.evaluate(element => {
     element.innerHTML = /* HTML */ `
       <w-node>
@@ -251,7 +279,7 @@ it('updates links when nodes are removed', async () => {
   ])
 })
 
-it('does not update links when something else is removed', async () => {
+it('does not update links when the removed child is not a node', async () => {
   await elementHandle.evaluate(element => {
     element.innerHTML = /* HTML */ `
       <w-node>
@@ -313,7 +341,7 @@ it('updates links when nodes move', async () => {
   ])
 })
 
-it('does not update links when something else moves', async () => {
+it('does not update links when what moves is not a node', async () => {
   await elementHandle.evaluate(element => {
     element.innerHTML = /* HTML */ `
       <w-node>
@@ -439,3 +467,135 @@ it('erases links when an input is removed', async () => {
     ],
   ])
 })
+
+it('draws the links when they are added', async () => {
+  await elementHandle.evaluate(element => {
+    element.innerHTML = /* HTML */ `
+      <w-node style="left: 100px; top: 100px;">
+        <w-output id="out-1"></w-output>
+      </w-node>
+      <w-node style="left: 300px; top: 200px;">
+        <w-output id="out-2"></w-output>
+        <w-input id="in-2"></w-input>
+      </w-node>
+      <w-node style="left: 500px; top: 300px;">
+        <w-output id="out-3"></w-output>
+        <w-input id="in-3"></w-input>
+      </w-node>
+      <w-node style="left: 700px; top: 400px;">
+        <w-input id="in-4"></w-input>
+      </w-node>
+
+      <w-link from="out-3" to="in-4"></w-link>
+    `
+  })
+  linkUpdateMock.mockClear()
+  await elementHandle.evaluate(element => {
+    const link1 = document.createElement('w-link')
+    link1.setAttribute('from', 'out-1')
+    link1.setAttribute('to', 'in-2')
+
+    const link2 = document.createElement('w-link')
+    link2.setAttribute('from', 'out-2')
+    link2.setAttribute('to', 'in-3')
+
+    element.appendChild(link1)
+    element.appendChild(link2)
+  })
+  expect(linkUpdateMock.mock.calls).toEqual([
+    [
+      { x: 200, y: 105 },
+      { x: 300, y: 215 },
+    ],
+    [
+      { x: 400, y: 205 },
+      { x: 500, y: 315 },
+    ],
+  ])
+})
+
+it('does not draw links when the added child is not a link', async () => {
+  await elementHandle.evaluate(element => {
+    element.innerHTML = /* HTML */ `
+      <w-node>
+        <w-output id="out-1"></w-output>
+      </w-node>
+      <w-node>
+        <w-input id="in-2"></w-output>
+      </w-node>
+    `
+  })
+  await elementHandle.evaluate(element => {
+    const somethingElse = document.createElement('something-else')
+    somethingElse.setAttribute('from', 'out-1')
+    somethingElse.setAttribute('to', 'in-2')
+    element.appendChild(somethingElse)
+  })
+  expect(linkUpdateMock).not.toHaveBeenCalled()
+})
+
+it.skip('updates the link when it starts from another output', async () => {
+  await elementHandle.evaluate(element => {
+    element.innerHTML = /* HTML */ `
+      <w-node style="left: 100px; top: 100px;">
+        <w-output id="out-1"></w-output>
+      </w-node>
+      <w-node style="left: 300px; top: 200px;">
+        <w-output id="out-2"></w-output>
+        <w-input id="in-2"></w-input>
+      </w-node>
+      <w-node style="left: 500px; top: 300px;">
+        <w-input id="in-3"></w-input>
+      </w-node>
+
+      <w-link from="out-1" to="in-2"></w-link>
+    `
+  })
+  linkUpdateMock.mockClear()
+  await elementHandle.evaluate(element => {
+    const link = element.querySelector('w-link')
+    link.setAttribute('from', 'out-2')
+  })
+  expect(linkUpdateMock.mock.calls).toEqual([
+    [
+      { x: 200, y: 105 },
+      { x: 500, y: 305 },
+    ],
+  ])
+})
+
+it.skip('updates the link when it ends to another input', async () => {
+  await elementHandle.evaluate(element => {
+    element.innerHTML = /* HTML */ `
+      <w-node style="left: 100px; top: 100px;">
+        <w-output id="out-1"></w-output>
+      </w-node>
+      <w-node style="left: 300px; top: 200px;">
+        <w-output id="out-2"></w-output>
+        <w-input id="in-2"></w-input>
+      </w-node>
+      <w-node style="left: 500px; top: 300px;">
+        <w-input id="in-3"></w-input>
+      </w-node>
+
+      <w-link from="out-1" to="in-2"></w-link>
+    `
+  })
+  linkUpdateMock.mockClear()
+  await elementHandle.evaluate(element => {
+    const link = element.querySelector('w-link')
+    link.setAttribute('to', 'in-3')
+  })
+  expect(linkUpdateMock.mock.calls).toEqual([
+    [
+      { x: 400, y: 215 },
+      { x: 500, y: 305 },
+    ],
+  ])
+})
+
+it.todo('does not update links that does not start from an output')
+
+it.todo('does not update links that does not end to an input')
+
+it.todo('all setAttribute should be replaced with setter calls')
