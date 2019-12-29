@@ -1,7 +1,7 @@
 let moduleHandle
 
 beforeAll(async () => {
-  await page.goto('http://localhost:8081/test.html')
+  await page.goto('http://localhost:8080/test.html')
   moduleHandle = await page.evaluateHandle(/* js */ `
     import('./components/waane-element.js')
   `)

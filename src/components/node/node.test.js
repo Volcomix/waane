@@ -1,7 +1,7 @@
 let elementHandle, onResizeMock
 
 beforeAll(async () => {
-  await page.goto('http://localhost:8081/test.html')
+  await page.goto('http://localhost:8080/test.html')
   await page.evaluate(/* js */ `
     import('./components/node/node.js')
   `)

@@ -1,7 +1,7 @@
 let elementHandle, linkUpdateMock
 
 beforeAll(async () => {
-  await page.goto('http://localhost:8081/test.html')
+  await page.goto('http://localhost:8080/test.html')
   await page.addStyleTag({
     content: /* css */ `
       w-node {
