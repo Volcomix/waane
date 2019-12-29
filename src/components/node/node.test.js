@@ -56,7 +56,7 @@ it('gets the inputs', async () => {
 
 it('updates the x position', async () => {
   const left = await elementHandle.evaluate(element => {
-    element.setAttribute('x', 10)
+    element.x = 10
     return element.style.left
   })
   expect(left).toBe('10px')
@@ -64,7 +64,7 @@ it('updates the x position', async () => {
 
 it('updates the y position', async () => {
   const top = await elementHandle.evaluate(element => {
-    element.setAttribute('y', 10)
+    element.y = 10
     return element.style.top
   })
   expect(top).toBe('10px')
@@ -72,7 +72,7 @@ it('updates the y position', async () => {
 
 it('removes the x position', async () => {
   const left = await elementHandle.evaluate(element => {
-    element.setAttribute('x', 10)
+    element.x = 10
     element.removeAttribute('x')
     return element.style.left
   })
@@ -81,7 +81,7 @@ it('removes the x position', async () => {
 
 it('removes the y position', async () => {
   const top = await elementHandle.evaluate(element => {
-    element.setAttribute('y', 10)
+    element.y = 10
     element.removeAttribute('y')
     return element.style.top
   })
@@ -102,7 +102,7 @@ it('dispatches w-node-resize when a child attribute changes', async () => {
     `
   })
   await elementHandle.evaluate(element => {
-    element.firstElementChild.setAttribute('id', 'a-child-element-id')
+    element.firstElementChild.id = 'a-child-element-id'
   })
   expect(onResizeMock).toHaveBeenCalledTimes(2)
 })
@@ -119,7 +119,7 @@ it('dispatches w-node-resize when character data changes', async () => {
 
 it('does not dispatch w-node-resize when the node moves', async () => {
   await elementHandle.evaluate(element => {
-    element.setAttribute('x', 10)
+    element.x = 10
   })
   expect(onResizeMock).not.toHaveBeenCalled()
 })

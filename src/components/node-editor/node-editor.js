@@ -20,7 +20,9 @@ class NodeEditor extends WaaneElement {
     this._childListObserver = new MutationObserver(
       this._onChildListChange.bind(this),
     )
-    this._nodesMoveObserver = new MutationObserver(this._onNodesMove.bind(this))
+    this._nodesPositionObserver = new MutationObserver(
+      this._onNodesPositionChange.bind(this),
+    )
     this._linksSocketObserver = new MutationObserver(
       this._onLinksSocketChange.bind(this),
     )
@@ -32,7 +34,7 @@ class NodeEditor extends WaaneElement {
       childList: true,
       subtree: true,
     })
-    this._nodesMoveObserver.observe(this, {
+    this._nodesPositionObserver.observe(this, {
       attributeFilter: ['x', 'y'],
       subtree: true,
     })
@@ -46,7 +48,9 @@ class NodeEditor extends WaaneElement {
   }
 
   disconnectedCallback() {
-    this._nodesMoveObserver.disconnect()
+    this._childListObserver.disconnect()
+    this._nodesPositionObserver.disconnect()
+    this._linksSocketObserver.disconnect()
   }
 
   get nodes() {
@@ -87,7 +91,7 @@ class NodeEditor extends WaaneElement {
     this._updateLinks(outputs, inputs)
   }
 
-  _onNodesMove(mutations) {
+  _onNodesPositionChange(mutations) {
     const outputs = new Set()
     const inputs = new Set()
     mutations.forEach(mutation => {

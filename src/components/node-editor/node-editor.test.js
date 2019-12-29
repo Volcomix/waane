@@ -594,8 +594,34 @@ it('updates the link when it ends to another input', async () => {
   ])
 })
 
-it.todo('does not update links that does not start from an output')
+it('does not draw links that does not start from an output', async () => {
+  await elementHandle.evaluate(element => {
+    element.innerHTML = /* HTML */ `
+      <w-node style="left: 100px; top: 100px;">
+        <something-else id="out-1"></something-else>
+      </w-node>
+      <w-node style="left: 300px; top: 200px;">
+        <w-input id="in-2"></w-input>
+      </w-node>
 
-it.todo('does not update links that does not end to an input')
+      <w-link from="out-1" to="in-2"></w-link>
+    `
+  })
+  expect(linkUpdateMock.mock.calls).toEqual([[null, { x: 300, y: 205 }]])
+})
 
-it.todo('all setAttribute should be replaced with setter calls')
+it('does not draw links that does not end to an input', async () => {
+  await elementHandle.evaluate(element => {
+    element.innerHTML = /* HTML */ `
+      <w-node style="left: 100px; top: 100px;">
+        <w-output id="out-1"></w-output>
+      </w-node>
+      <w-node style="left: 300px; top: 200px;">
+        <something-else id="in-2"></something-else>
+      </w-node>
+
+      <w-link from="out-1" to="in-2"></w-link>
+    `
+  })
+  expect(linkUpdateMock.mock.calls).toEqual([[{ x: 200, y: 105 }, null]])
+})
