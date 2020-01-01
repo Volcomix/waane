@@ -4,9 +4,12 @@ class NodeEditor extends WaaneElement {
   static get template() {
     return html`
       <style>
+        @import '/components/variables.css';
+
         :host {
           position: relative;
           display: block;
+          background-color: rgb(var(--background));
         }
       </style>
 

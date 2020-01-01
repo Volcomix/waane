@@ -35,8 +35,8 @@
             <option value="3">Three</option>
           </select>
         </label>
-        <w-output id="source-out-1">Output 1</w-output>
-        <w-output id="source-out-2">Output 2</w-output>
+        <w-output id="source-out1">Output 1</w-output>
+        <w-output id="source-out2">Output 2</w-output>
       </w-node>
 
       <w-node x="300" y="50">
@@ -52,13 +52,13 @@
 
       <w-node x="600" y="100">
         <span slot="title">Destination</span>
-        <w-input id="dest-in-1">Input 1</w-input>
-        <w-input id="dest-in-2">Input 2</w-input>
+        <w-input id="dest-in1">Input 1</w-input>
+        <w-input id="dest-in2">Input 2</w-input>
       </w-node>
 
-      <w-link from="source-out-1" to="filter-in"></w-link>
-      <w-link from="source-out-2" to="dest-in-2"></w-link>
-      <w-link from="filter-out" to="dest-in-1"></w-link>
+      <w-link from="source-out1" to="filter-in"></w-link>
+      <w-link from="source-out2" to="dest-in2"></w-link>
+      <w-link from="filter-out" to="dest-in1"></w-link>
     </w-node-editor>
 
     <script async type="module" src="./components/index.js"></script>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Elevation</title>
+    <meta name="description" content="Elegation test page" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      @import './components/variables.css';
+      @import './components/elevation/elevation.css';
+
+      .theme {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        padding: 8px;
+        background-color: rgb(var(--background));
+      }
+
+      .theme--light {
+        --background: 255, 255, 255;
+        --surface: 255, 255, 255;
+        --on-surface: 0, 0, 0;
+        --elevation-overlay: none;
+      }
+
+      .surface {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 16px;
+        min-width: 200px;
+        min-height: 100px;
+        background-color: rgb(var(--surface));
+        color: rgba(var(--on-surface), var(--high-emphasis));
+      }
+    </style>
+  </head>
+  <body>
+    <div class="theme theme--light">
+      <div class="surface elevation--z1">1dp</div>
+      <div class="surface elevation--z2">2dp</div>
+      <div class="surface elevation--z3">3dp</div>
+      <div class="surface elevation--z4">4dp</div>
+      <div class="surface elevation--z6">6dp</div>
+      <div class="surface elevation--z8">8dp</div>
+      <div class="surface elevation--z12">12dp</div>
+      <div class="surface elevation--z16">16dp</div>
+      <div class="surface elevation--z24">24dp</div>
+    </div>
+    <div class="theme">
+      <div class="surface elevation--z1">1dp</div>
+      <div class="surface elevation--z2">2dp</div>
+      <div class="surface elevation--z3">3dp</div>
+      <div class="surface elevation--z4">4dp</div>
+      <div class="surface elevation--z6">6dp</div>
+      <div class="surface elevation--z8">8dp</div>
+      <div class="surface elevation--z12">12dp</div>
+      <div class="surface elevation--z16">16dp</div>
+      <div class="surface elevation--z24">24dp</div>
+    </div>
+  </body>
+</html>

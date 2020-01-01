@@ -4,15 +4,35 @@ class Node extends WaaneElement {
   static get template() {
     return html`
       <style>
+        @import '/components/typography/typography.css';
+        @import '/components/elevation/elevation.css';
+
         :host {
           position: absolute;
+          z-index: 1;
+        }
+
+        .node {
           display: flex;
           flex-direction: column;
+          border-radius: 4px;
+          padding: 16px;
+          background-color: rgb(var(--surface));
+        }
+
+        .node__title {
+          color: rgba(var(--on-surface), var(--high-emphasis));
+        }
+
+        .node__body {
+          color: rgba(var(--on-surface), var(--medium-emphasis));
         }
       </style>
 
-      <slot name="title">Node</slot>
-      <slot></slot>
+      <div class="node elevation--z1">
+        <slot class="node__title typography--headline5" name="title">Node</slot>
+        <slot class="node__body typography--body2"></slot>
+      </div>
     `
   }
 

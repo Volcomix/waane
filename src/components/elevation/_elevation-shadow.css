@@ -1,0 +1,101 @@
+:root,
+:host {
+  --elevation-shadow-color: var(--w-elevation-shadow-color, 0, 0, 0);
+  --elevation-umbra-opacity: var(--w-elevation-umbra-opacity, 0.2);
+  --elevation-penumbra-opacity: var(--w-elevation-penumbra-opacity, 0.14);
+  --elevation-ambient-opacity: var(--w-elevation-ambient-opacity, 0.12);
+
+  --elevation1-umbra: var(--w-elevation1-umbra, 0px 2px 1px -1px);
+  --elevation2-umbra: var(--w-elevation2-umbra, 0px 3px 1px -2px);
+  --elevation3-umbra: var(--w-elevation3-umbra, 0px 3px 3px -2px);
+  --elevation4-umbra: var(--w-elevation4-umbra, 0px 2px 4px -1px);
+  --elevation6-umbra: var(--w-elevation6-umbra, 0px 3px 5px -1px);
+  --elevation8-umbra: var(--w-elevation8-umbra, 0px 5px 5px -3px);
+  --elevation12-umbra: var(--w-elevation12-umbra, 0px 7px 8px -4px);
+  --elevation16-umbra: var(--w-elevation16-umbra, 0px 8px 10px -5px);
+  --elevation24-umbra: var(--w-elevation24-umbra, 0px 11px 15px -7px);
+
+  --elevation1-penumbra: var(--w-elevation1-penumbra, 0px 1px 1px 0px);
+  --elevation2-penumbra: var(--w-elevation2-penumbra, 0px 2px 2px 0px);
+  --elevation3-penumbra: var(--w-elevation3-penumbra, 0px 3px 4px 0px);
+  --elevation4-penumbra: var(--w-elevation4-penumbra, 0px 4px 5px 0px);
+  --elevation6-penumbra: var(--w-elevation6-penumbra, 0px 6px 10px 0px);
+  --elevation8-penumbra: var(--w-elevation8-penumbra, 0px 8px 10px 1px);
+  --elevation12-penumbra: var(--w-elevation12-penumbra, 0px 12px 17px 2px);
+  --elevation16-penumbra: var(--w-elevation16-penumbra, 0px 16px 24px 2px);
+  --elevation24-penumbra: var(--w-elevation24-penumbra, 0px 24px 38px 3px);
+
+  --elevation0-ambient: var(--w-elevation0-ambient, 0px 0px 0px 0px);
+  --elevation1-ambient: var(--w-elevation1-ambient, 0px 1px 3px 0px);
+  --elevation2-ambient: var(--w-elevation2-ambient, 0px 1px 5px 0px);
+  --elevation3-ambient: var(--w-elevation3-ambient, 0px 1px 8px 0px);
+  --elevation4-ambient: var(--w-elevation4-ambient, 0px 1px 10px 0px);
+  --elevation6-ambient: var(--w-elevation6-ambient, 0px 1px 18px 0px);
+  --elevation8-ambient: var(--w-elevation8-ambient, 0px 3px 14px 2px);
+  --elevation12-ambient: var(--w-elevation12-ambient, 0px 5px 22px 4px);
+  --elevation16-ambient: var(--w-elevation16-ambient, 0px 6px 30px 5px);
+  --elevation24-ambient: var(--w-elevation24-ambient, 0px 9px 46px 8px);
+
+  --elevation1-shadow: var(--elevation1-umbra)
+      rgba(var(--elevation-shadow-color), var(--elevation-umbra-opacity)),
+    var(--elevation1-penumbra)
+      rgba(var(--elevation-shadow-color), var(--elevation-penumbra-opacity)),
+    var(--elevation1-ambient)
+      rgba(var(--elevation-shadow-color), var(--elevation-ambient-opacity));
+
+  --elevation2-shadow: var(--elevation2-umbra)
+      rgba(var(--elevation-shadow-color), var(--elevation-umbra-opacity)),
+    var(--elevation2-penumbra)
+      rgba(var(--elevation-shadow-color), var(--elevation-penumbra-opacity)),
+    var(--elevation2-ambient)
+      rgba(var(--elevation-shadow-color), var(--elevation-ambient-opacity));
+
+  --elevation3-shadow: var(--elevation3-umbra)
+      rgba(var(--elevation-shadow-color), var(--elevation-umbra-opacity)),
+    var(--elevation3-penumbra)
+      rgba(var(--elevation-shadow-color), var(--elevation-penumbra-opacity)),
+    var(--elevation3-ambient)
+      rgba(var(--elevation-shadow-color), var(--elevation-ambient-opacity));
+
+  --elevation4-shadow: var(--elevation4-umbra)
+      rgba(var(--elevation-shadow-color), var(--elevation-umbra-opacity)),
+    var(--elevation4-penumbra)
+      rgba(var(--elevation-shadow-color), var(--elevation-penumbra-opacity)),
+    var(--elevation4-ambient)
+      rgba(var(--elevation-shadow-color), var(--elevation-ambient-opacity));
+
+  --elevation6-shadow: var(--elevation6-umbra)
+      rgba(var(--elevation-shadow-color), var(--elevation-umbra-opacity)),
+    var(--elevation6-penumbra)
+      rgba(var(--elevation-shadow-color), var(--elevation-penumbra-opacity)),
+    var(--elevation6-ambient)
+      rgba(var(--elevation-shadow-color), var(--elevation-ambient-opacity));
+
+  --elevation8-shadow: var(--elevation8-umbra)
+      rgba(var(--elevation-shadow-color), var(--elevation-umbra-opacity)),
+    var(--elevation8-penumbra)
+      rgba(var(--elevation-shadow-color), var(--elevation-penumbra-opacity)),
+    var(--elevation8-ambient)
+      rgba(var(--elevation-shadow-color), var(--elevation-ambient-opacity));
+
+  --elevation12-shadow: var(--elevation12-umbra)
+      rgba(var(--elevation-shadow-color), var(--elevation-umbra-opacity)),
+    var(--elevation12-penumbra)
+      rgba(var(--elevation-shadow-color), var(--elevation-penumbra-opacity)),
+    var(--elevation12-ambient)
+      rgba(var(--elevation-shadow-color), var(--elevation-ambient-opacity));
+
+  --elevation16-shadow: var(--elevation16-umbra)
+      rgba(var(--elevation-shadow-color), var(--elevation-umbra-opacity)),
+    var(--elevation16-penumbra)
+      rgba(var(--elevation-shadow-color), var(--elevation-penumbra-opacity)),
+    var(--elevation16-ambient)
+      rgba(var(--elevation-shadow-color), var(--elevation-ambient-opacity));
+
+  --elevation24-shadow: var(--elevation24-umbra)
+      rgba(var(--elevation-shadow-color), var(--elevation-umbra-opacity)),
+    var(--elevation24-penumbra)
+      rgba(var(--elevation-shadow-color), var(--elevation-penumbra-opacity)),
+    var(--elevation24-ambient)
+      rgba(var(--elevation-shadow-color), var(--elevation-ambient-opacity));
+}

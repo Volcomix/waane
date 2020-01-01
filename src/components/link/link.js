@@ -7,20 +7,20 @@ class Link extends WaaneElement {
         :host {
           position: absolute;
           display: block;
-          min-width: 1em;
-          min-height: 1em;
+          min-width: 20px;
+          min-height: 20px;
         }
 
-        svg {
+        .link {
           width: 100%;
           height: 100%;
           overflow: visible;
           fill: none;
-          stroke: black;
+          stroke: rgba(var(--on-background), var(--medium-emphasis));
         }
       </style>
 
-      <svg>
+      <svg class="link">
         <path />
       </svg>
     `
