@@ -7,6 +7,8 @@ class Output extends WaaneElement {
         :host {
           display: flex;
           justify-content: flex-end;
+          margin-right: -12px;
+          padding-right: 12px;
         }
       </style>
 

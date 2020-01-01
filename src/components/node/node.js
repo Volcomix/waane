@@ -13,10 +13,8 @@ class Node extends WaaneElement {
         }
 
         .node {
-          display: flex;
-          flex-direction: column;
           border-radius: 4px;
-          padding: 16px;
+          padding: 8px 12px;
           background-color: rgb(var(--surface));
         }
 
@@ -25,12 +23,15 @@ class Node extends WaaneElement {
         }
 
         .node__body {
+          display: flex;
+          flex-direction: column;
+          margin-top: 8px;
           color: rgba(var(--on-surface), var(--medium-emphasis));
         }
       </style>
 
       <div class="node elevation--z1">
-        <slot class="node__title typography--headline5" name="title">Node</slot>
+        <slot class="node__title typography--subtitle2" name="title">Node</slot>
         <slot class="node__body typography--body2"></slot>
       </div>
     `

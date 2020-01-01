@@ -6,6 +6,8 @@ class Input extends WaaneElement {
       <style>
         :host {
           display: flex;
+          margin-left: -12px;
+          padding-left: 12px;
         }
       </style>
 
