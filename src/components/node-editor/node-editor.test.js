@@ -594,7 +594,7 @@ it('updates the link when it ends to another input', async () => {
   ])
 })
 
-it('does not draw links that does not start from an output', async () => {
+it('does not draw links that do not start from an output', async () => {
   await elementHandle.evaluate(element => {
     element.innerHTML = /* HTML */ `
       <w-node style="left: 100px; top: 100px;">
@@ -610,7 +610,7 @@ it('does not draw links that does not start from an output', async () => {
   expect(linkUpdateMock.mock.calls).toEqual([[null, { x: 300, y: 205 }]])
 })
 
-it('does not draw links that does not end to an input', async () => {
+it('does not draw links that do not end to an input', async () => {
   await elementHandle.evaluate(element => {
     element.innerHTML = /* HTML */ `
       <w-node style="left: 100px; top: 100px;">
