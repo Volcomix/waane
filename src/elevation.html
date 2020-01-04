@@ -44,15 +44,23 @@
     <div class="theme theme--dark"></div>
 
     <script type="module">
+      import { css } from './components/waane-element.js'
       import variables from './components/variables.js'
       import elevation from './components/elevation/elevation.js'
 
       const variablesStyle = variables(':root')
       document.head.insertAdjacentHTML('beforeend', variablesStyle)
 
+      const style = document.createElement('style')
+      const content = []
       for (let z = 0; z < 25; z++) {
-        const elevationStyle = elevation(`.surface--z${z}`, z)
-        document.head.insertAdjacentHTML('beforeend', elevationStyle)
+        content.push(css`
+          .surface--z${z} {
+            ${elevation(z)}
+          }
+        `)
+        style.textContent = content.join('')
+        document.head.appendChild(style)
       }
 
       document.querySelectorAll('.theme').forEach(container => {

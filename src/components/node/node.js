@@ -1,36 +1,34 @@
-import { WaaneElement, html } from '../waane-element.js'
+import { WaaneElement, html, css } from '../waane-element.js'
 import elevation from '../elevation/elevation.js'
 import typography from '../typography/typography.js'
 
 class Node extends WaaneElement {
+  static get styles() {
+    return css`
+      :host {
+        position: absolute;
+        border-radius: 4px;
+        padding: 8px 12px;
+        background-color: rgb(var(--surface));
+        ${elevation(1)}
+      }
+
+      .title {
+        color: rgba(var(--on-surface), var(--high-emphasis));
+      }
+
+      .body {
+        display: flex;
+        flex-direction: column;
+        margin-top: 8px;
+        color: rgba(var(--on-surface), var(--medium-emphasis));
+      }
+    `
+  }
+
   static get template() {
-    const styles = [
-      elevation(':host', 1),
-      typography('.title', 'subtitle2'),
-      typography('.body', 'body2'),
-    ]
     return html`
-      ${styles.join('\n')}
-      <style>
-        :host {
-          position: absolute;
-          z-index: 1;
-          border-radius: 4px;
-          padding: 8px 12px;
-          background-color: rgb(var(--surface));
-        }
-
-        .title {
-          color: rgba(var(--on-surface), var(--high-emphasis));
-        }
-
-        .body {
-          display: flex;
-          flex-direction: column;
-          margin-top: 8px;
-          color: rgba(var(--on-surface), var(--medium-emphasis));
-        }
-      </style>
+      ${typography('.title', 'subtitle2')} ${typography('.body', 'body2')}
 
       <slot class="title" name="title">Node</slot>
       <slot class="body"></slot>

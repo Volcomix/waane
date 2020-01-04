@@ -57,17 +57,17 @@ export class WaaneElement extends HTMLElement {
 }
 
 const getTemplateElement = memoize(function() {
-  const template = this.constructor.template
   const styles = this.constructor.styles
-  if (!template && !styles) {
+  const template = this.constructor.template
+  if (!styles && !template) {
     return null
   }
   const content = []
-  if (template) {
-    content.push(template)
-  }
   if (styles) {
     content.push(`<style>${styles}</style>`)
+  }
+  if (template) {
+    content.push(template)
   }
   const templateElement = document.createElement('template')
   templateElement.innerHTML = content.join('')
