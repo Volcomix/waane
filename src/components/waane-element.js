@@ -1,8 +1,5 @@
-export function html(strings, ...substitutions) {
-  const template = document.createElement('template')
-  template.innerHTML = String.raw(strings, ...substitutions)
-  return template
-}
+export const html = String.raw
+export const css = String.raw
 
 export class WaaneElement extends HTMLElement {
   constructor() {
@@ -17,7 +14,7 @@ export class WaaneElement extends HTMLElement {
   }
 
   get _template() {
-    return getTemplate.call(this, this.tagName)
+    return getTemplateElement.call(this, this.tagName)
   }
 
   get _attributes() {
@@ -59,8 +56,22 @@ export class WaaneElement extends HTMLElement {
   }
 }
 
-const getTemplate = memoize(function() {
-  return this.constructor.template
+const getTemplateElement = memoize(function() {
+  const template = this.constructor.template
+  const styles = this.constructor.styles
+  if (!template && !styles) {
+    return null
+  }
+  const content = []
+  if (template) {
+    content.push(template)
+  }
+  if (styles) {
+    content.push(`<style>${styles}</style>`)
+  }
+  const templateElement = document.createElement('template')
+  templateElement.innerHTML = content.join('')
+  return templateElement
 })
 
 const getObservedAttributes = memoize(function() {
