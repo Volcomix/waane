@@ -5,10 +5,11 @@
     <title>Typography</title>
     <meta name="description" content="Typography test page" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap"
+      rel="stylesheet"
+    />
     <style>
-      @import './components/variables.css';
-      @import './components/typography/typography.css';
-
       body {
         display: flex;
         flex-direction: column;
@@ -26,18 +27,31 @@
     </style>
   </head>
   <body>
-    <h1 class="typography--headline1">Headline 1</h1>
-    <h2 class="typography--headline2">Headline 2</h2>
-    <h3 class="typography--headline3">Headline 3</h3>
-    <h4 class="typography--headline4">Headline 4</h4>
-    <h5 class="typography--headline5">Headline 5</h5>
-    <h6 class="typography--headline6">Headline 6</h6>
-    <h6 class="typography--subtitle1">Subtitle 1</h6>
-    <h6 class="typography--subtitle2">Subtitle 2</h6>
-    <p class="typography--body1">Body 1</p>
-    <p class="typography--body2">Body 2</p>
-    <span class="typography--button">Button</span>
-    <span class="typography--caption">Caption</span>
-    <span class="typography--overline">Overline</span>
+    <h1 class="headline1">Headline 1</h1>
+    <h2 class="headline2">Headline 2</h2>
+    <h3 class="headline3">Headline 3</h3>
+    <h4 class="headline4">Headline 4</h4>
+    <h5 class="headline5">Headline 5</h5>
+    <h6 class="headline6">Headline 6</h6>
+    <h6 class="subtitle1">Subtitle 1</h6>
+    <h6 class="subtitle2">Subtitle 2</h6>
+    <p class="body1">Body 1</p>
+    <p class="body2">Body 2</p>
+    <span class="button">Button</span>
+    <span class="caption">Caption</span>
+    <span class="overline">Overline</span>
+
+    <script type="module">
+      import variables from './components/variables.js'
+      import typography from './components/typography/typography.js'
+
+      const variablesStyle = variables(':root')
+      document.head.insertAdjacentHTML('beforeend', variablesStyle)
+
+      document.body.querySelectorAll('[class]').forEach(({ className }) => {
+        const typographyStyle = typography(`.${className}`, className)
+        document.head.insertAdjacentHTML('beforeend', typographyStyle)
+      })
+    </script>
   </body>
 </html>

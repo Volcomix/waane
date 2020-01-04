@@ -1,28 +1,30 @@
 import { WaaneElement, html } from '../waane-element.js'
+import elevation from '../elevation/elevation.js'
+import typography from '../typography/typography.js'
 
 class Node extends WaaneElement {
   static get template() {
+    const styles = [
+      elevation(':host', 1),
+      typography('.title', 'subtitle2'),
+      typography('.body', 'body2'),
+    ]
     return html`
+      ${styles.join('\n')}
       <style>
-        @import '/components/typography/typography.css';
-        @import '/components/elevation/elevation.css';
-
         :host {
           position: absolute;
           z-index: 1;
-        }
-
-        .node {
           border-radius: 4px;
           padding: 8px 12px;
           background-color: rgb(var(--surface));
         }
 
-        .node__title {
+        .title {
           color: rgba(var(--on-surface), var(--high-emphasis));
         }
 
-        .node__body {
+        .body {
           display: flex;
           flex-direction: column;
           margin-top: 8px;
@@ -30,10 +32,8 @@ class Node extends WaaneElement {
         }
       </style>
 
-      <div class="node elevation--z1">
-        <slot class="node__title typography--subtitle2" name="title">Node</slot>
-        <slot class="node__body typography--body2"></slot>
-      </div>
+      <slot class="title" name="title">Node</slot>
+      <slot class="body"></slot>
     `
   }
 

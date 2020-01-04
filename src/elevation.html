@@ -6,9 +6,6 @@
     <meta name="description" content="Elegation test page" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
-      @import './components/variables.css';
-      @import './components/elevation/elevation.css';
-
       .theme {
         display: flex;
         flex-wrap: wrap;
@@ -21,7 +18,13 @@
         --background: 255, 255, 255;
         --surface: 255, 255, 255;
         --on-surface: 0, 0, 0;
-        --elevation-overlay: none;
+        --overlay: none;
+      }
+
+      .theme--dark {
+        --background: 0, 0, 0;
+        --surface: 0, 0, 0;
+        --on-surface: 255, 255, 255;
       }
 
       .surface {
@@ -37,27 +40,29 @@
     </style>
   </head>
   <body>
-    <div class="theme theme--light">
-      <div class="surface elevation--z1">1dp</div>
-      <div class="surface elevation--z2">2dp</div>
-      <div class="surface elevation--z3">3dp</div>
-      <div class="surface elevation--z4">4dp</div>
-      <div class="surface elevation--z6">6dp</div>
-      <div class="surface elevation--z8">8dp</div>
-      <div class="surface elevation--z12">12dp</div>
-      <div class="surface elevation--z16">16dp</div>
-      <div class="surface elevation--z24">24dp</div>
-    </div>
-    <div class="theme">
-      <div class="surface elevation--z1">1dp</div>
-      <div class="surface elevation--z2">2dp</div>
-      <div class="surface elevation--z3">3dp</div>
-      <div class="surface elevation--z4">4dp</div>
-      <div class="surface elevation--z6">6dp</div>
-      <div class="surface elevation--z8">8dp</div>
-      <div class="surface elevation--z12">12dp</div>
-      <div class="surface elevation--z16">16dp</div>
-      <div class="surface elevation--z24">24dp</div>
-    </div>
+    <div class="theme theme--light"></div>
+    <div class="theme theme--dark"></div>
+
+    <script type="module">
+      import variables from './components/variables.js'
+      import elevation from './components/elevation/elevation.js'
+
+      const variablesStyle = variables(':root')
+      document.head.insertAdjacentHTML('beforeend', variablesStyle)
+
+      for (let z = 0; z < 25; z++) {
+        const elevationStyle = elevation(`.surface--z${z}`, z)
+        document.head.insertAdjacentHTML('beforeend', elevationStyle)
+      }
+
+      document.querySelectorAll('.theme').forEach(container => {
+        for (let z = 0; z < 25; z++) {
+          const surface = document.createElement('div')
+          surface.className = `surface surface--z${z}`
+          surface.textContent = `${z}dp`
+          container.appendChild(surface)
+        }
+      })
+    </script>
   </body>
 </html>

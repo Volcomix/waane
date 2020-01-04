@@ -1,11 +1,11 @@
 import { WaaneElement, html } from '../waane-element.js'
+import variables from '../variables.js'
 
 class NodeEditor extends WaaneElement {
   static get template() {
     return html`
+      ${variables(':host')}
       <style>
-        @import '/components/variables.css';
-
         :host {
           position: relative;
           display: block;
