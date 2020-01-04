@@ -1,17 +1,20 @@
-import { WaaneElement, html } from '../waane-element.js'
+import { WaaneElement, html, css } from '../waane-element.js'
 import variables from '../variables.js'
 
 class NodeEditor extends WaaneElement {
+  static get styles() {
+    return css`
+      :host {
+        position: relative;
+        display: block;
+        background-color: rgb(var(--background));
+      }
+    `
+  }
+
   static get template() {
     return html`
       ${variables(':host')}
-      <style>
-        :host {
-          position: relative;
-          display: block;
-          background-color: rgb(var(--background));
-        }
-      </style>
 
       <slot></slot>
     `

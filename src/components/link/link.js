@@ -1,25 +1,27 @@
-import { WaaneElement, html } from '../waane-element.js'
+import { WaaneElement, html, css } from '../waane-element.js'
 
 class Link extends WaaneElement {
+  static get styles() {
+    return css`
+      :host {
+        position: absolute;
+        display: block;
+        min-width: 20px;
+        min-height: 20px;
+      }
+
+      .link {
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+        fill: none;
+        stroke: rgba(var(--on-background), var(--medium-emphasis));
+      }
+    `
+  }
+
   static get template() {
     return html`
-      <style>
-        :host {
-          position: absolute;
-          display: block;
-          min-width: 20px;
-          min-height: 20px;
-        }
-
-        .link {
-          width: 100%;
-          height: 100%;
-          overflow: visible;
-          fill: none;
-          stroke: rgba(var(--on-background), var(--medium-emphasis));
-        }
-      </style>
-
       <svg class="link">
         <path />
       </svg>
