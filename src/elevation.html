@@ -59,9 +59,9 @@
             ${elevation(z)}
           }
         `)
-        style.textContent = content.join('')
-        document.head.appendChild(style)
       }
+      style.textContent = content.join('')
+      document.head.appendChild(style)
 
       document.querySelectorAll('.theme').forEach(container => {
         for (let z = 0; z < 25; z++) {

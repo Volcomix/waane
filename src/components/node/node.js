@@ -15,6 +15,7 @@ class Node extends WaaneElement {
 
       .title {
         color: rgba(var(--on-surface), var(--high-emphasis));
+        ${typography('subtitle2')}
       }
 
       .body {
@@ -22,14 +23,13 @@ class Node extends WaaneElement {
         flex-direction: column;
         margin-top: 8px;
         color: rgba(var(--on-surface), var(--medium-emphasis));
+        ${typography('body2')}
       }
     `
   }
 
   static get template() {
     return html`
-      ${typography('.title', 'subtitle2')} ${typography('.body', 'body2')}
-
       <slot class="title" name="title">Node</slot>
       <slot class="body"></slot>
     `

@@ -1,0 +1,131 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`returns typography styles for body1 1`] = `
+"
+    font-family: var(--typeface);
+    font-weight: var(--font-regular);
+    font-size: 16px;
+    text-transform: none;
+    letter-spacing: 0.5px;
+  "
+`;
+
+exports[`returns typography styles for body2 1`] = `
+"
+    font-family: var(--typeface);
+    font-weight: var(--font-regular);
+    font-size: 14px;
+    text-transform: none;
+    letter-spacing: 0.25px;
+  "
+`;
+
+exports[`returns typography styles for button 1`] = `
+"
+    font-family: var(--typeface);
+    font-weight: var(--font-medium);
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1.25px;
+  "
+`;
+
+exports[`returns typography styles for caption 1`] = `
+"
+    font-family: var(--typeface);
+    font-weight: var(--font-regular);
+    font-size: 12px;
+    text-transform: none;
+    letter-spacing: 0.4px;
+  "
+`;
+
+exports[`returns typography styles for headline1 1`] = `
+"
+    font-family: var(--typeface);
+    font-weight: var(--font-light);
+    font-size: 96px;
+    text-transform: none;
+    letter-spacing: -1.5px;
+  "
+`;
+
+exports[`returns typography styles for headline2 1`] = `
+"
+    font-family: var(--typeface);
+    font-weight: var(--font-light);
+    font-size: 60px;
+    text-transform: none;
+    letter-spacing: -0.5px;
+  "
+`;
+
+exports[`returns typography styles for headline3 1`] = `
+"
+    font-family: var(--typeface);
+    font-weight: var(--font-regular);
+    font-size: 48px;
+    text-transform: none;
+    letter-spacing: 0px;
+  "
+`;
+
+exports[`returns typography styles for headline4 1`] = `
+"
+    font-family: var(--typeface);
+    font-weight: var(--font-regular);
+    font-size: 34px;
+    text-transform: none;
+    letter-spacing: 0.25px;
+  "
+`;
+
+exports[`returns typography styles for headline5 1`] = `
+"
+    font-family: var(--typeface);
+    font-weight: var(--font-regular);
+    font-size: 24px;
+    text-transform: none;
+    letter-spacing: 0px;
+  "
+`;
+
+exports[`returns typography styles for headline6 1`] = `
+"
+    font-family: var(--typeface);
+    font-weight: var(--font-medium);
+    font-size: 20px;
+    text-transform: none;
+    letter-spacing: 0.15px;
+  "
+`;
+
+exports[`returns typography styles for overline 1`] = `
+"
+    font-family: var(--typeface);
+    font-weight: var(--font-regular);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  "
+`;
+
+exports[`returns typography styles for subtitle1 1`] = `
+"
+    font-family: var(--typeface);
+    font-weight: var(--font-regular);
+    font-size: 16px;
+    text-transform: none;
+    letter-spacing: 0.15px;
+  "
+`;
+
+exports[`returns typography styles for subtitle2 1`] = `
+"
+    font-family: var(--typeface);
+    font-weight: var(--font-medium);
+    font-size: 14px;
+    text-transform: none;
+    letter-spacing: 0.1px;
+  "
+`;

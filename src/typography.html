@@ -42,16 +42,24 @@
     <span class="overline">Overline</span>
 
     <script type="module">
+      import { css } from './components/waane-element.js'
       import variables from './components/variables.js'
       import typography from './components/typography/typography.js'
 
       const variablesStyle = variables(':root')
       document.head.insertAdjacentHTML('beforeend', variablesStyle)
 
+      const style = document.createElement('style')
+      const content = []
       document.body.querySelectorAll('[class]').forEach(({ className }) => {
-        const typographyStyle = typography(`.${className}`, className)
-        document.head.insertAdjacentHTML('beforeend', typographyStyle)
+        content.push(css`
+          .${className} {
+            ${typography(className)}
+          }
+        `)
       })
+      style.textContent = content.join('')
+      document.head.appendChild(style)
     </script>
   </body>
 </html>
