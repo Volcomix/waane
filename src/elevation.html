@@ -48,11 +48,14 @@
       import variables from './components/variables.js'
       import elevation from './components/elevation/elevation.js'
 
-      const variablesStyle = variables(':root')
-      document.head.insertAdjacentHTML('beforeend', variablesStyle)
-
       const style = document.createElement('style')
-      const content = []
+      const content = [
+        css`
+          :root {
+            ${variables}
+          }
+        `,
+      ]
       for (let z = 0; z < 25; z++) {
         content.push(css`
           .surface--z${z} {

@@ -87,7 +87,9 @@ const layers = {
 function shadow(z) {
   return ['umbra', 'penumbra', 'ambient']
     .map(layerName => {
-      return `${layers[layerName][z]} rgba(var(--shadow-color), var(--${layerName}-opacity))`
+      const shadowProperties = layers[layerName][z]
+      const shadowColor = `rgba(var(--shadow-color), var(--${layerName}-opacity))`
+      return `${shadowProperties} ${shadowColor}`
     })
     .join(', ')
 }

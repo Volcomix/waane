@@ -5,6 +5,7 @@ class NodeEditor extends WaaneElement {
   static get styles() {
     return css`
       :host {
+        ${variables}
         position: relative;
         display: block;
         background-color: rgb(var(--background));
@@ -14,8 +15,6 @@ class NodeEditor extends WaaneElement {
 
   static get template() {
     return html`
-      ${variables(':host')}
-
       <slot></slot>
     `
   }

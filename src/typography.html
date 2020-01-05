@@ -46,11 +46,14 @@
       import variables from './components/variables.js'
       import typography from './components/typography/typography.js'
 
-      const variablesStyle = variables(':root')
-      document.head.insertAdjacentHTML('beforeend', variablesStyle)
-
       const style = document.createElement('style')
-      const content = []
+      const content = [
+        css`
+          :root {
+            ${variables}
+          }
+        `,
+      ]
       document.body.querySelectorAll('[class]').forEach(({ className }) => {
         content.push(css`
           .${className} {
