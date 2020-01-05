@@ -1,10 +1,12 @@
 import { css } from './waane-element.js'
 
 export default css`
-  --secondary: var(--w-secondary, 246, 219, 128);
+  --primary: var(--w-primary, 127, 225, 248);
+  --secondary: var(--w-secondary, 245, 220, 129);
   --background: var(--w-background, 18, 18, 18);
   --surface: var(--w-surface, 18, 18, 18);
 
+  --on-primary: var(--w-on-primary, 0, 0, 0);
   --on-secondary: var(--w-on-secondary, 0, 0, 0);
   --on-background: var(--w-on-background, 255, 255, 255);
   --on-surface: var(--w-on-surface, 255, 255, 255);

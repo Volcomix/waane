@@ -22,6 +22,11 @@
         margin: 0;
       }
 
+      .theme ::selection {
+        background-color: rgba(var(--primary), 0.99);
+        color: rgb(var(--on-primary));
+      }
+
       .theme--dark {
         --w-background: 60, 60, 60;
         --w-surface: 30, 30, 30;
@@ -53,6 +58,7 @@
         margin: 2px 0 2px 8px;
         border: none;
         border-radius: 2px;
+        outline: none;
         box-sizing: border-box;
         width: 92px;
         height: 20px;
@@ -81,6 +87,15 @@
         .select {
           padding: 0;
         }
+
+        .select:-moz-focusring {
+          color: transparent;
+          text-shadow: 0 0 0 rgba(var(--on-surface), var(--medium-emphasis));
+        }
+      }
+
+      .select__option {
+        background-color: rgba(var(--surface), var(--surface-opacity));
       }
     </style>
   </head>
@@ -92,10 +107,10 @@
         <label class="field">
           Type
           <select class="input select">
-            <option>sine</option>
-            <option>square</option>
-            <option>sawtooth</option>
-            <option>triangle</option>
+            <option class="select__option">sine</option>
+            <option class="select__option">square</option>
+            <option class="select__option">sawtooth</option>
+            <option class="select__option">triangle</option>
           </select>
         </label>
         <w-input id="osc-freq">
@@ -118,14 +133,14 @@
         <label class="field">
           Type
           <select class="input select">
-            <option>lowpass</option>
-            <option>highpass</option>
-            <option>bandpass</option>
-            <option>lowshelf</option>
-            <option>highshelf</option>
-            <option>peaking</option>
-            <option>notch</option>
-            <option>allpass</option>
+            <option class="select__option">lowpass</option>
+            <option class="select__option">highpass</option>
+            <option class="select__option">bandpass</option>
+            <option class="select__option">lowshelf</option>
+            <option class="select__option">highshelf</option>
+            <option class="select__option">peaking</option>
+            <option class="select__option">notch</option>
+            <option class="select__option">allpass</option>
           </select>
         </label>
         <w-input id="filter-freq">
