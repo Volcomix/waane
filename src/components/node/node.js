@@ -9,7 +9,7 @@ class Node extends WaaneElement {
         position: absolute;
         border-radius: 4px;
         padding: 8px 12px;
-        background-color: rgb(var(--surface));
+        background-color: rgba(var(--surface), var(--surface-opacity));
         ${elevation(1)}
       }
 

@@ -9,6 +9,8 @@ export default css`
   --on-background: var(--w-on-background, 255, 255, 255);
   --on-surface: var(--w-on-surface, 255, 255, 255);
 
+  --surface-opacity: var(--w-surface-opacity, 0.87);
+
   /* Set to none to disable (e.g. to remove the overlay on light theme) */
   --shadow: var(--w-shadow);
   --overlay: var(--w-overlay);
