@@ -22,47 +22,148 @@
         margin: 0;
       }
 
-      w-node-editor {
+      .theme--dark {
+        --w-background: 60, 60, 60;
+        --w-surface: 30, 30, 30;
+        --w-shadow: none;
+      }
+
+      .theme--light {
+        --w-secondary: 238, 187, 2;
+        --w-background: 255, 255, 255;
+        --w-surface: 240, 240, 240;
+        --w-on-background: 0, 0, 0;
+        --w-on-surface: 0, 0, 0;
+        --w-shadow: none;
+        --w-overlay: none;
+      }
+
+      .node-editor {
         height: 100%;
+      }
+
+      .field {
+        flex: 1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .input {
+        margin: 2px 0 2px 8px;
+        border: none;
+        border-radius: 2px;
+        box-sizing: border-box;
+        width: 92px;
+        height: 20px;
+        padding: 0 4px;
+        background-color: rgba(var(--on-surface), 0.06);
+        font-size: 14px;
+        font-family: var(--typeface);
+        font-weight: var(--font-regular);
+        letter-spacing: 0.25px;
+        color: rgba(var(--on-surface), var(--medium-emphasis));
+      }
+
+      .input--number {
+        -webkit-appearance: textfield;
+      }
+
+      .input--number::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+      }
+
+      .select {
+        -webkit-appearance: none;
+      }
+
+      @-moz-document url-prefix() {
+        .select {
+          padding: 0;
+        }
       }
     </style>
   </head>
-  <body>
-    <w-node-editor>
-      <w-node x="50" y="150">
-        <span slot="title">Source</span>
-        <label>
-          Property
-          <select>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
+  <body class="theme theme--dark">
+    <w-node-editor class="node-editor">
+      <w-node x="50" y="280">
+        <span slot="title">Oscillator</span>
+        <w-output id="osc-out">Output</w-output>
+        <label class="field">
+          Type
+          <select class="input select">
+            <option>sine</option>
+            <option>square</option>
+            <option>sawtooth</option>
+            <option>triangle</option>
           </select>
         </label>
-        <w-output id="source-out1">Output 1</w-output>
-        <w-output id="source-out2">Output 2</w-output>
-      </w-node>
-
-      <w-node x="300" y="50">
-        <span slot="title">Filter</span>
-        <w-output id="filter-out">Output</w-output>
-        <w-input id="filter-in">
-          <label>
-            Input
-            <input type="number" />
+        <w-input id="osc-freq">
+          <label class="field">
+            Frequency
+            <input class="input input--number" type="number" value="440" />
+          </label>
+        </w-input>
+        <w-input id="osc-detune">
+          <label class="field">
+            Detune
+            <input class="input input--number" type="number" value="0" />
           </label>
         </w-input>
       </w-node>
 
-      <w-node x="600" y="100">
-        <span slot="title">Destination</span>
-        <w-input id="dest-in1">Input 1</w-input>
-        <w-input id="dest-in2">Input 2</w-input>
+      <w-node x="340" y="50">
+        <span slot="title">Biquad Filter</span>
+        <w-output id="filter-out">Output</w-output>
+        <label class="field">
+          Type
+          <select class="input select">
+            <option>lowpass</option>
+            <option>highpass</option>
+            <option>bandpass</option>
+            <option>lowshelf</option>
+            <option>highshelf</option>
+            <option>peaking</option>
+            <option>notch</option>
+            <option>allpass</option>
+          </select>
+        </label>
+        <w-input id="filter-freq">
+          <label class="field">
+            Frequency
+            <input class="input input--number" type="number" value="350" />
+          </label>
+        </w-input>
+        <w-input id="filter-detune">
+          <label class="field">
+            Detune
+            <input class="input input--number" type="number" value="0" />
+          </label>
+        </w-input>
+        <w-input id="filter-q">
+          <label class="field">
+            Q
+            <input class="input input--number" type="number" value="1" />
+          </label>
+        </w-input>
+        <w-input id="filter-gain">
+          <label class="field">
+            Gain
+            <input class="input input--number" type="number" value="0" />
+          </label>
+        </w-input>
+        <w-input id="filter-in">Input</w-input>
       </w-node>
 
-      <w-link from="source-out1" to="filter-in"></w-link>
-      <w-link from="source-out2" to="dest-in2"></w-link>
-      <w-link from="filter-out" to="dest-in1"></w-link>
+      <w-node x="630" y="230">
+        <span slot="title">Destination</span>
+        <w-input id="dest-in">Input</w-input>
+      </w-node>
+
+      <w-link from="osc-out" to="filter-in"></w-link>
+      <w-link from="osc-out" to="filter-freq"></w-link>
+      <w-link from="osc-out" to="dest-in"></w-link>
+      <w-link from="filter-out" to="dest-in"></w-link>
     </w-node-editor>
 
     <script async type="module" src="./components/index.js"></script>

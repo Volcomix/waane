@@ -24,9 +24,9 @@ const typescale = {
 export default function typography(name) {
   const [font, size, textTransform, letterSpacing] = typescale[name]
   return css`
+    font-size: ${size}px;
     font-family: ${typeface};
     font-weight: ${font};
-    font-size: ${size}px;
     text-transform: ${textTransform || 'none'};
     letter-spacing: ${letterSpacing}px;
   `

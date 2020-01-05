@@ -13,6 +13,10 @@ class Node extends WaaneElement {
         ${elevation(1)}
       }
 
+      .body::slotted(*) {
+        min-height: 24px;
+      }
+
       .title {
         color: rgba(var(--on-surface), var(--high-emphasis));
         ${typography('subtitle2')}
