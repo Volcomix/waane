@@ -1,11 +1,17 @@
 import { css } from './waane-element.js'
 
 export default css`
+  --secondary: var(--w-secondary, 246, 219, 128);
   --background: var(--w-background, 18, 18, 18);
   --surface: var(--w-surface, 18, 18, 18);
 
+  --on-secondary: var(--w-on-secondary, 0, 0, 0);
   --on-background: var(--w-on-background, 255, 255, 255);
   --on-surface: var(--w-on-surface, 255, 255, 255);
+
+  /* Set to none to disable (e.g. to remove the overlay on light theme) */
+  --shadow: var(--w-shadow);
+  --overlay: var(--w-overlay);
 
   --typeface: var(--w-typeface, 'Roboto', sans-serif);
 
@@ -21,8 +27,4 @@ export default css`
   --umbra-opacity: var(--w-umbra-opacity, 0.2);
   --penumbra-opacity: var(--w-penumbra-opacity, 0.14);
   --ambient-opacity: var(--w-ambient-opacity, 0.12);
-
-  /* Set to none to disable (e.g. to remove the overlay on light theme) */
-  --shadow: var(--w-shadow);
-  --overlay: var(--w-overlay);
 `
