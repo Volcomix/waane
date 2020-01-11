@@ -2,7 +2,8 @@
   "name": "@waane/node-editor",
   "version": "1.0.0",
   "description": "Node editor web components",
-  "main": "index.js",
+  "main": "src/components/index.js",
+  "type": "module",
   "author": "Volcomix",
   "license": "MIT",
   "scripts": {

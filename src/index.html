@@ -23,23 +23,36 @@
       }
 
       .theme ::selection {
-        background-color: rgba(var(--primary), 0.99);
-        color: rgb(var(--on-primary));
+        background-color: rgba(var(--primary), var(--high-emphasis));
+        color: rgba(var(--on-primary), var(--high-emphasis));
       }
 
       .theme--dark {
-        --w-background: 60, 60, 60;
-        --w-surface: 30, 30, 30;
+        --w-primary: 243, 119, 35;
+        --w-secondary: 255, 91, 85;
+        --w-background: 95, 102, 112;
+        --w-surface: 42, 46, 51;
+
+        --w-on-primary: 255, 255, 255;
+        --w-on-secondary: 255, 255, 255;
+        --w-on-background: 255, 255, 255;
+        --w-on-surface: 255, 255, 255;
+
         --w-shadow: none;
+        --w-overlay: none;
       }
 
       .theme--light {
-        --w-secondary: 238, 187, 2;
+        --w-primary: 2, 95, 238;
+        --w-secondary: 238, 144, 2;
         --w-background: 255, 255, 255;
         --w-surface: 240, 240, 240;
+
+        --w-on-primary: 255, 255, 255;
+        --w-on-secondary: 0, 0, 0;
         --w-on-background: 0, 0, 0;
         --w-on-surface: 0, 0, 0;
-        --w-shadow: none;
+
         --w-overlay: none;
       }
 
@@ -48,10 +61,19 @@
       }
 
       .field {
+        position: relative;
         flex: 1;
         display: flex;
         justify-content: space-between;
         align-items: center;
+      }
+
+      .field--select::after {
+        content: '⌄';
+        position: absolute;
+        right: 2px;
+        transform: translateY(-3px);
+        pointer-events: none;
       }
 
       .input {
@@ -61,14 +83,23 @@
         outline: none;
         box-sizing: border-box;
         width: 92px;
-        height: 20px;
-        padding: 0 4px;
-        background-color: rgba(var(--on-surface), 0.06);
+        height: 24px;
+        padding: 0 16px 0 4px;
+        background-color: rgba(var(--on-surface), 0.04);
         font-size: 14px;
         font-family: var(--typeface);
         font-weight: var(--font-regular);
         letter-spacing: 0.25px;
         color: rgba(var(--on-surface), var(--medium-emphasis));
+      }
+
+      .input:hover {
+        background-color: rgba(var(--on-surface), 0.08);
+      }
+
+      .input:focus {
+        background-color: rgba(var(--on-surface), 0.12);
+        color: rgba(var(--on-surface), var(--high-emphasis));
       }
 
       .input--number {
@@ -99,12 +130,12 @@
       }
     </style>
   </head>
-  <body class="theme theme--dark">
+  <body class="theme theme--default">
     <w-node-editor class="node-editor">
-      <w-node x="50" y="280">
+      <w-node x="50" y="300">
         <span slot="title">Oscillator</span>
         <w-output id="osc-out">Output</w-output>
-        <label class="field">
+        <label class="field field--select">
           Type
           <select class="input select">
             <option class="select__option">sine</option>
@@ -130,7 +161,7 @@
       <w-node x="340" y="50">
         <span slot="title">Biquad Filter</span>
         <w-output id="filter-out">Output</w-output>
-        <label class="field">
+        <label class="field field--select">
           Type
           <select class="input select">
             <option class="select__option">lowpass</option>
@@ -170,7 +201,7 @@
         <w-input id="filter-in">Input</w-input>
       </w-node>
 
-      <w-node x="630" y="230">
+      <w-node x="630" y="260">
         <span slot="title">Destination</span>
         <w-input id="dest-in">Input</w-input>
       </w-node>

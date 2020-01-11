@@ -10,11 +10,7 @@ class Node extends WaaneElement {
         border-radius: 4px;
         padding: 8px 12px;
         background-color: rgba(var(--surface), var(--surface-opacity));
-        ${elevation(1)}
-      }
-
-      .body::slotted(*) {
-        min-height: 24px;
+        ${elevation(3)}
       }
 
       .title {
@@ -25,9 +21,12 @@ class Node extends WaaneElement {
       .body {
         display: flex;
         flex-direction: column;
-        margin-top: 8px;
         color: rgba(var(--on-surface), var(--medium-emphasis));
         ${typography('body2')}
+      }
+
+      .body::slotted(*) {
+        min-height: 28px;
       }
     `
   }
