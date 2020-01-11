@@ -1,5 +1,5 @@
 import './node-editor/node-editor.js'
-import './node/node.js'
+import './node/node.html'
 import './link/link.js'
 import './output/output.js'
 import './input/input.js'
