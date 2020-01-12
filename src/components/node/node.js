@@ -7,10 +7,16 @@ class Node extends WaaneElement {
     return css`
       :host {
         position: absolute;
+        transition: border 100ms var(--easing-standard);
+        border: 2px solid transparent;
         border-radius: 4px;
-        padding: 8px 12px;
+        padding: 6px 10px;
         background-color: rgba(var(--surface), var(--surface-opacity));
         ${elevation(3)}
+      }
+
+      :host([selected]) {
+        border: 2px solid rgba(var(--primary), var(--high-emphasis));
       }
 
       .title {

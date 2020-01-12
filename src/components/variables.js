@@ -31,4 +31,8 @@ export default css`
   --umbra-opacity: var(--w-umbra-opacity, 0.2);
   --penumbra-opacity: var(--w-penumbra-opacity, 0.14);
   --ambient-opacity: var(--w-ambient-opacity, 0.12);
+
+  --easing-standard: var(--w-easing-standard, cubic-bezier(0.4, 0, 0.2, 1));
+  --easing-decelerate: var(--w-easing-decelerate, cubic-bezier(0, 0, 0.2, 1));
+  --easing-accelerate: var(--w-easing-accelerate, cubic-bezier(0.4, 0, 1, 1));
 `
