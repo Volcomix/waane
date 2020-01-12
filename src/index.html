@@ -135,7 +135,7 @@
       <w-node x="50" y="300">
         <span slot="title">Oscillator</span>
         <w-output id="osc-out">Output</w-output>
-        <label class="field field--select">
+        <div class="field field--select">
           Type
           <select class="input select">
             <option class="select__option">sine</option>
@@ -143,25 +143,25 @@
             <option class="select__option">sawtooth</option>
             <option class="select__option">triangle</option>
           </select>
-        </label>
+        </div>
         <w-input id="osc-freq">
-          <label class="field">
+          <div class="field">
             Frequency
             <input class="input input--number" type="number" value="440" />
-          </label>
+          </div>
         </w-input>
         <w-input id="osc-detune">
-          <label class="field">
+          <div class="field">
             Detune
             <input class="input input--number" type="number" value="0" />
-          </label>
+          </div>
         </w-input>
       </w-node>
 
       <w-node x="340" y="50">
         <span slot="title">Biquad Filter</span>
         <w-output id="filter-out">Output</w-output>
-        <label class="field field--select">
+        <div class="field field--select">
           Type
           <select class="input select">
             <option class="select__option">lowpass</option>
@@ -173,30 +173,30 @@
             <option class="select__option">notch</option>
             <option class="select__option">allpass</option>
           </select>
-        </label>
+        </div>
         <w-input id="filter-freq">
-          <label class="field">
+          <div class="field">
             Frequency
             <input class="input input--number" type="number" value="350" />
-          </label>
+          </div>
         </w-input>
         <w-input id="filter-detune">
-          <label class="field">
+          <div class="field">
             Detune
             <input class="input input--number" type="number" value="0" />
-          </label>
+          </div>
         </w-input>
         <w-input id="filter-q">
-          <label class="field">
+          <div class="field">
             Q
             <input class="input input--number" type="number" value="1" />
-          </label>
+          </div>
         </w-input>
         <w-input id="filter-gain">
-          <label class="field">
+          <div class="field">
             Gain
             <input class="input input--number" type="number" value="0" />
-          </label>
+          </div>
         </w-input>
         <w-input id="filter-in">Input</w-input>
       </w-node>
