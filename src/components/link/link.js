@@ -28,6 +28,10 @@ class Link extends WaaneElement {
     `
   }
 
+  static get properties() {
+    return { from: String, to: String }
+  }
+
   constructor() {
     super()
     this._path = this.shadowRoot.querySelector('path')

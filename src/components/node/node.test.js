@@ -1,4 +1,4 @@
-let elementHandle, onResizeMock
+let elementHandle, onResizeMock, onBodyClickMock
 
 beforeAll(async () => {
   await page.goto('http://localhost:8080/test.html')
@@ -6,7 +6,14 @@ beforeAll(async () => {
     import('./components/node/node.js')
   `)
   onResizeMock = jest.fn()
+  onBodyClickMock = jest.fn()
   await page.exposeFunction('onResizeMock', onResizeMock)
+  await page.exposeFunction('onBodyClickMock', onBodyClickMock)
+  await page.evaluate(() => {
+    document.body.addEventListener('click', event => {
+      onBodyClickMock(event.target.nodeName.toLowerCase())
+    })
+  })
 })
 
 beforeEach(async () => {
@@ -19,6 +26,7 @@ beforeEach(async () => {
     return element
   })
   onResizeMock.mockClear()
+  onBodyClickMock.mockClear()
 })
 
 it('is named Node by default', async () => {
@@ -122,4 +130,42 @@ it('does not dispatch w-node-resize when the node moves', async () => {
     element.x = 10
   })
   expect(onResizeMock).not.toHaveBeenCalled()
+})
+
+it('becomes the only selected node', async () => {
+  await elementHandle.click()
+  const isSelected = await elementHandle.evaluate(element => element.selected)
+  expect(isSelected).toBe(true)
+  expect(onBodyClickMock.mock.calls).toEqual([['w-node']])
+})
+
+it('becomes the only selected node when clicking a child', async () => {
+  await elementHandle.evaluate(element => {
+    element.innerHTML = /* HTML */ `
+      <div id="child">A child</div>
+    `
+  })
+  await page.click('#child')
+  const isSelected = await elementHandle.evaluate(element => element.selected)
+  expect(isSelected).toBe(true)
+  expect(onBodyClickMock.mock.calls).toEqual([['w-node']])
+})
+
+it('becomes selected', async () => {
+  await page.keyboard.down('Control')
+  await elementHandle.click()
+  await page.keyboard.up('Control')
+  const isSelected = await elementHandle.evaluate(element => element.selected)
+  expect(isSelected).toBe(true)
+  expect(onBodyClickMock).not.toHaveBeenCalled()
+})
+
+it('becomes unselected', async () => {
+  await elementHandle.evaluate(element => (element.selected = true))
+  await page.keyboard.down('Control')
+  await elementHandle.click()
+  await page.keyboard.up('Control')
+  const isSelected = await elementHandle.evaluate(element => element.selected)
+  expect(isSelected).toBe(false)
+  expect(onBodyClickMock).not.toHaveBeenCalled()
 })

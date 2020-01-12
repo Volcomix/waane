@@ -39,12 +39,13 @@ class Node extends WaaneElement {
   }
 
   static get properties() {
-    return { x: String, y: String }
+    return { x: String, y: String, selected: Boolean }
   }
 
   constructor() {
     super()
     this._resizeObserver = new MutationObserver(this._dispatchResize.bind(this))
+    this.addEventListener('click', this._onClick.bind(this))
   }
 
   connectedCallback() {
@@ -78,7 +79,9 @@ class Node extends WaaneElement {
 
   _dispatchResize(mutations) {
     if (this._isResized(mutations)) {
-      this.dispatchEvent(new Event('w-node-resize', { bubbles: true }))
+      this.dispatchEvent(
+        new Event('w-node-resize', { bubbles: true, cancelable: true }),
+      )
     }
   }
 
@@ -86,6 +89,23 @@ class Node extends WaaneElement {
     return mutations.some(mutation => {
       return mutation.target !== this || mutation.type !== 'attributes'
     })
+  }
+
+  _onClick(event) {
+    if (event.ctrlKey) {
+      this.selected = !this.selected
+      event.stopPropagation()
+    } else if (event.target === this) {
+      this.selected = true
+    } else {
+      event.stopPropagation()
+      this.dispatchEvent(
+        new MouseEvent('click', {
+          bubbles: true,
+          cancelable: true,
+        }),
+      )
+    }
   }
 }
 

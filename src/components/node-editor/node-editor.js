@@ -32,6 +32,7 @@ class NodeEditor extends WaaneElement {
       this._onLinksSocketChange.bind(this),
     )
     this.addEventListener('w-node-resize', this._onNodeResize.bind(this))
+    this.addEventListener('click', this._onClick.bind(this))
   }
 
   async connectedCallback() {
@@ -123,6 +124,14 @@ class NodeEditor extends WaaneElement {
     const inputs = new Set()
     this._findUpdatedSockets(event.target, outputs, inputs)
     this._updateLinks(outputs, inputs)
+  }
+
+  _onClick(event) {
+    this.nodes.forEach(node => {
+      if (node !== event.target) {
+        node.selected = false
+      }
+    })
   }
 
   _isNode(target) {

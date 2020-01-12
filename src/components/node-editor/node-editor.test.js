@@ -4,10 +4,16 @@ beforeAll(async () => {
   await page.goto('http://localhost:8080/test.html')
   await page.addStyleTag({
     content: /* css */ `
+      w-node-editor {
+        width: 600px;
+        height: 600px;
+      }
+
       w-node {
         position: absolute;
         display: block;
         width: 100px;
+        min-height: 10px;
       }
 
       w-output {
@@ -32,12 +38,27 @@ beforeAll(async () => {
     customElements.define(
       'w-node',
       class extends HTMLElement {
+        constructor() {
+          super()
+          this.addEventListener('click', () => {
+            this.selected = true
+          })
+        }
+
         get outputs() {
           return this.querySelectorAll('w-output')
         }
 
         get inputs() {
           return this.querySelectorAll('w-input')
+        }
+
+        set selected(selected) {
+          if (selected) {
+            this.setAttribute('selected', '')
+          } else {
+            this.removeAttribute('selected')
+          }
         }
       },
     )
@@ -268,8 +289,7 @@ it('updates links when nodes are removed', async () => {
     `
   })
   linkUpdateMock.mockClear()
-  await elementHandle.evaluate(element => {
-    const [node1, node2] = element.querySelectorAll('w-node')
+  await elementHandle.$$eval('w-node', ([node1, node2]) => {
     node1.remove()
     node2.remove()
   })
@@ -293,8 +313,7 @@ it('does not update links when the removed child is not a node', async () => {
     `
   })
   linkUpdateMock.mockClear()
-  await elementHandle.evaluate(element => {
-    const somethingElse = element.querySelector('something-else')
+  await elementHandle.$eval('something-else', somethingElse => {
     somethingElse.remove()
   })
   expect(linkUpdateMock).not.toHaveBeenCalled()
@@ -324,8 +343,7 @@ it('updates links when nodes move', async () => {
     `
   })
   linkUpdateMock.mockClear()
-  await elementHandle.evaluate(element => {
-    const [node1, node2] = element.querySelectorAll('w-node')
+  await elementHandle.$$eval('w-node', ([node1, node2]) => {
     node1.setAttribute('x', 100)
     node2.setAttribute('x', 300)
   })
@@ -355,8 +373,7 @@ it('does not update links when what moves is not a node', async () => {
     `
   })
   linkUpdateMock.mockClear()
-  await elementHandle.evaluate(element => {
-    const somethingElse = element.querySelector('something-else')
+  await elementHandle.$eval('something-else', somethingElse => {
     somethingElse.setAttribute('x', 100)
   })
   expect(linkUpdateMock).not.toHaveBeenCalled()
@@ -386,8 +403,7 @@ it('updates links when a node is resized', async () => {
     `
   })
   linkUpdateMock.mockClear()
-  await elementHandle.evaluate(element => {
-    const node2 = element.querySelector('w-node:nth-of-type(2)')
+  await elementHandle.$eval('w-node:nth-of-type(2)', node2 => {
     node2.dispatchEvent(new Event('w-node-resize', { bubbles: true }))
   })
   expect(linkUpdateMock.mock.calls).toEqual([
@@ -421,8 +437,7 @@ it('erases links when an output is removed', async () => {
     `
   })
   linkUpdateMock.mockClear()
-  await elementHandle.evaluate(element => {
-    const node2 = element.querySelector('w-node:nth-of-type(2)')
+  await elementHandle.$eval('w-node:nth-of-type(2)', node2 => {
     node2.querySelector('w-output#out2').remove()
     node2.dispatchEvent(new Event('w-node-resize', { bubbles: true }))
   })
@@ -454,8 +469,7 @@ it('erases links when an input is removed', async () => {
     `
   })
   linkUpdateMock.mockClear()
-  await elementHandle.evaluate(element => {
-    const node2 = element.querySelector('w-node:nth-of-type(2)')
+  await elementHandle.$eval('w-node:nth-of-type(2)', node2 => {
     node2.querySelector('w-input#in2').remove()
     node2.dispatchEvent(new Event('w-node-resize', { bubbles: true }))
   })
@@ -552,8 +566,7 @@ it('updates the link when it starts from another output', async () => {
     `
   })
   linkUpdateMock.mockClear()
-  await elementHandle.evaluate(element => {
-    const link = element.querySelector('w-link')
+  await elementHandle.$eval('w-link', link => {
     link.setAttribute('from', 'out2')
   })
   expect(linkUpdateMock.mock.calls).toEqual([
@@ -582,8 +595,7 @@ it('updates the link when it ends to another input', async () => {
     `
   })
   linkUpdateMock.mockClear()
-  await elementHandle.evaluate(element => {
-    const link = element.querySelector('w-link')
+  await elementHandle.$eval('w-link', link => {
     link.setAttribute('to', 'in3')
   })
   expect(linkUpdateMock.mock.calls).toEqual([
@@ -624,4 +636,32 @@ it('does not draw links that do not end to an input', async () => {
     `
   })
   expect(linkUpdateMock.mock.calls).toEqual([[{ x: 200, y: 105 }, null]])
+})
+
+it('deselects all nodes', async () => {
+  await elementHandle.evaluate(element => {
+    element.innerHTML = /* HTML */ `
+      <w-node id="node1" selected></w-node>
+      <w-node id="node2" selected></w-node>
+    `
+  })
+  await page.mouse.click(500, 500)
+  const selectedNodeIds = await elementHandle.$$eval('[selected]', nodes =>
+    nodes.map(node => node.id),
+  )
+  expect(selectedNodeIds).toHaveLength(0)
+})
+
+it('deselects all nodes but the new selected one', async () => {
+  await elementHandle.evaluate(element => {
+    element.innerHTML = /* HTML */ `
+      <w-node id="node1" selected></w-node>
+      <w-node id="node2"></w-node>
+    `
+  })
+  await page.click('#node2')
+  const selectedNodeIds = await elementHandle.$$eval('[selected]', nodes =>
+    nodes.map(node => node.id),
+  )
+  expect(selectedNodeIds).toEqual(['node2'])
 })
