@@ -2,23 +2,31 @@ export const html = String.raw
 export const css = String.raw
 
 export class WaaneElement extends HTMLElement {
+  static get observedAttributes() {
+    const propertyTypes = this.properties
+    if (propertyTypes) {
+      return Object.keys(propertyTypes).map(toKebabCase)
+    }
+  }
+
   constructor() {
     super()
     this._setters = {}
+    this._properties = {}
     this._initShadowRoot()
-    this._initAttributes()
+    this._initProperties()
   }
 
-  attributeChangedCallback(name, _oldValue, newValue) {
-    this[this._setters[name]] = newValue
+  attributeChangedCallback(name) {
+    this[this._setters[name]] = this[this._properties[name]]
   }
 
   get _template() {
     return getTemplateElement.call(this, this.tagName)
   }
 
-  get _attributes() {
-    return getObservedAttributes.call(this, this.tagName)
+  get _propertyTypes() {
+    return getProperties.call(this, this.tagName)
   }
 
   _initShadowRoot() {
@@ -29,28 +37,54 @@ export class WaaneElement extends HTMLElement {
     this.shadowRoot.appendChild(template.content.cloneNode(true))
   }
 
-  _initAttributes() {
-    const attributes = this._attributes
-    if (!attributes) return
+  _initProperties() {
+    const propertyTypes = this._propertyTypes
+    if (!propertyTypes) return
 
-    for (const attribute of attributes) {
-      const property = toCamelCase(attribute)
-      this._registerSetter(attribute, property)
-      this._registerProperty(attribute, property)
-    }
+    Object.entries(propertyTypes).forEach(([property, type]) => {
+      const attribute = toKebabCase(property)
+      this._registerSetter(property, attribute)
+      this._registerProperty(property, attribute, type)
+    })
   }
 
-  _registerSetter(attribute, property) {
+  _registerSetter(property, attribute) {
     this._setters[attribute] = `_${property}`
   }
 
-  _registerProperty(attribute, property) {
+  _registerProperty(property, attribute, type) {
+    this._properties[attribute] = property
+    switch (type) {
+      case Boolean:
+        this._defineBooleanProperty(property, attribute)
+        break
+      default:
+        this._defineStringProperty(property, attribute)
+    }
+  }
+
+  _defineStringProperty(property, attribute) {
     Object.defineProperty(this, property, {
       get() {
         return this.getAttribute(attribute)
       },
       set(value) {
         this.setAttribute(attribute, value)
+      },
+    })
+  }
+
+  _defineBooleanProperty(property, attribute) {
+    Object.defineProperty(this, property, {
+      get() {
+        return this.hasAttribute(attribute)
+      },
+      set(value) {
+        if (value) {
+          this.setAttribute(attribute, '')
+        } else {
+          this.removeAttribute(attribute)
+        }
       },
     })
   }
@@ -74,12 +108,12 @@ const getTemplateElement = memoize(function() {
   return templateElement
 })
 
-const getObservedAttributes = memoize(function() {
-  return this.constructor.observedAttributes
+const getProperties = memoize(function() {
+  return this.constructor.properties
 })
 
-const toCamelCase = memoize(function(string) {
-  return string.toLowerCase().replace(/-(.)/g, (_match, p1) => p1.toUpperCase())
+const toKebabCase = memoize(function(string) {
+  return string.replace(/[A-Z]/g, '-$&').toLowerCase()
 })
 
 function memoize(fn) {

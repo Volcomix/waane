@@ -38,8 +38,8 @@ class Node extends WaaneElement {
     `
   }
 
-  static get observedAttributes() {
-    return ['x', 'y']
+  static get properties() {
+    return { x: String, y: String }
   }
 
   constructor() {
