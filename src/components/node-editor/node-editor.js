@@ -1,26 +1,38 @@
 import { WaaneElement, html, css } from '../waane-element.js'
 import variables from '../variables.js'
 
+const zoomFactor = 1.1
+const maxZoom = zoomFactor ** 15
+const minZoom = zoomFactor ** -22
+
 class NodeEditor extends WaaneElement {
   static get styles() {
     return css`
       :host {
         ${variables}
         position: relative;
-        display: block;
+        display: flex;
+        overflow: hidden;
         background-color: rgb(var(--background));
+      }
+
+      .container {
+        flex: 1;
+        display: block;
       }
     `
   }
 
   static get template() {
     return html`
-      <slot></slot>
+      <slot class="container"></slot>
     `
   }
 
   constructor() {
     super()
+    this._container = this.shadowRoot.querySelector('.container')
+    this._scale = 1
     this._sockets = new Map()
     this._childListObserver = new MutationObserver(
       this._onChildListChange.bind(this),
@@ -33,6 +45,7 @@ class NodeEditor extends WaaneElement {
     )
     this.addEventListener('w-node-resize', this._onNodeResize.bind(this))
     this.addEventListener('click', this._onClick.bind(this))
+    this.addEventListener('wheel', this._onWheel.bind(this))
   }
 
   async connectedCallback() {
@@ -134,6 +147,17 @@ class NodeEditor extends WaaneElement {
     })
   }
 
+  _onWheel(event) {
+    event.preventDefault()
+    if (event.deltaY > 0) {
+      this._scale /= zoomFactor
+    } else {
+      this._scale *= zoomFactor
+    }
+    this._scale = Math.min(Math.max(minZoom, this._scale), maxZoom)
+    this._container.style.transform = `scale(${this._scale})`
+  }
+
   _isNode(target) {
     return target.nodeName.toLowerCase() === 'w-node'
   }
@@ -172,39 +196,39 @@ class NodeEditor extends WaaneElement {
   }
 
   _updateLinks(outputs, inputs) {
-    const nodeEditorRect = this.getBoundingClientRect()
+    const containerRect = this._container.getBoundingClientRect()
     this.links.forEach(link => {
       if (outputs.has(link.from) || inputs.has(link.to)) {
-        this._updateLink(link, nodeEditorRect)
+        this._updateLink(link, containerRect)
       }
     })
   }
 
-  _updateLink(link, nodeEditorRect) {
-    const fromPosition = this._getFromPosition(link, nodeEditorRect)
-    const toPosition = this._getToPosition(link, nodeEditorRect)
+  _updateLink(link, containerRect) {
+    const fromPosition = this._getFromPosition(link, containerRect)
+    const toPosition = this._getToPosition(link, containerRect)
     link.update(fromPosition, toPosition)
   }
 
-  _getFromPosition(link, nodeEditorRect) {
+  _getFromPosition(link, containerRect) {
     const from = this.querySelector(`w-output#${link.from}`)
     if (!from) return
 
     const fromRect = from.getBoundingClientRect()
     return {
-      x: fromRect.x + fromRect.width - nodeEditorRect.x,
-      y: fromRect.y + fromRect.height / 2 - nodeEditorRect.y,
+      x: (fromRect.x + fromRect.width - containerRect.x) / this._scale,
+      y: (fromRect.y + fromRect.height / 2 - containerRect.y) / this._scale,
     }
   }
 
-  _getToPosition(link, nodeEditorRect) {
+  _getToPosition(link, containerRect) {
     const to = this.querySelector(`w-input#${link.to}`)
     if (!to) return
 
     const toRect = to.getBoundingClientRect()
     return {
-      x: toRect.x - nodeEditorRect.x,
-      y: toRect.y + toRect.height / 2 - nodeEditorRect.y,
+      x: (toRect.x - containerRect.x) / this._scale,
+      y: (toRect.y + toRect.height / 2 - containerRect.y) / this._scale,
     }
   }
 }

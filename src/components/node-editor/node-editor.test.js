@@ -665,3 +665,83 @@ it('deselects all nodes but the new selected one', async () => {
   )
   expect(selectedNodeIds).toEqual(['node2'])
 })
+
+it('zooms in', async () => {
+  const transform = await elementHandle.evaluate(element => {
+    element.dispatchEvent(new WheelEvent('wheel', { deltaY: -1 }))
+    return element.shadowRoot.querySelector('.container').style.transform
+  })
+  expect(transform).toBe('scale(1.1)')
+})
+
+it('stops zooming in', async () => {
+  const transform = await elementHandle.evaluate(element => {
+    for (let i = 0; i < 30; i++) {
+      element.dispatchEvent(new WheelEvent('wheel', { deltaY: -1 }))
+    }
+    return element.shadowRoot.querySelector('.container').style.transform
+  })
+  expect(transform).toBe('scale(4.17725)')
+})
+
+it('zooms out', async () => {
+  const transform = await elementHandle.evaluate(element => {
+    element.dispatchEvent(new WheelEvent('wheel', { deltaY: 1 }))
+    return element.shadowRoot.querySelector('.container').style.transform
+  })
+  expect(transform).toBe('scale(0.909091)')
+})
+
+it('stops zooming out', async () => {
+  const transform = await elementHandle.evaluate(element => {
+    for (let i = 0; i < 30; i++) {
+      element.dispatchEvent(new WheelEvent('wheel', { deltaY: 1 }))
+    }
+    return element.shadowRoot.querySelector('.container').style.transform
+  })
+  expect(transform).toBe('scale(0.122846)')
+})
+
+it('draws the links when zoomed in', async () => {
+  await elementHandle.evaluate(element => {
+    element.dispatchEvent(new WheelEvent('wheel', { deltaY: -1 }))
+    element.innerHTML = /* HTML */ `
+      <w-node style="left: 100px; top: 100px;">
+        <w-output id="out1"></w-output>
+      </w-node>
+      <w-node style="left: 300px; top: 200px;">
+        <w-input id="in2"></w-input>
+      </w-node>
+
+      <w-link from="out1" to="in2"></w-link>
+    `
+  })
+  expect(linkUpdateMock).toHaveBeenCalledTimes(1)
+  const [fromPosition, toPosition] = linkUpdateMock.mock.calls[0]
+  expect(fromPosition.x).toBeCloseTo(200)
+  expect(fromPosition.y).toBeCloseTo(105)
+  expect(toPosition.x).toBeCloseTo(300)
+  expect(toPosition.y).toBeCloseTo(205)
+})
+
+it('draws the links when zoomed out', async () => {
+  await elementHandle.evaluate(element => {
+    element.dispatchEvent(new WheelEvent('wheel', { deltaY: 1 }))
+    element.innerHTML = /* HTML */ `
+      <w-node style="left: 100px; top: 100px;">
+        <w-output id="out1"></w-output>
+      </w-node>
+      <w-node style="left: 300px; top: 200px;">
+        <w-input id="in2"></w-input>
+      </w-node>
+
+      <w-link from="out1" to="in2"></w-link>
+    `
+  })
+  expect(linkUpdateMock).toHaveBeenCalledTimes(1)
+  const [fromPosition, toPosition] = linkUpdateMock.mock.calls[0]
+  expect(fromPosition.x).toBeCloseTo(200)
+  expect(fromPosition.y).toBeCloseTo(105)
+  expect(toPosition.x).toBeCloseTo(300)
+  expect(toPosition.y).toBeCloseTo(205)
+})

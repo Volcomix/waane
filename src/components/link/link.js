@@ -10,7 +10,7 @@ class Link extends WaaneElement {
         min-height: 20px;
       }
 
-      .link {
+      .container {
         width: 100%;
         height: 100%;
         overflow: visible;
@@ -22,8 +22,8 @@ class Link extends WaaneElement {
 
   static get template() {
     return html`
-      <svg class="link">
-        <path />
+      <svg class="container">
+        <path class="path" />
       </svg>
     `
   }
@@ -34,7 +34,7 @@ class Link extends WaaneElement {
 
   constructor() {
     super()
-    this._path = this.shadowRoot.querySelector('path')
+    this._path = this.shadowRoot.querySelector('.path')
   }
 
   update(fromPosition, toPosition) {
