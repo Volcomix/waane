@@ -671,7 +671,7 @@ it('zooms in', async () => {
     element.dispatchEvent(new WheelEvent('wheel', { deltaY: -1 }))
     return element.shadowRoot.querySelector('.container').style.transform
   })
-  expect(transform).toBe('scale(1.1)')
+  expect(transform).toBe('scale(1.1) translate(0px, 0px)')
 })
 
 it('stops zooming in', async () => {
@@ -681,7 +681,7 @@ it('stops zooming in', async () => {
     }
     return element.shadowRoot.querySelector('.container').style.transform
   })
-  expect(transform).toBe('scale(4.17725)')
+  expect(transform).toBe('scale(4.17725) translate(0px, 0px)')
 })
 
 it('zooms out', async () => {
@@ -689,7 +689,7 @@ it('zooms out', async () => {
     element.dispatchEvent(new WheelEvent('wheel', { deltaY: 1 }))
     return element.shadowRoot.querySelector('.container').style.transform
   })
-  expect(transform).toBe('scale(0.909091)')
+  expect(transform).toBe('scale(0.909091) translate(0px, 0px)')
 })
 
 it('stops zooming out', async () => {
@@ -699,34 +699,65 @@ it('stops zooming out', async () => {
     }
     return element.shadowRoot.querySelector('.container').style.transform
   })
-  expect(transform).toBe('scale(0.122846)')
+  expect(transform).toBe('scale(0.122846) translate(0px, 0px)')
 })
 
-it('draws the links when zoomed in', async () => {
+it('pans up', async () => {
+  const transform = await elementHandle.evaluate(element => {
+    element.dispatchEvent(
+      new MouseEvent('mousemove', { buttons: 4, movementY: -10 }),
+    )
+    return element.shadowRoot.querySelector('.container').style.transform
+  })
+  expect(transform).toBe('scale(1) translate(0px, -10px)')
+})
+
+it('pans right', async () => {
+  const transform = await elementHandle.evaluate(element => {
+    element.dispatchEvent(
+      new MouseEvent('mousemove', { buttons: 4, movementX: 10 }),
+    )
+    return element.shadowRoot.querySelector('.container').style.transform
+  })
+  expect(transform).toBe('scale(1) translate(10px, 0px)')
+})
+
+it('pans down', async () => {
+  const transform = await elementHandle.evaluate(element => {
+    element.dispatchEvent(
+      new MouseEvent('mousemove', { buttons: 4, movementY: 10 }),
+    )
+    return element.shadowRoot.querySelector('.container').style.transform
+  })
+  expect(transform).toBe('scale(1) translate(0px, 10px)')
+})
+
+it('pans left', async () => {
+  const transform = await elementHandle.evaluate(element => {
+    element.dispatchEvent(
+      new MouseEvent('mousemove', { buttons: 4, movementX: -10 }),
+    )
+    return element.shadowRoot.querySelector('.container').style.transform
+  })
+  expect(transform).toBe('scale(1) translate(-10px, 0px)')
+})
+
+it('does not pan', async () => {
+  const transform = await elementHandle.evaluate(element => {
+    element.dispatchEvent(
+      new MouseEvent('mousemove', { buttons: 1, movementX: 10 }),
+    )
+    return element.shadowRoot.querySelector('.container').style.transform
+  })
+  expect(transform).toBe('')
+})
+
+it('draws the links when zoomed and panned', async () => {
   await elementHandle.evaluate(element => {
     element.dispatchEvent(new WheelEvent('wheel', { deltaY: -1 }))
-    element.innerHTML = /* HTML */ `
-      <w-node style="left: 100px; top: 100px;">
-        <w-output id="out1"></w-output>
-      </w-node>
-      <w-node style="left: 300px; top: 200px;">
-        <w-input id="in2"></w-input>
-      </w-node>
-
-      <w-link from="out1" to="in2"></w-link>
-    `
-  })
-  expect(linkUpdateMock).toHaveBeenCalledTimes(1)
-  const [fromPosition, toPosition] = linkUpdateMock.mock.calls[0]
-  expect(fromPosition.x).toBeCloseTo(200)
-  expect(fromPosition.y).toBeCloseTo(105)
-  expect(toPosition.x).toBeCloseTo(300)
-  expect(toPosition.y).toBeCloseTo(205)
-})
-
-it('draws the links when zoomed out', async () => {
-  await elementHandle.evaluate(element => {
-    element.dispatchEvent(new WheelEvent('wheel', { deltaY: 1 }))
+    element.dispatchEvent(
+      new MouseEvent('mousemove', { buttons: 1, movementX: 10 }),
+    )
     element.innerHTML = /* HTML */ `
       <w-node style="left: 100px; top: 100px;">
         <w-output id="out1"></w-output>

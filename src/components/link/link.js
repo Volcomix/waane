@@ -15,6 +15,7 @@ class Link extends WaaneElement {
         height: 100%;
         overflow: visible;
         fill: none;
+        stroke-width: 1.5px;
         stroke: rgba(var(--on-background), var(--medium-emphasis));
       }
     `

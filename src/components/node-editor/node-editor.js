@@ -33,6 +33,7 @@ class NodeEditor extends WaaneElement {
     super()
     this._container = this.shadowRoot.querySelector('.container')
     this._scale = 1
+    this._translate = { x: 0, y: 0 }
     this._sockets = new Map()
     this._childListObserver = new MutationObserver(
       this._onChildListChange.bind(this),
@@ -46,6 +47,7 @@ class NodeEditor extends WaaneElement {
     this.addEventListener('w-node-resize', this._onNodeResize.bind(this))
     this.addEventListener('click', this._onClick.bind(this))
     this.addEventListener('wheel', this._onWheel.bind(this))
+    this.addEventListener('mousemove', this._onMouseMove.bind(this))
   }
 
   async connectedCallback() {
@@ -155,7 +157,16 @@ class NodeEditor extends WaaneElement {
       this._scale *= zoomFactor
     }
     this._scale = Math.min(Math.max(minZoom, this._scale), maxZoom)
-    this._container.style.transform = `scale(${this._scale})`
+    this._transform()
+  }
+
+  _onMouseMove(event) {
+    // Middle button pressed
+    if (event.buttons & 4) {
+      this._translate.x += event.movementX / this._scale
+      this._translate.y += event.movementY / this._scale
+      this._transform()
+    }
   }
 
   _isNode(target) {
@@ -230,6 +241,10 @@ class NodeEditor extends WaaneElement {
       x: (toRect.x - containerRect.x) / this._scale,
       y: (toRect.y + toRect.height / 2 - containerRect.y) / this._scale,
     }
+  }
+
+  _transform() {
+    this._container.style.transform = `scale(${this._scale}) translate(${this._translate.x}px, ${this._translate.y}px)`
   }
 }
 
