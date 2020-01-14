@@ -6,8 +6,12 @@
   "author": "Volcomix",
   "license": "MIT",
   "scripts": {
-    "start": "live-server --watch=*.html,**/*.css,**/*.js --ignore=**/*.test.js --no-browser src",
-    "test": "jest --watch"
+    "start": "npm-run-all -r -p *:watch",
+    "serve": "python -m http.server 8080 --directory src",
+    "serve:watch": "live-server --watch=*.html,**/*.js --ignore=**/*.test.js --no-browser src",
+    "test": "wait-on http://localhost:8080/test.html && jest",
+    "test:watch": "yarn test --watch",
+    "test:ci": "npm-run-all -r -p serve test"
   },
   "devDependencies": {
     "@babel/core": "^7.7.7",
@@ -16,6 +20,8 @@
     "jest": "^24.9.0",
     "jest-puppeteer": "^4.4.0",
     "live-server": "^1.2.1",
-    "puppeteer": "^2.0.0"
+    "npm-run-all": "^4.1.5",
+    "puppeteer": "^2.0.0",
+    "wait-on": "^3.3.0"
   }
 }
