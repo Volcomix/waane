@@ -152,9 +152,17 @@ it('becomes the only selected node when clicking a child', async () => {
 })
 
 it('becomes selected', async () => {
-  await page.keyboard.down('Control')
+  if (process.platform === 'darwin') {
+    await page.keyboard.down('Meta')
+  } else {
+    await page.keyboard.down('Control')
+  }
   await elementHandle.click()
-  await page.keyboard.up('Control')
+  if (process.platform === 'darwin') {
+    await page.keyboard.up('Meta')
+  } else {
+    await page.keyboard.up('Control')
+  }
   const isSelected = await elementHandle.evaluate(element => element.selected)
   expect(isSelected).toBe(true)
   expect(onBodyClickMock).not.toHaveBeenCalled()
@@ -162,9 +170,17 @@ it('becomes selected', async () => {
 
 it('becomes unselected', async () => {
   await elementHandle.evaluate(element => (element.selected = true))
-  await page.keyboard.down('Control')
+  if (process.platform === 'darwin') {
+    await page.keyboard.down('Meta')
+  } else {
+    await page.keyboard.down('Control')
+  }
   await elementHandle.click()
-  await page.keyboard.up('Control')
+  if (process.platform === 'darwin') {
+    await page.keyboard.up('Meta')
+  } else {
+    await page.keyboard.up('Control')
+  }
   const isSelected = await elementHandle.evaluate(element => element.selected)
   expect(isSelected).toBe(false)
   expect(onBodyClickMock).not.toHaveBeenCalled()

@@ -98,7 +98,7 @@ class Node extends WaaneElement {
   }
 
   _onClick(event) {
-    if (event.ctrlKey) {
+    if (event.ctrlKey || event.metaKey) {
       this.selected = !this.selected
       event.stopPropagation()
     } else if (event.target === this) {
