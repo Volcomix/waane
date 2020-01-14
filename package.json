@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "start": "npm-run-all -r -p *:watch",
-    "serve": "python -m http.server 8080 --directory src",
+    "serve": "python3 -m http.server 8080 --directory src",
     "serve:watch": "live-server --watch=*.html,**/*.js --ignore=**/*.test.js --no-browser src",
     "test": "wait-on http://localhost:8080/test.html && jest",
     "test:watch": "yarn test --watch",
