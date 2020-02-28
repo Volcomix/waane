@@ -14,6 +14,7 @@ class NodeEditor extends WaaneElement {
         display: flex;
         overflow: hidden;
         background-color: rgb(var(--background));
+        user-select: none;
       }
 
       .container {
@@ -45,8 +46,9 @@ class NodeEditor extends WaaneElement {
       this._onLinksSocketChange.bind(this),
     )
     this.addEventListener('w-node-resize', this._onNodeResize.bind(this))
-    this.addEventListener('click', this._onClick.bind(this))
     this.addEventListener('wheel', this._onWheel.bind(this))
+    this.addEventListener('mousedown', this._onMouseDown.bind(this))
+    this.addEventListener('click', this._onClick.bind(this))
     this.addEventListener('mousemove', this._onMouseMove.bind(this))
   }
 
@@ -141,7 +143,23 @@ class NodeEditor extends WaaneElement {
     this._updateLinks(outputs, inputs)
   }
 
+  _onMouseDown(event) {
+    if ((event.buttons & 1) === 0 || event.ctrlKey || event.metaKey) {
+      return
+    }
+    this.nodes.forEach(node => {
+      if (node !== event.target) {
+        node.selected = false
+      }
+    })
+  }
+
   _onClick(event) {
+    if (event.button === 1 || event.ctrlKey || event.metaKey) {
+      console.log('Dropped')
+      return
+    }
+    console.log('Tried something')
     this.nodes.forEach(node => {
       if (node !== event.target) {
         node.selected = false
@@ -161,8 +179,14 @@ class NodeEditor extends WaaneElement {
   }
 
   _onMouseMove(event) {
-    // Middle button pressed
-    if (event.buttons & 4) {
+    if (event.buttons & 1) {
+      // Primary button pressed
+      this.querySelectorAll('w-node[selected]').forEach(node => {
+        node.x += event.movementX / this._scale
+        node.y += event.movementY / this._scale
+      })
+    } else if (event.buttons & 4) {
+      // Middle button pressed
       this._translate.x += event.movementX / this._scale
       this._translate.y += event.movementY / this._scale
       this._transform()

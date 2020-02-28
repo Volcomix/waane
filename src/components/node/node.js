@@ -45,13 +45,15 @@ class Node extends WaaneElement {
   }
 
   static get properties() {
-    return { x: String, y: String, selected: Boolean }
+    return { x: Number, y: Number, selected: Boolean }
   }
 
   constructor() {
     super()
     this._resizeObserver = new MutationObserver(this._dispatchResize.bind(this))
-    this.addEventListener('click', this._onClick.bind(this))
+    this.addEventListener('mousedown', this._onMouseDown.bind(this))
+    this.addEventListener('click', this._onMouseClick.bind(this))
+    this.addEventListener('mousemove', this._onMouseMove.bind(this))
   }
 
   connectedCallback() {
@@ -97,20 +99,61 @@ class Node extends WaaneElement {
     })
   }
 
-  _onClick(event) {
+  _onMouseDown(event) {
+    if ((event.buttons & 1) === 0) {
+      return
+    }
+    if (this.selected) {
+      this._preventClick = false
+      event.stopPropagation()
+      return
+    }
+    this._preventClick = true
     if (event.ctrlKey || event.metaKey) {
-      this.selected = !this.selected
+      this.selected = true
       event.stopPropagation()
     } else if (event.target === this) {
       this.selected = true
     } else {
       event.stopPropagation()
       this.dispatchEvent(
+        new MouseEvent('mousedown', {
+          bubbles: true,
+          cancelable: true,
+          buttons: event.buttons,
+        }),
+      )
+    }
+  }
+
+  _onMouseClick(event) {
+    if (this._preventClick) {
+      event.stopPropagation()
+      return
+    }
+    if (!this.selected) {
+      event.stopPropagation()
+      return
+    }
+    if (event.ctrlKey || event.metaKey) {
+      this.selected = false
+      event.stopPropagation()
+    } else if (event.target !== this) {
+      event.stopPropagation()
+      this.dispatchEvent(
         new MouseEvent('click', {
           bubbles: true,
           cancelable: true,
+          button: event.button,
+          buttons: event.buttons,
         }),
       )
+    }
+  }
+
+  _onMouseMove(event) {
+    if (['input', 'select'].includes(event.target.tagName.toLowerCase())) {
+      event.stopPropagation()
     }
   }
 }

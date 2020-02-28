@@ -55,6 +55,9 @@ export class WaaneElement extends HTMLElement {
   _registerProperty(property, attribute, type) {
     this._properties[attribute] = property
     switch (type) {
+      case Number:
+        this._defineNumberProperty(property, attribute)
+        break
       case Boolean:
         this._defineBooleanProperty(property, attribute)
         break
@@ -67,6 +70,17 @@ export class WaaneElement extends HTMLElement {
     Object.defineProperty(this, property, {
       get() {
         return this.getAttribute(attribute)
+      },
+      set(value) {
+        this.setAttribute(attribute, value)
+      },
+    })
+  }
+
+  _defineNumberProperty(property, attribute) {
+    Object.defineProperty(this, property, {
+      get() {
+        return Number(this.getAttribute(attribute))
       },
       set(value) {
         this.setAttribute(attribute, value)
