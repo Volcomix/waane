@@ -16,7 +16,7 @@
   "devDependencies": {
     "@babel/core": "^7.9.0",
     "@babel/preset-env": "^7.9.0",
-    "babel-jest": "^25.2.0",
+    "babel-jest": "^25.2.3",
     "jest": "^25.2.3",
     "jest-puppeteer": "^4.4.0",
     "live-server": "^1.2.1",
