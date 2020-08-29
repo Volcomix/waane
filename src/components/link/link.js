@@ -1,4 +1,4 @@
-import { WaaneElement, html, css } from '../waane-element.js'
+import { css, html, WaaneElement } from '../waane-element.js'
 
 class Link extends WaaneElement {
   static get styles() {

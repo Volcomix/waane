@@ -1,317 +1,251 @@
-let moduleHandle
+import { expect, it, jest } from '@jest/globals'
+import { css, html, WaaneElement } from './waane-element'
 
-beforeAll(async () => {
-  await page.goto('http://localhost:8080/test.html')
-  moduleHandle = await page.evaluateHandle(/* js */ `
-    import('./components/waane-element.js')
-  `)
+let testTagNameId = 0
+
+function defineElement(elementClass) {
+  const tagName = `test-${testTagNameId++}`
+  customElements.define(tagName, elementClass)
+  return tagName
+}
+
+it('has no shadow root without styles nor template', () => {
+  const tagName = defineElement(class extends WaaneElement {})
+  const element = document.createElement(tagName)
+  expect(element.shadowRoot).toBeNull()
 })
 
-it('has no shadow root without styles nor template', async () => {
-  const tagName = await defineElement(({ WaaneElement }) => {
-    return class extends WaaneElement {}
-  })
-  const hasShadowRoot = await page.evaluate(tagName => {
-    const element = document.createElement(tagName)
-    return !!element.shadowRoot
-  }, tagName)
-  expect(hasShadowRoot).toBe(false)
-})
-
-it('initializes the shadow root without styles', async () => {
-  const tagName = await defineElement(({ WaaneElement, html }) => {
-    return class extends WaaneElement {
+it('initializes the shadow root without styles', () => {
+  const template = html`<span>A shadow</span>`
+  const tagName = defineElement(
+    class extends WaaneElement {
       static get template() {
-        return html`
-          <span>A shadow</span>
-        `
+        return template
       }
-    }
-  })
-  const shadowRootHandle = await page.evaluateHandle(tagName => {
-    const element = document.createElement(tagName)
-    return element.shadowRoot
-  }, tagName)
-  await expect(shadowRootHandle).toMatchElement('span', { text: 'A shadow' })
+    },
+  )
+  const element = document.createElement(tagName)
+  expect(element.shadowRoot.innerHTML).toBe(template)
 })
 
-it('initializes the shadow root without template', async () => {
-  const tagName = await defineElement(({ WaaneElement, css }) => {
-    return class extends WaaneElement {
-      static get styles() {
-        return css`
-          :host {
-            --a-style: red;
-          }
-        `
-      }
+it('initializes the shadow root without template', () => {
+  const styles = css`
+    :host {
+      --a-style: red;
     }
-  })
-  const shadowRootHandle = await page.evaluateHandle(tagName => {
-    const element = document.createElement(tagName)
-    return element.shadowRoot
-  }, tagName)
-  await expect(shadowRootHandle).toMatchElement('style', { text: '--a-style' })
+  `
+  const tagName = defineElement(
+    class extends WaaneElement {
+      static get styles() {
+        return styles
+      }
+    },
+  )
+  const element = document.createElement(tagName)
+  expect(element.shadowRoot.innerHTML).toBe(`<style>${styles}</style>`)
 })
 
-it('initializes the shadow root without properties', async () => {
-  const tagName = await defineElement(({ WaaneElement, html, css }) => {
-    return class extends WaaneElement {
+it('initializes the shadow root without properties', () => {
+  const styles = css`
+    :host {
+      --a-style: red;
+    }
+  `
+  const template = html`<span>A shadow</span>`
+  const tagName = defineElement(
+    class extends WaaneElement {
       static get styles() {
-        return css`
-          :host {
-            --a-style: red;
-          }
-        `
+        return styles
       }
 
       static get template() {
-        return html`
-          <span>A shadow</span>
-        `
+        return template
       }
-    }
-  })
-  const shadowRootHandle = await page.evaluateHandle(tagName => {
-    const element = document.createElement(tagName)
-    return element.shadowRoot
-  }, tagName)
-  await expect(shadowRootHandle).toMatchElement('style', { text: '--a-style' })
-  await expect(shadowRootHandle).toMatchElement('span', { text: 'A shadow' })
+    },
+  )
+  const element = document.createElement(tagName)
+  expect(element.shadowRoot.innerHTML).toBe(
+    `<style>${styles}</style>${template}`,
+  )
 })
 
-it('memoizes styles', async () => {
+it('memoizes styles', () => {
   const stylesMock = jest.fn()
-  await page.exposeFunction('stylesMock', stylesMock)
-
-  const tagName = await defineElement(({ WaaneElement }) => {
-    return class extends WaaneElement {
+  const tagName = defineElement(
+    class extends WaaneElement {
       static get styles() {
         stylesMock()
       }
-    }
-  })
-  await page.evaluate(tagName => {
-    document.createElement(tagName)
-    document.createElement(tagName)
-    document.createElement(tagName)
-  }, tagName)
+    },
+  )
+  document.createElement(tagName)
+  document.createElement(tagName)
+  document.createElement(tagName)
   expect(stylesMock).toHaveBeenCalledTimes(1)
 })
 
-it('memoizes template', async () => {
+it('memoizes template', () => {
   const templateMock = jest.fn()
-  await page.exposeFunction('templateMock', templateMock)
-
-  const tagName = await defineElement(({ WaaneElement }) => {
-    return class extends WaaneElement {
+  const tagName = defineElement(
+    class extends WaaneElement {
       static get template() {
         templateMock()
       }
-    }
-  })
-  await page.evaluate(tagName => {
-    document.createElement(tagName)
-    document.createElement(tagName)
-    document.createElement(tagName)
-  }, tagName)
+    },
+  )
+  document.createElement(tagName)
+  document.createElement(tagName)
+  document.createElement(tagName)
   expect(templateMock).toHaveBeenCalledTimes(1)
 })
 
-it('memoizes properties', async () => {
+it('memoizes properties', () => {
   const propertiesMock = jest.fn()
-  await page.exposeFunction('propertiesMock', propertiesMock)
-
-  const tagName = await defineElement(({ WaaneElement }) => {
-    return class extends WaaneElement {
+  const tagName = defineElement(
+    class extends WaaneElement {
       static get properties() {
         propertiesMock()
       }
-    }
-  })
-  await page.evaluate(tagName => {
-    document.createElement(tagName)
-    document.createElement(tagName)
-    document.createElement(tagName)
-    document.createElement(tagName)
-    document.createElement(tagName)
-  }, tagName)
+    },
+  )
+  document.createElement(tagName)
+  document.createElement(tagName)
+  document.createElement(tagName)
+  document.createElement(tagName)
+  document.createElement(tagName)
 
   // Expected to be called once by the browser and once by WaaneElement
   expect(propertiesMock).toHaveBeenCalledTimes(2)
 })
 
-it('calls the associated _setter with a String when an attribute changes', async () => {
-  const stringSetterMock = jest.fn()
-  await page.exposeFunction('stringSetterMock', stringSetterMock)
-
-  const tagName = await defineElement(({ WaaneElement }) => {
-    return class extends WaaneElement {
+it('calls the associated _setter with a String when an attribute changes', () => {
+  const setterMock = jest.fn()
+  const tagName = defineElement(
+    class extends WaaneElement {
       static get properties() {
         return { someData: String }
       }
 
       set _someData(value) {
-        stringSetterMock(value)
+        setterMock(value)
       }
-    }
-  })
-  await page.evaluate(tagName => {
-    const element = document.createElement(tagName)
-    element.setAttribute('some-data', 'aValue')
-  }, tagName)
-  expect(stringSetterMock).toHaveBeenCalledWith('aValue')
-})
-
-it('calls the associated _setter with true when an attribute changes', async () => {
-  const trueSetterMock = jest.fn()
-  await page.exposeFunction('trueSetterMock', trueSetterMock)
-
-  const tagName = await defineElement(({ WaaneElement }) => {
-    return class extends WaaneElement {
-      static get properties() {
-        return { someData: Boolean }
-      }
-
-      set _someData(value) {
-        trueSetterMock(value)
-      }
-    }
-  })
-  await page.evaluate(tagName => {
-    const element = document.createElement(tagName)
-    element.setAttribute('some-data', 'aValue')
-  }, tagName)
-  expect(trueSetterMock).toHaveBeenCalledWith(true)
-})
-
-it('calls the associated _setter with false when an attribute changes', async () => {
-  const falseSetterMock = jest.fn()
-  await page.exposeFunction('falseSetterMock', falseSetterMock)
-
-  const tagName = await defineElement(({ WaaneElement }) => {
-    return class extends WaaneElement {
-      static get properties() {
-        return { someData: Boolean }
-      }
-
-      set _someData(value) {
-        falseSetterMock(value)
-      }
-    }
-  })
-  await page.evaluate(tagName => {
-    const element = document.createElement(tagName)
-    element.someData = true
-    element.removeAttribute('some-data')
-  }, tagName)
-  expect(falseSetterMock).toHaveBeenLastCalledWith(false)
-})
-
-it('reflects from String property to attribute', async () => {
-  const tagName = await defineElement(({ WaaneElement }) => {
-    return class extends WaaneElement {
-      static get properties() {
-        return { someData: String }
-      }
-    }
-  })
-  const attributeValue = await page.evaluate(tagName => {
-    const element = document.createElement(tagName)
-    element.someData = 'aValue'
-    return element.getAttribute('some-data')
-  }, tagName)
-  expect(attributeValue).toBe('aValue')
-})
-
-it('reflects from attribute to String property', async () => {
-  const tagName = await defineElement(({ WaaneElement }) => {
-    return class extends WaaneElement {
-      static get properties() {
-        return { someData: String }
-      }
-    }
-  })
-  const propertyValue = await page.evaluate(tagName => {
-    const element = document.createElement(tagName)
-    element.setAttribute('some-data', 'aValue')
-    return element.someData
-  }, tagName)
-  expect(propertyValue).toBe('aValue')
-})
-
-it('reflects true from property to attribute', async () => {
-  const tagName = await defineElement(({ WaaneElement }) => {
-    return class extends WaaneElement {
-      static get properties() {
-        return { someData: Boolean }
-      }
-    }
-  })
-  const attributeValue = await page.evaluate(tagName => {
-    const element = document.createElement(tagName)
-    element.someData = true
-    return element.getAttribute('some-data')
-  }, tagName)
-  expect(attributeValue).toBe('')
-})
-
-it('reflects false from property to attribute', async () => {
-  const tagName = await defineElement(({ WaaneElement }) => {
-    return class extends WaaneElement {
-      static get properties() {
-        return { someData: Boolean }
-      }
-    }
-  })
-  const attributeValue = await page.evaluate(tagName => {
-    const element = document.createElement(tagName)
-    element.someData = false
-    return element.getAttribute('some-data')
-  }, tagName)
-  expect(attributeValue).toBe(null)
-})
-
-it('reflects true from attribute to property', async () => {
-  const tagName = await defineElement(({ WaaneElement }) => {
-    return class extends WaaneElement {
-      static get properties() {
-        return { someData: Boolean }
-      }
-    }
-  })
-  const propertyValue = await page.evaluate(tagName => {
-    const element = document.createElement(tagName)
-    element.setAttribute('some-data', '')
-    return element.someData
-  }, tagName)
-  expect(propertyValue).toBe(true)
-})
-
-it('reflects false from attribute to property', async () => {
-  const tagName = await defineElement(({ WaaneElement }) => {
-    return class extends WaaneElement {
-      static get properties() {
-        return { someData: Boolean }
-      }
-    }
-  })
-  const propertyValue = await page.evaluate(tagName => {
-    const element = document.createElement(tagName)
-    return element.someData
-  }, tagName)
-  expect(propertyValue).toBe(false)
-})
-
-async function defineElement(pageFunction) {
-  const elementClassHandle = await page.evaluateHandle(
-    pageFunction,
-    moduleHandle,
+    },
   )
-  return await elementClassHandle.evaluate(elementClass => {
-    window.testTagNameId = (window.testTagNameId || 0) + 1
-    const tagName = `test-${testTagNameId}`
-    customElements.define(tagName, elementClass)
-    return tagName
-  })
-}
+  const element = document.createElement(tagName)
+  element.setAttribute('some-data', 'aValue')
+  expect(setterMock).toHaveBeenCalledWith('aValue')
+})
+
+it('calls the associated _setter with true when an attribute changes', () => {
+  const setterMock = jest.fn()
+  const tagName = defineElement(
+    class extends WaaneElement {
+      static get properties() {
+        return { someData: Boolean }
+      }
+
+      set _someData(value) {
+        setterMock(value)
+      }
+    },
+  )
+  const element = document.createElement(tagName)
+  element.setAttribute('some-data', 'aValue')
+  expect(setterMock).toHaveBeenCalledWith(true)
+})
+
+it('calls the associated _setter with false when an attribute changes', () => {
+  const setterMock = jest.fn()
+  const tagName = defineElement(
+    class extends WaaneElement {
+      static get properties() {
+        return { someData: Boolean }
+      }
+
+      set _someData(value) {
+        setterMock(value)
+      }
+    },
+  )
+  const element = document.createElement(tagName)
+  element.someData = true
+  element.removeAttribute('some-data')
+  expect(setterMock).toHaveBeenLastCalledWith(false)
+})
+
+it('reflects from String property to attribute', () => {
+  const tagName = defineElement(
+    class extends WaaneElement {
+      static get properties() {
+        return { someData: String }
+      }
+    },
+  )
+  const element = document.createElement(tagName)
+  element.someData = 'aValue'
+  expect(element.getAttribute('some-data')).toBe('aValue')
+})
+
+it('reflects from attribute to String property', () => {
+  const tagName = defineElement(
+    class extends WaaneElement {
+      static get properties() {
+        return { someData: String }
+      }
+    },
+  )
+  const element = document.createElement(tagName)
+  element.setAttribute('some-data', 'aValue')
+  expect(element.someData).toBe('aValue')
+})
+
+it('reflects true from property to attribute', () => {
+  const tagName = defineElement(
+    class extends WaaneElement {
+      static get properties() {
+        return { someData: Boolean }
+      }
+    },
+  )
+  const element = document.createElement(tagName)
+  element.someData = true
+  expect(element.getAttribute('some-data')).toBe('')
+})
+
+it('reflects false from property to attribute', () => {
+  const tagName = defineElement(
+    class extends WaaneElement {
+      static get properties() {
+        return { someData: Boolean }
+      }
+    },
+  )
+  const element = document.createElement(tagName)
+  element.someData = false
+  expect(element.getAttribute('some-data')).toBeNull()
+})
+
+it('reflects true from attribute to property', () => {
+  const tagName = defineElement(
+    class extends WaaneElement {
+      static get properties() {
+        return { someData: Boolean }
+      }
+    },
+  )
+  const element = document.createElement(tagName)
+  element.setAttribute('some-data', '')
+  expect(element.someData).toBe(true)
+})
+
+it('reflects false from attribute to property', () => {
+  const tagName = defineElement(
+    class extends WaaneElement {
+      static get properties() {
+        return { someData: Boolean }
+      }
+    },
+  )
+  const element = document.createElement(tagName)
+  expect(element.someData).toBe(false)
+})
