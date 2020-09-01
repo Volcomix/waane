@@ -29,8 +29,10 @@ it('gets the outputs', () => {
     <w-input>Input</w-input>
     <w-output>Output 2</w-output>
   `
-  const outputs = [...element.outputs].map((output) => output.textContent)
-  expect(outputs).toEqual(['Output 1', 'Output 2'])
+  expect([...element.outputs]).toEqual([
+    expect.objectContaining({ textContent: 'Output 1' }),
+    expect.objectContaining({ textContent: 'Output 2' }),
+  ])
 })
 
 it('gets the inputs', () => {
@@ -41,8 +43,10 @@ it('gets the inputs', () => {
     <w-output>Output</w-output>
     <w-input>Input 2</w-input>
   `
-  const inputs = [...element.inputs].map((input) => input.textContent)
-  expect(inputs).toEqual(['Input 1', 'Input 2'])
+  expect([...element.inputs]).toEqual([
+    expect.objectContaining({ textContent: 'Input 1' }),
+    expect.objectContaining({ textContent: 'Input 2' }),
+  ])
 })
 
 it('updates the x position', () => {
