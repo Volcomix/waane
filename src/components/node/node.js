@@ -85,9 +85,7 @@ class Node extends WaaneElement {
 
   _dispatchResize(mutations) {
     if (this._isResized(mutations)) {
-      this.dispatchEvent(
-        new Event('w-node-resize', { bubbles: true, cancelable: true }),
-      )
+      this.dispatchEvent(new Event('w-node-resize', { bubbles: true }))
     }
   }
 

@@ -72,6 +72,18 @@ beforeAll(() => {
       get inputs() {
         return this.querySelectorAll('w-input')
       }
+
+      get from() {
+        return this.getAttribute('from')
+      }
+
+      get to() {
+        return this.getAttribute('to')
+      }
+
+      update(fromPosition, toPosition) {
+        linkUpdateMock(fromPosition, toPosition)
+      }
     },
   )
 })
@@ -278,18 +290,18 @@ it('does not update links when the added child is not a node', async () => {
 it('updates links when nodes are removed', async () => {
   document.body.innerHTML = html`
     <w-node-editor>
-      <w-node style="left: 100px; top: 100px;">
+      <w-node>
         <w-output id="out1"></w-output>
       </w-node>
-      <w-node style="left: 300px; top: 200px;">
+      <w-node>
         <w-output id="out2"></w-output>
         <w-input id="in2"></w-input>
       </w-node>
-      <w-node style="left: 500px; top: 300px;">
+      <w-node>
         <w-output id="out3"></w-output>
         <w-input id="in3"></w-input>
       </w-node>
-      <w-node style="left: 700px; top: 400px;">
+      <w-node>
         <w-input id="in4"></w-input>
       </w-node>
 
@@ -321,9 +333,9 @@ it('updates links when nodes are removed', async () => {
   ])
 })
 
-it.skip('does not update links when the removed child is not a node', async () => {
-  await elementHandle.evaluate((element) => {
-    element.innerHTML = html`
+it('does not update links when the removed child is not a node', async () => {
+  document.body.innerHTML = html`
+    <w-node-editor>
       <w-node>
         <w-output id="out1"></w-output>
       </w-node>
@@ -332,43 +344,59 @@ it.skip('does not update links when the removed child is not a node', async () =
       </something-else>
 
       <w-link from="out1" to="in2"></w-link>
-    `
-  })
+    </w-node-editor>
+  `
+
+  await new Promise(setTimeout)
   linkUpdateMock.mockClear()
-  await elementHandle.$eval('something-else', (somethingElse) => {
-    somethingElse.remove()
-  })
+
+  document.body.querySelector('something-else').remove()
+
+  await new Promise(setTimeout)
+
   expect(linkUpdateMock).not.toHaveBeenCalled()
 })
 
-it.skip('updates links when nodes move', async () => {
-  await elementHandle.evaluate((element) => {
-    element.innerHTML = html`
-      <w-node style="left: 100px; top: 100px;">
+it('updates links when nodes move', async () => {
+  document.body.innerHTML = html`
+    <w-node-editor>
+      <w-node>
         <w-output id="out1"></w-output>
       </w-node>
-      <w-node style="left: 300px; top: 200px;">
+      <w-node>
         <w-output id="out2"></w-output>
         <w-input id="in2"></w-input>
       </w-node>
-      <w-node style="left: 500px; top: 300px;">
+      <w-node>
         <w-output id="out3"></w-output>
         <w-input id="in3"></w-input>
       </w-node>
-      <w-node style="left: 700px; top: 400px;">
+      <w-node>
         <w-input id="in4"></w-input>
       </w-node>
 
       <w-link from="out1" to="in2"></w-link>
       <w-link from="out2" to="in3"></w-link>
       <w-link from="out3" to="in4"></w-link>
-    `
-  })
+    </w-node-editor>
+  `
+  setupContainer(document.body.querySelector('w-node-editor'))
+  setupSocket(document.body.querySelector('#out1'), 100, 100)
+  setupSocket(document.body.querySelector('#out2'), 300, 200)
+  setupSocket(document.body.querySelector('#in2'), 300, 210)
+  setupSocket(document.body.querySelector('#out3'), 500, 300)
+  setupSocket(document.body.querySelector('#in3'), 500, 310)
+  setupSocket(document.body.querySelector('#in4'), 700, 400)
+
+  await new Promise(setTimeout)
   linkUpdateMock.mockClear()
-  await elementHandle.$$eval('w-node', ([node1, node2]) => {
-    node1.setAttribute('x', 100)
-    node2.setAttribute('x', 300)
-  })
+
+  const [node1, node2] = document.body.querySelectorAll('w-node')
+  node1.setAttribute('x', 100)
+  node2.setAttribute('x', 300)
+
+  await new Promise(setTimeout)
+
   expect(linkUpdateMock.mock.calls).toEqual([
     [
       { x: 200, y: 105 },
@@ -381,9 +409,9 @@ it.skip('updates links when nodes move', async () => {
   ])
 })
 
-it.skip('does not update links when what moves is not a node', async () => {
-  await elementHandle.evaluate((element) => {
-    element.innerHTML = html`
+it('does not update links when what moves is not a node', async () => {
+  document.body.innerHTML = html`
+    <w-node-editor>
       <w-node>
         <w-output id="out1"></w-output>
       </w-node>
@@ -392,42 +420,58 @@ it.skip('does not update links when what moves is not a node', async () => {
       </something-else>
 
       <w-link from="out1" to="in2"></w-link>
-    `
-  })
+    </w-node-editor>
+  `
+
+  await new Promise(setTimeout)
   linkUpdateMock.mockClear()
-  await elementHandle.$eval('something-else', (somethingElse) => {
-    somethingElse.setAttribute('x', 100)
-  })
+
+  document.body.querySelector('something-else').setAttribute('x', 100)
+
+  await new Promise(setTimeout)
+
   expect(linkUpdateMock).not.toHaveBeenCalled()
 })
 
-it.skip('updates links when a node is resized', async () => {
-  await elementHandle.evaluate((element) => {
-    element.innerHTML = html`
-      <w-node style="left: 100px; top: 100px;">
+it('updates links when a node is resized', async () => {
+  document.body.innerHTML = html`
+    <w-node-editor>
+      <w-node>
         <w-output id="out1"></w-output>
       </w-node>
-      <w-node style="left: 300px; top: 200px;">
+      <w-node>
         <w-output id="out2"></w-output>
         <w-input id="in2"></w-input>
       </w-node>
-      <w-node style="left: 500px; top: 300px;">
+      <w-node>
         <w-output id="out3"></w-output>
         <w-input id="in3"></w-input>
       </w-node>
-      <w-node style="left: 700px; top: 400px;">
+      <w-node>
         <w-input id="in4"></w-input>
       </w-node>
 
       <w-link from="out1" to="in2"></w-link>
       <w-link from="out2" to="in3"></w-link>
       <w-link from="out3" to="in4"></w-link>
-    `
-  })
+    </w-node-editor>
+  `
+  setupContainer(document.body.querySelector('w-node-editor'))
+  setupSocket(document.body.querySelector('#out1'), 100, 100)
+  setupSocket(document.body.querySelector('#out2'), 300, 200)
+  setupSocket(document.body.querySelector('#in2'), 300, 210)
+  setupSocket(document.body.querySelector('#out3'), 500, 300)
+  setupSocket(document.body.querySelector('#in3'), 500, 310)
+  setupSocket(document.body.querySelector('#in4'), 700, 400)
+
+  await new Promise(setTimeout)
   linkUpdateMock.mockClear()
-  await elementHandle.$eval('w-node:nth-of-type(2)', (node2) => {
-    node2.dispatchEvent(new Event('w-node-resize', { bubbles: true }))
-  })
+
+  const node2 = document.body.querySelector('w-node:nth-of-type(2)')
+  node2.dispatchEvent(new Event('w-node-resize', { bubbles: true }))
+
+  await new Promise(setTimeout)
+
   expect(linkUpdateMock.mock.calls).toEqual([
     [
       { x: 200, y: 105 },
@@ -440,63 +484,84 @@ it.skip('updates links when a node is resized', async () => {
   ])
 })
 
-it.skip('erases links when an output is removed', async () => {
-  await elementHandle.evaluate((element) => {
-    element.innerHTML = html`
-      <w-node style="left: 100px; top: 100px;">
+it('erases links when an output is removed', async () => {
+  document.body.innerHTML = html`
+    <w-node-editor>
+      <w-node>
         <w-output id="out1"></w-output>
       </w-node>
-      <w-node style="left: 300px; top: 200px;">
+      <w-node>
         <w-output id="out2"></w-output>
         <w-input id="in2"></w-input>
       </w-node>
-      <w-node style="left: 500px; top: 300px;">
+      <w-node>
         <w-input id="in3"></w-input>
       </w-node>
 
       <w-link from="out1" to="in2"></w-link>
       <w-link from="out2" to="in3"></w-link>
-    `
-  })
+    </w-node-editor>
+  `
+  setupContainer(document.body.querySelector('w-node-editor'))
+  setupSocket(document.body.querySelector('#out1'), 100, 100)
+  setupSocket(document.body.querySelector('#out2'), 300, 200)
+  setupSocket(document.body.querySelector('#in2'), 300, 210)
+  setupSocket(document.body.querySelector('#in3'), 500, 300)
+
+  await new Promise(setTimeout)
   linkUpdateMock.mockClear()
-  await elementHandle.$eval('w-node:nth-of-type(2)', (node2) => {
-    node2.querySelector('w-output#out2').remove()
-    node2.dispatchEvent(new Event('w-node-resize', { bubbles: true }))
-  })
+
+  const node2 = document.body.querySelector('w-node:nth-of-type(2)')
+  node2.querySelector('w-output#out2').remove()
+  setupSocket(node2.querySelector('#in2'), 300, 200)
+  node2.dispatchEvent(new Event('w-node-resize', { bubbles: true }))
+
+  await new Promise(setTimeout)
+
   expect(linkUpdateMock.mock.calls).toEqual([
     [
       { x: 200, y: 105 },
       { x: 300, y: 205 },
     ],
-    [null, { x: 500, y: 305 }],
+    [undefined, { x: 500, y: 305 }],
   ])
 })
 
-it.skip('erases links when an input is removed', async () => {
-  await elementHandle.evaluate((element) => {
-    element.innerHTML = html`
-      <w-node style="left: 100px; top: 100px;">
+it('erases links when an input is removed', async () => {
+  document.body.innerHTML = html`
+    <w-node-editor>
+      <w-node>
         <w-output id="out1"></w-output>
       </w-node>
-      <w-node style="left: 300px; top: 200px;">
+      <w-node>
         <w-output id="out2"></w-output>
         <w-input id="in2"></w-input>
       </w-node>
-      <w-node style="left: 500px; top: 300px;">
+      <w-node>
         <w-input id="in3"></w-input>
       </w-node>
 
       <w-link from="out1" to="in2"></w-link>
       <w-link from="out2" to="in3"></w-link>
-    `
-  })
+    </w-node-editor>
+  `
+  setupContainer(document.body.querySelector('w-node-editor'))
+  setupSocket(document.body.querySelector('#out1'), 100, 100)
+  setupSocket(document.body.querySelector('#out2'), 300, 200)
+  setupSocket(document.body.querySelector('#in2'), 300, 210)
+  setupSocket(document.body.querySelector('#in3'), 500, 300)
+
+  await new Promise(setTimeout)
   linkUpdateMock.mockClear()
-  await elementHandle.$eval('w-node:nth-of-type(2)', (node2) => {
-    node2.querySelector('w-input#in2').remove()
-    node2.dispatchEvent(new Event('w-node-resize', { bubbles: true }))
-  })
+
+  const node2 = document.querySelector('w-node:nth-of-type(2)')
+  node2.querySelector('w-input#in2').remove()
+  node2.dispatchEvent(new Event('w-node-resize', { bubbles: true }))
+
+  await new Promise(setTimeout)
+
   expect(linkUpdateMock.mock.calls).toEqual([
-    [{ x: 200, y: 105 }, null],
+    [{ x: 200, y: 105 }, undefined],
     [
       { x: 400, y: 205 },
       { x: 500, y: 305 },
@@ -504,40 +569,53 @@ it.skip('erases links when an input is removed', async () => {
   ])
 })
 
-it.skip('draws the links when they are added', async () => {
-  await elementHandle.evaluate((element) => {
-    element.innerHTML = html`
-      <w-node style="left: 100px; top: 100px;">
+it('draws the links when they are added', async () => {
+  document.body.innerHTML = html`
+    <w-node-editor>
+      <w-node>
         <w-output id="out1"></w-output>
       </w-node>
-      <w-node style="left: 300px; top: 200px;">
+      <w-node>
         <w-output id="out2"></w-output>
         <w-input id="in2"></w-input>
       </w-node>
-      <w-node style="left: 500px; top: 300px;">
+      <w-node>
         <w-output id="out3"></w-output>
         <w-input id="in3"></w-input>
       </w-node>
-      <w-node style="left: 700px; top: 400px;">
+      <w-node>
         <w-input id="in4"></w-input>
       </w-node>
 
       <w-link from="out3" to="in4"></w-link>
-    `
-  })
+    </w-node-editor>
+  `
+  const element = document.body.querySelector('w-node-editor')
+
+  setupContainer(element)
+  setupSocket(element.querySelector('#out1'), 100, 100)
+  setupSocket(element.querySelector('#out2'), 300, 200)
+  setupSocket(element.querySelector('#in2'), 300, 210)
+  setupSocket(element.querySelector('#out3'), 500, 300)
+  setupSocket(element.querySelector('#in3'), 500, 310)
+  setupSocket(element.querySelector('#in4'), 700, 400)
+
+  await new Promise(setTimeout)
   linkUpdateMock.mockClear()
-  await elementHandle.evaluate((element) => {
-    const link1 = document.createElement('w-link')
-    link1.setAttribute('from', 'out1')
-    link1.setAttribute('to', 'in2')
 
-    const link2 = document.createElement('w-link')
-    link2.setAttribute('from', 'out2')
-    link2.setAttribute('to', 'in3')
+  const link1 = document.createElement('w-link')
+  link1.setAttribute('from', 'out1')
+  link1.setAttribute('to', 'in2')
 
-    element.appendChild(link1)
-    element.appendChild(link2)
-  })
+  const link2 = document.createElement('w-link')
+  link2.setAttribute('from', 'out2')
+  link2.setAttribute('to', 'in3')
+
+  element.appendChild(link1)
+  element.appendChild(link2)
+
+  await new Promise(setTimeout)
+
   expect(linkUpdateMock.mock.calls).toEqual([
     [
       { x: 200, y: 105 },
@@ -550,47 +628,65 @@ it.skip('draws the links when they are added', async () => {
   ])
 })
 
-it.skip('does not draw links when the added child is not a link', async () => {
-  await elementHandle.evaluate((element) => {
-    element.innerHTML = html`
+it('does not draw links when the added child is not a link', async () => {
+  document.body.innerHTML = html`
+    <w-node-editor>
       <w-node>
         <w-output id="out1"></w-output>
       </w-node>
       <w-node>
-        <w-input id="in2"></w-output>
+        <w-input id="in2"></w-input>
       </w-node>
-    `
+    </w-node-editor>
+  `
+  const element = document.body.querySelector('w-node-editor')
+  jest.spyOn(element, 'links', 'get').mockImplementation(function () {
+    return this.querySelectorAll('something-else')
   })
-  await elementHandle.evaluate((element) => {
-    const somethingElse = document.createElement('something-else')
-    somethingElse.setAttribute('from', 'out1')
-    somethingElse.setAttribute('to', 'in2')
-    element.appendChild(somethingElse)
-  })
+
+  await new Promise(setTimeout)
+
+  const somethingElse = document.createElement('something-else')
+  somethingElse.setAttribute('from', 'out1')
+  somethingElse.setAttribute('to', 'in2')
+  element.appendChild(somethingElse)
+
+  await new Promise(setTimeout)
+
   expect(linkUpdateMock).not.toHaveBeenCalled()
 })
 
-it.skip('updates the link when it starts from another output', async () => {
-  await elementHandle.evaluate((element) => {
-    element.innerHTML = html`
-      <w-node style="left: 100px; top: 100px;">
+it('updates the link when it starts from another output', async () => {
+  document.body.innerHTML = html`
+    <w-node-editor>
+      <w-node>
         <w-output id="out1"></w-output>
       </w-node>
-      <w-node style="left: 300px; top: 200px;">
+      <w-node>
         <w-output id="out2"></w-output>
         <w-input id="in2"></w-input>
       </w-node>
-      <w-node style="left: 500px; top: 300px;">
+      <w-node>
         <w-input id="in3"></w-input>
       </w-node>
 
       <w-link from="out1" to="in3"></w-link>
-    `
-  })
+    </w-node-editor>
+  `
+  setupContainer(document.body.querySelector('w-node-editor'))
+  setupSocket(document.body.querySelector('#out1'), 100, 100)
+  setupSocket(document.body.querySelector('#out2'), 300, 200)
+  setupSocket(document.body.querySelector('#in2'), 300, 210)
+  setupSocket(document.body.querySelector('#in3'), 500, 300)
+
+  await new Promise(setTimeout)
   linkUpdateMock.mockClear()
-  await elementHandle.$eval('w-link', (link) => {
-    link.setAttribute('from', 'out2')
-  })
+
+  const link = document.body.querySelector('w-link')
+  link.setAttribute('from', 'out2')
+
+  await new Promise(setTimeout)
+
   expect(linkUpdateMock.mock.calls).toEqual([
     [
       { x: 400, y: 205 },
@@ -599,27 +695,37 @@ it.skip('updates the link when it starts from another output', async () => {
   ])
 })
 
-it.skip('updates the link when it ends to another input', async () => {
-  await elementHandle.evaluate((element) => {
-    element.innerHTML = html`
-      <w-node style="left: 100px; top: 100px;">
+it('updates the link when it ends to another input', async () => {
+  document.body.innerHTML = html`
+    <w-node-editor>
+      <w-node>
         <w-output id="out1"></w-output>
       </w-node>
-      <w-node style="left: 300px; top: 200px;">
+      <w-node>
         <w-output id="out2"></w-output>
         <w-input id="in2"></w-input>
       </w-node>
-      <w-node style="left: 500px; top: 300px;">
+      <w-node>
         <w-input id="in3"></w-input>
       </w-node>
 
       <w-link from="out1" to="in2"></w-link>
-    `
-  })
+    </w-node-editor>
+  `
+  setupContainer(document.body.querySelector('w-node-editor'))
+  setupSocket(document.body.querySelector('#out1'), 100, 100)
+  setupSocket(document.body.querySelector('#out2'), 300, 200)
+  setupSocket(document.body.querySelector('#in2'), 300, 210)
+  setupSocket(document.body.querySelector('#in3'), 500, 300)
+
+  await new Promise(setTimeout)
   linkUpdateMock.mockClear()
-  await elementHandle.$eval('w-link', (link) => {
-    link.setAttribute('to', 'in3')
-  })
+
+  const link = document.body.querySelector('w-link')
+  link.setAttribute('to', 'in3')
+
+  await new Promise(setTimeout)
+
   expect(linkUpdateMock.mock.calls).toEqual([
     [
       { x: 200, y: 105 },
@@ -628,36 +734,46 @@ it.skip('updates the link when it ends to another input', async () => {
   ])
 })
 
-it.skip('does not draw links that do not start from an output', async () => {
-  await elementHandle.evaluate((element) => {
-    element.innerHTML = html`
-      <w-node style="left: 100px; top: 100px;">
+it('does not draw links that do not start from an output', async () => {
+  document.body.innerHTML = html`
+    <w-node-editor>
+      <w-node>
         <something-else id="out1"></something-else>
       </w-node>
-      <w-node style="left: 300px; top: 200px;">
+      <w-node>
         <w-input id="in2"></w-input>
       </w-node>
 
       <w-link from="out1" to="in2"></w-link>
-    `
-  })
-  expect(linkUpdateMock.mock.calls).toEqual([[null, { x: 300, y: 205 }]])
+    </w-node-editor>
+  `
+  setupContainer(document.body.querySelector('w-node-editor'))
+  setupSocket(document.body.querySelector('#in2'), 300, 200)
+
+  await new Promise(setTimeout)
+
+  expect(linkUpdateMock.mock.calls).toEqual([[undefined, { x: 300, y: 205 }]])
 })
 
-it.skip('does not draw links that do not end to an input', async () => {
-  await elementHandle.evaluate((element) => {
-    element.innerHTML = html`
-      <w-node style="left: 100px; top: 100px;">
+it('does not draw links that do not end to an input', async () => {
+  document.body.innerHTML = html`
+    <w-node-editor>
+      <w-node>
         <w-output id="out1"></w-output>
       </w-node>
-      <w-node style="left: 300px; top: 200px;">
+      <w-node>
         <something-else id="in2"></something-else>
       </w-node>
 
       <w-link from="out1" to="in2"></w-link>
-    `
-  })
-  expect(linkUpdateMock.mock.calls).toEqual([[{ x: 200, y: 105 }, null]])
+    </w-node-editor>
+  `
+  setupContainer(document.body.querySelector('w-node-editor'))
+  setupSocket(document.body.querySelector('#out1'), 100, 100)
+
+  await new Promise(setTimeout)
+
+  expect(linkUpdateMock.mock.calls).toEqual([[{ x: 200, y: 105 }, undefined]])
 })
 
 it.skip('deselects all nodes', async () => {
