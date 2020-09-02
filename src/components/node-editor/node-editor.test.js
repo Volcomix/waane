@@ -2,6 +2,18 @@ import { afterEach, beforeAll, expect, it, jest } from '@jest/globals'
 import { html } from '../waane-element'
 import './node-editor'
 
+function setupContainer(element) {
+  jest
+    .spyOn(element._container, 'getBoundingClientRect')
+    .mockReturnValue({ x: 0, y: 0, width: 600, height: 600 })
+}
+
+function setupSocket(element, x, y) {
+  jest
+    .spyOn(element, 'getBoundingClientRect')
+    .mockReturnValue({ x, y, width: 100, height: 10 })
+}
+
 let linkUpdateMock
 
 beforeAll(() => {
@@ -118,24 +130,11 @@ it('draws all the links when connected', async () => {
       <w-link from="out3" to="in4"></w-link>
     </w-node-editor>
   `
-  jest
-    .spyOn(
-      document.body.querySelector('w-node-editor')._container,
-      'getBoundingClientRect',
-    )
-    .mockReturnValue({ x: 0, y: 0, width: 600, height: 600 })
-  jest
-    .spyOn(document.body.querySelector('#out1'), 'getBoundingClientRect')
-    .mockReturnValue({ x: 100, y: 100, width: 100, height: 10 })
-  jest
-    .spyOn(document.body.querySelector('#out2'), 'getBoundingClientRect')
-    .mockReturnValue({ x: 300, y: 200, width: 100, height: 10 })
-  jest
-    .spyOn(document.body.querySelector('#in2'), 'getBoundingClientRect')
-    .mockReturnValue({ x: 300, y: 210, width: 100, height: 10 })
-  jest
-    .spyOn(document.body.querySelector('#in3'), 'getBoundingClientRect')
-    .mockReturnValue({ x: 500, y: 300, width: 100, height: 10 })
+  setupContainer(document.body.querySelector('w-node-editor'))
+  setupSocket(document.body.querySelector('#out1'), 100, 100)
+  setupSocket(document.body.querySelector('#out2'), 300, 200)
+  setupSocket(document.body.querySelector('#in2'), 300, 210)
+  setupSocket(document.body.querySelector('#in3'), 500, 300)
 
   await new Promise(setTimeout)
 
@@ -176,21 +175,11 @@ it('draws all links when node editor innerHTML is set', async () => {
     <w-link from="out2" to="in3"></w-link>
     <w-link from="out3" to="in4"></w-link>
   `
-  jest
-    .spyOn(element._container, 'getBoundingClientRect')
-    .mockReturnValue({ x: 0, y: 0, width: 600, height: 600 })
-  jest
-    .spyOn(element.querySelector('#out1'), 'getBoundingClientRect')
-    .mockReturnValue({ x: 100, y: 100, width: 100, height: 10 })
-  jest
-    .spyOn(element.querySelector('#out2'), 'getBoundingClientRect')
-    .mockReturnValue({ x: 300, y: 200, width: 100, height: 10 })
-  jest
-    .spyOn(element.querySelector('#in2'), 'getBoundingClientRect')
-    .mockReturnValue({ x: 300, y: 210, width: 100, height: 10 })
-  jest
-    .spyOn(element.querySelector('#in3'), 'getBoundingClientRect')
-    .mockReturnValue({ x: 500, y: 300, width: 100, height: 10 })
+  setupContainer(element)
+  setupSocket(element.querySelector('#out1'), 100, 100)
+  setupSocket(element.querySelector('#out2'), 300, 200)
+  setupSocket(element.querySelector('#in2'), 300, 210)
+  setupSocket(element.querySelector('#in3'), 500, 300)
 
   await new Promise(setTimeout)
 
@@ -225,39 +214,25 @@ it('updates links when nodes are added', async () => {
   `
   const element = document.body.querySelector('w-node-editor')
 
-  jest
-    .spyOn(element._container, 'getBoundingClientRect')
-    .mockReturnValue({ x: 0, y: 0, width: 600, height: 600 })
-  jest
-    .spyOn(element.querySelector('#out3'), 'getBoundingClientRect')
-    .mockReturnValue({ x: 500, y: 300, width: 100, height: 10 })
-  jest
-    .spyOn(element.querySelector('#in3'), 'getBoundingClientRect')
-    .mockReturnValue({ x: 500, y: 310, width: 100, height: 10 })
-  jest
-    .spyOn(element.querySelector('#in4'), 'getBoundingClientRect')
-    .mockReturnValue({ x: 700, y: 400, width: 100, height: 10 })
+  setupContainer(element)
+  setupSocket(element.querySelector('#out3'), 500, 300)
+  setupSocket(element.querySelector('#in3'), 500, 310)
+  setupSocket(element.querySelector('#in4'), 700, 400)
 
   await new Promise(setTimeout)
   linkUpdateMock.mockClear()
 
   const node1 = document.createElement('w-node')
   node1.innerHTML = html`<w-output id="out1"></w-output> `
-  jest
-    .spyOn(node1.querySelector('#out1'), 'getBoundingClientRect')
-    .mockReturnValue({ x: 100, y: 100, width: 100, height: 10 })
+  setupSocket(node1.querySelector('#out1'), 100, 100)
 
   const node2 = document.createElement('w-node')
   node2.innerHTML = html`
     <w-output id="out2"></w-output>
     <w-input id="in2"></w-input>
   `
-  jest
-    .spyOn(node2.querySelector('#out2'), 'getBoundingClientRect')
-    .mockReturnValue({ x: 300, y: 200, width: 100, height: 10 })
-  jest
-    .spyOn(node2.querySelector('#in2'), 'getBoundingClientRect')
-    .mockReturnValue({ x: 300, y: 210, width: 100, height: 10 })
+  setupSocket(node2.querySelector('#out2'), 300, 200)
+  setupSocket(node2.querySelector('#in2'), 300, 210)
 
   element.appendChild(node1)
   element.appendChild(node2)
@@ -300,9 +275,9 @@ it('does not update links when the added child is not a node', async () => {
   expect(linkUpdateMock).not.toHaveBeenCalled()
 })
 
-it.skip('updates links when nodes are removed', async () => {
-  await elementHandle.evaluate((element) => {
-    element.innerHTML = html`
+it('updates links when nodes are removed', async () => {
+  document.body.innerHTML = html`
+    <w-node-editor>
       <w-node style="left: 100px; top: 100px;">
         <w-output id="out1"></w-output>
       </w-node>
@@ -321,16 +296,28 @@ it.skip('updates links when nodes are removed', async () => {
       <w-link from="out1" to="in2"></w-link>
       <w-link from="out2" to="in3"></w-link>
       <w-link from="out3" to="in4"></w-link>
-    `
-  })
+    </w-node-editor>
+  `
+  setupContainer(document.body.querySelector('w-node-editor'))
+  setupSocket(document.body.querySelector('#out1'), 100, 100)
+  setupSocket(document.body.querySelector('#out2'), 300, 200)
+  setupSocket(document.body.querySelector('#in2'), 300, 210)
+  setupSocket(document.body.querySelector('#out3'), 500, 300)
+  setupSocket(document.body.querySelector('#in3'), 500, 310)
+  setupSocket(document.body.querySelector('#in4'), 700, 400)
+
+  await new Promise(setTimeout)
   linkUpdateMock.mockClear()
-  await elementHandle.$$eval('w-node', ([node1, node2]) => {
-    node1.remove()
-    node2.remove()
-  })
+
+  const [node1, node2] = document.body.querySelectorAll('w-node')
+  node1.remove()
+  node2.remove()
+
+  await new Promise(setTimeout)
+
   expect(linkUpdateMock.mock.calls).toEqual([
-    [null, null],
-    [null, { x: 500, y: 315 }],
+    [undefined, undefined],
+    [undefined, { x: 500, y: 315 }],
   ])
 })
 
