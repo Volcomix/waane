@@ -798,40 +798,40 @@ it('deselects all nodes but the new selected one', () => {
   expect([...selectedNodes]).toEqual([expect.objectContaining({ id: 'node2' })])
 })
 
-it.skip('zooms in', async () => {
-  const transform = await elementHandle.evaluate((element) => {
+it('zooms in', () => {
+  const element = document.createElement('w-node-editor')
+  element.dispatchEvent(new WheelEvent('wheel', { deltaY: -1 }))
+  expect(element.shadowRoot.querySelector('.container').style.transform).toBe(
+    'scale(1.1) translate(0px, 0px)',
+  )
+})
+
+it('stops zooming in', () => {
+  const element = document.createElement('w-node-editor')
+  for (let i = 0; i < 30; i++) {
     element.dispatchEvent(new WheelEvent('wheel', { deltaY: -1 }))
-    return element.shadowRoot.querySelector('.container').style.transform
-  })
-  expect(transform).toBe('scale(1.1) translate(0px, 0px)')
+  }
+  expect(element.shadowRoot.querySelector('.container').style.transform).toBe(
+    'scale(4.177248169415656) translate(0px, 0px)',
+  )
 })
 
-it.skip('stops zooming in', async () => {
-  const transform = await elementHandle.evaluate((element) => {
-    for (let i = 0; i < 30; i++) {
-      element.dispatchEvent(new WheelEvent('wheel', { deltaY: -1 }))
-    }
-    return element.shadowRoot.querySelector('.container').style.transform
-  })
-  expect(transform).toBe('scale(4.17725) translate(0px, 0px)')
+it('zooms out', () => {
+  const element = document.createElement('w-node-editor')
+  element.dispatchEvent(new WheelEvent('wheel', { deltaY: 1 }))
+  expect(element.shadowRoot.querySelector('.container').style.transform).toBe(
+    'scale(0.9090909090909091) translate(0px, 0px)',
+  )
 })
 
-it.skip('zooms out', async () => {
-  const transform = await elementHandle.evaluate((element) => {
+it('stops zooming out', () => {
+  const element = document.createElement('w-node-editor')
+  for (let i = 0; i < 30; i++) {
     element.dispatchEvent(new WheelEvent('wheel', { deltaY: 1 }))
-    return element.shadowRoot.querySelector('.container').style.transform
-  })
-  expect(transform).toBe('scale(0.909091) translate(0px, 0px)')
-})
-
-it.skip('stops zooming out', async () => {
-  const transform = await elementHandle.evaluate((element) => {
-    for (let i = 0; i < 30; i++) {
-      element.dispatchEvent(new WheelEvent('wheel', { deltaY: 1 }))
-    }
-    return element.shadowRoot.querySelector('.container').style.transform
-  })
-  expect(transform).toBe('scale(0.122846) translate(0px, 0px)')
+  }
+  expect(element.shadowRoot.querySelector('.container').style.transform).toBe(
+    'scale(0.12284597357367225) translate(0px, 0px)',
+  )
 })
 
 it.skip('pans up', async () => {
