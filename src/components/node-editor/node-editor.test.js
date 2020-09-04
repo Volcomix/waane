@@ -776,32 +776,26 @@ it('does not draw links that do not end to an input', async () => {
   expect(linkUpdateMock.mock.calls).toEqual([[{ x: 200, y: 105 }, undefined]])
 })
 
-it.skip('deselects all nodes', async () => {
-  await elementHandle.evaluate((element) => {
-    element.innerHTML = html`
-      <w-node id="node1" selected></w-node>
-      <w-node id="node2" selected></w-node>
-    `
-  })
-  await page.mouse.click(500, 500)
-  const selectedNodeIds = await elementHandle.$$eval('[selected]', (nodes) =>
-    nodes.map((node) => node.id),
-  )
-  expect(selectedNodeIds).toHaveLength(0)
+it('deselects all nodes', () => {
+  const element = document.createElement('w-node-editor')
+  element.innerHTML = html`
+    <w-node id="node1" selected></w-node>
+    <w-node id="node2" selected></w-node>
+  `
+  element.click()
+  const selectedNodes = element.querySelectorAll('[selected]')
+  expect(selectedNodes).toHaveLength(0)
 })
 
-it.skip('deselects all nodes but the new selected one', async () => {
-  await elementHandle.evaluate((element) => {
-    element.innerHTML = html`
-      <w-node id="node1" selected></w-node>
-      <w-node id="node2"></w-node>
-    `
-  })
-  await page.click('#node2')
-  const selectedNodeIds = await elementHandle.$$eval('[selected]', (nodes) =>
-    nodes.map((node) => node.id),
-  )
-  expect(selectedNodeIds).toEqual(['node2'])
+it('deselects all nodes but the new selected one', () => {
+  const element = document.createElement('w-node-editor')
+  element.innerHTML = html`
+    <w-node id="node1" selected></w-node>
+    <w-node id="node2"></w-node>
+  `
+  element.querySelector('#node2').click()
+  const selectedNodes = element.querySelectorAll('[selected]')
+  expect([...selectedNodes]).toEqual([expect.objectContaining({ id: 'node2' })])
 })
 
 it.skip('zooms in', async () => {
