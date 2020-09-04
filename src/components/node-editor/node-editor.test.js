@@ -2,16 +2,19 @@ import { afterEach, beforeAll, expect, it, jest } from '@jest/globals'
 import { html } from '../waane-element'
 import './node-editor'
 
-function setupContainer(element) {
+function setupContainer(element, scale = 1) {
   jest
     .spyOn(element._container, 'getBoundingClientRect')
-    .mockReturnValue({ x: 0, y: 0, width: 600, height: 600 })
+    .mockReturnValue({ x: 0, y: 0, width: 600 * scale, height: 600 * scale })
 }
 
-function setupSocket(element, x, y) {
-  jest
-    .spyOn(element, 'getBoundingClientRect')
-    .mockReturnValue({ x, y, width: 100, height: 10 })
+function setupSocket(element, x, y, scale = 1) {
+  jest.spyOn(element, 'getBoundingClientRect').mockReturnValue({
+    x: x * scale,
+    y: y * scale,
+    width: 100 * scale,
+    height: 10 * scale,
+  })
 }
 
 let linkUpdateMock
@@ -834,73 +837,91 @@ it('stops zooming out', () => {
   )
 })
 
-it.skip('pans up', async () => {
-  const transform = await elementHandle.evaluate((element) => {
-    element.dispatchEvent(
-      new MouseEvent('mousemove', { buttons: 4, movementY: -10 }),
-    )
-    return element.shadowRoot.querySelector('.container').style.transform
-  })
-  expect(transform).toBe('scale(1) translate(0px, -10px)')
+it('pans up', () => {
+  const element = document.createElement('w-node-editor')
+  const event = new MouseEvent('mousemove', { buttons: 4 })
+  event.movementX = 0
+  event.movementY = -10
+  element.dispatchEvent(event)
+  expect(element.shadowRoot.querySelector('.container').style.transform).toBe(
+    'scale(1) translate(0px, -10px)',
+  )
 })
 
-it.skip('pans right', async () => {
-  const transform = await elementHandle.evaluate((element) => {
-    element.dispatchEvent(
-      new MouseEvent('mousemove', { buttons: 4, movementX: 10 }),
-    )
-    return element.shadowRoot.querySelector('.container').style.transform
-  })
-  expect(transform).toBe('scale(1) translate(10px, 0px)')
+it('pans right', () => {
+  const element = document.createElement('w-node-editor')
+  const event = new MouseEvent('mousemove', { buttons: 4 })
+  event.movementX = 10
+  event.movementY = 0
+  element.dispatchEvent(event)
+  expect(element.shadowRoot.querySelector('.container').style.transform).toBe(
+    'scale(1) translate(10px, 0px)',
+  )
 })
 
-it.skip('pans down', async () => {
-  const transform = await elementHandle.evaluate((element) => {
-    element.dispatchEvent(
-      new MouseEvent('mousemove', { buttons: 4, movementY: 10 }),
-    )
-    return element.shadowRoot.querySelector('.container').style.transform
-  })
-  expect(transform).toBe('scale(1) translate(0px, 10px)')
+it('pans down', () => {
+  const element = document.createElement('w-node-editor')
+  const event = new MouseEvent('mousemove', { buttons: 4 })
+  event.movementX = 0
+  event.movementY = 10
+  element.dispatchEvent(event)
+  expect(element.shadowRoot.querySelector('.container').style.transform).toBe(
+    'scale(1) translate(0px, 10px)',
+  )
 })
 
-it.skip('pans left', async () => {
-  const transform = await elementHandle.evaluate((element) => {
-    element.dispatchEvent(
-      new MouseEvent('mousemove', { buttons: 4, movementX: -10 }),
-    )
-    return element.shadowRoot.querySelector('.container').style.transform
-  })
-  expect(transform).toBe('scale(1) translate(-10px, 0px)')
+it('pans left', () => {
+  const element = document.createElement('w-node-editor')
+  const event = new MouseEvent('mousemove', { buttons: 4 })
+  event.movementX = -10
+  event.movementY = 0
+  element.dispatchEvent(event)
+  expect(element.shadowRoot.querySelector('.container').style.transform).toBe(
+    'scale(1) translate(-10px, 0px)',
+  )
 })
 
-it.skip('does not pan', async () => {
-  const transform = await elementHandle.evaluate((element) => {
-    element.dispatchEvent(
-      new MouseEvent('mousemove', { buttons: 1, movementX: 10 }),
-    )
-    return element.shadowRoot.querySelector('.container').style.transform
-  })
-  expect(transform).toBe('')
+it('does not pan', () => {
+  const element = document.createElement('w-node-editor')
+  const event = new MouseEvent('mousemove', { buttons: 1 })
+  event.movementX = 10
+  event.movementY = 10
+  element.dispatchEvent(event)
+  expect(element.shadowRoot.querySelector('.container').style.transform).toBe(
+    '',
+  )
 })
 
-it.skip('draws the links when zoomed and panned', async () => {
-  await elementHandle.evaluate((element) => {
-    element.dispatchEvent(new WheelEvent('wheel', { deltaY: -1 }))
-    element.dispatchEvent(
-      new MouseEvent('mousemove', { buttons: 1, movementX: 10 }),
-    )
-    element.innerHTML = html`
-      <w-node style="left: 100px; top: 100px;">
-        <w-output id="out1"></w-output>
-      </w-node>
-      <w-node style="left: 300px; top: 200px;">
-        <w-input id="in2"></w-input>
-      </w-node>
+it('draws the links when zoomed and panned', async () => {
+  document.body.innerHTML = html`<w-node-editor></w-node-editor>`
+  const element = document.body.querySelector('w-node-editor')
 
-      <w-link from="out1" to="in2"></w-link>
-    `
-  })
+  await new Promise(setTimeout)
+
+  element.dispatchEvent(new WheelEvent('wheel', { deltaY: -1 }))
+
+  const mouseEvent = new MouseEvent('mousemove', { buttons: 4 })
+  mouseEvent.movementX = 10
+  mouseEvent.movementY = 0
+  element.dispatchEvent(mouseEvent)
+
+  element.innerHTML = html`
+    <w-node>
+      <w-output id="out1"></w-output>
+    </w-node>
+    <w-node>
+      <w-input id="in2"></w-input>
+    </w-node>
+
+    <w-link from="out1" to="in2"></w-link>
+  `
+  const scale = 1.1
+  setupContainer(element, scale)
+  setupSocket(element.querySelector('#out1'), 100, 100, scale)
+  setupSocket(element.querySelector('#in2'), 300, 200, scale)
+
+  await new Promise(setTimeout)
+
   expect(linkUpdateMock).toHaveBeenCalledTimes(1)
   const [fromPosition, toPosition] = linkUpdateMock.mock.calls[0]
   expect(fromPosition.x).toBeCloseTo(200)
