@@ -5,17 +5,16 @@
   "main": "src/components/index.js",
   "author": "Volcomix",
   "license": "MIT",
+  "type": "module",
   "scripts": {
     "start": "live-server --watch=*.html,**/*.js --ignore=**/*.test.js --no-browser src",
     "serve": "cd src && python3 -m http.server 8080",
-    "test": "jest --watch",
-    "test:ci": "jest"
+    "jest": "npx --node-arg=--experimental-vm-modules jest",
+    "test": "yarn jest --watch",
+    "test:ci": "yarn jest"
   },
   "devDependencies": {
-    "@babel/core": "^7.11.6",
-    "@babel/preset-env": "^7.11.5",
     "@jest/globals": "^26.4.2",
-    "babel-jest": "^26.3.0",
     "jest": "^26.4.2",
     "live-server": "^1.2.1"
   }
