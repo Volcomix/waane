@@ -86,7 +86,7 @@ const layers = {
 
 function shadow(z) {
   return ['umbra', 'penumbra', 'ambient']
-    .map(layerName => {
+    .map((layerName) => {
       const shadowProperties = layers[layerName][z]
       const shadowColor = `rgba(var(--shadow-color), var(--${layerName}-opacity))`
       return `${shadowProperties} ${shadowColor}`
@@ -100,7 +100,7 @@ function overlay(z) {
   return `linear-gradient(${overlayColor}, ${overlayColor})`
 }
 
-export default function(z) {
+export default function (z) {
   return css`
     z-index: ${z};
     box-shadow: var(--shadow, ${shadow(z)});

@@ -90,7 +90,7 @@ export class WaaneElement extends HTMLElement {
   }
 }
 
-const getTemplateElement = memoize(function() {
+const getTemplateElement = memoize(function () {
   const styles = this.constructor.styles
   const template = this.constructor.template
   if (!styles && !template) {
@@ -108,17 +108,17 @@ const getTemplateElement = memoize(function() {
   return templateElement
 })
 
-const getProperties = memoize(function() {
+const getProperties = memoize(function () {
   return this.constructor.properties
 })
 
-const toKebabCase = memoize(function(string) {
+const toKebabCase = memoize(function (string) {
   return string.replace(/[A-Z]/g, '-$&').toLowerCase()
 })
 
 function memoize(fn) {
   const cache = {}
-  return function(argument) {
+  return function (argument) {
     if (argument in cache) {
       return cache[argument]
     } else {

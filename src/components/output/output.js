@@ -1,4 +1,4 @@
-import { WaaneElement, html, css } from '../waane-element.js'
+import { css, html, WaaneElement } from '../waane-element.js'
 
 class Output extends WaaneElement {
   static get styles() {
@@ -23,9 +23,7 @@ class Output extends WaaneElement {
   }
 
   static get template() {
-    return html`
-      <slot>Output</slot>
-    `
+    return html`<slot>Output</slot>`
   }
 }
 

@@ -1,11 +1,5 @@
-let moduleHandle
-
-beforeAll(async () => {
-  await page.goto('http://localhost:8080/test.html')
-  moduleHandle = await page.evaluateHandle(/* js */ `
-    import('./components/typography/typography.js')
-  `)
-})
+import { expect, it } from '@jest/globals'
+import typography from './typography'
 
 const names = [
   'headline1',
@@ -24,12 +18,7 @@ const names = [
 ]
 
 for (const name of names) {
-  it(`returns typography styles for ${name}`, async () => {
-    const typography = await page.evaluate(
-      ({ default: typography }, name) => typography(name),
-      moduleHandle,
-      name,
-    )
-    expect(typography).toMatchSnapshot()
+  it(`returns typography styles for ${name}`, () => {
+    expect(typography(name)).toMatchSnapshot()
   })
 }

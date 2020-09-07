@@ -1,6 +1,6 @@
-import { WaaneElement, html, css } from '../waane-element.js'
 import elevation from '../elevation/elevation.js'
 import typography from '../typography/typography.js'
+import { css, html, WaaneElement } from '../waane-element.js'
 
 class Node extends WaaneElement {
   static get styles() {
@@ -85,14 +85,12 @@ class Node extends WaaneElement {
 
   _dispatchResize(mutations) {
     if (this._isResized(mutations)) {
-      this.dispatchEvent(
-        new Event('w-node-resize', { bubbles: true, cancelable: true }),
-      )
+      this.dispatchEvent(new Event('w-node-resize', { bubbles: true }))
     }
   }
 
   _isResized(mutations) {
-    return mutations.some(mutation => {
+    return mutations.some((mutation) => {
       return mutation.target !== this || mutation.type !== 'attributes'
     })
   }
