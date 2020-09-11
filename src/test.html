@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Node editor</title>
+    <meta
+      name="description"
+      content="An example using @waane/node-editor web components"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      html,
+      body {
+        height: 100%;
+      }
+
+      body {
+        margin: 0;
+      }
+
+      .theme ::selection {
+        background-color: rgba(var(--primary), var(--high-emphasis));
+        color: rgba(var(--on-primary), var(--high-emphasis));
+      }
+
+      .theme--dark {
+        --w-primary: 243, 119, 35;
+        --w-secondary: 255, 91, 85;
+        --w-background: 95, 102, 112;
+        --w-surface: 42, 46, 51;
+
+        --w-on-primary: 255, 255, 255;
+        --w-on-secondary: 255, 255, 255;
+        --w-on-background: 255, 255, 255;
+        --w-on-surface: 255, 255, 255;
+
+        --w-shadow: none;
+        --w-overlay: none;
+      }
+
+      .theme--light {
+        --w-primary: 2, 95, 238;
+        --w-secondary: 238, 144, 2;
+        --w-background: 255, 255, 255;
+        --w-surface: 240, 240, 240;
+
+        --w-on-primary: 255, 255, 255;
+        --w-on-secondary: 0, 0, 0;
+        --w-on-background: 0, 0, 0;
+        --w-on-surface: 0, 0, 0;
+
+        --w-overlay: none;
+      }
+
+      .node-editor {
+        height: 100%;
+      }
+
+      .field {
+        position: relative;
+        flex: 1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .field--select::after {
+        content: '⌄';
+        position: absolute;
+        right: 2px;
+        transform: translateY(-3px);
+        pointer-events: none;
+      }
+
+      .input {
+        margin: 2px 0 2px 8px;
+        border: none;
+        border-radius: 2px;
+        outline: none;
+        box-sizing: border-box;
+        width: 92px;
+        height: 24px;
+        padding: 0 16px 0 4px;
+        background-color: rgba(var(--on-surface), 0.04);
+        font-size: 14px;
+        font-family: var(--typeface);
+        font-weight: var(--font-regular);
+        letter-spacing: 0.25px;
+        color: rgba(var(--on-surface), var(--medium-emphasis));
+      }
+
+      .input:hover {
+        background-color: rgba(var(--on-surface), 0.08);
+      }
+
+      .input:focus {
+        background-color: rgba(var(--on-surface), 0.12);
+        color: rgba(var(--on-surface), var(--high-emphasis));
+      }
+
+      .input--number {
+        -webkit-appearance: textfield;
+      }
+
+      .input--number::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+      }
+
+      .select {
+        -webkit-appearance: none;
+      }
+
+      @-moz-document url-prefix() {
+        .select {
+          padding: 0;
+        }
+
+        .select:-moz-focusring {
+          color: transparent;
+          text-shadow: 0 0 0 rgba(var(--on-surface), var(--medium-emphasis));
+        }
+      }
+
+      .select__option {
+        background-color: rgba(var(--surface), var(--surface-opacity));
+      }
+    </style>
+  </head>
+  <body class="theme theme--default">
+    <w-node-editor class="node-editor">
+      <w-node x="50" y="300">
+        <span slot="title">Oscillator</span>
+        <w-output id="osc-out">Output</w-output>
+        <div class="field field--select">
+          Type
+          <select class="input select">
+            <option class="select__option">sine</option>
+            <option class="select__option">square</option>
+            <option class="select__option">sawtooth</option>
+            <option class="select__option">triangle</option>
+          </select>
+        </div>
+        <w-input id="osc-freq">
+          <div class="field">
+            Frequency
+            <input class="input input--number" type="number" value="440" />
+          </div>
+        </w-input>
+        <w-input id="osc-detune">
+          <div class="field">
+            Detune
+            <input class="input input--number" type="number" value="0" />
+          </div>
+        </w-input>
+      </w-node>
+
+      <w-node x="340" y="50">
+        <span slot="title">Biquad Filter</span>
+        <w-output id="filter-out">Output</w-output>
+        <div class="field field--select">
+          Type
+          <select class="input select">
+            <option class="select__option">lowpass</option>
+            <option class="select__option">highpass</option>
+            <option class="select__option">bandpass</option>
+            <option class="select__option">lowshelf</option>
+            <option class="select__option">highshelf</option>
+            <option class="select__option">peaking</option>
+            <option class="select__option">notch</option>
+            <option class="select__option">allpass</option>
+          </select>
+        </div>
+        <w-input id="filter-freq">
+          <div class="field">
+            Frequency
+            <input class="input input--number" type="number" value="350" />
+          </div>
+        </w-input>
+        <w-input id="filter-detune">
+          <div class="field">
+            Detune
+            <input class="input input--number" type="number" value="0" />
+          </div>
+        </w-input>
+        <w-input id="filter-q">
+          <div class="field">
+            Q
+            <input class="input input--number" type="number" value="1" />
+          </div>
+        </w-input>
+        <w-input id="filter-gain">
+          <div class="field">
+            Gain
+            <input class="input input--number" type="number" value="0" />
+          </div>
+        </w-input>
+        <w-input id="filter-in">Input</w-input>
+      </w-node>
+
+      <w-node x="630" y="260">
+        <span slot="title">Destination</span>
+        <w-input id="dest-in">Input</w-input>
+      </w-node>
+
+      <w-link from="osc-out" to="filter-in"></w-link>
+      <w-link from="osc-out" to="filter-freq"></w-link>
+      <w-link from="osc-out" to="dest-in"></w-link>
+      <w-link from="filter-out" to="dest-in"></w-link>
+    </w-node-editor>
+
+    <script async type="module" src="./components/index.js"></script>
+  </body>
+</html>
