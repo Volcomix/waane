@@ -37,12 +37,22 @@ class ContextMenu extends HTMLElement {
   _onContextMenu = (event) => {
     event.preventDefault()
     this._menu.hidden = false
-    this._menu.style.left = `${event.clientX}px`
-    this._menu.style.top = `${event.clientY}px`
+    this._setMenuPosition(event)
   }
 
   _onBodyClick = () => {
     this._menu.hidden = true
+  }
+
+  /**
+   * @param {MouseEvent} event
+   */
+  _setMenuPosition(event) {
+    const { width, height } = this._menu.getBoundingClientRect()
+    const x = Math.min(event.clientX, window.innerWidth - width)
+    const y = Math.min(event.clientY, window.innerHeight - height)
+    this._menu.style.left = `${x}px`
+    this._menu.style.top = `${y}px`
   }
 }
 
