@@ -49,8 +49,14 @@ class ContextMenu extends HTMLElement {
    */
   _setMenuPosition(event) {
     const { width, height } = this._menu.getBoundingClientRect()
-    const x = Math.min(event.clientX, window.innerWidth - width)
-    const y = Math.min(event.clientY, window.innerHeight - height)
+    const x = Math.min(
+      event.clientX,
+      document.documentElement.clientWidth - width,
+    )
+    const y = Math.min(
+      event.clientY,
+      document.documentElement.clientHeight - height,
+    )
     this._menu.style.left = `${x}px`
     this._menu.style.top = `${y}px`
   }
