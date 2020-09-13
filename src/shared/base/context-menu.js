@@ -13,20 +13,26 @@ class ContextMenu extends HTMLElement {
     this._menu = /** @type {HTMLElement} */ (this.querySelector('w-menu'))
     this._menu.hidden = true
 
-    this.addEventListener('contextmenu', () => {
-      this._menu.hidden = false
-    })
+    this.addEventListener('contextmenu', this._onContextMenu)
   }
 
   connectedCallback() {
-    document.body.addEventListener('click', this._closeMenu)
+    document.body.addEventListener('click', this._onBodyClick)
   }
 
   disconnectedCallback() {
-    document.body.removeEventListener('click', this._closeMenu)
+    document.body.removeEventListener('click', this._onBodyClick)
   }
 
-  _closeMenu = () => {
+  /**
+   * @param {MouseEvent} event
+   */
+  _onContextMenu = (event) => {
+    event.preventDefault()
+    this._menu.hidden = false
+  }
+
+  _onBodyClick = () => {
     this._menu.hidden = true
   }
 }
