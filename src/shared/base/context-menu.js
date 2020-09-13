@@ -1,7 +1,14 @@
 import { html } from '../../helpers/template.js'
 
 const template = document.createElement('template')
-template.innerHTML = html`<slot></slot>`
+template.innerHTML = html`
+  <style>
+    ::slotted(w-menu) {
+      position: fixed;
+    }
+  </style>
+  <slot></slot>
+`
 
 class ContextMenu extends HTMLElement {
   constructor() {
@@ -30,6 +37,8 @@ class ContextMenu extends HTMLElement {
   _onContextMenu = (event) => {
     event.preventDefault()
     this._menu.hidden = false
+    this._menu.style.left = `${event.clientX}px`
+    this._menu.style.top = `${event.clientY}px`
   }
 
   _onBodyClick = () => {
