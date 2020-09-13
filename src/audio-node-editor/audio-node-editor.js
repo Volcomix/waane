@@ -1,11 +1,13 @@
-import { html } from '../helpers/elements.js'
+import { html } from '../helpers/template.js'
 
 const template = document.createElement('template')
 template.innerHTML = html`
-  <w-menu>
-    <w-menu-item>Oscillator</w-menu-item>
-  </w-menu>
-  <w-graph></w-graph>
+  <w-context-menu>
+    <w-graph></w-graph>
+    <w-menu>
+      <w-menu-item>Oscillator</w-menu-item>
+    </w-menu>
+  </w-context-menu>
 `
 
 class AudioNodeEditor extends HTMLElement {

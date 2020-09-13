@@ -9,8 +9,6 @@ test('has no node by default', () => {
 
 test('adds an oscillator node', () => {
   const audioNodeEditor = document.createElement('audio-node-editor')
-  const graph = audioNodeEditor.shadowRoot.querySelector('w-graph')
-  graph.dispatchEvent(new MouseEvent('contextmenu'))
   const oscillatorMenuItem = /** @type {HTMLElement} */ (Array.from(
     audioNodeEditor.shadowRoot.querySelectorAll('w-menu-item'),
   ).find((menuItem) => menuItem.textContent === 'Oscillator'))
