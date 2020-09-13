@@ -1,8 +1,8 @@
 import { afterEach, expect, test } from '@jest/globals'
-import { html } from '../../../helpers/template'
+import { html } from '../../core/element'
 import '../context-menu'
 
-function render() {
+function renderContextMenu() {
   document.body.innerHTML = html`
     <w-context-menu>
       <span>Some content</span>
@@ -26,14 +26,14 @@ afterEach(() => {
 })
 
 test('displays the menu', async () => {
-  const { content, menu } = render()
+  const { content, menu } = renderContextMenu()
   expect(menu.hidden).toBe(true)
   content.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true }))
   expect(menu.hidden).toBe(false)
 })
 
 test('hides the menu', async () => {
-  const { menu } = render()
+  const { menu } = renderContextMenu()
   menu.hidden = false
   document.body.click()
   expect(menu.hidden).toBe(true)

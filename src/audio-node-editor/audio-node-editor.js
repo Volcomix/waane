@@ -1,7 +1,6 @@
-import { html } from '../helpers/template.js'
+import { defineCustomElement, html } from '../shared/core/element.js'
 
-const template = document.createElement('template')
-template.innerHTML = html`
+const template = html`
   <w-context-menu>
     <w-graph></w-graph>
     <w-menu>
@@ -10,21 +9,13 @@ template.innerHTML = html`
   </w-context-menu>
 `
 
-class AudioNodeEditor extends HTMLElement {
-  constructor() {
-    super()
+defineCustomElement('audio-node-editor', template, function ({ host }) {
+  const graph = host.shadowRoot.querySelector('w-graph')
+  const oscillatorMenuItem = host.shadowRoot.querySelector('w-menu-item')
 
-    this.attachShadow({ mode: 'open' })
-    this.shadowRoot.appendChild(template.content.cloneNode(true))
-
-    this.shadowRoot
-      .querySelector('w-menu-item')
-      .addEventListener('click', () => {
-        const oscillatorNode = document.createElement('w-graph-node')
-        oscillatorNode.innerHTML = 'Oscillator'
-        this.shadowRoot.querySelector('w-graph').appendChild(oscillatorNode)
-      })
-  }
-}
-
-customElements.define('audio-node-editor', AudioNodeEditor)
+  oscillatorMenuItem.addEventListener('click', () => {
+    const oscillatorNode = document.createElement('w-graph-node')
+    oscillatorNode.innerHTML = 'Oscillator'
+    graph.appendChild(oscillatorNode)
+  })
+})
