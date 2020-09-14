@@ -1,6 +1,7 @@
-import { defineCustomElement, html } from '../core/element.js'
+import { html } from '../core/element.js'
 
-const template = html`
+const template = document.createElement('template')
+template.innerHTML = html`
   <style>
     ::slotted(w-menu) {
       position: fixed;
@@ -9,38 +10,44 @@ const template = html`
   <slot></slot>
 `
 
-defineCustomElement('w-context-menu', template, function ({
-  host,
-  connected,
-  disconnected,
-}) {
-  const menu = /** @type {HTMLElement} */ (host.querySelector('w-menu'))
+export default class ContextMenu extends HTMLElement {
+  constructor() {
+    super()
+    this.attachShadow({ mode: 'open' })
+    this.shadowRoot.appendChild(template.content.cloneNode(true))
 
-  menu.hidden = true
+    this._menu = /** @type {HTMLElement} */ (this.querySelector('w-menu'))
+    this._menu.hidden = true
 
-  connected(() => {
-    document.body.addEventListener('click', onBodyClick)
-  })
+    this.addEventListener('contextmenu', this._onContextMenu)
+  }
 
-  disconnected(() => {
-    document.body.removeEventListener('click', onBodyClick)
-  })
+  connectedCallback() {
+    document.body.addEventListener('click', this._onBodyClick)
+  }
 
-  host.addEventListener('contextmenu', (event) => {
-    event.preventDefault()
-    menu.hidden = false
-    setMenuPosition(event)
-  })
-
-  function onBodyClick() {
-    menu.hidden = true
+  disconnectedCallback() {
+    document.body.removeEventListener('click', this._onBodyClick)
   }
 
   /**
    * @param {MouseEvent} event
    */
-  function setMenuPosition(event) {
-    const { width, height } = menu.getBoundingClientRect()
+  _onContextMenu(event) {
+    event.preventDefault()
+    this._menu.hidden = false
+    this._setMenuPosition(event)
+  }
+
+  _onBodyClick = () => {
+    this._menu.hidden = true
+  }
+
+  /**
+   * @param {MouseEvent} event
+   */
+  _setMenuPosition(event) {
+    const { width, height } = this._menu.getBoundingClientRect()
     const x = Math.min(
       event.clientX,
       document.documentElement.clientWidth - width,
@@ -49,7 +56,9 @@ defineCustomElement('w-context-menu', template, function ({
       event.clientY,
       document.documentElement.clientHeight - height,
     )
-    menu.style.left = `${x}px`
-    menu.style.top = `${y}px`
+    this._menu.style.left = `${x}px`
+    this._menu.style.top = `${y}px`
   }
-})
+}
+
+customElements.define('w-context-menu', ContextMenu)

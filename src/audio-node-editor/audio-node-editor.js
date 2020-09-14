@@ -1,6 +1,8 @@
-import { defineCustomElement, html } from '../shared/core/element.js'
+import { html } from '../shared/core/element.js'
+import { GraphNode } from '../shared/node-editor/graph-node.js'
 
-const template = html`
+const template = document.createElement('template')
+template.innerHTML = html`
   <w-context-menu>
     <w-graph></w-graph>
     <w-menu>
@@ -9,13 +11,35 @@ const template = html`
   </w-context-menu>
 `
 
-defineCustomElement('audio-node-editor', template, function ({ host }) {
-  const graph = host.shadowRoot.querySelector('w-graph')
-  const oscillatorMenuItem = host.shadowRoot.querySelector('w-menu-item')
+export default class AudioNodeEditor extends HTMLElement {
+  constructor() {
+    super()
+    this.attachShadow({ mode: 'open' })
+    this.shadowRoot.appendChild(template.content.cloneNode(true))
 
-  oscillatorMenuItem.addEventListener('click', () => {
-    const oscillatorNode = document.createElement('w-graph-node')
+    this._graph = this.shadowRoot.querySelector('w-graph')
+
+    const oscillatorMenuItem = /** @type {HTMLElement} */ (this.shadowRoot.querySelector(
+      'w-menu-item',
+    ))
+    oscillatorMenuItem.addEventListener(
+      'click',
+      this._onOscillatorMenuItemClick,
+    )
+  }
+
+  /**
+   * @param {MouseEvent} event
+   */
+  _onOscillatorMenuItemClick = (event) => {
+    const oscillatorNode = /** @type {GraphNode} */ (document.createElement(
+      'w-graph-node',
+    ))
     oscillatorNode.innerHTML = 'Oscillator'
-    graph.appendChild(oscillatorNode)
-  })
-})
+    oscillatorNode.x = event.pageX
+    oscillatorNode.y = event.pageY
+    this._graph.appendChild(oscillatorNode)
+  }
+}
+
+customElements.define('audio-node-editor', AudioNodeEditor)

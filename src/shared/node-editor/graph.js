@@ -1,6 +1,7 @@
-import { defineCustomElement, html } from '../core/element.js'
+import { html } from '../core/element.js'
 
-const template = html`
+const template = document.createElement('template')
+template.innerHTML = html`
   <style>
     :host {
       display: block;
@@ -10,4 +11,12 @@ const template = html`
   <slot></slot>
 `
 
-defineCustomElement('w-graph', template)
+export default class Graph extends HTMLElement {
+  constructor() {
+    super()
+    this.attachShadow({ mode: 'open' })
+    this.shadowRoot.appendChild(template.content.cloneNode(true))
+  }
+}
+
+customElements.define('w-graph', Graph)
