@@ -13,9 +13,24 @@
       body {
         height: 100%;
       }
+
+      body:not(.light) {
+        --color-primary: 187 134 252;
+        --color-secondary: 3 218 198;
+        --color-background: 18 18 18;
+        --color-surface: 18 18 18;
+
+        --color-on-primary: 0 0 0;
+        --color-on-secondary: 0 0 0;
+        --color-on-background: 255 255 255;
+        --color-on-surface: 255 255 255;
+
+        --shadow: initial;
+        --overlay: initial;
+      }
     </style>
   </head>
-  <body>
+  <body class="dark">
     <audio-node-editor></audio-node-editor>
 
     <script async type="module" src="./index.js"></script>
