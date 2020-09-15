@@ -1,8 +1,14 @@
 import { html } from '../core/element.js'
-import Menu from './menu.js'
 
 const template = document.createElement('template')
-template.innerHTML = html`<slot></slot>`
+template.innerHTML = html`
+  <style>
+    ::slotted(w-menu) {
+      position: fixed;
+    }
+  </style>
+  <slot></slot>
+`
 
 export default class ContextMenu extends HTMLElement {
   constructor() {
@@ -10,7 +16,7 @@ export default class ContextMenu extends HTMLElement {
     this.attachShadow({ mode: 'open' })
     this.shadowRoot.appendChild(template.content.cloneNode(true))
 
-    this._menu = /** @type {Menu} */ (this.querySelector('w-menu'))
+    this._menu = /** @type {HTMLElement} */ (this.querySelector('w-menu'))
     this._menu.hidden = true
 
     this.addEventListener('contextmenu', this._onContextMenu)
@@ -42,14 +48,16 @@ export default class ContextMenu extends HTMLElement {
    */
   _setMenuPosition(event) {
     const { width, height } = this._menu.getBoundingClientRect()
-    this._menu.x = Math.min(
+    const x = Math.min(
       event.clientX,
       document.documentElement.clientWidth - width,
     )
-    this._menu.y = Math.min(
+    const y = Math.min(
       event.clientY,
       document.documentElement.clientHeight - height,
     )
+    this._menu.style.left = `${x}px`
+    this._menu.style.top = `${y}px`
   }
 }
 
