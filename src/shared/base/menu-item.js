@@ -10,6 +10,7 @@ template.innerHTML = html`
       padding: 0 16px;
       cursor: pointer;
       user-select: none;
+      transition: background-color 100ms var(--easing-standard);
     }
 
     :host(:hover) {

@@ -20,6 +20,10 @@ style.textContent = css`
     --text-high-emphasis: 0.87;
     --text-medium-emphasis: 0.6;
     --text-disabled: 0.38;
+
+    --easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
+    --easing-decelerated: cubic-bezier(0, 0, 0.2, 1);
+    --easing-accelerated: cubic-bezier(0.4, 0, 1, 1);
   }
 
   body {
