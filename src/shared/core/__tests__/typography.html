@@ -5,10 +5,6 @@
     <title>Typography</title>
     <meta name="description" content="Typography test page" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link
-      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap"
-      rel="stylesheet"
-    />
     <style>
       body {
         display: flex;
@@ -42,26 +38,13 @@
     <span class="overline">Overline</span>
 
     <script type="module">
-      import { css } from './components/waane-element.js'
-      import variables from './components/variables.js'
-      import typography from './components/typography/typography.js'
+      import { css } from '../element.js'
+      import typography from '../typography.js'
 
       const style = document.createElement('style')
-      const content = [
-        css`
-          :root {
-            ${variables}
-          }
-        `,
-      ]
-      document.body.querySelectorAll('[class]').forEach(({ className }) => {
-        content.push(css`
-          .${className} {
-            ${typography(className)}
-          }
-        `)
-      })
-      style.textContent = content.join('')
+      style.textContent = [...document.body.querySelectorAll('[class]')]
+        .map(({ className }) => `.${className} {${typography(className)}}`)
+        .join('\n')
       document.head.appendChild(style)
     </script>
   </body>
