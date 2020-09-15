@@ -25,7 +25,7 @@ style.textContent = css`
   body {
     margin: 0%;
     background-color: rgb(var(--color-background));
-    color: rgb(var(--color-on-background));
+    color: rgba(var(--color-on-background) / var(--text-high-emphasis));
   }
 `
 document.head.appendChild(style)
