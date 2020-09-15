@@ -4,13 +4,13 @@ const template = document.createElement('template')
 template.innerHTML = html`
   <style>
     :host {
-      position: absolute;
+      position: fixed;
     }
   </style>
   <slot></slot>
 `
 
-export default class GraphNode extends HTMLElement {
+export default class Menu extends HTMLElement {
   constructor() {
     super()
     this.attachShadow({ mode: 'open' })
@@ -52,4 +52,4 @@ export default class GraphNode extends HTMLElement {
   }
 }
 
-customElements.define('w-graph-node', GraphNode)
+customElements.define('w-menu', Menu)

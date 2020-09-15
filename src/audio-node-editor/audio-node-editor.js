@@ -1,5 +1,5 @@
 import { html } from '../shared/core/element.js'
-import { GraphNode } from '../shared/node-editor/graph-node.js'
+import GraphNode from '../shared/node-editor/graph-node.js'
 
 const template = document.createElement('template')
 template.innerHTML = html`
