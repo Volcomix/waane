@@ -34,7 +34,7 @@ export default function typography(name) {
 }
 
 const style = document.createElement('style')
-style.innerHTML = css`
+style.textContent = css`
   @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap');
 
   body {

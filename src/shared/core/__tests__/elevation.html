@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Elevation</title>
+    <meta name="description" content="Elevation test page" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      .theme {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        padding: 16px;
+        background-color: rgb(var(--color-background));
+        color: rgba(var(--color-on-background) / var(--text-high-emphasis));
+      }
+
+      .theme--light {
+        --color-background: 255 255 255;
+        --color-surface: 255 255 255;
+        --color-on-background: 0 0 0;
+        --color-on-surface: 0 0 0;
+        --overlay: none;
+      }
+
+      .theme--dark {
+        --color-background: 0 0 0;
+        --color-surface: 0 0 0;
+        --color-on-background: 255 255 255;
+        --color-on-surface: 255 255 255;
+      }
+
+      .surface {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 16px;
+        min-width: 200px;
+        min-height: 100px;
+        background-color: rgb(var(--color-surface));
+        color: rgba(var(--color-on-surface) / var(--text-high-emphasis));
+      }
+    </style>
+  </head>
+  <body>
+    <section class="theme theme--light"></section>
+    <section class="theme theme--dark"></section>
+
+    <script type="module">
+      import '../theme.js'
+      import '../typography.js'
+      import elevation from '../elevation.js'
+
+      const style = document.createElement('style')
+      style.textContent = Array.from(
+        { length: 25 },
+        (_, z) => `.surface--z${z} {${elevation(z)}}`,
+      ).join('\n')
+      document.head.appendChild(style)
+
+      document.body.querySelectorAll('section').forEach((section) => {
+        for (let z = 0; z < 25; z++) {
+          const surface = document.createElement('div')
+          surface.className = `surface surface--z${z}`
+          surface.textContent = `${z}dp`
+          section.appendChild(surface)
+        }
+      })
+    </script>
+  </body>
+</html>
