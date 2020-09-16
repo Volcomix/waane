@@ -20,35 +20,28 @@ const style = css`
   }
 `
 
-const template = html`
-  <style>
-    ${style}
-  </style>
-  <slot></slot>
-`
-
-const properties = {
-  /** @type {number} */
-  x: null,
-
-  /** @type {number} */
-  y: null,
-}
-
-/** @type {import('../core/element.js').Setup<typeof properties>} */
-function graphNode({ host, observe }) {
-  observe('x', () => {
-    host.style.left = `${host.x}px`
-  })
-
-  observe('y', () => {
-    host.style.top = `${host.y}px`
-  })
-}
-
 export default defineCustomElement(
   'w-graph-node',
-  template,
-  graphNode,
-  properties,
+  html`
+    <style>
+      ${style}
+    </style>
+    <slot></slot>
+  `,
+  ({ host, observe }) => {
+    observe('x', () => {
+      host.style.left = `${host.x}px`
+    })
+
+    observe('y', () => {
+      host.style.top = `${host.y}px`
+    })
+  },
+  {
+    /** @type {number} */
+    x: null,
+
+    /** @type {number} */
+    y: null,
+  },
 )

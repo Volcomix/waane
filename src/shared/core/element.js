@@ -23,21 +23,19 @@ export const css = String.raw
  * @returns {void}
  */
 
-/** @typedef {Object.<string, Number>} Properties */
-
 /**
- * @template T
+ * @template {Object.<string, Number>} T
  * @param {string} name
  * @param {string} template
  * @param {Setup<T>} setup
- * @param {Properties} properties
+ * @param {T} properties
  * @returns {HTMLElement & T}
  */
 export function defineCustomElement(
   name,
   template,
   setup = () => {},
-  properties = {},
+  properties = /** @type {T} */ ({}),
 ) {
   const templateElement = document.createElement('template')
   templateElement.innerHTML = template
