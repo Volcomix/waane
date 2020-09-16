@@ -1,5 +1,4 @@
 import { html } from '../shared/core/element.js'
-import GraphNode from '../shared/node-editor/graph-node.js'
 
 const template = document.createElement('template')
 template.innerHTML = html`
@@ -32,7 +31,7 @@ export default class AudioNodeEditor extends HTMLElement {
    * @param {MouseEvent} event
    */
   _onOscillatorMenuItemClick = (event) => {
-    const oscillatorNode = /** @type {GraphNode} */ (document.createElement(
+    const oscillatorNode = /** @type {import('../shared/node-editor/graph-node.js').default} */ (document.createElement(
       'w-graph-node',
     ))
     oscillatorNode.innerHTML = 'Oscillator'
