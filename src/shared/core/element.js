@@ -24,7 +24,7 @@ export const css = String.raw
  */
 
 /**
- * @template {Object.<string, Number>} T
+ * @template {Object.<string, Number> | {}} T
  * @param {string} name
  * @param {string} template
  * @param {Setup<T>} setup
