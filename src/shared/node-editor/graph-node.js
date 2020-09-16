@@ -26,7 +26,7 @@ export default defineCustomElement(
     </style>
     <slot></slot>
   `,
-  function ({ host, observe }) {
+  ({ host, observe }) => {
     observe('x', () => {
       host.style.left = `${host.x}px`
     })
@@ -34,8 +34,5 @@ export default defineCustomElement(
       host.style.top = `${host.y}px`
     })
   },
-  {
-    x: Number,
-    y: Number,
-  },
+  { x: Number, y: Number },
 )

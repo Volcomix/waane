@@ -25,7 +25,6 @@ style.textContent = css`
     --easing-decelerated: cubic-bezier(0, 0, 0.2, 1);
     --easing-accelerated: cubic-bezier(0.4, 0, 1, 1);
   }
-
   body {
     margin: 0%;
     background-color: rgb(var(--color-background));

@@ -20,6 +20,8 @@ export const css = String.raw
  * @template {PropertiesTypes} T
  * @typedef {object} SetupOptions
  * @property {HTMLElement & Properties<T>} host
+ * @property {(callback: () => void) => void} connected
+ * @property {(callback: () => void) => void} disconnected
  * @property {Observe<T>} observe
  */
 
@@ -48,6 +50,10 @@ export function defineCustomElement(
   templateElement.innerHTML = template
 
   class CustomElement extends HTMLElement {
+    _connectedCallback = () => {}
+
+    _disconnectedCallback = () => {}
+
     /** @type {Object.<string, () => void>} */
     _attributeChangedCallbacks = {}
 
@@ -60,6 +66,12 @@ export function defineCustomElement(
 
       setup({
         host: this,
+        connected: (callback) => {
+          this._connectedCallback = callback
+        },
+        disconnected: (callback) => {
+          this._disconnectedCallback = callback
+        },
         observe: /** @type {Observe<T>} */ ((
           /** @type {string} */ attributeName,
           callback,
@@ -75,6 +87,14 @@ export function defineCustomElement(
 
     static get observedAttributes() {
       return Object.keys(properties)
+    }
+
+    connectedCallback() {
+      this._connectedCallback()
+    }
+
+    disconnectedCallback() {
+      this._disconnectedCallback()
     }
 
     /**

@@ -1,4 +1,4 @@
-import { css, html } from '../core/element.js'
+import { css, defineCustomElement, html } from '../core/element.js'
 import elevation from '../core/elevation.js'
 
 const style = css`
@@ -11,21 +11,12 @@ const style = css`
     ${elevation(8)}
   }
 `
-
-const template = document.createElement('template')
-template.innerHTML = html`
-  <style>
-    ${style}
-  </style>
-  <slot></slot>
-`
-
-export default class Menu extends HTMLElement {
-  constructor() {
-    super()
-    this.attachShadow({ mode: 'open' })
-    this.shadowRoot.appendChild(template.content.cloneNode(true))
-  }
-}
-
-customElements.define('w-menu', Menu)
+export default defineCustomElement(
+  'w-menu',
+  html`
+    <style>
+      ${style}
+    </style>
+    <slot></slot>
+  `,
+)
