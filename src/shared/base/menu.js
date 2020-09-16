@@ -6,9 +6,9 @@ const style = css`
     min-width: 112px;
     padding: 8px 0;
     border-radius: 4px;
-    ${elevation(8)}
     background-color: rgb(var(--color-surface));
     color: rgba(var(--color-on-surface) / var(--text-high-emphasis));
+    ${elevation(8)}
   }
 `
 

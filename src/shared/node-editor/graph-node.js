@@ -1,11 +1,28 @@
-import { html } from '../core/element.js'
+import { css, html } from '../core/element.js'
+import elevation from '../core/elevation.js'
+import typography from '../core/typography.js'
+
+const style = css`
+  :host {
+    position: absolute;
+    padding: 16px;
+    background-color: rgb(var(--color-surface));
+    color: rgba(var(--color-on-surface) / var(--text-high-emphasis));
+    ${elevation(1)}
+  }
+
+  slot {
+    display: flex;
+    align-items: center;
+    height: 32px;
+    ${typography('headline6')}
+  }
+`
 
 const template = document.createElement('template')
 template.innerHTML = html`
   <style>
-    :host {
-      position: absolute;
-    }
+    ${style}
   </style>
   <slot></slot>
 `
