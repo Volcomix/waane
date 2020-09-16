@@ -6,6 +6,7 @@ const style = css`
   :host {
     position: absolute;
     padding: 16px;
+    border-radius: 4px;
     background-color: rgb(var(--color-surface));
     color: rgba(var(--color-on-surface) / var(--text-high-emphasis));
     ${elevation(1)}
