@@ -2,8 +2,9 @@ export const html = String.raw
 export const css = String.raw
 
 /**
+ * @template T
  * @callback Observe
- * @param {string} attributeName
+ * @param {keyof T} attributeName
  * @param {() => void} callback
  * @returns {void}
  */
@@ -12,7 +13,7 @@ export const css = String.raw
  * @template T
  * @typedef {object} SetupOptions
  * @property {HTMLElement & T} host
- * @property {Observe} observe
+ * @property {Observe<T>} observe
  */
 
 /**
@@ -22,19 +23,21 @@ export const css = String.raw
  * @returns {void}
  */
 
+/** @typedef {Object.<string, Number>} Properties */
+
 /**
  * @template T
  * @param {string} name
  * @param {string} template
  * @param {Setup<T>} setup
- * @param {string[]} observedAttributes
+ * @param {Properties} properties
  * @returns {HTMLElement & T}
  */
 export function defineCustomElement(
   name,
   template,
   setup = () => {},
-  observedAttributes = [],
+  properties = {},
 ) {
   const templateElement = document.createElement('template')
   templateElement.innerHTML = template
@@ -52,18 +55,21 @@ export function defineCustomElement(
 
       setup({
         host: this,
-        observe: (attributeName, callback) => {
+        observe: /** @type {Observe<T>} */ ((
+          /** @type {string} */ attributeName,
+          callback,
+        ) => {
           Object.defineProperty(this, attributeName, {
             get: () => Number(this.getAttribute(attributeName)),
             set: (value) => this.setAttribute(attributeName, String(value)),
           })
           this._attributeChangedCallbacks[attributeName] = callback
-        },
+        }),
       })
     }
 
     static get observedAttributes() {
-      return observedAttributes
+      return Object.keys(properties)
     }
 
     /**

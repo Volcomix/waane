@@ -27,13 +27,15 @@ const template = html`
   <slot></slot>
 `
 
-/**
- * @typedef {object} GraphNodeProps
- * @property {number} x
- * @property {number} y
- */
+const properties = {
+  /** @type {number} */
+  x: null,
 
-/** @type {import('../core/element.js').Setup<GraphNodeProps>} */
+  /** @type {number} */
+  y: null,
+}
+
+/** @type {import('../core/element.js').Setup<typeof properties>} */
 function graphNode({ host, observe }) {
   observe('x', () => {
     host.style.left = `${host.x}px`
@@ -44,7 +46,9 @@ function graphNode({ host, observe }) {
   })
 }
 
-export default defineCustomElement('w-graph-node', template, graphNode, [
-  'x',
-  'y',
-])
+export default defineCustomElement(
+  'w-graph-node',
+  template,
+  graphNode,
+  properties,
+)
