@@ -24,7 +24,7 @@ export const css = String.raw
  */
 
 /**
- * @template {Object.<string, Number> | {}} T
+ * @template {Object.<string, String | Number> | void} T
  * @param {string} name
  * @param {string} template
  * @param {Setup<T>} setup
@@ -67,7 +67,7 @@ export function defineCustomElement(
     }
 
     static get observedAttributes() {
-      return Object.keys(properties)
+      return Object.keys(/** @type {{}} */ (properties))
     }
 
     /**

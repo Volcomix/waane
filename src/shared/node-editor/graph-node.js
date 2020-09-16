@@ -11,7 +11,6 @@ const style = css`
     color: rgba(var(--color-on-surface) / var(--text-high-emphasis));
     ${elevation(1)}
   }
-
   slot {
     display: flex;
     align-items: center;
@@ -19,7 +18,6 @@ const style = css`
     ${typography('headline6')}
   }
 `
-
 export default defineCustomElement(
   'w-graph-node',
   html`
@@ -28,11 +26,10 @@ export default defineCustomElement(
     </style>
     <slot></slot>
   `,
-  ({ host, observe }) => {
+  function ({ host, observe }) {
     observe('x', () => {
       host.style.left = `${host.x}px`
     })
-
     observe('y', () => {
       host.style.top = `${host.y}px`
     })
