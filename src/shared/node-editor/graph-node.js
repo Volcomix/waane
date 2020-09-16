@@ -35,10 +35,7 @@ export default defineCustomElement(
     })
   },
   {
-    /** @type {number} */
-    x: null,
-
-    /** @type {number} */
-    y: null,
+    x: Number,
+    y: Number,
   },
 )

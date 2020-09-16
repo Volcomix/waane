@@ -1,6 +1,13 @@
 export const html = String.raw
 export const css = String.raw
 
+/** @typedef {Object.<string, typeof Number>} PropertiesTypes */
+
+/**
+ * @template {PropertiesTypes} T
+ * @typedef {{[P in keyof T]: InstanceType<T[P]>}} Properties
+ */
+
 /**
  * @template T
  * @callback Observe
@@ -10,9 +17,9 @@ export const css = String.raw
  */
 
 /**
- * @template T
+ * @template {PropertiesTypes} T
  * @typedef {object} SetupOptions
- * @property {HTMLElement & T} host
+ * @property {HTMLElement & Properties<T>} host
  * @property {Observe<T>} observe
  */
 
@@ -24,12 +31,12 @@ export const css = String.raw
  */
 
 /**
- * @template {Object.<string, String | Number> | void} T
+ * @template {PropertiesTypes} T
  * @param {string} name
  * @param {string} template
  * @param {Setup<T>} setup
  * @param {T} properties
- * @returns {HTMLElement & T}
+ * @returns {HTMLElement & Properties<T>}
  */
 export function defineCustomElement(
   name,
@@ -44,7 +51,7 @@ export function defineCustomElement(
     /** @type {Object.<string, () => void>} */
     _attributeChangedCallbacks = {}
 
-    /** @this {CustomElement & T} */
+    /** @this {CustomElement & Properties<T>} */
     constructor() {
       super()
 
@@ -67,7 +74,7 @@ export function defineCustomElement(
     }
 
     static get observedAttributes() {
-      return Object.keys(/** @type {{}} */ (properties))
+      return Object.keys(properties)
     }
 
     /**
@@ -80,5 +87,7 @@ export function defineCustomElement(
 
   customElements.define(name, CustomElement)
 
-  return /** @type {HTMLElement & T} */ (/** @type {unknown} */ (CustomElement))
+  return /** @type {HTMLElement & Properties<T>} */ (
+    /** @type {unknown} */ (CustomElement)
+  )
 }
