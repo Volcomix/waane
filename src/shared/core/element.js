@@ -36,15 +36,15 @@ export const css = String.raw
  * @template {PropertyTypes} T
  * @param {string} name
  * @param {string} template
- * @param {Setup<T>} setup
  * @param {T} properties
+ * @param {Setup<T>} setup
  * @returns {HTMLElement & Properties<T>}
  */
 export function defineCustomElement(
   name,
   template,
-  setup = () => {},
   properties = /** @type {T} */ ({}),
+  setup = () => {},
 ) {
   const templateElement = document.createElement('template')
   templateElement.innerHTML = template

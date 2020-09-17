@@ -10,12 +10,15 @@ export default defineCustomElement(
     </style>
     <slot></slot>
   `,
+  {},
   ({ host, connected, disconnected }) => {
-    const menu = /** @type {HTMLElement} */ (host.querySelector('w-menu'))
-    menu.hidden = true
+    const menu = /** @type {import('./menu.js').default} */ (host.querySelector(
+      'w-menu',
+    ))
+    menu.open = false
 
     function onBodyClick() {
-      menu.hidden = true
+      menu.open = false
     }
 
     /**
@@ -43,7 +46,7 @@ export default defineCustomElement(
     })
     host.addEventListener('contextmenu', (event) => {
       event.preventDefault()
-      menu.hidden = false
+      menu.open = true
       setMenuPosition(event)
     })
   },

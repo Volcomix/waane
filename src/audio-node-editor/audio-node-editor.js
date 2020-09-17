@@ -10,6 +10,7 @@ export default defineCustomElement(
       </w-menu>
     </w-context-menu>
   `,
+  {},
   ({ host }) => {
     const graph = host.shadowRoot.querySelector('w-graph')
     const oscillatorMenuItem = /** @type {HTMLElement} */ (host.shadowRoot.querySelector(

@@ -2,7 +2,7 @@ import { afterEach, expect, test } from '@jest/globals'
 import { html } from '../../core/element'
 import '../context-menu'
 
-function renderContextMenu() {
+function setup() {
   document.body.innerHTML = html`
     <w-context-menu>
       <span>Some content</span>
@@ -17,7 +17,9 @@ function renderContextMenu() {
   return {
     contextMenu,
     content: contextMenu.querySelector('span'),
-    menu: /** @type {HTMLElement} */ (contextMenu.querySelector('w-menu')),
+    menu: /** @type {import('../menu.js').default} */ (contextMenu.querySelector(
+      'w-menu',
+    )),
   }
 }
 
@@ -26,15 +28,15 @@ afterEach(() => {
 })
 
 test('displays the menu', async () => {
-  const { content, menu } = renderContextMenu()
-  expect(menu.hidden).toBe(true)
+  const { content, menu } = setup()
+  expect(menu.open).toBe(false)
   content.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true }))
-  expect(menu.hidden).toBe(false)
+  expect(menu.open).toBe(true)
 })
 
 test('hides the menu', async () => {
-  const { menu } = renderContextMenu()
-  menu.hidden = false
+  const { menu } = setup()
+  menu.open = true
   document.body.click()
-  expect(menu.hidden).toBe(true)
+  expect(menu.open).toBe(false)
 })

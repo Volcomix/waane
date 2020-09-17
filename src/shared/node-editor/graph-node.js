@@ -26,6 +26,11 @@ export default defineCustomElement(
     </style>
     <slot></slot>
   `,
+  {
+    x: Number,
+    y: Number,
+    selected: Boolean,
+  },
   ({ host, observe }) => {
     observe('x', () => {
       host.style.left = `${host.x}px`
@@ -33,6 +38,8 @@ export default defineCustomElement(
     observe('y', () => {
       host.style.top = `${host.y}px`
     })
+    host.addEventListener('click', () => {
+      host.selected = true
+    })
   },
-  { x: Number, y: Number },
 )
