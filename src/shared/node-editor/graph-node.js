@@ -11,6 +11,7 @@ const style = css`
     color: rgba(var(--color-on-surface) / var(--text-high-emphasis));
     ${elevation(1)}
   }
+
   slot {
     display: flex;
     align-items: center;
@@ -18,28 +19,29 @@ const style = css`
     ${typography('headline6')}
   }
 `
-export default defineCustomElement(
-  'w-graph-node',
-  html`
+export default defineCustomElement('w-graph-node', {
+  template: html`
     <style>
       ${style}
     </style>
     <slot></slot>
   `,
-  {
+  properties: {
     x: Number,
     y: Number,
     selected: Boolean,
   },
-  ({ host, observe }) => {
+  setup({ host, observe }) {
     observe('x', () => {
       host.style.left = `${host.x}px`
     })
+
     observe('y', () => {
       host.style.top = `${host.y}px`
     })
+
     host.addEventListener('click', () => {
       host.selected = true
     })
   },
-)
+})

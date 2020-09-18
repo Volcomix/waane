@@ -1,8 +1,7 @@
 import { defineCustomElement, html } from '../core/element.js'
 
-export default defineCustomElement(
-  'w-context-menu',
-  html`
+export default defineCustomElement('w-context-menu', {
+  template: html`
     <style>
       ::slotted(w-menu) {
         position: fixed;
@@ -10,8 +9,7 @@ export default defineCustomElement(
     </style>
     <slot></slot>
   `,
-  {},
-  ({ host, connected, disconnected }) => {
+  setup({ host, connected, disconnected }) {
     const menu = /** @type {import('./menu.js').default} */ (host.querySelector(
       'w-menu',
     ))
@@ -41,13 +39,15 @@ export default defineCustomElement(
     connected(() => {
       document.body.addEventListener('click', onBodyClick)
     })
+
     disconnected(() => {
       document.body.removeEventListener('click', onBodyClick)
     })
+
     host.addEventListener('contextmenu', (event) => {
       event.preventDefault()
       menu.open = true
       setMenuPosition(event)
     })
   },
-)
+})

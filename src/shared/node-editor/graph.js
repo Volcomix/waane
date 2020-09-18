@@ -1,8 +1,7 @@
 import { defineCustomElement, html } from '../core/element.js'
 
-export default defineCustomElement(
-  'w-graph',
-  html`
+export default defineCustomElement('w-graph', {
+  template: html`
     <style>
       :host {
         display: block;
@@ -11,4 +10,4 @@ export default defineCustomElement(
     </style>
     <slot></slot>
   `,
-)
+})

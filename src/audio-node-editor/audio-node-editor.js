@@ -1,8 +1,7 @@
 import { defineCustomElement, html } from '../shared/core/element.js'
 
-export default defineCustomElement(
-  'audio-node-editor',
-  html`
+export default defineCustomElement('audio-node-editor', {
+  template: html`
     <w-context-menu>
       <w-graph></w-graph>
       <w-menu>
@@ -10,8 +9,7 @@ export default defineCustomElement(
       </w-menu>
     </w-context-menu>
   `,
-  {},
-  ({ host }) => {
+  setup({ host }) {
     const graph = host.shadowRoot.querySelector('w-graph')
     const oscillatorMenuItem = /** @type {HTMLElement} */ (host.shadowRoot.querySelector(
       'w-menu-item',
@@ -27,4 +25,4 @@ export default defineCustomElement(
       graph.appendChild(oscillatorNode)
     })
   },
-)
+})

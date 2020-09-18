@@ -34,17 +34,21 @@ export const css = String.raw
 
 /**
  * @template {PropertyTypes} T
+ * @typedef {object} DefineCustomElementOptions
+ * @property {string} [template]
+ * @property {T} [properties]
+ * @property {Setup<T>} [setup]
+ */
+
+/**
+ * @template {PropertyTypes} T
  * @param {string} name
- * @param {string} template
- * @param {T} properties
- * @param {Setup<T>} setup
+ * @param {DefineCustomElementOptions<T>} options
  * @returns {HTMLElement & Properties<T>}
  */
 export function defineCustomElement(
   name,
-  template,
-  properties = /** @type {T} */ ({}),
-  setup = () => {},
+  { template = '', properties = /** @type {T} */ ({}), setup = () => {} },
 ) {
   const templateElement = document.createElement('template')
   templateElement.innerHTML = template

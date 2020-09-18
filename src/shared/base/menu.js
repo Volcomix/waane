@@ -10,17 +10,19 @@ const style = css`
     color: rgba(var(--color-on-surface) / var(--text-high-emphasis));
     ${elevation(8)}
   }
+
   :host(:not([open])) {
     display: none;
   }
 `
-export default defineCustomElement(
-  'w-menu',
-  html`
+export default defineCustomElement('w-menu', {
+  template: html`
     <style>
       ${style}
     </style>
     <slot></slot>
   `,
-  { open: Boolean },
-)
+  properties: {
+    open: Boolean,
+  },
+})

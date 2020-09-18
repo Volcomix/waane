@@ -1,8 +1,7 @@
 import { defineCustomElement, html } from '../core/element.js'
 
-export default defineCustomElement(
-  'w-menu-item',
-  html`
+export default defineCustomElement('w-menu-item', {
+  template: html`
     <style>
       :host {
         display: flex;
@@ -13,13 +12,15 @@ export default defineCustomElement(
         user-select: none;
         transition: background-color 100ms var(--easing-standard);
       }
+
       :host(:hover) {
         background-color: rgba(var(--color-on-surface) / 0.04);
       }
+
       :host(:active) {
         background-color: rgba(var(--color-on-surface) / 0.16);
       }
     </style>
     <slot></slot>
   `,
-)
+})
