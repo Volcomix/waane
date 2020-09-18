@@ -4,7 +4,15 @@ export const css = String.raw
 /** @typedef {typeof Number | typeof Boolean} PropertyType */
 
 /**
+ * @template T
+ * @typedef {object} AccessorProperty
+ * @property {() => T} get
+ * @property {(value: T) => void} set
+ */
+
+/**
  * @param {string} attributeName
+ * @returns {AccessorProperty<number>}
  */
 function getNumberProperty(attributeName) {
   return {
@@ -13,10 +21,7 @@ function getNumberProperty(attributeName) {
       return Number(this.getAttribute(attributeName))
     },
 
-    /**
-     * @param {number} value
-     * @this {HTMLElement}
-     */
+    /** @this {HTMLElement} */
     set(value) {
       this.setAttribute(attributeName, String(value))
     },
@@ -25,6 +30,7 @@ function getNumberProperty(attributeName) {
 
 /**
  * @param {string} attributeName
+ * @returns {AccessorProperty<boolean>}
  */
 function getBooleanProperty(attributeName) {
   return {
@@ -33,10 +39,7 @@ function getBooleanProperty(attributeName) {
       return this.hasAttribute(attributeName)
     },
 
-    /**
-     * @param {boolean} value
-     * @this {HTMLElement}
-     */
+    /** @this {HTMLElement} */
     set(value) {
       if (value) {
         this.setAttribute(attributeName, '')
@@ -50,6 +53,7 @@ function getBooleanProperty(attributeName) {
 /**
  * @param {string} propertyName
  * @param {PropertyType} propertyType
+ * @returns {AccessorProperty<InstanceType<PropertyType>>}
  */
 function getProperty(propertyName, propertyType) {
   const attributeName = propertyName.replace(/[A-Z]/g, '-$&').toLowerCase()
