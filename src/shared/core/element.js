@@ -65,7 +65,7 @@ function getProperty(propertyName, propertyType) {
   }
 }
 
-/** @typedef {Object.<string, PropertyType} PropertyTypes */
+/** @typedef {Object.<string, PropertyType>} PropertyTypes */
 
 /**
  * @template {PropertyTypes} T
@@ -99,6 +99,7 @@ function getProperty(propertyName, propertyType) {
 /**
  * @template {PropertyTypes} T
  * @typedef {object} DefineCustomElementOptions
+ * @property {string} [styles]
  * @property {string} [template]
  * @property {T} [properties]
  * @property {Setup<T>} [setup]
@@ -112,10 +113,20 @@ function getProperty(propertyName, propertyType) {
  */
 export function defineCustomElement(
   name,
-  { template = '', properties = /** @type {T} */ ({}), setup = () => {} },
+  {
+    styles = '',
+    template = html`<slot></slot>`,
+    properties = /** @type {T} */ ({}),
+    setup = () => {},
+  },
 ) {
   const templateElement = document.createElement('template')
-  templateElement.innerHTML = template
+  templateElement.innerHTML = html`
+    <style>
+      ${styles}
+    </style>
+    ${template}
+  `
 
   const reflectedProperties = Object.entries(properties).reduce(
     (result, [propertyName, propertyType]) =>

@@ -1,13 +1,10 @@
-import { defineCustomElement, html } from '../core/element.js'
+import { css, defineCustomElement } from '../core/element.js'
 
 export default defineCustomElement('w-context-menu', {
-  template: html`
-    <style>
-      ::slotted(w-menu) {
-        position: fixed;
-      }
-    </style>
-    <slot></slot>
+  styles: css`
+    ::slotted(w-menu) {
+      position: fixed;
+    }
   `,
   setup({ host, connected, disconnected }) {
     const menu = /** @type {import('./menu.js').default} */ (host.querySelector(

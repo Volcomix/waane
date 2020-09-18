@@ -19,7 +19,7 @@ export default defineCustomElement('audio-node-editor', {
       const oscillatorNode = /** @type {import('../shared/node-editor/graph-node.js').default} */ (document.createElement(
         'w-graph-node',
       ))
-      oscillatorNode.innerHTML = 'Oscillator'
+      oscillatorNode.textContent = 'Oscillator'
       oscillatorNode.x = event.pageX
       oscillatorNode.y = event.pageY
       graph.appendChild(oscillatorNode)

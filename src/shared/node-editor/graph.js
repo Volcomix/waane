@@ -1,13 +1,10 @@
-import { defineCustomElement, html } from '../core/element.js'
+import { css, defineCustomElement } from '../core/element.js'
 
 export default defineCustomElement('w-graph', {
-  template: html`
-    <style>
-      :host {
-        display: block;
-        height: 100%;
-      }
-    </style>
-    <slot></slot>
+  styles: css`
+    :host {
+      display: block;
+      height: 100%;
+    }
   `,
 })
