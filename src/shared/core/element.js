@@ -1,7 +1,67 @@
 export const html = String.raw
 export const css = String.raw
 
-/** @typedef {Object.<string, typeof Number | typeof Boolean>} PropertyTypes */
+/** @typedef {typeof Number | typeof Boolean} PropertyType */
+
+/**
+ * @param {string} attributeName
+ */
+function getNumberProperty(attributeName) {
+  return {
+    /** @this {HTMLElement} */
+    get() {
+      return Number(this.getAttribute(attributeName))
+    },
+
+    /**
+     * @param {number} value
+     * @this {HTMLElement}
+     */
+    set(value) {
+      this.setAttribute(attributeName, String(value))
+    },
+  }
+}
+
+/**
+ * @param {string} attributeName
+ */
+function getBooleanProperty(attributeName) {
+  return {
+    /** @this {HTMLElement} */
+    get() {
+      return this.hasAttribute(attributeName)
+    },
+
+    /**
+     * @param {boolean} value
+     * @this {HTMLElement}
+     */
+    set(value) {
+      if (value) {
+        this.setAttribute(attributeName, '')
+      } else {
+        this.removeAttribute(attributeName)
+      }
+    },
+  }
+}
+
+/**
+ * @param {string} propertyName
+ * @param {PropertyType} propertyType
+ */
+function getProperty(propertyName, propertyType) {
+  const attributeName = propertyName.replace(/[A-Z]/g, '-$&').toLowerCase()
+  switch (propertyType) {
+    case Number:
+      return getNumberProperty(attributeName)
+    case Boolean:
+      return getBooleanProperty(attributeName)
+  }
+}
+
+/** @typedef {Object.<string, PropertyType} PropertyTypes */
 
 /**
  * @template {PropertyTypes} T
@@ -54,51 +114,10 @@ export function defineCustomElement(
   templateElement.innerHTML = template
 
   const reflectedProperties = Object.entries(properties).reduce(
-    (result, [propertyName, propertyType]) => {
-      const attributeName = propertyName.replace(/[A-Z]/g, '-$&').toLowerCase()
-
-      switch (propertyType) {
-        case Number:
-          return Object.assign(result, {
-            [propertyName]: {
-              /** @this {HTMLElement} */
-              get() {
-                return Number(this.getAttribute(attributeName))
-              },
-
-              /**
-               * @param {number} value
-               * @this {HTMLElement}
-               */
-              set(value) {
-                this.setAttribute(attributeName, String(value))
-              },
-            },
-          })
-
-        case Boolean:
-          return Object.assign(result, {
-            [propertyName]: {
-              /** @this {HTMLElement} */
-              get() {
-                return this.hasAttribute(attributeName)
-              },
-
-              /**
-               * @param {boolean} value
-               * @this {HTMLElement}
-               */
-              set(value) {
-                if (value) {
-                  this.setAttribute(attributeName, '')
-                } else {
-                  this.removeAttribute(attributeName)
-                }
-              },
-            },
-          })
-      }
-    },
+    (result, [propertyName, propertyType]) =>
+      Object.assign(result, {
+        [propertyName]: getProperty(propertyName, propertyType),
+      }),
     {},
   )
 
