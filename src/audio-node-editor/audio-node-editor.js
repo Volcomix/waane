@@ -1,4 +1,5 @@
 import { defineCustomElement, html } from '../shared/core/element.js'
+import useSelection from '../shared/core/use-selection.js'
 
 /** @typedef {import('../shared/node-editor/graph-node.js').default} GraphNode */
 
@@ -19,27 +20,7 @@ export default defineCustomElement('audio-node-editor', {
       'w-menu-item',
     ))
 
-    graph.addEventListener('click', (event) => {
-      if (!event.ctrlKey) {
-        graph.querySelectorAll('w-graph-node[selected]').forEach((
-          /** @type {GraphNode} */ graphNode,
-        ) => {
-          graphNode.selected = false
-        })
-      }
-
-      let element = /** @type {Element} */ (event.target)
-      while (element !== graph) {
-        if (element.tagName === 'W-GRAPH-NODE') {
-          const selectedGraphNode = /** @type {GraphNode} */ (element)
-          selectedGraphNode.selected = event.ctrlKey
-            ? !selectedGraphNode.selected
-            : true
-          break
-        }
-        element = element.parentElement
-      }
-    })
+    useSelection(graph, 'w-graph-node')
 
     oscillatorMenuItem.addEventListener('click', (event) => {
       const oscillatorNode = /** @type {GraphNode} */ (document.createElement(
