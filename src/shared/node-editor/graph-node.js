@@ -1,5 +1,6 @@
 import { css, defineCustomElement } from '../core/element.js'
 import elevation from '../core/elevation.js'
+import icon from '../core/icon.js'
 import typography from '../core/typography.js'
 
 export default defineCustomElement('w-graph-node', {
@@ -27,6 +28,7 @@ export default defineCustomElement('w-graph-node', {
       right: 0;
       bottom: 0;
       left: 0;
+      padding: 8px;
       border-radius: 4px;
       text-align: right;
       transition: background-color 200ms var(--easing-standard);
@@ -41,13 +43,17 @@ export default defineCustomElement('w-graph-node', {
     }
 
     :host([selected]):after {
+      ${icon}
+      content: 'check_circle';
       background-color: rgba(var(--color-primary) / 0.08);
+      color: rgb(var(--color-primary));
     }
 
     slot {
       display: flex;
       align-items: center;
       height: 32px;
+      margin-right: 24px;
       ${typography('headline6')}
     }
   `,
