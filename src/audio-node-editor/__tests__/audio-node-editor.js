@@ -50,7 +50,7 @@ test('adds an oscillator node', () => {
   ])
 })
 
-test('selects single nodes', () => {
+test('selects nodes', () => {
   const { graph, getGraphNodes, addAudioNode } = setup()
   addAudioNode('Oscillator')
   addAudioNode('Oscillator')
@@ -65,4 +65,32 @@ test('selects single nodes', () => {
 
   expect(graphNode1.selected).toBe(false)
   expect(graphNode2.selected).toBe(false)
+})
+
+test('inverts node selection', () => {
+  const { graph, getGraphNodes, addAudioNode } = setup()
+  addAudioNode('Oscillator')
+  addAudioNode('Oscillator')
+  const [graphNode1, graphNode2] = getGraphNodes()
+
+  graphNode1.dispatchEvent(
+    new MouseEvent('click', { ctrlKey: true, bubbles: true }),
+  )
+
+  expect(graphNode1.selected).toBe(true)
+  expect(graphNode2.selected).toBe(false)
+
+  graphNode2.dispatchEvent(
+    new MouseEvent('click', { ctrlKey: true, bubbles: true }),
+  )
+
+  expect(graphNode1.selected).toBe(true)
+  expect(graphNode2.selected).toBe(true)
+
+  graphNode1.dispatchEvent(
+    new MouseEvent('click', { ctrlKey: true, bubbles: true }),
+  )
+
+  expect(graphNode1.selected).toBe(false)
+  expect(graphNode2.selected).toBe(true)
 })

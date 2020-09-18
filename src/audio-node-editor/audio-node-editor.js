@@ -20,16 +20,21 @@ export default defineCustomElement('audio-node-editor', {
     ))
 
     graph.addEventListener('click', (event) => {
-      graph.querySelectorAll('w-graph-node').forEach((
-        /** @type {GraphNode} */ graphNode,
-      ) => {
-        graphNode.selected = false
-      })
+      if (!event.ctrlKey) {
+        graph.querySelectorAll('w-graph-node').forEach((
+          /** @type {GraphNode} */ graphNode,
+        ) => {
+          graphNode.selected = false
+        })
+      }
+
       let element = /** @type {Element} */ (event.target)
       while (element !== graph) {
         if (element.tagName === 'W-GRAPH-NODE') {
           const selectedGraphNode = /** @type {GraphNode} */ (element)
-          selectedGraphNode.selected = true
+          selectedGraphNode.selected = event.ctrlKey
+            ? !selectedGraphNode.selected
+            : true
           break
         }
         element = element.parentElement
