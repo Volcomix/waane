@@ -16,13 +16,17 @@ export default defineCustomElement('w-graph-node', {
       ${elevation(1)}
     }
 
-    :host(:hover),
-    :host([selected]) {
+    :host(:hover) {
       ${elevation(4)}
     }
 
+    :host([selected]) {
+      ${elevation(3)}
+    }
+
     :host:after {
-      content: '';
+      ${icon}
+      content: 'check_circle';
       position: absolute;
       top: 0;
       right: 0;
@@ -31,7 +35,9 @@ export default defineCustomElement('w-graph-node', {
       padding: 8px;
       border-radius: 4px;
       text-align: right;
-      transition: background-color 200ms var(--easing-standard);
+      color: transparent;
+      transition: background-color 200ms var(--easing-standard),
+        color 100ms var(--easing-accelerated);
     }
 
     :host(:hover):after {
@@ -43,10 +49,10 @@ export default defineCustomElement('w-graph-node', {
     }
 
     :host([selected]):after {
-      ${icon}
-      content: 'check_circle';
       background-color: rgba(var(--color-primary) / 0.08);
       color: rgb(var(--color-primary));
+      transition: background-color 200ms var(--easing-standard),
+        color 100ms var(--easing-decelerated);
     }
 
     slot {
