@@ -21,7 +21,7 @@ export default defineCustomElement('audio-node-editor', {
 
     graph.addEventListener('click', (event) => {
       if (!event.ctrlKey) {
-        graph.querySelectorAll('w-graph-node').forEach((
+        graph.querySelectorAll('w-graph-node[selected]').forEach((
           /** @type {GraphNode} */ graphNode,
         ) => {
           graphNode.selected = false
