@@ -27,7 +27,7 @@ style.textContent = css`
   }
 
   body {
-    margin: 0%;
+    margin: 0;
     background-color: rgb(var(--color-background));
     color: rgba(var(--color-on-background) / var(--text-high-emphasis));
   }

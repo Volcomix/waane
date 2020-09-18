@@ -10,7 +10,38 @@ export default defineCustomElement('w-graph-node', {
       border-radius: 4px;
       background-color: rgb(var(--color-surface));
       color: rgba(var(--color-on-surface) / var(--text-high-emphasis));
+      transition: box-shadow 150ms var(--easing-standard);
+      user-select: none;
       ${elevation(1)}
+    }
+
+    :host(:hover),
+    :host([selected]) {
+      ${elevation(4)}
+    }
+
+    :host:after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      border-radius: 4px;
+      text-align: right;
+      transition: background-color 200ms var(--easing-standard);
+    }
+
+    :host(:hover):after {
+      background-color: rgba(var(--color-on-surface) / 0.04);
+    }
+
+    :host(:active):after {
+      background-color: rgba(var(--color-primary) / 0.16);
+    }
+
+    :host([selected]):after {
+      background-color: rgba(var(--color-primary) / 0.08);
     }
 
     slot {
@@ -32,10 +63,6 @@ export default defineCustomElement('w-graph-node', {
 
     observe('y', () => {
       host.style.top = `${host.y}px`
-    })
-
-    host.addEventListener('click', () => {
-      host.selected = true
     })
   },
 })

@@ -5,13 +5,16 @@ import { html } from '../../shared/core/element'
 function setup() {
   document.body.innerHTML = html`<audio-node-editor></audio-node-editor>`
   const audioNodeEditor = document.body.querySelector('audio-node-editor')
-  const graph = audioNodeEditor.shadowRoot.querySelector('w-graph')
+  const graph = /** @type {HTMLElement} */ (audioNodeEditor.shadowRoot.querySelector(
+    'w-graph',
+  ))
 
   return {
     audioNodeEditor,
+    graph,
 
-    getGraphNode: () =>
-      /** @type {import('../../shared/node-editor/graph-node.js').default} */ (audioNodeEditor.shadowRoot.querySelector(
+    getGraphNodes: () =>
+      /** @type {NodeListOf<import('../../shared/node-editor/graph-node.js').default>} */ (audioNodeEditor.shadowRoot.querySelectorAll(
         'w-graph-node',
       )),
 
@@ -35,20 +38,31 @@ afterEach(() => {
 })
 
 test('has no node by default', () => {
-  const { getGraphNode } = setup()
-  expect(getGraphNode()).toBeNull()
+  const { getGraphNodes } = setup()
+  expect(getGraphNodes()).toHaveLength(0)
 })
 
 test('adds an oscillator node', () => {
-  const { getGraphNode, addAudioNode } = setup()
+  const { getGraphNodes, addAudioNode } = setup()
   addAudioNode('Oscillator')
-  expect(getGraphNode().textContent).toBe('Oscillator')
+  expect([...getGraphNodes()]).toEqual([
+    expect.objectContaining({ textContent: 'Oscillator' }),
+  ])
 })
 
-test('selects a single node', () => {
-  const { getGraphNode, addAudioNode } = setup()
+test('selects single nodes', () => {
+  const { graph, getGraphNodes, addAudioNode } = setup()
   addAudioNode('Oscillator')
-  const graphNode = getGraphNode()
-  graphNode.click()
-  expect(graphNode.selected).toBe(true)
+  addAudioNode('Oscillator')
+  const [graphNode1, graphNode2] = getGraphNodes()
+
+  graphNode1.click()
+
+  expect(graphNode1.selected).toBe(true)
+  expect(graphNode2.selected).toBe(false)
+
+  graph.click()
+
+  expect(graphNode1.selected).toBe(false)
+  expect(graphNode2.selected).toBe(false)
 })
