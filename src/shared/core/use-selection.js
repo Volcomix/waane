@@ -31,7 +31,13 @@ const SelectionRectangle = defineCustomElement('w-selection-rectangle', {
   },
 })
 
-/** @typedef {HTMLElement & { selected: boolean }} SelectableElement */
+/**
+ * @typedef {object} SelectableProps
+ * @property {boolean} selecting
+ * @property {boolean} selected
+ */
+
+/** @typedef {HTMLElement & SelectableProps} SelectableElement */
 
 /**
  * @param {HTMLElement} container
@@ -61,9 +67,7 @@ export default function useSelection(container, tagName) {
     while (element !== container) {
       if (element.tagName === tagNameUpperCase) {
         const clickedElement = /** @type {SelectableElement} */ (element)
-        clickedElement.selected = event.ctrlKey
-          ? !clickedElement.selected
-          : true
+        clickedElement.selected = !clickedElement.selected
         break
       }
       element = element.parentElement
@@ -92,7 +96,9 @@ export default function useSelection(container, tagName) {
     }
     if (!selectionRectangle.isConnected) {
       container.appendChild(selectionRectangle)
-      unselectAll()
+      if (!event.ctrlKey) {
+        unselectAll()
+      }
     }
     selectionRectangle.toX = event.pageX
     selectionRectangle.toY = event.pageY
@@ -103,13 +109,19 @@ export default function useSelection(container, tagName) {
     ) => {
       const { x, y, width, height } = element.getBoundingClientRect()
       const elementBox = { min: { x, y }, max: { x: x + width, y: y + height } }
-      element.selected = doOverlap(selectionBox, elementBox)
+      element.selecting = doOverlap(selectionBox, elementBox)
     })
   })
 
   container.addEventListener('mouseup', () => {
     selectionRectangle.remove()
     isRectangularSelection = false
+    container.querySelectorAll(`${tagName}[selecting]`).forEach((
+      /** @type {SelectableElement} */ element,
+    ) => {
+      element.selected = !element.selected
+      element.selecting = false
+    })
   })
 }
 

@@ -20,7 +20,8 @@ export default defineCustomElement('w-graph-node', {
       ${elevation(3)}
     }
 
-    :host(:hover) {
+    :host(:hover),
+    :host([selecting]) {
       ${elevation(4)}
     }
 
@@ -51,8 +52,14 @@ export default defineCustomElement('w-graph-node', {
         color 100ms var(--easing-decelerated);
     }
 
-    :host(:active):after {
+    :host(:active):after,
+    :host([selecting]):after {
       background-color: rgba(var(--color-primary) / 0.16);
+    }
+
+    :host([selected][selecting]):after {
+      background-color: transparent;
+      color: rgba(var(--color-primary) / 0.24);
     }
 
     slot {
@@ -66,6 +73,7 @@ export default defineCustomElement('w-graph-node', {
   properties: {
     x: Number,
     y: Number,
+    selecting: Boolean,
     selected: Boolean,
   },
   setup({ host, observe }) {
