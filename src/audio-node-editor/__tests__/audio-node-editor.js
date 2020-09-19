@@ -68,7 +68,7 @@ test('selects nodes', () => {
 })
 
 test('inverts node selection', () => {
-  const { graph, getGraphNodes, addAudioNode } = setup()
+  const { getGraphNodes, addAudioNode } = setup()
   addAudioNode('Oscillator')
   addAudioNode('Oscillator')
   const [graphNode1, graphNode2] = getGraphNodes()
@@ -93,4 +93,35 @@ test('inverts node selection', () => {
 
   expect(graphNode1.selected).toBe(false)
   expect(graphNode2.selected).toBe(true)
+})
+
+test('moves nodes', () => {
+  const { graph, getGraphNodes, addAudioNode } = setup()
+  addAudioNode('Oscillator')
+  addAudioNode('Oscillator')
+  addAudioNode('Oscillator')
+  const [graphNode1, graphNode2, graphNode3] = getGraphNodes()
+  graphNode1.x = 0
+  graphNode1.y = 0
+  graphNode2.x = 10
+  graphNode2.y = 10
+  graphNode3.x = 20
+  graphNode3.y = 20
+
+  graphNode1.dispatchEvent(
+    new MouseEvent('click', { ctrlKey: true, bubbles: true }),
+  )
+  graphNode2.dispatchEvent(
+    new MouseEvent('click', { ctrlKey: true, bubbles: true }),
+  )
+
+  graphNode1.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }))
+  graph.dispatchEvent(
+    Object.assign(new MouseEvent('mousemove'), { movementX: 5, movementY: 5 }),
+  )
+  graph.dispatchEvent(new MouseEvent('mouseup'))
+
+  expect(graphNode1).toMatchObject({ x: 5, y: 5 })
+  expect(graphNode2).toMatchObject({ x: 15, y: 15 })
+  expect(graphNode3).toMatchObject({ x: 20, y: 20 })
 })

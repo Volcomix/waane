@@ -45,7 +45,6 @@ const SelectionRectangle = defineCustomElement('w-selection-rectangle', {
  * @param {string} tagName
  */
 export default function useSelection(container, tagName) {
-  const tagNameUpperCase = tagName.toUpperCase()
   let isRectangleSelection = false
   const selectionRectangle = /** @type {SelectionRectangle} */ (document.createElement(
     'w-selection-rectangle',
@@ -70,7 +69,7 @@ export default function useSelection(container, tagName) {
 
     let element = /** @type {Element} */ (event.target)
     while (element !== container) {
-      if (element.tagName === tagNameUpperCase) {
+      if (element.matches(tagName)) {
         const clickedElement = /** @type {SelectableElement} */ (element)
         clickedElement.selected = !clickedElement.selected
         break
@@ -85,7 +84,7 @@ export default function useSelection(container, tagName) {
     }
     let element = /** @type {Element} */ (event.target)
     while (element !== container) {
-      if (element.tagName === tagNameUpperCase) {
+      if (element.matches(tagName)) {
         return
       }
       element = element.parentElement
