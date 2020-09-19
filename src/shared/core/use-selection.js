@@ -46,7 +46,7 @@ const SelectionRectangle = defineCustomElement('w-selection-rectangle', {
  */
 export default function useSelection(container, tagName) {
   const tagNameUpperCase = tagName.toUpperCase()
-  let isRectangularSelection = false
+  let isRectangleSelection = false
   const selectionRectangle = /** @type {SelectionRectangle} */ (document.createElement(
     'w-selection-rectangle',
   ))
@@ -90,13 +90,13 @@ export default function useSelection(container, tagName) {
       }
       element = element.parentElement
     }
-    isRectangularSelection = true
+    isRectangleSelection = true
     selectionRectangle.fromX = event.pageX
     selectionRectangle.fromY = event.pageY
   })
 
   container.addEventListener('mousemove', (event) => {
-    if (!isRectangularSelection) {
+    if (!isRectangleSelection) {
       return
     }
     if (!selectionRectangle.isConnected) {
@@ -119,7 +119,7 @@ export default function useSelection(container, tagName) {
   })
 
   container.addEventListener('mouseup', () => {
-    isRectangularSelection = false
+    isRectangleSelection = false
     if (!selectionRectangle.isConnected) {
       return
     }
