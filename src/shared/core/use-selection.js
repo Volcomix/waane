@@ -120,24 +120,12 @@ export default function useSelection(container, tagName) {
 function getSelectionBox(selectionRectangle) {
   return {
     min: {
-      x: Math.min(
-        selectionRectangle.fromX.valueOf(),
-        selectionRectangle.toX.valueOf(),
-      ),
-      y: Math.min(
-        selectionRectangle.fromY.valueOf(),
-        selectionRectangle.toY.valueOf(),
-      ),
+      x: Math.min(selectionRectangle.fromX, selectionRectangle.toX),
+      y: Math.min(selectionRectangle.fromY, selectionRectangle.toY),
     },
     max: {
-      x: Math.max(
-        selectionRectangle.fromX.valueOf(),
-        selectionRectangle.toX.valueOf(),
-      ),
-      y: Math.max(
-        selectionRectangle.fromY.valueOf(),
-        selectionRectangle.toY.valueOf(),
-      ),
+      x: Math.max(selectionRectangle.fromX, selectionRectangle.toX),
+      y: Math.max(selectionRectangle.fromY, selectionRectangle.toY),
     },
   }
 }

@@ -4,6 +4,16 @@ export const css = String.raw
 /** @typedef {typeof Number | typeof Boolean} PropertyType */
 
 /**
+ * @template {PropertyType} T
+ * @typedef {T extends typeof Number
+ *  ? number
+ *  : T extends typeof Boolean
+ *  ? boolean
+ *  : never
+ * } PrimitiveType
+ */
+
+/**
  * @template T
  * @typedef {object} AccessorProperty
  * @property {() => T} get
@@ -53,7 +63,7 @@ function getBooleanProperty(attributeName) {
 /**
  * @param {string} attributeName
  * @param {PropertyType} propertyType
- * @returns {AccessorProperty<InstanceType<PropertyType>>}
+ * @returns {AccessorProperty<PrimitiveType<PropertyType>>}
  */
 function getProperty(attributeName, propertyType) {
   switch (propertyType) {
@@ -68,11 +78,11 @@ function getProperty(attributeName, propertyType) {
 
 /**
  * @template {PropertyTypes} T
- * @typedef {{[P in keyof T]: InstanceType<T[P]>}} Properties
+ * @typedef {{[P in keyof T]: PrimitiveType<T[P]>}} Properties
  */
 
 /**
- * @template T
+ * @template {PropertyTypes} T
  * @callback Observe
  * @param {keyof T} propertyName
  * @param {() => void} callback
@@ -89,7 +99,7 @@ function getProperty(attributeName, propertyType) {
  */
 
 /**
- * @template T
+ * @template {PropertyTypes} T
  * @callback Setup
  * @param {SetupOptions<T>} options
  * @returns {void}
