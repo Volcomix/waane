@@ -8,6 +8,7 @@ const SelectionRectangle = defineCustomElement('w-selection-rectangle', {
       z-index: 8;
       border: 1px solid rgba(var(--color-primary) / var(--text-medium-emphasis));
       background-color: rgba(var(--color-primary) / 0.08);
+      pointer-events: none; /* Required to keep click event firing */
     }
   `,
   properties: {
@@ -59,6 +60,10 @@ export default function useSelection(container, tagName) {
   }
 
   container.addEventListener('click', (event) => {
+    if (selectionRectangle.isConnected) {
+      selectionRectangle.remove()
+      return
+    }
     if (!event.ctrlKey) {
       unselectAll()
     }
@@ -114,8 +119,10 @@ export default function useSelection(container, tagName) {
   })
 
   container.addEventListener('mouseup', () => {
-    selectionRectangle.remove()
     isRectangularSelection = false
+    if (!selectionRectangle.isConnected) {
+      return
+    }
     container.querySelectorAll(`${tagName}[selecting]`).forEach((
       /** @type {SelectableElement} */ element,
     ) => {
