@@ -1,3 +1,4 @@
+import { doOverlap } from '../helpers/geometry.js'
 import { css, defineCustomElement } from './element.js'
 
 const SelectionRectangle = defineCustomElement('w-selection-rectangle', {
@@ -17,23 +18,15 @@ const SelectionRectangle = defineCustomElement('w-selection-rectangle', {
   },
   setup({ host, observe }) {
     observe('toX', () => {
-      if (host.fromX < host.toX) {
-        host.style.left = `${host.fromX}px`
-        host.style.width = `${host.toX.valueOf() - host.fromX.valueOf()}px`
-      } else {
-        host.style.left = `${host.toX}px`
-        host.style.width = `${host.fromX.valueOf() - host.toX.valueOf()}px`
-      }
+      const selectionBox = getSelectionBox(host)
+      host.style.left = `${selectionBox.min.x}px`
+      host.style.width = `${selectionBox.max.x - selectionBox.min.x}px`
     })
 
     observe('toY', () => {
-      if (host.fromY < host.toY) {
-        host.style.top = `${host.fromY}px`
-        host.style.height = `${host.toY.valueOf() - host.fromY.valueOf()}px`
-      } else {
-        host.style.top = `${host.toY}px`
-        host.style.height = `${host.fromY.valueOf() - host.toY.valueOf()}px`
-      }
+      const selectionBox = getSelectionBox(host)
+      host.style.top = `${selectionBox.min.y}px`
+      host.style.height = `${selectionBox.max.y - selectionBox.min.y}px`
     })
   },
 })
@@ -103,10 +96,48 @@ export default function useSelection(container, tagName) {
     }
     selectionRectangle.toX = event.pageX
     selectionRectangle.toY = event.pageY
+
+    const selectionBox = getSelectionBox(selectionRectangle)
+    container.querySelectorAll(tagName).forEach((
+      /** @type {SelectableElement} */ element,
+    ) => {
+      const { x, y, width, height } = element.getBoundingClientRect()
+      const elementBox = { min: { x, y }, max: { x: x + width, y: y + height } }
+      element.selected = doOverlap(selectionBox, elementBox)
+    })
   })
 
   container.addEventListener('mouseup', () => {
     selectionRectangle.remove()
     isRectangularSelection = false
   })
+}
+
+/**
+ * @param {SelectionRectangle} selectionRectangle
+ * @returns {import('../helpers/geometry.js').Box}
+ */
+function getSelectionBox(selectionRectangle) {
+  return {
+    min: {
+      x: Math.min(
+        selectionRectangle.fromX.valueOf(),
+        selectionRectangle.toX.valueOf(),
+      ),
+      y: Math.min(
+        selectionRectangle.fromY.valueOf(),
+        selectionRectangle.toY.valueOf(),
+      ),
+    },
+    max: {
+      x: Math.max(
+        selectionRectangle.fromX.valueOf(),
+        selectionRectangle.toX.valueOf(),
+      ),
+      y: Math.max(
+        selectionRectangle.fromY.valueOf(),
+        selectionRectangle.toY.valueOf(),
+      ),
+    },
+  }
 }

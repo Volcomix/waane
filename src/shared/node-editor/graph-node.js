@@ -16,12 +16,12 @@ export default defineCustomElement('w-graph-node', {
       ${elevation(1)}
     }
 
-    :host(:hover) {
-      ${elevation(4)}
-    }
-
     :host([selected]) {
       ${elevation(3)}
+    }
+
+    :host(:hover) {
+      ${elevation(4)}
     }
 
     :host:after {
@@ -44,15 +44,15 @@ export default defineCustomElement('w-graph-node', {
       background-color: rgba(var(--color-on-surface) / 0.04);
     }
 
-    :host(:active):after {
-      background-color: rgba(var(--color-primary) / 0.16);
-    }
-
     :host([selected]):after {
       background-color: rgba(var(--color-primary) / 0.08);
       color: rgb(var(--color-primary));
       transition: background-color 200ms var(--easing-standard),
         color 100ms var(--easing-decelerated);
+    }
+
+    :host(:active):after {
+      background-color: rgba(var(--color-primary) / 0.16);
     }
 
     slot {
