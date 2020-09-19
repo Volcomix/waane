@@ -1,11 +1,6 @@
-import { css, defineCustomElement } from '../core/element.js'
+import { defineCustomElement } from '../core/element.js'
 
 export default defineCustomElement('w-context-menu', {
-  styles: css`
-    ::slotted(w-menu) {
-      position: fixed;
-    }
-  `,
   setup({ host, connected, disconnected }) {
     const menu = /** @type {import('./menu.js').default} */ (host.querySelector(
       'w-menu',
@@ -21,16 +16,14 @@ export default defineCustomElement('w-context-menu', {
      */
     function setMenuPosition(event) {
       const { width, height } = menu.getBoundingClientRect()
-      const x = Math.min(
+      menu.x = Math.min(
         event.clientX,
         document.documentElement.clientWidth - width,
       )
-      const y = Math.min(
+      menu.y = Math.min(
         event.clientY,
         document.documentElement.clientHeight - height,
       )
-      menu.style.left = `${x}px`
-      menu.style.top = `${y}px`
     }
 
     connected(() => {

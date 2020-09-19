@@ -1,3 +1,43 @@
+import { css, defineCustomElement } from './element.js'
+
+const SelectionRectangle = defineCustomElement('w-selection-rectangle', {
+  styles: css`
+    :host {
+      position: absolute;
+      z-index: 8;
+      border: 1px solid rgba(var(--color-primary) / var(--text-medium-emphasis));
+      background-color: rgba(var(--color-primary) / 0.08);
+    }
+  `,
+  properties: {
+    fromX: Number,
+    fromY: Number,
+    toX: Number,
+    toY: Number,
+  },
+  setup({ host, observe }) {
+    observe('toX', () => {
+      if (host.fromX < host.toX) {
+        host.style.left = `${host.fromX}px`
+        host.style.width = `${host.toX.valueOf() - host.fromX.valueOf()}px`
+      } else {
+        host.style.left = `${host.toX}px`
+        host.style.width = `${host.fromX.valueOf() - host.toX.valueOf()}px`
+      }
+    })
+
+    observe('toY', () => {
+      if (host.fromY < host.toY) {
+        host.style.top = `${host.fromY}px`
+        host.style.height = `${host.toY.valueOf() - host.fromY.valueOf()}px`
+      } else {
+        host.style.top = `${host.toY}px`
+        host.style.height = `${host.fromY.valueOf() - host.toY.valueOf()}px`
+      }
+    })
+  },
+})
+
 /** @typedef {HTMLElement & { selected: boolean }} SelectableElement */
 
 /**
@@ -6,14 +46,22 @@
  */
 export default function useSelection(container, tagName) {
   const tagNameUpperCase = tagName.toUpperCase()
+  let isRectangularSelection = false
+  const selectionRectangle = /** @type {SelectionRectangle} */ (document.createElement(
+    'w-selection-rectangle',
+  ))
+
+  function unselectAll() {
+    container.querySelectorAll(`${tagName}[selected]`).forEach((
+      /** @type {SelectableElement} */ element,
+    ) => {
+      element.selected = false
+    })
+  }
 
   container.addEventListener('click', (event) => {
     if (!event.ctrlKey) {
-      container.querySelectorAll(`${tagName}[selected]`).forEach((
-        /** @type {SelectableElement} */ element,
-      ) => {
-        element.selected = false
-      })
+      unselectAll()
     }
 
     let element = /** @type {Element} */ (event.target)
@@ -27,5 +75,38 @@ export default function useSelection(container, tagName) {
       }
       element = element.parentElement
     }
+  })
+
+  container.addEventListener('mousedown', (event) => {
+    if (event.button !== 0) {
+      return
+    }
+    let element = /** @type {Element} */ (event.target)
+    while (element !== container) {
+      if (element.tagName === tagNameUpperCase) {
+        return
+      }
+      element = element.parentElement
+    }
+    isRectangularSelection = true
+    selectionRectangle.fromX = event.pageX
+    selectionRectangle.fromY = event.pageY
+  })
+
+  container.addEventListener('mousemove', (event) => {
+    if (!isRectangularSelection) {
+      return
+    }
+    if (!selectionRectangle.isConnected) {
+      container.appendChild(selectionRectangle)
+      unselectAll()
+    }
+    selectionRectangle.toX = event.pageX
+    selectionRectangle.toY = event.pageY
+  })
+
+  container.addEventListener('mouseup', () => {
+    selectionRectangle.remove()
+    isRectangularSelection = false
   })
 }

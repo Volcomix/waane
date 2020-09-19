@@ -4,6 +4,7 @@ import elevation from '../core/elevation.js'
 export default defineCustomElement('w-menu', {
   styles: css`
     :host {
+      position: fixed;
       min-width: 112px;
       padding: 8px 0;
       border-radius: 4px;
@@ -18,5 +19,16 @@ export default defineCustomElement('w-menu', {
   `,
   properties: {
     open: Boolean,
+    x: Number,
+    y: Number,
+  },
+  setup({ host, observe }) {
+    observe('x', () => {
+      host.style.left = `${host.x}px`
+    })
+
+    observe('y', () => {
+      host.style.top = `${host.y}px`
+    })
   },
 })

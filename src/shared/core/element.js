@@ -51,12 +51,11 @@ function getBooleanProperty(attributeName) {
 }
 
 /**
- * @param {string} propertyName
+ * @param {string} attributeName
  * @param {PropertyType} propertyType
  * @returns {AccessorProperty<InstanceType<PropertyType>>}
  */
-function getProperty(propertyName, propertyType) {
-  const attributeName = propertyName.replace(/[A-Z]/g, '-$&').toLowerCase()
+function getProperty(attributeName, propertyType) {
   switch (propertyType) {
     case Number:
       return getNumberProperty(attributeName)
@@ -128,10 +127,21 @@ export function defineCustomElement(
     ${template}
   `
 
+  const attributesByProperty = Object.keys(properties).reduce(
+    (result, propertyName) =>
+      Object.assign(result, {
+        [propertyName]: propertyName.replace(/[A-Z]/g, '-$&').toLowerCase(),
+      }),
+    {},
+  )
+
   const reflectedProperties = Object.entries(properties).reduce(
     (result, [propertyName, propertyType]) =>
       Object.assign(result, {
-        [propertyName]: getProperty(propertyName, propertyType),
+        [propertyName]: getProperty(
+          attributesByProperty[propertyName],
+          propertyType,
+        ),
       }),
     {},
   )
@@ -141,9 +151,9 @@ export function defineCustomElement(
     _disconnectedCallback = () => {}
 
     /** @type {Object.<string, () => void>} */
-    _attributeChangedCallbacks = Object.keys(properties).reduce(
-      (callbacks, propertyName) =>
-        Object.assign(callbacks, { [propertyName]: () => {} }),
+    _attributeChangedCallbacks = Object.values(attributesByProperty).reduce(
+      (callbacks, attributeName) =>
+        Object.assign(callbacks, { [attributeName]: () => {} }),
       {},
     )
 
@@ -167,13 +177,14 @@ export function defineCustomElement(
           /** @type {string} */ propertyName,
           callback,
         ) => {
-          this._attributeChangedCallbacks[propertyName] = callback
+          const attributeName = attributesByProperty[propertyName]
+          this._attributeChangedCallbacks[attributeName] = callback
         }),
       })
     }
 
     static get observedAttributes() {
-      return Object.keys(properties)
+      return Object.values(attributesByProperty)
     }
 
     connectedCallback() {
