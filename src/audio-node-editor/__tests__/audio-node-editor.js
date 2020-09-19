@@ -29,6 +29,7 @@ function setup() {
         ),
       ].find((element) => element.textContent === audioNodeName))
       menuItem.click()
+      graph.click()
     },
   }
 }

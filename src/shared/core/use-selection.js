@@ -41,24 +41,24 @@ const SelectionRectangle = defineCustomElement('w-selection-rectangle', {
 /** @typedef {HTMLElement & SelectableProps} SelectableElement */
 
 /**
- * @param {HTMLElement} container
+ * @param {HTMLElement} host
  * @param {string} tagName
  */
-export default function useSelection(container, tagName) {
+export default function useSelection(host, tagName) {
   let isRectangleSelection = false
   const selectionRectangle = /** @type {SelectionRectangle} */ (document.createElement(
     'w-selection-rectangle',
   ))
 
   function unselectAll() {
-    container.querySelectorAll(`${tagName}[selected]`).forEach((
+    host.querySelectorAll(`${tagName}[selected]`).forEach((
       /** @type {SelectableElement} */ element,
     ) => {
       element.selected = false
     })
   }
 
-  container.addEventListener('click', (event) => {
+  host.addEventListener('click', (event) => {
     if (selectionRectangle.isConnected) {
       selectionRectangle.remove()
       return
@@ -66,9 +66,8 @@ export default function useSelection(container, tagName) {
     if (!event.ctrlKey) {
       unselectAll()
     }
-
     let element = /** @type {Element} */ (event.target)
-    while (element !== container) {
+    while (element !== host) {
       if (element.matches(tagName)) {
         const clickedElement = /** @type {SelectableElement} */ (element)
         clickedElement.selected = !clickedElement.selected
@@ -78,12 +77,12 @@ export default function useSelection(container, tagName) {
     }
   })
 
-  container.addEventListener('mousedown', (event) => {
+  host.addEventListener('mousedown', (event) => {
     if (event.button !== 0) {
       return
     }
     let element = /** @type {Element} */ (event.target)
-    while (element !== container) {
+    while (element !== host) {
       if (element.matches(tagName)) {
         return
       }
@@ -94,12 +93,12 @@ export default function useSelection(container, tagName) {
     selectionRectangle.fromY = event.pageY
   })
 
-  container.addEventListener('mousemove', (event) => {
+  host.addEventListener('mousemove', (event) => {
     if (!isRectangleSelection) {
       return
     }
     if (!selectionRectangle.isConnected) {
-      container.appendChild(selectionRectangle)
+      host.appendChild(selectionRectangle)
       if (!event.ctrlKey) {
         unselectAll()
       }
@@ -108,7 +107,7 @@ export default function useSelection(container, tagName) {
     selectionRectangle.toY = event.pageY
 
     const selectionBox = getSelectionBox(selectionRectangle)
-    container.querySelectorAll(tagName).forEach((
+    host.querySelectorAll(tagName).forEach((
       /** @type {SelectableElement} */ element,
     ) => {
       const { x, y, width, height } = element.getBoundingClientRect()
@@ -117,12 +116,12 @@ export default function useSelection(container, tagName) {
     })
   })
 
-  container.addEventListener('mouseup', () => {
+  host.addEventListener('mouseup', () => {
     isRectangleSelection = false
     if (!selectionRectangle.isConnected) {
       return
     }
-    container.querySelectorAll(`${tagName}[selecting]`).forEach((
+    host.querySelectorAll(`${tagName}[selecting]`).forEach((
       /** @type {SelectableElement} */ element,
     ) => {
       element.selected = !element.selected

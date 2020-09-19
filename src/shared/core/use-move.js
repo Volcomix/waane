@@ -8,22 +8,29 @@
 /** @typedef {HTMLElement & MovableProps} MovableElement */
 
 /**
- * @param {HTMLElement} container
- * @param {string} tagName
+ * @callback SetMovingElement
+ * @param {MovableElement} movingElement
+ * @returns {void}
  */
-export default function useMove(container, tagName) {
+
+/**
+ * @param {HTMLElement} host
+ * @param {string} tagName
+ * @returns {SetMovingElement}
+ */
+export default function useMove(host, tagName) {
   /** @type {MovableElement} */
   let movingElement = null
 
   let isMoving = false
 
-  container.addEventListener('mousedown', (event) => {
+  host.addEventListener('mousedown', (event) => {
     if (event.button !== 0) {
       return
     }
     let element = /** @type {Element} */ (event.target)
     while (!element.matches(tagName)) {
-      if (element === container) {
+      if (element === host) {
         return
       }
       element = element.parentElement
@@ -31,14 +38,14 @@ export default function useMove(container, tagName) {
     movingElement = /** @type {MovableElement} */ (element)
   })
 
-  container.addEventListener('mousemove', (event) => {
+  host.addEventListener('mousemove', (event) => {
     if (!movingElement) {
       return
     }
     isMoving = true
     if (!movingElement.selected) {
       if (!event.ctrlKey) {
-        container.querySelectorAll(`${tagName}[selected]`).forEach((
+        host.querySelectorAll(`${tagName}[selected]`).forEach((
           /** @type {MovableElement} */ element,
         ) => {
           element.selected = false
@@ -46,7 +53,7 @@ export default function useMove(container, tagName) {
       }
       movingElement.selected = true
     }
-    container.querySelectorAll(`${tagName}[selected]`).forEach((
+    host.querySelectorAll(`${tagName}[selected]`).forEach((
       /** @type {MovableElement} */ element,
     ) => {
       element.x += event.movementX
@@ -54,11 +61,11 @@ export default function useMove(container, tagName) {
     })
   })
 
-  container.addEventListener('mouseup', () => {
+  host.addEventListener('mouseup', () => {
     movingElement = null
   })
 
-  container.addEventListener(
+  host.addEventListener(
     'click',
     (event) => {
       if (isMoving) {
@@ -68,4 +75,8 @@ export default function useMove(container, tagName) {
     },
     true,
   )
+
+  return (element) => {
+    movingElement = element
+  }
 }

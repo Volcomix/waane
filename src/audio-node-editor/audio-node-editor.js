@@ -20,16 +20,17 @@ export default defineCustomElement('audio-node-editor', {
     ))
 
     useSelection(graph, 'w-graph-node')
-    useMove(graph, 'w-graph-node')
+    const setMovingElement = useMove(graph, 'w-graph-node')
 
     oscillatorMenuItem.addEventListener('click', (event) => {
       const oscillatorNode = /** @type {import('../shared/node-editor/graph-node.js').default} */ (document.createElement(
         'w-graph-node',
       ))
       oscillatorNode.textContent = 'Oscillator'
-      oscillatorNode.x = event.pageX
-      oscillatorNode.y = event.pageY
+      oscillatorNode.x = event.pageX - 1
+      oscillatorNode.y = event.pageY - 1
       graph.appendChild(oscillatorNode)
+      setMovingElement(oscillatorNode)
     })
   },
 })
