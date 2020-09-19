@@ -11,7 +11,8 @@ export default defineCustomElement('w-graph-node', {
       border-radius: 4px;
       background-color: rgb(var(--color-surface));
       color: rgba(var(--color-on-surface) / var(--text-high-emphasis));
-      transition: box-shadow 150ms var(--easing-standard);
+      transition: color 150ms var(--easing-standard),
+        box-shadow 150ms var(--easing-standard);
       user-select: none;
       ${elevation(1)}
     }
@@ -23,6 +24,10 @@ export default defineCustomElement('w-graph-node', {
     :host(:hover),
     :host([selecting]) {
       ${elevation(4)}
+    }
+
+    :host([selected][selecting]) {
+      color: rgba(var(--color-on-surface) / var(--text-medium-emphasis));
     }
 
     :host:after {
