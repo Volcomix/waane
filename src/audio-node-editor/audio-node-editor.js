@@ -27,8 +27,12 @@ export default defineCustomElement('audio-node-editor', {
         'w-graph-node',
       ))
       oscillatorNode.textContent = 'Oscillator'
-      oscillatorNode.x = event.pageX - 1
-      oscillatorNode.y = event.pageY - 1
+
+      // -2 is required for the cursor to click on the node
+      // after adding it
+      oscillatorNode.x = event.pageX - 2
+      oscillatorNode.y = event.pageY - 2
+
       graph.appendChild(oscillatorNode)
       setMovingElement(oscillatorNode)
     })
