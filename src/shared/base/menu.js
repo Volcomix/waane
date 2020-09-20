@@ -23,6 +23,15 @@ export default defineCustomElement('w-menu', {
     y: Number,
   },
   setup({ host, observe }) {
+    function onBodyClick() {
+      document.body.removeEventListener('click', onBodyClick)
+      host.open = false
+    }
+
+    observe('open', () => {
+      document.body.addEventListener('click', onBodyClick)
+    })
+
     observe('x', () => {
       host.style.left = `${host.x}px`
     })
