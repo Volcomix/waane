@@ -1,3 +1,3 @@
-import './context-menu.js'
 import './menu-item.js'
 import './menu.js'
+import './use-context-menu.js'

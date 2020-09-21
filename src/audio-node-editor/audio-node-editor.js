@@ -1,26 +1,25 @@
+import useContextMenu from '../shared/base/use-context-menu.js'
 import { defineCustomElement, html } from '../shared/core/element.js'
-import useMove from '../shared/core/use-move.js'
-import useSelection from '../shared/core/use-selection.js'
 
 export default defineCustomElement('audio-node-editor', {
   template: html`
-    <w-context-menu>
-      <w-graph></w-graph>
-      <w-menu>
-        <w-menu-item>Oscillator</w-menu-item>
-      </w-menu>
-    </w-context-menu>
+    <w-node-editor></w-node-editor>
+    <w-menu>
+      <w-menu-item>Oscillator</w-menu-item>
+    </w-menu>
   `,
   setup({ host }) {
-    const graph = /** @type {HTMLElement} */ (host.shadowRoot.querySelector(
-      'w-graph',
+    const nodeEditor = /** @type {import('../shared/node-editor/node-editor.js').default} */ (host.shadowRoot.querySelector(
+      'w-node-editor',
+    ))
+    const menu = /** @type {import('../shared/base/menu.js').default} */ (host.shadowRoot.querySelector(
+      'w-menu',
     ))
     const oscillatorMenuItem = /** @type {HTMLElement} */ (host.shadowRoot.querySelector(
       'w-menu-item',
     ))
 
-    useSelection(graph, 'w-graph-node')
-    const setMovingElement = useMove(graph, 'w-graph-node')
+    useContextMenu(nodeEditor, menu)
 
     oscillatorMenuItem.addEventListener('click', (event) => {
       const oscillatorNode = /** @type {import('../shared/node-editor/graph-node.js').default} */ (document.createElement(
@@ -30,11 +29,11 @@ export default defineCustomElement('audio-node-editor', {
 
       // -2 is required for the cursor to click on the node
       // after adding it
-      oscillatorNode.x = event.pageX - 2
-      oscillatorNode.y = event.pageY - 2
+      oscillatorNode.x = event.pageX - 2 - nodeEditor.panX
+      oscillatorNode.y = event.pageY - 2 - nodeEditor.panY
+      oscillatorNode.moving = true
 
-      graph.appendChild(oscillatorNode)
-      setMovingElement(oscillatorNode)
+      nodeEditor.appendChild(oscillatorNode)
     })
   },
 })

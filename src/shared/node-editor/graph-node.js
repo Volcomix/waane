@@ -80,6 +80,7 @@ export default defineCustomElement('w-graph-node', {
     y: Number,
     selecting: Boolean,
     selected: Boolean,
+    moving: Boolean,
   },
   setup({ host, observe }) {
     observe('x', () => {

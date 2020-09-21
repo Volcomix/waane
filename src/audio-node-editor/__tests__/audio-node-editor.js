@@ -4,17 +4,17 @@ import { html } from '../../shared/core/element'
 
 function setup() {
   document.body.innerHTML = html`<audio-node-editor></audio-node-editor>`
-  const audioNodeEditor = document.body.querySelector('audio-node-editor')
-  const graph = /** @type {HTMLElement} */ (audioNodeEditor.shadowRoot.querySelector(
-    'w-graph',
+  const audioNodeEditor = /** @type {HTMLElement} */ (document.body.querySelector(
+    'audio-node-editor',
   ))
-
+  const nodeEditor = /** @type {HTMLElement} */ (audioNodeEditor.shadowRoot.querySelector(
+    'w-node-editor',
+  ))
   return {
-    audioNodeEditor,
-    graph,
+    nodeEditor,
 
     getGraphNodes: () =>
-      /** @type {NodeListOf<import('../../shared/node-editor/graph-node.js').default>} */ (audioNodeEditor.shadowRoot.querySelectorAll(
+      /** @type {NodeListOf<import('../../shared/node-editor/graph-node.js').default>} */ (nodeEditor.querySelectorAll(
         'w-graph-node',
       )),
 
@@ -22,14 +22,14 @@ function setup() {
      * @param {string} audioNodeName
      */
     addAudioNode: (audioNodeName) => {
-      graph.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true }))
+      nodeEditor.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true }))
       const menuItem = /** @type {HTMLElement} */ ([
         ...audioNodeEditor.shadowRoot.querySelectorAll(
           'w-menu[open] w-menu-item',
         ),
       ].find((element) => element.textContent === audioNodeName))
       menuItem.click()
-      graph.click()
+      nodeEditor.click()
     },
   }
 }
@@ -52,7 +52,7 @@ test('adds an oscillator node', () => {
 })
 
 test('selects nodes', () => {
-  const { graph, getGraphNodes, addAudioNode } = setup()
+  const { nodeEditor, getGraphNodes, addAudioNode } = setup()
   addAudioNode('Oscillator')
   addAudioNode('Oscillator')
   const [graphNode1, graphNode2] = getGraphNodes()
@@ -62,7 +62,7 @@ test('selects nodes', () => {
   expect(graphNode1.selected).toBe(true)
   expect(graphNode2.selected).toBe(false)
 
-  graph.click()
+  nodeEditor.click()
 
   expect(graphNode1.selected).toBe(false)
   expect(graphNode2.selected).toBe(false)
@@ -97,7 +97,7 @@ test('inverts node selection', () => {
 })
 
 test('moves nodes', () => {
-  const { graph, getGraphNodes, addAudioNode } = setup()
+  const { nodeEditor, getGraphNodes, addAudioNode } = setup()
   addAudioNode('Oscillator')
   addAudioNode('Oscillator')
   addAudioNode('Oscillator')
@@ -117,10 +117,10 @@ test('moves nodes', () => {
   )
 
   graphNode1.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }))
-  graph.dispatchEvent(
+  nodeEditor.dispatchEvent(
     Object.assign(new MouseEvent('mousemove'), { movementX: 5, movementY: 5 }),
   )
-  graph.dispatchEvent(new MouseEvent('mouseup'))
+  nodeEditor.dispatchEvent(new MouseEvent('mouseup'))
 
   expect(graphNode1).toMatchObject({ x: 5, y: 5 })
   expect(graphNode2).toMatchObject({ x: 15, y: 15 })
