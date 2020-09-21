@@ -3,6 +3,7 @@
  * @property {number} x
  * @property {number} y
  * @property {boolean} selected
+ * @property {boolean} moving
  */
 
 /** @typedef {HTMLElement & MovableProps} MovableElement */
@@ -16,16 +17,19 @@
 /**
  * @param {HTMLElement} host
  * @param {string} tagName
- * @returns {SetMovingElement}
  */
 export default function useMove(host, tagName) {
-  /** @type {MovableElement} */
-  let movingElement = null
-
   let isMoving = false
 
+  /**
+   * @returns {MovableElement}
+   */
+  function getMovingElement() {
+    return host.querySelector(`${tagName}[moving]`)
+  }
+
   host.addEventListener('mousedown', (event) => {
-    if (event.button !== 0) {
+    if (event.button !== 0 || event.altKey) {
       return
     }
     let element = /** @type {Element} */ (event.target)
@@ -35,16 +39,18 @@ export default function useMove(host, tagName) {
       }
       element = element.parentElement
     }
-    movingElement = /** @type {MovableElement} */ (element)
+    const movingElement = /** @type {MovableElement} */ (element)
+    movingElement.moving = true
   })
 
   host.addEventListener('mousemove', (event) => {
+    const movingElement = getMovingElement()
     if (!movingElement) {
       return
     }
     isMoving = true
     if (!movingElement.selected) {
-      if (!event.ctrlKey) {
+      if (!event.ctrlKey && !event.metaKey) {
         host.querySelectorAll(`${tagName}[selected]`).forEach((
           /** @type {MovableElement} */ element,
         ) => {
@@ -62,21 +68,16 @@ export default function useMove(host, tagName) {
   })
 
   host.addEventListener('mouseup', () => {
-    movingElement = null
+    const movingElement = getMovingElement()
+    if (movingElement) {
+      movingElement.moving = false
+    }
   })
 
-  host.addEventListener(
-    'click',
-    (event) => {
-      if (isMoving) {
-        isMoving = false
-        event.stopPropagation()
-      }
-    },
-    true,
-  )
-
-  return (element) => {
-    movingElement = element
-  }
+  host.addEventListener('click', (event) => {
+    if (isMoving) {
+      event.stopImmediatePropagation()
+      isMoving = false
+    }
+  })
 }

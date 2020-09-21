@@ -18,40 +18,57 @@ export default defineCustomElement('w-node-editor', {
       <slot></slot>
     </w-graph>
   `,
+  properties: {
+    panX: Number,
+    panY: Number,
+  },
   setup({ host }) {
     const graph = /** @type {HTMLElement} */ (host.shadowRoot.querySelector(
       'w-graph',
     ))
 
-    const { getTranslateX, getTranslateY } = setup(host, graph)
+    // The order does matter because each one can stop the immediate
+    // propagation to the next one
+    setup(host, graph)
+    useMove(host, 'w-graph-node')
     useSelection(host, 'w-graph-node')
-    const setMovingElement = useMove(host, 'w-graph-node')
   },
 })
 
 /**
- * @param {HTMLElement} host
- * @param {HTMLElement} pannableElement
+ * @typedef {object} MouseNavigationProps
+ * @property {number} panX
+ * @property {number} panY
  */
-function setup(host, pannableElement) {
-  let translateX = 0
-  let translateY = 0
+
+/** @typedef {HTMLElement & MouseNavigationProps} MouseNavigationHost */
+
+/**
+ * @param {MouseNavigationHost} host
+ * @param {HTMLElement} transformedElement
+ */
+function setup(host, transformedElement) {
+  let isPanning = false
+  host.panX = 0
+  host.panY = 0
 
   host.addEventListener('mousemove', (event) => {
-    if ((event.buttons & 4) === 0) {
+    if (
+      (event.buttons & 4) === 0 &&
+      ((event.buttons & 1) === 0 || !event.altKey)
+    ) {
       return
     }
-    translateX += event.movementX
-    translateY += event.movementY
-    pannableElement.style.transform = `translate(${translateX}px, ${translateY}px)`
+    isPanning = true
+    host.panX += event.movementX
+    host.panY += event.movementY
+    transformedElement.style.transform = `translate(${host.panX}px, ${host.panY}px)`
   })
 
-  return {
-    getTranslateX() {
-      return translateX
-    },
-    getTranslateY() {
-      return translateY
-    },
-  }
+  host.addEventListener('click', (event) => {
+    if (isPanning) {
+      event.stopImmediatePropagation()
+      isPanning = false
+    }
+  })
 }

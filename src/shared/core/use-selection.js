@@ -63,7 +63,7 @@ export default function useSelection(host, tagName) {
       selectionRectangle.remove()
       return
     }
-    if (!event.ctrlKey) {
+    if (!event.ctrlKey && !event.metaKey) {
       unselectAll()
     }
     let element = /** @type {Element} */ (event.target)
@@ -78,7 +78,7 @@ export default function useSelection(host, tagName) {
   })
 
   host.addEventListener('mousedown', (event) => {
-    if (event.button !== 0) {
+    if (event.button !== 0 || event.altKey) {
       return
     }
     let element = /** @type {Element} */ (event.target)
@@ -99,7 +99,7 @@ export default function useSelection(host, tagName) {
     }
     if (!selectionRectangle.isConnected) {
       host.appendChild(selectionRectangle)
-      if (!event.ctrlKey) {
+      if (!event.ctrlKey && !event.metaKey) {
         unselectAll()
       }
     }

@@ -9,10 +9,10 @@ export default defineCustomElement('audio-node-editor', {
     </w-menu>
   `,
   setup({ host }) {
-    const nodeEditor = /** @type {HTMLElement} */ (host.shadowRoot.querySelector(
+    const nodeEditor = /** @type {import('../shared/node-editor/node-editor.js').default} */ (host.shadowRoot.querySelector(
       'w-node-editor',
     ))
-    const menu = /** @type {import('../shared/base/menu').default} */ (host.shadowRoot.querySelector(
+    const menu = /** @type {import('../shared/base/menu.js').default} */ (host.shadowRoot.querySelector(
       'w-menu',
     ))
     const oscillatorMenuItem = /** @type {HTMLElement} */ (host.shadowRoot.querySelector(
@@ -29,11 +29,11 @@ export default defineCustomElement('audio-node-editor', {
 
       // -2 is required for the cursor to click on the node
       // after adding it
-      oscillatorNode.x = event.pageX - 2 /*  - getTranslateX() */
-      oscillatorNode.y = event.pageY - 2 /*  - getTranslateY() */
+      oscillatorNode.x = event.pageX - 2 - nodeEditor.panX
+      oscillatorNode.y = event.pageY - 2 - nodeEditor.panY
+      oscillatorNode.moving = true
 
       nodeEditor.appendChild(oscillatorNode)
-      // setMovingElement(oscillatorNode)
     })
   },
 })
