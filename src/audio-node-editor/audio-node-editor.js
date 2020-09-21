@@ -29,8 +29,11 @@ export default defineCustomElement('audio-node-editor', {
 
       // -2 is required for the cursor to click on the node
       // after adding it
-      oscillatorNode.x = event.pageX - 2 - nodeEditor.panX
-      oscillatorNode.y = event.pageY - 2 - nodeEditor.panY
+      const { width, height } = nodeEditor.getBoundingClientRect()
+      oscillatorNode.x =
+        (event.pageX - 2 - width / 2) / nodeEditor.zoom - nodeEditor.panX
+      oscillatorNode.y =
+        (event.pageY - 2 - height / 2) / nodeEditor.zoom - nodeEditor.panY
       oscillatorNode.moving = true
 
       nodeEditor.appendChild(oscillatorNode)

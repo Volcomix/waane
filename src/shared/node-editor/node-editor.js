@@ -20,6 +20,7 @@ export default defineCustomElement('w-node-editor', {
     </w-graph>
   `,
   properties: {
+    zoom: Number,
     panX: Number,
     panY: Number,
   },
@@ -31,7 +32,7 @@ export default defineCustomElement('w-node-editor', {
     // The order does matter because each one can stop the immediate
     // propagation to the next one
     useMouseNavigation(host, graph)
-    useMove(host, 'w-graph-node')
+    useMove(host, 'w-graph-node', () => host.zoom)
     useSelection(host, 'w-graph-node')
   },
 })

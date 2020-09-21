@@ -16,8 +16,9 @@
 /**
  * @param {HTMLElement} host
  * @param {string} tagName
+ * @param {() => number} getZoom
  */
-export default function useMove(host, tagName) {
+export default function useMove(host, tagName, getZoom = () => 1) {
   let isMoving = false
 
   /**
@@ -58,11 +59,12 @@ export default function useMove(host, tagName) {
       }
       movingElement.selected = true
     }
+    const zoom = getZoom()
     host.querySelectorAll(`${tagName}[selected]`).forEach((
       /** @type {MovableElement} */ element,
     ) => {
-      element.x += event.movementX
-      element.y += event.movementY
+      element.x += event.movementX / zoom
+      element.y += event.movementY / zoom
     })
   })
 
