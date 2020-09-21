@@ -15,7 +15,7 @@ export default function useMouseNavigation(host, transformedElement) {
   host.panX = 0
   host.panY = 0
 
-  host.addEventListener('mousemove', (event) => {
+  host.addEventListener('mousedown', (event) => {
     if (
       (event.buttons & 4) === 0 &&
       ((event.buttons & 1) === 0 || !event.altKey)
@@ -23,6 +23,12 @@ export default function useMouseNavigation(host, transformedElement) {
       return
     }
     isPanning = true
+  })
+
+  host.addEventListener('mousemove', (event) => {
+    if (!isPanning) {
+      return
+    }
     host.panX += event.movementX
     host.panY += event.movementY
     transformedElement.style.transform = `translate(${host.panX}px, ${host.panY}px)`
