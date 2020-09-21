@@ -98,7 +98,8 @@ export default function useSelection(host, tagName) {
       return
     }
     if (!selectionRectangle.isConnected) {
-      host.appendChild(selectionRectangle)
+      const root = host.shadowRoot || host
+      root.appendChild(selectionRectangle)
       if (!event.ctrlKey && !event.metaKey) {
         unselectAll()
       }
