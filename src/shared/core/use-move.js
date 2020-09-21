@@ -2,11 +2,10 @@
  * @typedef {object} MovableProps
  * @property {number} x
  * @property {number} y
- * @property {boolean} selected
  * @property {boolean} moving
  */
 
-/** @typedef {HTMLElement & MovableProps} MovableElement */
+/** @typedef {HTMLElement & MovableProps & import("./use-selection").SelectableProps} MovableElement */
 
 /**
  * @callback SetMovingElement
