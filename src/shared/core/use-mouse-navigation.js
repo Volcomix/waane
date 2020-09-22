@@ -10,17 +10,8 @@
 /**
  * @param {MouseNavigationHost} host
  * @param {HTMLElement} transformedElement
- * @param {number} zoomFactor
- * @param {number} minZoom
- * @param {number} maxZoom
  */
-export default function useMouseNavigation(
-  host,
-  transformedElement,
-  zoomFactor = 1.025,
-  minZoom = 0.2,
-  maxZoom = 3,
-) {
+export default function useMouseNavigation(host, transformedElement) {
   let isPanning = false
   host.zoom = 1
   host.panX = 0
@@ -32,12 +23,8 @@ export default function useMouseNavigation(
 
   host.addEventListener('wheel', (event) => {
     event.preventDefault()
-    if (event.deltaY > 0) {
-      host.zoom /= zoomFactor
-    } else {
-      host.zoom *= zoomFactor
-    }
-    host.zoom = Math.min(Math.max(host.zoom, minZoom), maxZoom)
+    host.zoom += event.deltaY * -0.01
+    host.zoom = Math.min(Math.max(0.125, host.zoom), 4)
     transform()
   })
 
