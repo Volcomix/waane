@@ -1,5 +1,4 @@
 import { css, defineCustomElement } from '../core/element.js'
-import icon from '../core/icon.js'
 
 export default defineCustomElement('w-menu-item', {
   styles: css`
@@ -21,8 +20,7 @@ export default defineCustomElement('w-menu-item', {
       background-color: rgba(var(--color-on-surface) / 0.16);
     }
 
-    ::slotted(i) {
-      ${icon}
+    ::slotted(w-icon) {
       margin-right: 20px;
     }
   `,

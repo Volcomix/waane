@@ -17,13 +17,13 @@ export default defineCustomElement('audio-node-editor', {
     </w-menu>
     <w-menu id="graph-node-menu">
       <w-menu-item id="duplicate">
-        <i>content_copy</i>
-        Duplicate
+        <w-icon>content_copy</w-icon>
+        <span>Duplicate</span>
       </w-menu-item>
       <hr />
       <w-menu-item id="delete">
-        <i>delete</i>
-        Delete
+        <w-icon>delete</w-icon>
+        <span>Delete</span>
       </w-menu-item>
     </w-menu>
   `,
