@@ -16,6 +16,12 @@ export default defineCustomElement('w-menu', {
     :host(:not([open])) {
       display: none;
     }
+
+    ::slotted(hr) {
+      margin: 8px 0;
+      border: none;
+      border-top: 1px solid rgba(var(--color-on-surface) / 0.12);
+    }
   `,
   properties: {
     open: Boolean,

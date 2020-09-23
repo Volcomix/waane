@@ -17,6 +17,7 @@ export default defineCustomElement('audio-node-editor', {
     </w-menu>
     <w-menu id="graph-node-menu">
       <w-menu-item id="duplicate">Duplicate</w-menu-item>
+      <hr />
       <w-menu-item id="delete">Delete</w-menu-item>
     </w-menu>
   `,
