@@ -145,19 +145,21 @@ function getProperty(attributeName, propertyType) {
 export function defineCustomElement(
   name,
   {
-    styles = '',
+    styles,
     template = html`<slot></slot>`,
     properties = /** @type {T} */ ({}),
     setup = () => {},
   },
 ) {
   const templateElement = document.createElement('template')
-  templateElement.innerHTML = html`
-    <style>
-      ${styles}
-    </style>
-    ${template}
-  `
+  templateElement.innerHTML = styles
+    ? html`
+        <style>
+          ${styles}
+        </style>
+        ${template}
+      `
+    : template
 
   /** @type {Object<string, string>} */
   const attributesByProperty = Object.keys(properties).reduce(
