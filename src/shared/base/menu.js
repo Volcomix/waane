@@ -23,6 +23,9 @@ export default defineCustomElement('w-menu', {
     y: Number,
   },
   setup({ host, observe }) {
+    let width = 0
+    let height = 0
+
     function close() {
       document.body.removeEventListener('mousedown', onBodyMouseDown)
       host.open = false
@@ -44,14 +47,21 @@ export default defineCustomElement('w-menu', {
 
     observe('open', () => {
       document.body.addEventListener('mousedown', onBodyMouseDown)
+      if (host.open) {
+        const boundingClientRect = host.getBoundingClientRect()
+        width = boundingClientRect.width
+        height = boundingClientRect.height
+      }
     })
 
     observe('x', () => {
-      host.style.left = `${host.x}px`
+      const x = Math.min(host.x, document.documentElement.clientWidth - width)
+      host.style.left = `${x}px`
     })
 
     observe('y', () => {
-      host.style.top = `${host.y}px`
+      const y = Math.min(host.y, document.documentElement.clientHeight - height)
+      host.style.top = `${y}px`
     })
   },
 })

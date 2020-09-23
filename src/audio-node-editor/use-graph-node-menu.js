@@ -8,21 +8,6 @@
  * @param {Menu} menu
  */
 export default function useGraphNodeMenu(host, menu) {
-  /**
-   * @param {MouseEvent} event
-   */
-  function setMenuPosition(event) {
-    const { width, height } = menu.getBoundingClientRect()
-    menu.x = Math.min(
-      event.clientX,
-      document.documentElement.clientWidth - width,
-    )
-    menu.y = Math.min(
-      event.clientY,
-      document.documentElement.clientHeight - height,
-    )
-  }
-
   host.addEventListener('contextmenu', (event) => {
     let element = /** @type {Element} */ (event.target)
     while (!element.matches('w-graph-node')) {
@@ -47,6 +32,7 @@ export default function useGraphNodeMenu(host, menu) {
     }
 
     menu.open = true
-    setMenuPosition(event)
+    menu.x = event.clientX
+    menu.y = event.clientY
   })
 }
