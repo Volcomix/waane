@@ -36,13 +36,12 @@ function setup() {
     nodeEditor.dispatchEvent(new MouseEvent('click'))
   }
 
-  /**
-   * @returns {NodeListOf<HTMLElement>}
-   */
   function getMenuItems() {
-    return audioNodeEditor.shadowRoot.querySelectorAll(
-      'w-menu[open] w-menu-item',
-    )
+    return [
+      .../** @type {NodeListOf<HTMLElement>} */ (audioNodeEditor.shadowRoot.querySelectorAll(
+        'w-menu[open] w-menu-item',
+      )),
+    ]
   }
 
   /**
@@ -50,7 +49,7 @@ function setup() {
    */
   function addAudioNode(audioNodeName) {
     nodeEditor.dispatchEvent(new MouseEvent('contextmenu'))
-    const menuItem = [...getMenuItems()].find(
+    const menuItem = getMenuItems().find(
       (element) => element.textContent === audioNodeName,
     )
     menuItem.click()
@@ -80,7 +79,7 @@ test('has no node by default', () => {
 test('opens context menu on node editor', () => {
   const { nodeEditor, getMenuItems } = setup()
   nodeEditor.dispatchEvent(new MouseEvent('contextmenu'))
-  expect([...getMenuItems()].map((menuItem) => menuItem.textContent)).toEqual([
+  expect(getMenuItems().map((menuItem) => menuItem.textContent)).toEqual([
     'Oscillator',
   ])
   document.body.dispatchEvent(new MouseEvent('mousedown'))
@@ -193,23 +192,18 @@ test('opens context menu on selected nodes', () => {
   )
   graphNode1.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true }))
 
-  const graphNodeMenuItems = [
-    expect.stringContaining('Duplicate'),
-    expect.stringContaining('Delete'),
-  ]
-
-  expect([...getMenuItems()].map((menuItem) => menuItem.textContent)).toEqual(
-    graphNodeMenuItems,
+  const graphNodeMenuItems = ['Duplicate', 'Delete'].map((menuItem) =>
+    expect.objectContaining({ textContent: expect.stringContaining(menuItem) }),
   )
+
+  expect(getMenuItems()).toEqual(graphNodeMenuItems)
   expect(graphNode1.selected).toBe(true)
   expect(graphNode2.selected).toBe(true)
   expect(graphNode3.selected).toBe(false)
 
   graphNode3.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true }))
 
-  expect([...getMenuItems()].map((menuItem) => menuItem.textContent)).toEqual(
-    graphNodeMenuItems,
-  )
+  expect(getMenuItems()).toEqual(graphNodeMenuItems)
   expect(graphNode1.selected).toBe(false)
   expect(graphNode2.selected).toBe(false)
   expect(graphNode3.selected).toBe(true)
@@ -218,9 +212,7 @@ test('opens context menu on selected nodes', () => {
     new MouseEvent('contextmenu', { ctrlKey: true, bubbles: true }),
   )
 
-  expect([...getMenuItems()].map((menuItem) => menuItem.textContent)).toEqual(
-    graphNodeMenuItems,
-  )
+  expect(getMenuItems()).toEqual(graphNodeMenuItems)
   expect(graphNode1.selected).toBe(false)
   expect(graphNode2.selected).toBe(true)
   expect(graphNode3.selected).toBe(true)
@@ -248,7 +240,7 @@ test('deletes nodes', () => {
   )
   graphNode1.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true }))
 
-  const menuItem = [...getMenuItems()].find((element) =>
+  const menuItem = getMenuItems().find((element) =>
     element.textContent.includes('Delete'),
   )
   menuItem.click()
