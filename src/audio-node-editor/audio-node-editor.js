@@ -16,9 +16,15 @@ export default defineCustomElement('audio-node-editor', {
       <w-menu-item id="oscillator">Oscillator</w-menu-item>
     </w-menu>
     <w-menu id="graph-node-menu">
-      <w-menu-item id="duplicate">Duplicate</w-menu-item>
+      <w-menu-item id="duplicate">
+        <i>content_copy</i>
+        Duplicate
+      </w-menu-item>
       <hr />
-      <w-menu-item id="delete">Delete</w-menu-item>
+      <w-menu-item id="delete">
+        <i>delete</i>
+        Delete
+      </w-menu-item>
     </w-menu>
   `,
   setup({ host }) {

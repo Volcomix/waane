@@ -193,7 +193,10 @@ test('opens context menu on selected nodes', () => {
   )
   graphNode1.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true }))
 
-  const graphNodeMenuItems = ['Duplicate', 'Delete']
+  const graphNodeMenuItems = [
+    expect.stringContaining('Duplicate'),
+    expect.stringContaining('Delete'),
+  ]
 
   expect([...getMenuItems()].map((menuItem) => menuItem.textContent)).toEqual(
     graphNodeMenuItems,
@@ -245,8 +248,8 @@ test('deletes nodes', () => {
   )
   graphNode1.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true }))
 
-  const menuItem = [...getMenuItems()].find(
-    (element) => element.textContent === 'Delete',
+  const menuItem = [...getMenuItems()].find((element) =>
+    element.textContent.includes('Delete'),
   )
   menuItem.click()
 
