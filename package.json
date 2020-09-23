@@ -11,7 +11,8 @@
     "serve": "cd src && python3 -m http.server 8080",
     "jest": "npx --node-arg=--experimental-vm-modules jest",
     "test": "yarn jest --watch",
-    "test:ci": "yarn jest"
+    "test:ci": "yarn jest",
+    "typecheck": "npx -p typescript tsc -p jsconfig.json"
   },
   "devDependencies": {
     "@jest/globals": "^26.4.2",

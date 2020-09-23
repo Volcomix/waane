@@ -179,7 +179,7 @@ test('moves nodes', () => {
 })
 
 test('opens context menu on selected nodes', () => {
-  const { nodeEditor, getGraphNodes, getMenuItems, addAudioNode } = setup()
+  const { getGraphNodes, getMenuItems, addAudioNode } = setup()
   addAudioNode('Oscillator')
   addAudioNode('Oscillator')
   addAudioNode('Oscillator')
