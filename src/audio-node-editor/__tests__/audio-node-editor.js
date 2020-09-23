@@ -224,3 +224,31 @@ test('opens context menu on selected nodes', () => {
 
   expect(getMenuItems()).toHaveLength(0)
 })
+
+test('deletes nodes', () => {
+  const { getGraphNodes, getMenuItems, addAudioNode } = setup()
+  addAudioNode('Oscillator')
+  addAudioNode('Oscillator')
+  addAudioNode('Oscillator')
+  const graphNodes = getGraphNodes()
+  const [graphNode1, graphNode2, graphNode3] = graphNodes
+
+  expect(graphNodes).toHaveLength(3)
+
+  graphNode1.dispatchEvent(
+    new MouseEvent('click', { ctrlKey: true, bubbles: true }),
+  )
+  graphNode2.dispatchEvent(
+    new MouseEvent('click', { ctrlKey: true, bubbles: true }),
+  )
+  graphNode1.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true }))
+
+  const menuItem = [...getMenuItems()].find(
+    (element) => element.textContent === 'Delete',
+  )
+  menuItem.click()
+
+  const remainingGraphNodes = getGraphNodes()
+  expect(remainingGraphNodes).toHaveLength(1)
+  expect(remainingGraphNodes[0]).toBe(graphNode3)
+})

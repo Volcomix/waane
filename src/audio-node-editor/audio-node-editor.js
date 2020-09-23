@@ -29,7 +29,10 @@ export default defineCustomElement('audio-node-editor', {
     const graphNodeMenu = /** @type {Menu} */ (host.shadowRoot.querySelector(
       '#graph-node-menu',
     ))
-    const oscillatorMenuItem = /** @type {MenuItem} */ (host.shadowRoot.querySelector(
+    const menuItemOscillator = /** @type {MenuItem} */ (nodeEditorMenu.querySelector(
+      'w-menu-item',
+    ))
+    const menuItemDelete = /** @type {MenuItem} */ (graphNodeMenu.querySelector(
       'w-menu-item',
     ))
 
@@ -38,7 +41,7 @@ export default defineCustomElement('audio-node-editor', {
     useGraphNodeMenu(nodeEditor, graphNodeMenu)
     useNodeEditorMenu(nodeEditor, nodeEditorMenu)
 
-    oscillatorMenuItem.addEventListener('click', (event) => {
+    menuItemOscillator.addEventListener('click', (event) => {
       const oscillatorNode = /** @type {GraphNode} */ (document.createElement(
         'w-graph-node',
       ))
@@ -54,6 +57,12 @@ export default defineCustomElement('audio-node-editor', {
       oscillatorNode.moving = true
 
       nodeEditor.appendChild(oscillatorNode)
+    })
+
+    menuItemDelete.addEventListener('click', () => {
+      nodeEditor
+        .querySelectorAll('w-graph-node[selected]')
+        .forEach((selectedGraphNode) => selectedGraphNode.remove())
     })
   },
 })
