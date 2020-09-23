@@ -1,28 +1,45 @@
-import useContextMenu from '../shared/base/use-context-menu.js'
 import { defineCustomElement, html } from '../shared/core/element.js'
+import useMenuGraphNode from '../shared/node-editor/use-menu-graph-node.js'
+import useMenuNodeEditor from '../shared/node-editor/use-menu-node-editor.js'
+
+/**
+ * @typedef {import('../shared/node-editor/node-editor.js').default} NodeEditor
+ * @typedef {import('../shared/node-editor/graph-node.js').default} GraphNode
+ * @typedef {import('../shared/base/menu.js').default} Menu
+ * @typedef {import('../shared/base/menu-item.js').default} MenuItem
+ */
 
 export default defineCustomElement('audio-node-editor', {
   template: html`
     <w-node-editor></w-node-editor>
-    <w-menu>
+    <w-menu id="menu-node-editor">
       <w-menu-item>Oscillator</w-menu-item>
+    </w-menu>
+    <w-menu id="menu-graph-node">
+      <w-menu-item>Delete</w-menu-item>
     </w-menu>
   `,
   setup({ host }) {
-    const nodeEditor = /** @type {import('../shared/node-editor/node-editor.js').default} */ (host.shadowRoot.querySelector(
+    const nodeEditor = /** @type {NodeEditor} */ (host.shadowRoot.querySelector(
       'w-node-editor',
     ))
-    const menu = /** @type {import('../shared/base/menu.js').default} */ (host.shadowRoot.querySelector(
-      'w-menu',
+    const menuNodeEditor = /** @type {Menu} */ (host.shadowRoot.querySelector(
+      '#menu-node-editor',
     ))
-    const oscillatorMenuItem = /** @type {HTMLElement} */ (host.shadowRoot.querySelector(
+    const menuGraphNode = /** @type {Menu} */ (host.shadowRoot.querySelector(
+      '#menu-graph-node',
+    ))
+    const oscillatorMenuItem = /** @type {MenuItem} */ (host.shadowRoot.querySelector(
       'w-menu-item',
     ))
 
-    useContextMenu(nodeEditor, menu)
+    // The order does matter because each one can stop the immediate
+    // propagation to the next one
+    useMenuGraphNode(nodeEditor, menuGraphNode)
+    useMenuNodeEditor(nodeEditor, menuNodeEditor)
 
     oscillatorMenuItem.addEventListener('click', (event) => {
-      const oscillatorNode = /** @type {import('../shared/node-editor/graph-node.js').default} */ (document.createElement(
+      const oscillatorNode = /** @type {GraphNode} */ (document.createElement(
         'w-graph-node',
       ))
       oscillatorNode.textContent = 'Oscillator'

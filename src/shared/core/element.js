@@ -137,6 +137,7 @@ export function defineCustomElement(
     ${template}
   `
 
+  /** @type {Object<string, string>} */
   const attributesByProperty = Object.keys(properties).reduce(
     (result, propertyName) =>
       Object.assign(result, {

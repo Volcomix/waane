@@ -1,3 +1,5 @@
 import './graph-node.js'
 import './graph.js'
 import './node-editor.js'
+import './use-menu-graph-node.js'
+import './use-menu-node-editor.js'

@@ -1,8 +1,8 @@
 /**
  * @param {HTMLElement} host
- * @param {import('./menu.js').default} menu
+ * @param {import('../base/menu.js').default} menu
  */
-export default function useContextMenu(host, menu) {
+export default function useMenuNodeEditor(host, menu) {
   /**
    * @param {MouseEvent} event
    */

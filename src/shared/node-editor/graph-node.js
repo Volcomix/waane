@@ -26,6 +26,10 @@ export default defineCustomElement('w-graph-node', {
       ${elevation(4)}
     }
 
+    :host([moving]) {
+      z-index: 5;
+    }
+
     :host([selected][selecting]) {
       color: rgba(var(--color-on-surface) / var(--text-medium-emphasis));
     }

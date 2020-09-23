@@ -23,13 +23,27 @@ export default defineCustomElement('w-menu', {
     y: Number,
   },
   setup({ host, observe }) {
-    function onBodyClick() {
-      document.body.removeEventListener('click', onBodyClick)
+    function close() {
+      document.body.removeEventListener('mousedown', onBodyMouseDown)
       host.open = false
     }
 
+    /**
+     * @param {MouseEvent} event
+     */
+    function onBodyMouseDown(event) {
+      if (event.composedPath().includes(host)) {
+        return
+      }
+      close()
+    }
+
+    host.addEventListener('click', () => {
+      close()
+    })
+
     observe('open', () => {
-      document.body.addEventListener('click', onBodyClick)
+      document.body.addEventListener('mousedown', onBodyMouseDown)
     })
 
     observe('x', () => {
