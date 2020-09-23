@@ -1,14 +1,5 @@
 /**
- * @typedef {object} MouseNavigationProps
- * @property {number} zoom
- * @property {number} panX
- * @property {number} panY
- */
-
-/** @typedef {HTMLElement & MouseNavigationProps} MouseNavigationHost */
-
-/**
- * @param {MouseNavigationHost} host
+ * @param {import('./node-editor.js').default} host
  * @param {HTMLElement} transformedElement
  */
 export default function useMouseNavigation(host, transformedElement) {

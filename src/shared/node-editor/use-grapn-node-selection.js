@@ -1,5 +1,7 @@
+import { css, defineCustomElement } from '../core/element.js'
 import { doOverlap } from '../helpers/geometry.js'
-import { css, defineCustomElement } from './element.js'
+
+/** @typedef {import('./graph-node.js').default} GraphNode */
 
 const SelectionRectangle = defineCustomElement('w-selection-rectangle', {
   styles: css`
@@ -33,28 +35,19 @@ const SelectionRectangle = defineCustomElement('w-selection-rectangle', {
 })
 
 /**
- * @typedef {object} SelectableProps
- * @property {boolean} selecting
- * @property {boolean} selected
- */
-
-/** @typedef {HTMLElement & SelectableProps} SelectableElement */
-
-/**
  * @param {HTMLElement} host
- * @param {string} tagName
  */
-export default function useSelection(host, tagName) {
+export default function useGraphNodeSelection(host) {
   let isRectangleSelection = false
   const selectionRectangle = /** @type {SelectionRectangle} */ (document.createElement(
     'w-selection-rectangle',
   ))
 
   function unselectAll() {
-    host.querySelectorAll(`${tagName}[selected]`).forEach((
-      /** @type {SelectableElement} */ element,
+    host.querySelectorAll(`w-graph-node[selected]`).forEach((
+      /** @type {GraphNode} */ selectedGraphNode,
     ) => {
-      element.selected = false
+      selectedGraphNode.selected = false
     })
   }
 
@@ -68,9 +61,9 @@ export default function useSelection(host, tagName) {
     }
     let element = /** @type {Element} */ (event.target)
     while (element !== host) {
-      if (element.matches(tagName)) {
-        const clickedElement = /** @type {SelectableElement} */ (element)
-        clickedElement.selected = !clickedElement.selected
+      if (element.matches('w-graph-node')) {
+        const graphNode = /** @type {GraphNode} */ (element)
+        graphNode.selected = !graphNode.selected
         break
       }
       element = element.parentElement
@@ -83,7 +76,7 @@ export default function useSelection(host, tagName) {
     }
     let element = /** @type {Element} */ (event.target)
     while (element !== host) {
-      if (element.matches(tagName)) {
+      if (element.matches('w-graph-node')) {
         return
       }
       element = element.parentElement
@@ -108,12 +101,15 @@ export default function useSelection(host, tagName) {
     selectionRectangle.toY = event.pageY
 
     const selectionBox = getSelectionBox(selectionRectangle)
-    host.querySelectorAll(tagName).forEach((
-      /** @type {SelectableElement} */ element,
+    host.querySelectorAll('w-graph-node').forEach((
+      /** @type {GraphNode} */ graphNode,
     ) => {
-      const { x, y, width, height } = element.getBoundingClientRect()
-      const elementBox = { min: { x, y }, max: { x: x + width, y: y + height } }
-      element.selecting = doOverlap(selectionBox, elementBox)
+      const { x, y, width, height } = graphNode.getBoundingClientRect()
+      const graphNodeBox = {
+        min: { x, y },
+        max: { x: x + width, y: y + height },
+      }
+      graphNode.selecting = doOverlap(selectionBox, graphNodeBox)
     })
   })
 
@@ -122,11 +118,11 @@ export default function useSelection(host, tagName) {
     if (!selectionRectangle.isConnected) {
       return
     }
-    host.querySelectorAll(`${tagName}[selecting]`).forEach((
-      /** @type {SelectableElement} */ element,
+    host.querySelectorAll(`w-graph-node[selecting]`).forEach((
+      /** @type {GraphNode} */ graphNode,
     ) => {
-      element.selected = !element.selected
-      element.selecting = false
+      graphNode.selected = !graphNode.selected
+      graphNode.selecting = false
     })
   })
 }

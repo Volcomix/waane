@@ -2,7 +2,7 @@
  * @param {HTMLElement} host
  * @param {import('../base/menu.js').default} menu
  */
-export default function useMenuNodeEditor(host, menu) {
+export default function useNodeEditorMenu(host, menu) {
   /**
    * @param {MouseEvent} event
    */

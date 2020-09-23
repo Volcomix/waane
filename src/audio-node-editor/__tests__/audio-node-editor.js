@@ -77,7 +77,7 @@ test('has no node by default', () => {
   expect(getGraphNodes()).toHaveLength(0)
 })
 
-test('opens the node editor context menu', () => {
+test('opens context menu on node editor', () => {
   const { nodeEditor, getMenuItems } = setup()
   nodeEditor.dispatchEvent(new MouseEvent('contextmenu'))
   expect([...getMenuItems()].map((menuItem) => menuItem.textContent)).toEqual([
@@ -178,7 +178,7 @@ test('moves nodes', () => {
   expect(graphNode3).toMatchObject({ x: 50, y: 50, selected: true })
 })
 
-test('opens selected nodes context menu', () => {
+test('opens context menu on selected nodes', () => {
   const { nodeEditor, getGraphNodes, getMenuItems, addAudioNode } = setup()
   addAudioNode('Oscillator')
   addAudioNode('Oscillator')

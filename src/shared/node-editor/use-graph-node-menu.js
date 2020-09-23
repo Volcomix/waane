@@ -7,7 +7,7 @@
  * @param {HTMLElement} host
  * @param {Menu} menu
  */
-export default function useMenuGraphNode(host, menu) {
+export default function useGraphNodeMenu(host, menu) {
   /**
    * @param {MouseEvent} event
    */
@@ -38,9 +38,9 @@ export default function useMenuGraphNode(host, menu) {
     if (!graphNode.selected) {
       if (!event.ctrlKey && !event.metaKey) {
         host.querySelectorAll(`w-graph-node[selected]`).forEach((
-          /** @type {GraphNode} */ element,
+          /** @type {GraphNode} */ selectedGraphNode,
         ) => {
-          element.selected = false
+          selectedGraphNode.selected = false
         })
       }
       graphNode.selected = true

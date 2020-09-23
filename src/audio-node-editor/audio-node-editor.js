@@ -1,6 +1,6 @@
 import { defineCustomElement, html } from '../shared/core/element.js'
-import useMenuGraphNode from '../shared/node-editor/use-menu-graph-node.js'
-import useMenuNodeEditor from '../shared/node-editor/use-menu-node-editor.js'
+import useGraphNodeMenu from '../shared/node-editor/use-graph-node-menu.js'
+import useNodeEditorMenu from '../shared/node-editor/use-node-editor-menu.js'
 
 /**
  * @typedef {import('../shared/node-editor/node-editor.js').default} NodeEditor
@@ -12,10 +12,10 @@ import useMenuNodeEditor from '../shared/node-editor/use-menu-node-editor.js'
 export default defineCustomElement('audio-node-editor', {
   template: html`
     <w-node-editor></w-node-editor>
-    <w-menu id="menu-node-editor">
+    <w-menu id="node-editor-menu">
       <w-menu-item>Oscillator</w-menu-item>
     </w-menu>
-    <w-menu id="menu-graph-node">
+    <w-menu id="graph-node-menu">
       <w-menu-item>Delete</w-menu-item>
     </w-menu>
   `,
@@ -23,11 +23,11 @@ export default defineCustomElement('audio-node-editor', {
     const nodeEditor = /** @type {NodeEditor} */ (host.shadowRoot.querySelector(
       'w-node-editor',
     ))
-    const menuNodeEditor = /** @type {Menu} */ (host.shadowRoot.querySelector(
-      '#menu-node-editor',
+    const nodeEditorMenu = /** @type {Menu} */ (host.shadowRoot.querySelector(
+      '#node-editor-menu',
     ))
-    const menuGraphNode = /** @type {Menu} */ (host.shadowRoot.querySelector(
-      '#menu-graph-node',
+    const graphNodeMenu = /** @type {Menu} */ (host.shadowRoot.querySelector(
+      '#graph-node-menu',
     ))
     const oscillatorMenuItem = /** @type {MenuItem} */ (host.shadowRoot.querySelector(
       'w-menu-item',
@@ -35,8 +35,8 @@ export default defineCustomElement('audio-node-editor', {
 
     // The order does matter because each one can stop the immediate
     // propagation to the next one
-    useMenuGraphNode(nodeEditor, menuGraphNode)
-    useMenuNodeEditor(nodeEditor, menuNodeEditor)
+    useGraphNodeMenu(nodeEditor, graphNodeMenu)
+    useNodeEditorMenu(nodeEditor, nodeEditorMenu)
 
     oscillatorMenuItem.addEventListener('click', (event) => {
       const oscillatorNode = /** @type {GraphNode} */ (document.createElement(

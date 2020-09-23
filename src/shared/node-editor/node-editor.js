@@ -1,7 +1,7 @@
 import { css, defineCustomElement, html } from '../core/element.js'
-import useMouseNavigation from '../core/use-mouse-navigation.js'
-import useMove from '../core/use-move.js'
-import useSelection from '../core/use-selection.js'
+import useGraphNodeMove from './use-graph-node-move.js'
+import useGraphNodeSelection from './use-grapn-node-selection.js'
+import useMouseNavigation from './use-mouse-navigation.js'
 
 export default defineCustomElement('w-node-editor', {
   styles: css`
@@ -32,7 +32,7 @@ export default defineCustomElement('w-node-editor', {
     // The order does matter because each one can stop the immediate
     // propagation to the next one
     useMouseNavigation(host, graph)
-    useMove(host, 'w-graph-node', () => host.zoom)
-    useSelection(host, 'w-graph-node')
+    useGraphNodeMove(host)
+    useGraphNodeSelection(host)
   },
 })
