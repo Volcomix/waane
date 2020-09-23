@@ -1,6 +1,6 @@
 /**
- * @typedef {import('../base/menu.js').default} Menu
- * @typedef {import('./graph-node.js').default} GraphNode
+ * @typedef {import('../shared/base/menu.js').default} Menu
+ * @typedef {import('../shared/node-editor/graph-node.js').default} GraphNode
  */
 
 /**

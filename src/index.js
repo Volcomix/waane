@@ -1,4 +1,4 @@
-import './audio-node-editor/audio-node-editor.js'
+import './audio-node-editor/index.js'
 import './shared/base/index.js'
 import './shared/core/index.js'
 import './shared/helpers/index.js'

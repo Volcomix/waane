@@ -1,6 +1,6 @@
 /**
  * @param {HTMLElement} host
- * @param {import('../base/menu.js').default} menu
+ * @param {import('../shared/base/menu.js').default} menu
  */
 export default function useNodeEditorMenu(host, menu) {
   /**

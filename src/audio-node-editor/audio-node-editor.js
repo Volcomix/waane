@@ -1,6 +1,6 @@
 import { defineCustomElement, html } from '../shared/core/element.js'
-import useGraphNodeMenu from '../shared/node-editor/use-graph-node-menu.js'
-import useNodeEditorMenu from '../shared/node-editor/use-node-editor-menu.js'
+import useGraphNodeMenu from './use-graph-node-menu.js'
+import useNodeEditorMenu from './use-node-editor-menu.js'
 
 /**
  * @typedef {import('../shared/node-editor/node-editor.js').default} NodeEditor
