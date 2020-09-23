@@ -27,14 +27,14 @@ export default defineCustomElement('w-menu', {
     let height = 0
 
     function close() {
-      document.body.removeEventListener('mousedown', onBodyMouseDown)
+      document.body.removeEventListener('mousedown', handleBodyMouseDown)
       host.open = false
     }
 
     /**
      * @param {MouseEvent} event
      */
-    function onBodyMouseDown(event) {
+    function handleBodyMouseDown(event) {
       if (event.composedPath().includes(host)) {
         return
       }
@@ -46,7 +46,7 @@ export default defineCustomElement('w-menu', {
     })
 
     observe('open', () => {
-      document.body.addEventListener('mousedown', onBodyMouseDown)
+      document.body.addEventListener('mousedown', handleBodyMouseDown)
       if (host.open) {
         const boundingClientRect = host.getBoundingClientRect()
         width = boundingClientRect.width

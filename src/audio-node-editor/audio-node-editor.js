@@ -13,10 +13,11 @@ export default defineCustomElement('audio-node-editor', {
   template: html`
     <w-node-editor></w-node-editor>
     <w-menu id="node-editor-menu">
-      <w-menu-item>Oscillator</w-menu-item>
+      <w-menu-item id="oscillator">Oscillator</w-menu-item>
     </w-menu>
     <w-menu id="graph-node-menu">
-      <w-menu-item>Delete</w-menu-item>
+      <w-menu-item id="duplicate">Duplicate</w-menu-item>
+      <w-menu-item id="delete">Delete</w-menu-item>
     </w-menu>
   `,
   setup({ host }) {
@@ -29,11 +30,11 @@ export default defineCustomElement('audio-node-editor', {
     const graphNodeMenu = /** @type {Menu} */ (host.shadowRoot.querySelector(
       '#graph-node-menu',
     ))
-    const menuItemOscillator = /** @type {MenuItem} */ (nodeEditorMenu.querySelector(
-      'w-menu-item',
+    const nodeEditorMenuItemOscillator = /** @type {MenuItem} */ (nodeEditorMenu.querySelector(
+      '#oscillator',
     ))
-    const menuItemDelete = /** @type {MenuItem} */ (graphNodeMenu.querySelector(
-      'w-menu-item',
+    const graphNodeMenuItemDelete = /** @type {MenuItem} */ (graphNodeMenu.querySelector(
+      '#delete',
     ))
 
     // The order does matter because each one can stop the immediate
@@ -41,7 +42,7 @@ export default defineCustomElement('audio-node-editor', {
     useGraphNodeMenu(nodeEditor, graphNodeMenu)
     useNodeEditorMenu(nodeEditor, nodeEditorMenu)
 
-    menuItemOscillator.addEventListener('click', (event) => {
+    nodeEditorMenuItemOscillator.addEventListener('click', (event) => {
       const oscillatorNode = /** @type {GraphNode} */ (document.createElement(
         'w-graph-node',
       ))
@@ -59,7 +60,7 @@ export default defineCustomElement('audio-node-editor', {
       nodeEditor.appendChild(oscillatorNode)
     })
 
-    menuItemDelete.addEventListener('click', () => {
+    graphNodeMenuItemDelete.addEventListener('click', () => {
       nodeEditor
         .querySelectorAll('w-graph-node[selected]')
         .forEach((selectedGraphNode) => selectedGraphNode.remove())

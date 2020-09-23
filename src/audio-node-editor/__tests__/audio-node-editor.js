@@ -193,18 +193,20 @@ test('opens context menu on selected nodes', () => {
   )
   graphNode1.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true }))
 
-  expect([...getMenuItems()].map((menuItem) => menuItem.textContent)).toEqual([
-    'Delete',
-  ])
+  const graphNodeMenuItems = ['Duplicate', 'Delete']
+
+  expect([...getMenuItems()].map((menuItem) => menuItem.textContent)).toEqual(
+    graphNodeMenuItems,
+  )
   expect(graphNode1.selected).toBe(true)
   expect(graphNode2.selected).toBe(true)
   expect(graphNode3.selected).toBe(false)
 
   graphNode3.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true }))
 
-  expect([...getMenuItems()].map((menuItem) => menuItem.textContent)).toEqual([
-    'Delete',
-  ])
+  expect([...getMenuItems()].map((menuItem) => menuItem.textContent)).toEqual(
+    graphNodeMenuItems,
+  )
   expect(graphNode1.selected).toBe(false)
   expect(graphNode2.selected).toBe(false)
   expect(graphNode3.selected).toBe(true)
@@ -213,9 +215,9 @@ test('opens context menu on selected nodes', () => {
     new MouseEvent('contextmenu', { ctrlKey: true, bubbles: true }),
   )
 
-  expect([...getMenuItems()].map((menuItem) => menuItem.textContent)).toEqual([
-    'Delete',
-  ])
+  expect([...getMenuItems()].map((menuItem) => menuItem.textContent)).toEqual(
+    graphNodeMenuItems,
+  )
   expect(graphNode1.selected).toBe(false)
   expect(graphNode2.selected).toBe(true)
   expect(graphNode3.selected).toBe(true)

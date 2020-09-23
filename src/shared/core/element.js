@@ -1,7 +1,7 @@
 export const html = String.raw
 export const css = String.raw
 
-/** @typedef {typeof Number | typeof Boolean} PropertyType */
+/** @typedef {typeof String | typeof Number | typeof Boolean} PropertyType */
 
 /**
  * @template {PropertyType} T
@@ -9,6 +9,8 @@ export const css = String.raw
  *  ? number
  *  : T extends typeof Boolean
  *  ? boolean
+ *  : T extends typeof String
+ *  ? string
  *  : never
  * } PrimitiveType
  */
@@ -19,6 +21,24 @@ export const css = String.raw
  * @property {() => T} get
  * @property {(value: T) => void} set
  */
+
+/**
+ * @param {string} attributeName
+ * @returns {AccessorProperty<string>}
+ */
+function getStringProperty(attributeName) {
+  return {
+    /** @this {HTMLElement} */
+    get() {
+      return this.getAttribute(attributeName)
+    },
+
+    /** @this {HTMLElement} */
+    set(value) {
+      this.setAttribute(attributeName, value)
+    },
+  }
+}
 
 /**
  * @param {string} attributeName
@@ -71,6 +91,8 @@ function getProperty(attributeName, propertyType) {
       return getNumberProperty(attributeName)
     case Boolean:
       return getBooleanProperty(attributeName)
+    default:
+      return getStringProperty(attributeName)
   }
 }
 
