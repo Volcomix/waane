@@ -1,6 +1,5 @@
-import { css, defineCustomElement } from '../core/element.js'
+import { css, defineCustomElement, html } from '../core/element.js'
 import elevation from '../core/elevation.js'
-import icon from '../core/icon.js'
 import typography from '../core/typography.js'
 
 export default defineCustomElement('w-graph-node', {
@@ -34,9 +33,7 @@ export default defineCustomElement('w-graph-node', {
       color: rgba(var(--color-on-surface) / var(--text-medium-emphasis));
     }
 
-    :host:after {
-      ${icon}
-      content: 'check_circle';
+    w-icon {
       position: absolute;
       top: 0;
       right: 0;
@@ -50,23 +47,23 @@ export default defineCustomElement('w-graph-node', {
         color 100ms var(--easing-accelerated);
     }
 
-    :host(:hover):after {
+    :host(:hover) w-icon {
       background-color: rgba(var(--color-on-surface) / 0.04);
     }
 
-    :host([selected]):after {
+    :host([selected]) w-icon {
       background-color: rgba(var(--color-primary) / 0.08);
       color: rgb(var(--color-primary));
       transition: background-color 200ms var(--easing-standard),
         color 100ms var(--easing-decelerated);
     }
 
-    :host(:active):after,
-    :host([selecting]):after {
+    :host(:active) w-icon,
+    :host([selecting]) w-icon {
       background-color: rgba(var(--color-primary) / 0.16);
     }
 
-    :host([selected][selecting]):after {
+    :host([selected][selecting]) w-icon {
       background-color: transparent;
       color: rgba(var(--color-primary) / 0.24);
     }
@@ -78,6 +75,10 @@ export default defineCustomElement('w-graph-node', {
       margin-right: 24px;
       ${typography('headline6')}
     }
+  `,
+  template: html`
+    <slot></slot>
+    <w-icon>check_circle</w-icon>
   `,
   properties: {
     x: Number,
