@@ -24,3 +24,14 @@ export function doOverlap(a, b) {
   }
   return true
 }
+
+/**
+ * @param {Point} a
+ * @param {Point} b
+ * @returns {number}
+ */
+export function squaredDist(a, b) {
+  const x = a.x - b.x
+  const y = a.y - b.y
+  return x * x + y * y
+}

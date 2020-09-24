@@ -1,4 +1,5 @@
 import { defineCustomElement, html } from '../shared/core/element.js'
+import { squaredDist } from '../shared/helpers/geometry.js'
 import useGraphNodeMenu from './use-graph-node-menu.js'
 import useNodeEditorMenu from './use-node-editor-menu.js'
 
@@ -40,6 +41,9 @@ export default defineCustomElement('audio-node-editor', {
     const nodeEditorMenuItemOscillator = /** @type {MenuItem} */ (nodeEditorMenu.querySelector(
       '#oscillator',
     ))
+    const graphNodeMenuItemDuplicate = /** @type {MenuItem} */ (graphNodeMenu.querySelector(
+      '#duplicate',
+    ))
     const graphNodeMenuItemDelete = /** @type {MenuItem} */ (graphNodeMenu.querySelector(
       '#delete',
     ))
@@ -49,7 +53,29 @@ export default defineCustomElement('audio-node-editor', {
     useGraphNodeMenu(nodeEditor, graphNodeMenu)
     useNodeEditorMenu(nodeEditor, nodeEditorMenu)
 
+    function cancelMovingNodes() {
+      nodeEditor.querySelectorAll('w-graph-node[moving]').forEach((
+        /** @type {GraphNode} */ movingGraphNode,
+      ) => {
+        movingGraphNode.moving = false
+      })
+    }
+
+    /**
+     * @param {number} x
+     * @param {number} y
+     */
+    function toNodeEditorPosition(x, y) {
+      const { width, height } = nodeEditor.getBoundingClientRect()
+      return {
+        x: (x - width / 2) / nodeEditor.zoom - nodeEditor.panX,
+        y: (y - height / 2) / nodeEditor.zoom - nodeEditor.panY,
+      }
+    }
+
     nodeEditorMenuItemOscillator.addEventListener('click', (event) => {
+      cancelMovingNodes()
+
       const oscillatorNode = /** @type {GraphNode} */ (document.createElement(
         'w-graph-node',
       ))
@@ -57,14 +83,60 @@ export default defineCustomElement('audio-node-editor', {
 
       // -2 is required for the cursor to click on the node
       // after adding it
-      const { width, height } = nodeEditor.getBoundingClientRect()
-      oscillatorNode.x =
-        (event.pageX - 2 - width / 2) / nodeEditor.zoom - nodeEditor.panX
-      oscillatorNode.y =
-        (event.pageY - 2 - height / 2) / nodeEditor.zoom - nodeEditor.panY
+      const { x, y } = toNodeEditorPosition(event.pageX, event.pageY)
+      oscillatorNode.x = x - 2
+      oscillatorNode.y = y - 2
       oscillatorNode.moving = true
 
       nodeEditor.appendChild(oscillatorNode)
+    })
+
+    graphNodeMenuItemDuplicate.addEventListener('click', (event) => {
+      cancelMovingNodes()
+
+      const offsetX = (event.clientX - graphNodeMenu.x) / nodeEditor.zoom
+      const offsetY = (event.clientY - graphNodeMenu.y) / nodeEditor.zoom
+
+      const mousePosition = toNodeEditorPosition(event.pageX, event.pageY)
+
+      /** @type {GraphNode} */
+      let nearestGraphNode = null
+
+      let minSquaredDist = Infinity
+
+      nodeEditor.querySelectorAll('w-graph-node[selected]').forEach((
+        /** @type {GraphNode} */ selectedGraphNode,
+      ) => {
+        // Duplicates the graph node
+        const duplicatedGraphNode = /** @type {GraphNode} */ (selectedGraphNode.cloneNode(
+          true,
+        ))
+        duplicatedGraphNode.x += offsetX
+        duplicatedGraphNode.y += offsetY
+        nodeEditor.appendChild(duplicatedGraphNode)
+
+        // Finds the nearest graph node which is behind the mouse
+        if (!nearestGraphNode) {
+          nearestGraphNode = duplicatedGraphNode
+        } else if (
+          duplicatedGraphNode.x <= mousePosition.x &&
+          duplicatedGraphNode.y <= mousePosition.y
+        ) {
+          const graphNodeSquaredDist = squaredDist(
+            duplicatedGraphNode,
+            mousePosition,
+          )
+          if (graphNodeSquaredDist < minSquaredDist) {
+            nearestGraphNode = duplicatedGraphNode
+            minSquaredDist = graphNodeSquaredDist
+          }
+        }
+
+        // Unselects the already existing node (the one that was duplicated)
+        selectedGraphNode.selected = false
+      })
+
+      nearestGraphNode.moving = true
     })
 
     graphNodeMenuItemDelete.addEventListener('click', () => {

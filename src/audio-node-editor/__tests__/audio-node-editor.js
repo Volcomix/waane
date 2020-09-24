@@ -222,6 +222,37 @@ test('opens context menu on selected nodes', () => {
   expect(getMenuItems()).toHaveLength(0)
 })
 
+test('duplicates nodes', () => {
+  const { nodeEditor, getGraphNodes, getMenuItems, addAudioNode } = setup()
+  addAudioNode('Oscillator')
+  addAudioNode('Oscillator')
+  addAudioNode('Oscillator')
+  const graphNodes = getGraphNodes()
+  const [graphNode1, graphNode2] = graphNodes
+
+  expect(graphNodes).toHaveLength(3)
+
+  graphNode1.dispatchEvent(
+    new MouseEvent('click', { ctrlKey: true, bubbles: true }),
+  )
+  graphNode2.dispatchEvent(
+    new MouseEvent('click', { ctrlKey: true, bubbles: true }),
+  )
+  graphNode1.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true }))
+
+  const menuItem = getMenuItems().find((element) =>
+    element.textContent.includes('Duplicate'),
+  )
+  menuItem.click()
+
+  nodeEditor.dispatchEvent(new MouseEvent('mousedown'))
+  nodeEditor.dispatchEvent(new MouseEvent('mouseup'))
+  nodeEditor.click()
+
+  const remainingGraphNodes = getGraphNodes()
+  expect(remainingGraphNodes).toHaveLength(5)
+})
+
 test('deletes nodes', () => {
   const { getGraphNodes, getMenuItems, addAudioNode } = setup()
   addAudioNode('Oscillator')

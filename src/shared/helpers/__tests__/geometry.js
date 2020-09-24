@@ -1,5 +1,5 @@
 import { expect, test } from '@jest/globals'
-import { doOverlap } from '../geometry'
+import { doOverlap, squaredDist } from '../geometry'
 
 test('boxes do not overlap', () => {
   expect(
@@ -17,4 +17,8 @@ test('boxes overlap', () => {
       { min: { x: 1, y: 1 }, max: { x: 2, y: 2 } },
     ),
   ).toBe(true)
+})
+
+test('squaredDist', () => {
+  expect(squaredDist({ x: 0, y: 0 }, { x: 1, y: 1 })).toBe(2)
 })
