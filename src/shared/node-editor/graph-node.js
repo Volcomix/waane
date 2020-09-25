@@ -73,6 +73,7 @@ export default defineCustomElement('w-graph-node', {
       align-items: center;
       height: 32px;
       margin-right: 24px;
+      white-space: nowrap;
       ${typography('headline6')}
     }
   `,

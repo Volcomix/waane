@@ -107,6 +107,7 @@ test('opens context menu on node editor', () => {
   contextMenu(nodeEditor)
   expect(getMenuItems().map((menuItem) => menuItem.textContent)).toEqual([
     'Oscillator',
+    'Audio destination',
   ])
   document.body.dispatchEvent(new MouseEvent('mousedown'))
   expect(getMenuItems()).toHaveLength(0)
@@ -118,6 +119,14 @@ test('adds an oscillator node', () => {
   expect(
     [...getGraphNodes()].map((graphNode) => graphNode.textContent),
   ).toEqual(['Oscillator'])
+})
+
+test('adds an audio destination node', () => {
+  const { getGraphNodes, addAudioNode } = setup()
+  addAudioNode('Audio destination')
+  expect(
+    [...getGraphNodes()].map((graphNode) => graphNode.textContent),
+  ).toEqual(['Audio destination'])
 })
 
 test('selects nodes', () => {

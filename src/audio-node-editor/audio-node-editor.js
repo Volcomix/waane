@@ -15,6 +15,7 @@ export default defineCustomElement('audio-node-editor', {
     <w-node-editor></w-node-editor>
     <w-menu id="node-editor-menu">
       <w-menu-item id="oscillator">Oscillator</w-menu-item>
+      <w-menu-item id="audio-destination">Audio destination</w-menu-item>
     </w-menu>
     <w-menu id="graph-node-menu">
       <w-menu-item id="duplicate">
@@ -41,6 +42,9 @@ export default defineCustomElement('audio-node-editor', {
     const nodeEditorMenuItemOscillator = /** @type {MenuItem} */ (nodeEditorMenu.querySelector(
       '#oscillator',
     ))
+    const nodeEditorMenuItemAudioDestination = /** @type {MenuItem} */ (nodeEditorMenu.querySelector(
+      '#audio-destination',
+    ))
     const graphNodeMenuItemDuplicate = /** @type {MenuItem} */ (graphNodeMenu.querySelector(
       '#duplicate',
     ))
@@ -53,7 +57,7 @@ export default defineCustomElement('audio-node-editor', {
     useGraphNodeMenu(nodeEditor, graphNodeMenu)
     useNodeEditorMenu(nodeEditor, nodeEditorMenu)
 
-    function cancelMovingNodes() {
+    function cancelMovingGraphNodes() {
       nodeEditor.querySelectorAll('w-graph-node[moving]').forEach((
         /** @type {GraphNode} */ movingGraphNode,
       ) => {
@@ -73,23 +77,35 @@ export default defineCustomElement('audio-node-editor', {
       }
     }
 
-    nodeEditorMenuItemOscillator.addEventListener('click', (event) => {
-      cancelMovingNodes()
+    /**
+     * @param {MouseEvent} event
+     * @param {string} audioNodeName
+     */
+    function addAudioNode(event, audioNodeName) {
+      cancelMovingGraphNodes()
 
       const { x, y } = toNodeEditorPosition(event.pageX, event.pageY)
 
       const oscillatorNode = /** @type {GraphNode} */ (document.createElement(
         'w-graph-node',
       ))
-      oscillatorNode.textContent = 'Oscillator'
+      oscillatorNode.textContent = audioNodeName
       oscillatorNode.x = x
       oscillatorNode.y = y
       oscillatorNode.moving = true
       nodeEditor.appendChild(oscillatorNode)
+    }
+
+    nodeEditorMenuItemOscillator.addEventListener('click', (event) => {
+      addAudioNode(event, 'Oscillator')
+    })
+
+    nodeEditorMenuItemAudioDestination.addEventListener('click', (event) => {
+      addAudioNode(event, 'Audio destination')
     })
 
     graphNodeMenuItemDuplicate.addEventListener('click', (event) => {
-      cancelMovingNodes()
+      cancelMovingGraphNodes()
 
       const mousePosition = toNodeEditorPosition(event.pageX, event.pageY)
 
