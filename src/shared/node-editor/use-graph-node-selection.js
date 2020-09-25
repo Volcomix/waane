@@ -74,6 +74,9 @@ export default function useGraphNodeSelection(host) {
     if (event.button !== 0 || event.altKey) {
       return
     }
+    if (host.querySelector('w-graph-node[moving]')) {
+      return
+    }
     let element = /** @type {Element} */ (event.target)
     while (element !== host) {
       if (element.matches('w-graph-node')) {

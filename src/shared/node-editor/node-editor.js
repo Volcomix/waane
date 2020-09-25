@@ -1,6 +1,6 @@
 import { css, defineCustomElement, html } from '../core/element.js'
 import useGraphNodeMove from './use-graph-node-move.js'
-import useGraphNodeSelection from './use-grapn-node-selection.js'
+import useGraphNodeSelection from './use-graph-node-selection.js'
 import useMouseNavigation from './use-mouse-navigation.js'
 
 export default defineCustomElement('w-node-editor', {

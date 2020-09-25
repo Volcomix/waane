@@ -76,28 +76,25 @@ export default defineCustomElement('audio-node-editor', {
     nodeEditorMenuItemOscillator.addEventListener('click', (event) => {
       cancelMovingNodes()
 
+      const { x, y } = toNodeEditorPosition(event.pageX, event.pageY)
+
       const oscillatorNode = /** @type {GraphNode} */ (document.createElement(
         'w-graph-node',
       ))
       oscillatorNode.textContent = 'Oscillator'
-
-      // -2 is required for the cursor to click on the node
-      // after adding it
-      const { x, y } = toNodeEditorPosition(event.pageX, event.pageY)
-      oscillatorNode.x = x - 2
-      oscillatorNode.y = y - 2
+      oscillatorNode.x = x
+      oscillatorNode.y = y
       oscillatorNode.moving = true
-
       nodeEditor.appendChild(oscillatorNode)
     })
 
     graphNodeMenuItemDuplicate.addEventListener('click', (event) => {
       cancelMovingNodes()
 
+      const mousePosition = toNodeEditorPosition(event.pageX, event.pageY)
+
       const offsetX = (event.clientX - graphNodeMenu.x) / nodeEditor.zoom
       const offsetY = (event.clientY - graphNodeMenu.y) / nodeEditor.zoom
-
-      const mousePosition = toNodeEditorPosition(event.pageX, event.pageY)
 
       /** @type {GraphNode} */
       let nearestGraphNode = null
