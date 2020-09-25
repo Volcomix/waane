@@ -47,10 +47,6 @@ export default defineCustomElement('w-menu', {
       close()
     }
 
-    host.addEventListener('click', () => {
-      close()
-    })
-
     observe('open', () => {
       document.body.addEventListener('mousedown', handleBodyMouseDown)
       if (host.open) {
@@ -68,6 +64,10 @@ export default defineCustomElement('w-menu', {
     observe('y', () => {
       const y = Math.min(host.y, document.documentElement.clientHeight - height)
       host.style.top = `${y}px`
+    })
+
+    host.addEventListener('click', () => {
+      close()
     })
   },
 })
