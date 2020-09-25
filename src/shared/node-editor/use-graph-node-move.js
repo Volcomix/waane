@@ -27,6 +27,9 @@ export default function useGraphNodeMove(host) {
     if (event.button !== 0 || event.altKey) {
       return
     }
+    if (host.querySelector('w-graph-node[moving]')) {
+      return
+    }
     let element = /** @type {Element} */ (event.target)
     while (!element.matches('w-graph-node')) {
       if (element === host) {

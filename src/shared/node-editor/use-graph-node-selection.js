@@ -3,6 +3,23 @@ import { doOverlap } from '../helpers/geometry.js'
 
 /** @typedef {import('./graph-node.js').default} GraphNode */
 
+/**
+ * @param {SelectionRectangle} selectionRectangle
+ * @returns {import('../helpers/geometry.js').Box}
+ */
+function getSelectionBox(selectionRectangle) {
+  return {
+    min: {
+      x: Math.min(selectionRectangle.fromX, selectionRectangle.toX),
+      y: Math.min(selectionRectangle.fromY, selectionRectangle.toY),
+    },
+    max: {
+      x: Math.max(selectionRectangle.fromX, selectionRectangle.toX),
+      y: Math.max(selectionRectangle.fromY, selectionRectangle.toY),
+    },
+  }
+}
+
 const SelectionRectangle = defineCustomElement('w-selection-rectangle', {
   styles: css`
     :host {
@@ -50,25 +67,6 @@ export default function useGraphNodeSelection(host) {
       selectedGraphNode.selected = false
     })
   }
-
-  host.addEventListener('click', (event) => {
-    if (selectionRectangle.isConnected) {
-      selectionRectangle.remove()
-      return
-    }
-    if (!event.ctrlKey && !event.metaKey) {
-      unselectAll()
-    }
-    let element = /** @type {Element} */ (event.target)
-    while (element !== host) {
-      if (element.matches('w-graph-node')) {
-        const graphNode = /** @type {GraphNode} */ (element)
-        graphNode.selected = !graphNode.selected
-        break
-      }
-      element = element.parentElement
-    }
-  })
 
   host.addEventListener('mousedown', (event) => {
     if (event.button !== 0 || event.altKey) {
@@ -128,21 +126,23 @@ export default function useGraphNodeSelection(host) {
       graphNode.selecting = false
     })
   })
-}
 
-/**
- * @param {SelectionRectangle} selectionRectangle
- * @returns {import('../helpers/geometry.js').Box}
- */
-function getSelectionBox(selectionRectangle) {
-  return {
-    min: {
-      x: Math.min(selectionRectangle.fromX, selectionRectangle.toX),
-      y: Math.min(selectionRectangle.fromY, selectionRectangle.toY),
-    },
-    max: {
-      x: Math.max(selectionRectangle.fromX, selectionRectangle.toX),
-      y: Math.max(selectionRectangle.fromY, selectionRectangle.toY),
-    },
-  }
+  host.addEventListener('click', (event) => {
+    if (selectionRectangle.isConnected) {
+      selectionRectangle.remove()
+      return
+    }
+    if (!event.ctrlKey && !event.metaKey) {
+      unselectAll()
+    }
+    let element = /** @type {Element} */ (event.target)
+    while (element !== host) {
+      if (element.matches('w-graph-node')) {
+        const graphNode = /** @type {GraphNode} */ (element)
+        graphNode.selected = !graphNode.selected
+        break
+      }
+      element = element.parentElement
+    }
+  })
 }
