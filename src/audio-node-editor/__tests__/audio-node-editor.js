@@ -2,6 +2,27 @@ import { afterEach, expect, test } from '@jest/globals'
 import '../../index'
 import { html } from '../../shared/core/element'
 
+/**
+ * @param {HTMLElement} element
+ * @param {MouseEventInit} eventInitDict
+ */
+function click(element, eventInitDict = {}) {
+  const commonEventInitDict = { bubbles: true, ...eventInitDict }
+  element.dispatchEvent(new MouseEvent('mousedown', commonEventInitDict))
+  element.dispatchEvent(new MouseEvent('mouseup', commonEventInitDict))
+  element.dispatchEvent(new MouseEvent('click', commonEventInitDict))
+}
+
+/**
+ * @param {HTMLElement} element
+ * @param {MouseEventInit} eventInitDict
+ */
+function contextMenu(element, eventInitDict = {}) {
+  element.dispatchEvent(
+    new MouseEvent('contextmenu', { bubbles: true, ...eventInitDict }),
+  )
+}
+
 function setup() {
   document.body.innerHTML = html`<audio-node-editor></audio-node-editor>`
   const audioNodeEditor = /** @type {HTMLElement} */ (document.body.querySelector(
@@ -45,17 +66,21 @@ function setup() {
   }
 
   /**
+   * @param {string} textContent
+   */
+  function getMenuItem(textContent) {
+    return getMenuItems().find((element) =>
+      element.textContent.includes(textContent),
+    )
+  }
+
+  /**
    * @param {string} audioNodeName
    */
   function addAudioNode(audioNodeName) {
-    nodeEditor.dispatchEvent(new MouseEvent('contextmenu'))
-    const menuItem = getMenuItems().find(
-      (element) => element.textContent === audioNodeName,
-    )
-    menuItem.click()
-    nodeEditor.dispatchEvent(new MouseEvent('mousedown'))
-    nodeEditor.dispatchEvent(new MouseEvent('mouseup'))
-    nodeEditor.click()
+    contextMenu(nodeEditor)
+    getMenuItem(audioNodeName).click()
+    click(nodeEditor)
   }
 
   return {
@@ -63,6 +88,7 @@ function setup() {
     getGraphNodes,
     moveGraphNode,
     getMenuItems,
+    getMenuItem,
     addAudioNode,
   }
 }
@@ -78,7 +104,7 @@ test('has no node by default', () => {
 
 test('opens context menu on node editor', () => {
   const { nodeEditor, getMenuItems } = setup()
-  nodeEditor.dispatchEvent(new MouseEvent('contextmenu'))
+  contextMenu(nodeEditor)
   expect(getMenuItems().map((menuItem) => menuItem.textContent)).toEqual([
     'Oscillator',
   ])
@@ -89,9 +115,9 @@ test('opens context menu on node editor', () => {
 test('adds an oscillator node', () => {
   const { getGraphNodes, addAudioNode } = setup()
   addAudioNode('Oscillator')
-  expect([...getGraphNodes()]).toEqual([
-    expect.objectContaining({ textContent: 'Oscillator' }),
-  ])
+  expect(
+    [...getGraphNodes()].map((graphNode) => graphNode.textContent),
+  ).toEqual(['Oscillator'])
 })
 
 test('selects nodes', () => {
@@ -117,23 +143,17 @@ test('inverts node selection', () => {
   addAudioNode('Oscillator')
   const [graphNode1, graphNode2] = getGraphNodes()
 
-  graphNode1.dispatchEvent(
-    new MouseEvent('click', { ctrlKey: true, bubbles: true }),
-  )
+  click(graphNode1, { ctrlKey: true })
 
   expect(graphNode1.selected).toBe(true)
   expect(graphNode2.selected).toBe(false)
 
-  graphNode2.dispatchEvent(
-    new MouseEvent('click', { ctrlKey: true, bubbles: true }),
-  )
+  click(graphNode2, { ctrlKey: true })
 
   expect(graphNode1.selected).toBe(true)
   expect(graphNode2.selected).toBe(true)
 
-  graphNode1.dispatchEvent(
-    new MouseEvent('click', { ctrlKey: true, bubbles: true }),
-  )
+  click(graphNode1, { ctrlKey: true })
 
   expect(graphNode1.selected).toBe(false)
   expect(graphNode2.selected).toBe(true)
@@ -152,12 +172,8 @@ test('moves nodes', () => {
   graphNode3.x = 20
   graphNode3.y = 20
 
-  graphNode1.dispatchEvent(
-    new MouseEvent('click', { ctrlKey: true, bubbles: true }),
-  )
-  graphNode2.dispatchEvent(
-    new MouseEvent('click', { ctrlKey: true, bubbles: true }),
-  )
+  click(graphNode1, { ctrlKey: true })
+  click(graphNode2, { ctrlKey: true })
   moveGraphNode(graphNode1, 5, 5)
 
   expect(graphNode1).toMatchObject({ x: 5, y: 5, selected: true })
@@ -184,35 +200,29 @@ test('opens context menu on selected nodes', () => {
   addAudioNode('Oscillator')
   const [graphNode1, graphNode2, graphNode3] = getGraphNodes()
 
-  graphNode1.dispatchEvent(
-    new MouseEvent('click', { ctrlKey: true, bubbles: true }),
-  )
-  graphNode2.dispatchEvent(
-    new MouseEvent('click', { ctrlKey: true, bubbles: true }),
-  )
-  graphNode1.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true }))
-
-  const graphNodeMenuItems = ['Duplicate', 'Delete'].map((menuItem) =>
+  const expectedMenuItems = ['Duplicate', 'Delete'].map((menuItem) =>
     expect.objectContaining({ textContent: expect.stringContaining(menuItem) }),
   )
 
-  expect(getMenuItems()).toEqual(graphNodeMenuItems)
+  click(graphNode1, { ctrlKey: true })
+  click(graphNode2, { ctrlKey: true })
+  contextMenu(graphNode1)
+
+  expect(getMenuItems()).toEqual(expectedMenuItems)
   expect(graphNode1.selected).toBe(true)
   expect(graphNode2.selected).toBe(true)
   expect(graphNode3.selected).toBe(false)
 
-  graphNode3.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true }))
+  contextMenu(graphNode3)
 
-  expect(getMenuItems()).toEqual(graphNodeMenuItems)
+  expect(getMenuItems()).toEqual(expectedMenuItems)
   expect(graphNode1.selected).toBe(false)
   expect(graphNode2.selected).toBe(false)
   expect(graphNode3.selected).toBe(true)
 
-  graphNode2.dispatchEvent(
-    new MouseEvent('contextmenu', { ctrlKey: true, bubbles: true }),
-  )
+  contextMenu(graphNode2, { ctrlKey: true })
 
-  expect(getMenuItems()).toEqual(graphNodeMenuItems)
+  expect(getMenuItems()).toEqual(expectedMenuItems)
   expect(graphNode1.selected).toBe(false)
   expect(graphNode2.selected).toBe(true)
   expect(graphNode3.selected).toBe(true)
@@ -223,7 +233,7 @@ test('opens context menu on selected nodes', () => {
 })
 
 test('duplicates nodes', () => {
-  const { nodeEditor, getGraphNodes, getMenuItems, addAudioNode } = setup()
+  const { nodeEditor, getGraphNodes, getMenuItem, addAudioNode } = setup()
   addAudioNode('Oscillator')
   addAudioNode('Oscillator')
   addAudioNode('Oscillator')
@@ -232,29 +242,18 @@ test('duplicates nodes', () => {
 
   expect(graphNodes).toHaveLength(3)
 
-  graphNode1.dispatchEvent(
-    new MouseEvent('click', { ctrlKey: true, bubbles: true }),
-  )
-  graphNode2.dispatchEvent(
-    new MouseEvent('click', { ctrlKey: true, bubbles: true }),
-  )
-  graphNode1.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true }))
-
-  const menuItem = getMenuItems().find((element) =>
-    element.textContent.includes('Duplicate'),
-  )
-  menuItem.click()
-
-  nodeEditor.dispatchEvent(new MouseEvent('mousedown'))
-  nodeEditor.dispatchEvent(new MouseEvent('mouseup'))
-  nodeEditor.click()
+  click(graphNode1, { ctrlKey: true })
+  click(graphNode2, { ctrlKey: true })
+  contextMenu(graphNode1)
+  getMenuItem('Duplicate').click()
+  click(nodeEditor)
 
   const remainingGraphNodes = getGraphNodes()
   expect(remainingGraphNodes).toHaveLength(5)
 })
 
 test('deletes nodes', () => {
-  const { getGraphNodes, getMenuItems, addAudioNode } = setup()
+  const { getGraphNodes, getMenuItem, addAudioNode } = setup()
   addAudioNode('Oscillator')
   addAudioNode('Oscillator')
   addAudioNode('Oscillator')
@@ -263,18 +262,10 @@ test('deletes nodes', () => {
 
   expect(graphNodes).toHaveLength(3)
 
-  graphNode1.dispatchEvent(
-    new MouseEvent('click', { ctrlKey: true, bubbles: true }),
-  )
-  graphNode2.dispatchEvent(
-    new MouseEvent('click', { ctrlKey: true, bubbles: true }),
-  )
-  graphNode1.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true }))
-
-  const menuItem = getMenuItems().find((element) =>
-    element.textContent.includes('Delete'),
-  )
-  menuItem.click()
+  click(graphNode1, { ctrlKey: true })
+  click(graphNode2, { ctrlKey: true })
+  contextMenu(graphNode1)
+  getMenuItem('Delete').click()
 
   const remainingGraphNodes = getGraphNodes()
   expect(remainingGraphNodes).toHaveLength(1)
