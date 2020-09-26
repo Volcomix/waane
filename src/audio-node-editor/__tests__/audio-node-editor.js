@@ -32,11 +32,12 @@ function setup() {
     'w-node-editor',
   ))
 
-  /**
-   * @returns {NodeListOf<import('../../shared/node-editor/graph-node.js').default>}
-   */
   function getGraphNodes() {
-    return nodeEditor.querySelectorAll('w-graph-node')
+    return [
+      .../** @type {NodeListOf<import('../../shared/node-editor/graph-node.js').default>} */ (nodeEditor.querySelectorAll(
+        'w-graph-node',
+      )),
+    ]
   }
 
   /**
@@ -80,6 +81,7 @@ function setup() {
   function addAudioNode(audioNodeName) {
     contextMenu(nodeEditor)
     getMenuItem(audioNodeName).click()
+    nodeEditor.dispatchEvent(new MouseEvent('mousemove'))
     click(nodeEditor)
   }
 
@@ -116,17 +118,23 @@ test('opens context menu on node editor', () => {
 test('adds an oscillator node', () => {
   const { getGraphNodes, addAudioNode } = setup()
   addAudioNode('Oscillator')
-  expect(
-    [...getGraphNodes()].map((graphNode) => graphNode.textContent),
-  ).toEqual(['Oscillator'])
+  expect(getGraphNodes()).toEqual([
+    expect.objectContaining({
+      textContent: expect.stringContaining('Oscillator'),
+      selected: true,
+    }),
+  ])
 })
 
 test('adds an audio destination node', () => {
   const { getGraphNodes, addAudioNode } = setup()
   addAudioNode('Audio destination')
-  expect(
-    [...getGraphNodes()].map((graphNode) => graphNode.textContent),
-  ).toEqual(['Audio destination'])
+  expect(getGraphNodes()).toEqual([
+    expect.objectContaining({
+      textContent: expect.stringContaining('Audio destination'),
+      selected: true,
+    }),
+  ])
 })
 
 test('selects nodes', () => {
@@ -152,7 +160,7 @@ test('inverts node selection', () => {
   addAudioNode('Oscillator')
   const [graphNode1, graphNode2] = getGraphNodes()
 
-  click(graphNode1, { ctrlKey: true })
+  click(graphNode1)
 
   expect(graphNode1.selected).toBe(true)
   expect(graphNode2.selected).toBe(false)
@@ -181,7 +189,7 @@ test('moves nodes', () => {
   graphNode3.x = 20
   graphNode3.y = 20
 
-  click(graphNode1, { ctrlKey: true })
+  click(graphNode1)
   click(graphNode2, { ctrlKey: true })
   moveGraphNode(graphNode1, 5, 5)
 
@@ -213,7 +221,7 @@ test('opens context menu on selected nodes', () => {
     expect.objectContaining({ textContent: expect.stringContaining(menuItem) }),
   )
 
-  click(graphNode1, { ctrlKey: true })
+  click(graphNode1)
   click(graphNode2, { ctrlKey: true })
   contextMenu(graphNode1)
 
@@ -251,14 +259,20 @@ test('duplicates nodes', () => {
 
   expect(graphNodes).toHaveLength(3)
 
-  click(graphNode1, { ctrlKey: true })
+  click(graphNode1)
   click(graphNode2, { ctrlKey: true })
   contextMenu(graphNode1)
   getMenuItem('Duplicate').click()
+  nodeEditor.dispatchEvent(new MouseEvent('mousemove'))
   click(nodeEditor)
 
-  const remainingGraphNodes = getGraphNodes()
-  expect(remainingGraphNodes).toHaveLength(5)
+  expect(getGraphNodes()).toEqual([
+    expect.objectContaining({ selected: false }),
+    expect.objectContaining({ selected: false }),
+    expect.objectContaining({ selected: false }),
+    expect.objectContaining({ selected: true }),
+    expect.objectContaining({ selected: true }),
+  ])
 })
 
 test('deletes nodes', () => {
@@ -271,7 +285,7 @@ test('deletes nodes', () => {
 
   expect(graphNodes).toHaveLength(3)
 
-  click(graphNode1, { ctrlKey: true })
+  click(graphNode1)
   click(graphNode2, { ctrlKey: true })
   contextMenu(graphNode1)
   getMenuItem('Delete').click()

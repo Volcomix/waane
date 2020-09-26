@@ -1,3 +1,5 @@
 import './audio-node-editor.js'
+import './node-audio-destination.js'
+import './node-oscillator.js'
 import './use-graph-node-menu.js'
 import './use-node-editor-menu.js'

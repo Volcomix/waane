@@ -86,22 +86,23 @@ export default defineCustomElement('audio-node-editor', {
 
       const { x, y } = toNodeEditorPosition(event.pageX, event.pageY)
 
-      const oscillatorNode = /** @type {GraphNode} */ (document.createElement(
+      const audioNode = document.createElement(audioNodeName)
+      nodeEditor.appendChild(audioNode)
+
+      const graphNode = /** @type {GraphNode} */ (audioNode.querySelector(
         'w-graph-node',
       ))
-      oscillatorNode.textContent = audioNodeName
-      oscillatorNode.x = x
-      oscillatorNode.y = y
-      oscillatorNode.moving = true
-      nodeEditor.appendChild(oscillatorNode)
+      graphNode.x = x
+      graphNode.y = y
+      graphNode.moving = true
     }
 
     nodeEditorMenuItemOscillator.addEventListener('click', (event) => {
-      addAudioNode(event, 'Oscillator')
+      addAudioNode(event, 'node-oscillator')
     })
 
     nodeEditorMenuItemAudioDestination.addEventListener('click', (event) => {
-      addAudioNode(event, 'Audio destination')
+      addAudioNode(event, 'node-audio-destination')
     })
 
     graphNodeMenuItemDuplicate.addEventListener('click', (event) => {
@@ -120,13 +121,20 @@ export default defineCustomElement('audio-node-editor', {
       nodeEditor.querySelectorAll('w-graph-node[selected]').forEach((
         /** @type {GraphNode} */ selectedGraphNode,
       ) => {
-        // Duplicates the graph node
-        const duplicatedGraphNode = /** @type {GraphNode} */ (selectedGraphNode.cloneNode(
-          true,
+        // Unselects the already existing node (the one that was duplicated)
+        selectedGraphNode.selected = false
+
+        // Duplicates the audio node
+        const duplicatedAudioNode = /** @type {HTMLElement} */ (selectedGraphNode.parentElement.cloneNode())
+        nodeEditor.appendChild(duplicatedAudioNode)
+
+        // Sets the duplicated graph node position
+        const duplicatedGraphNode = /** @type {GraphNode} */ (duplicatedAudioNode.querySelector(
+          'w-graph-node',
         ))
-        duplicatedGraphNode.x += offsetX
-        duplicatedGraphNode.y += offsetY
-        nodeEditor.appendChild(duplicatedGraphNode)
+        duplicatedGraphNode.x = selectedGraphNode.x + offsetX
+        duplicatedGraphNode.y = selectedGraphNode.y + offsetY
+        duplicatedGraphNode.selected = true
 
         // Finds the nearest graph node which is behind the mouse
         if (!nearestGraphNode) {
@@ -144,9 +152,6 @@ export default defineCustomElement('audio-node-editor', {
             minSquaredDist = graphNodeSquaredDist
           }
         }
-
-        // Unselects the already existing node (the one that was duplicated)
-        selectedGraphNode.selected = false
       })
 
       nearestGraphNode.moving = true
@@ -155,7 +160,9 @@ export default defineCustomElement('audio-node-editor', {
     graphNodeMenuItemDelete.addEventListener('click', () => {
       nodeEditor
         .querySelectorAll('w-graph-node[selected]')
-        .forEach((selectedGraphNode) => selectedGraphNode.remove())
+        .forEach((selectedGraphNode) => {
+          selectedGraphNode.parentElement.remove()
+        })
     })
   },
 })

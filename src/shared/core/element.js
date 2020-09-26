@@ -132,6 +132,7 @@ function getProperty(attributeName, propertyType) {
  * @typedef {object} DefineCustomElementOptions
  * @property {string} [styles]
  * @property {string} [template]
+ * @property {boolean} [shadow]
  * @property {T} [properties]
  * @property {Setup<T>} [setup]
  */
@@ -147,6 +148,7 @@ export function defineCustomElement(
   {
     styles,
     template = html`<slot></slot>`,
+    shadow = true,
     properties = /** @type {T} */ ({}),
     setup = () => {},
   },
@@ -195,8 +197,11 @@ export function defineCustomElement(
     /** @this {CustomElement & Properties<T>} */
     constructor() {
       super()
-      this.attachShadow({ mode: 'open' })
-      this.shadowRoot.appendChild(templateElement.content.cloneNode(true))
+
+      if (shadow) {
+        this.attachShadow({ mode: 'open' })
+        this.shadowRoot.appendChild(templateElement.content.cloneNode(true))
+      }
 
       Object.defineProperties(this, reflectedProperties)
 
@@ -223,6 +228,9 @@ export function defineCustomElement(
     }
 
     connectedCallback() {
+      if (!shadow) {
+        this.appendChild(templateElement.content.cloneNode(true))
+      }
       this._connectedCallback()
     }
 

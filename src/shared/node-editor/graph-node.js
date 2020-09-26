@@ -68,7 +68,7 @@ export default defineCustomElement('w-graph-node', {
       color: rgba(var(--color-primary) / 0.24);
     }
 
-    slot {
+    slot[name='title'] {
       display: flex;
       align-items: center;
       height: 32px;
@@ -76,8 +76,17 @@ export default defineCustomElement('w-graph-node', {
       white-space: nowrap;
       ${typography('headline6')}
     }
+
+    slot:not([name])::slotted(*) {
+      display: flex;
+      align-items: center;
+      height: 20px;
+      color: rgba(var(--color-on-surface) / var(--text-medium-emphasis));
+      ${typography('body2')}
+    }
   `,
   template: html`
+    <slot name="title"></slot>
     <slot></slot>
     <w-icon>check_circle</w-icon>
   `,
