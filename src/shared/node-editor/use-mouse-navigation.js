@@ -6,17 +6,11 @@ const maxZoom = zoomFactor ** 15
 
 /**
  * @param {import('./node-editor.js').default} host
- * @param {HTMLElement} transformedElement
  */
-export default function useMouseNavigation(host, transformedElement) {
-  let isPanning = false
+export default function useMouseNavigation(host) {
   host.zoom = 1
   host.panX = 0
   host.panY = 0
-
-  function transform() {
-    transformedElement.style.transform = `scale(${host.zoom}) translate(${host.panX}px, ${host.panY}px)`
-  }
 
   host.addEventListener('wheel', (event) => {
     event.preventDefault()
@@ -28,7 +22,6 @@ export default function useMouseNavigation(host, transformedElement) {
       host.zoom *= event.deltaY > 0 ? 1 / zoomFactor : zoomFactor
       host.zoom = Math.min(Math.max(minZoom, host.zoom), maxZoom)
     }
-    transform()
   })
 
   host.addEventListener('mousedown', (event) => {
@@ -38,26 +31,25 @@ export default function useMouseNavigation(host, transformedElement) {
     ) {
       return
     }
-    isPanning = true
+    host.panning = true
   })
 
   host.addEventListener('mousemove', (event) => {
-    if (!isPanning) {
+    if (!host.panning) {
       return
     }
     host.panX += event.movementX / host.zoom
     host.panY += event.movementY / host.zoom
-    transform()
   })
 
   host.addEventListener('click', (event) => {
-    if (isPanning) {
+    if (host.panning) {
       event.stopImmediatePropagation()
-      isPanning = false
+      host.panning = false
     }
   })
 
   host.addEventListener('auxclick', () => {
-    isPanning = false
+    host.panning = false
   })
 }

@@ -7,8 +7,6 @@
  * @param {NodeEditor} host
  */
 export default function useGraphNodeMove(host) {
-  let isMoving = false
-
   /**
    * @returns {NodeListOf<GraphNode>}
    */
@@ -46,7 +44,7 @@ export default function useGraphNodeMove(host) {
     if (!movingGraphNode) {
       return
     }
-    isMoving = true
+    host.moving = true
     if (!movingGraphNode.selected) {
       if (!event.ctrlKey && !event.metaKey) {
         getSelectedGraphNodes().forEach((selectedGraphNode) => {
@@ -69,9 +67,9 @@ export default function useGraphNodeMove(host) {
   })
 
   host.addEventListener('click', (event) => {
-    if (isMoving) {
+    if (host.moving) {
       event.stopImmediatePropagation()
-      isMoving = false
+      host.moving = false
     }
   })
 }

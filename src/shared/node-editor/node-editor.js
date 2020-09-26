@@ -13,6 +13,14 @@ export default defineCustomElement('w-node-editor', {
       left: 0;
       overflow: hidden;
     }
+
+    :host([panning]) {
+      cursor: all-scroll;
+    }
+
+    :host([moving]) {
+      cursor: move;
+    }
   `,
   template: html`
     <w-graph>
@@ -23,16 +31,28 @@ export default defineCustomElement('w-node-editor', {
     zoom: Number,
     panX: Number,
     panY: Number,
+    panning: Boolean,
+    moving: Boolean,
   },
-  setup({ host }) {
+  setup({ host, observe }) {
     const graph = /** @type {HTMLElement} */ (host.shadowRoot.querySelector(
       'w-graph',
     ))
 
     // The order does matter because each one can stop the immediate
     // propagation to the next one
-    useMouseNavigation(host, graph)
+    useMouseNavigation(host)
     useGraphNodeMove(host)
     useGraphNodeSelection(host)
+
+    function transform() {
+      graph.style.transform = `scale(${host.zoom}) translate(${host.panX}px, ${host.panY}px)`
+    }
+
+    observe('zoom', transform)
+
+    observe('panX', transform)
+
+    observe('panY', transform)
   },
 })
