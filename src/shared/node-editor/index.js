@@ -1,5 +1,6 @@
 import './graph-node-input.js'
 import './graph-node-output.js'
+import './graph-node-socket.js'
 import './graph-node.js'
 import './graph.js'
 import './node-editor.js'

@@ -1,4 +1,4 @@
-import { css, defineCustomElement } from '../core/element.js'
+import { css, defineCustomElement, html } from '../core/element.js'
 
 export default defineCustomElement('w-graph-node-output', {
   styles: css`
@@ -6,14 +6,14 @@ export default defineCustomElement('w-graph-node-output', {
       justify-content: flex-end;
     }
 
-    :host::after {
-      content: '';
+    w-graph-node-socket {
       position: absolute;
-      right: -4px;
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background-color: rgb(var(--color-secondary));
+      right: 0;
+      transform: translateX(50%);
     }
+  `,
+  template: html`
+    <slot></slot>
+    <w-graph-node-socket></w-graph-node-socket>
   `,
 })

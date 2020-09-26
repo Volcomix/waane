@@ -80,7 +80,7 @@ export default defineCustomElement('w-graph-node', {
     slot:not([name])::slotted(*) {
       display: flex;
       align-items: center;
-      height: 20px;
+      height: 32px;
       color: rgba(var(--color-on-surface) / var(--text-medium-emphasis));
       ${typography('body2')}
     }
