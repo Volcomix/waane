@@ -86,9 +86,9 @@ export default defineCustomElement('w-graph-node', {
     }
   `,
   template: html`
+    <w-icon>check_circle</w-icon>
     <slot name="title"></slot>
     <slot></slot>
-    <w-icon>check_circle</w-icon>
   `,
   properties: {
     x: Number,
