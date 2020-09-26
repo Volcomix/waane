@@ -56,4 +56,8 @@ export default function useMouseNavigation(host, transformedElement) {
       isPanning = false
     }
   })
+
+  host.addEventListener('auxclick', () => {
+    isPanning = false
+  })
 }
