@@ -1,3 +1,9 @@
+// TODO detect magic mouse
+const isMagicMouse = false
+const zoomFactor = 1.1
+const minZoom = zoomFactor ** -22
+const maxZoom = zoomFactor ** 15
+
 /**
  * @param {import('./node-editor.js').default} host
  * @param {HTMLElement} transformedElement
@@ -14,8 +20,14 @@ export default function useMouseNavigation(host, transformedElement) {
 
   host.addEventListener('wheel', (event) => {
     event.preventDefault()
-    host.zoom += event.deltaY * -0.01
-    host.zoom = Math.min(Math.max(0.125, host.zoom), 4)
+    if (isMagicMouse) {
+      host.zoom += event.deltaY * -0.01
+      host.zoom = Math.min(Math.max(0.125, host.zoom), 4)
+    } else {
+      // Without magic mouse, deltaMode = WheelEvent.DOM_DELTA_PIXEL (0)
+      host.zoom *= event.deltaY > 0 ? 1 / zoomFactor : zoomFactor
+      host.zoom = Math.min(Math.max(minZoom, host.zoom), maxZoom)
+    }
     transform()
   })
 
