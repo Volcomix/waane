@@ -16,8 +16,16 @@ export default defineCustomElement('w-graph-link', {
       overflow: visible;
       fill: none;
       stroke-width: 1.5px;
-      /* TODO high-emphasis when drawing, medium-emphasis when added */
       stroke: rgba(var(--color-on-background) / var(--text-medium-emphasis));
+      transition: stroke 150ms var(--easing-standard);
+    }
+
+    :host([linking]) {
+      z-index: 8;
+    }
+
+    :host([linking]) svg {
+      stroke: rgba(var(--color-on-background) / var(--text-high-emphasis));
     }
   `,
   template: html`
@@ -30,6 +38,7 @@ export default defineCustomElement('w-graph-link', {
     fromY: Number,
     toX: Number,
     toY: Number,
+    linking: Boolean,
   },
   setup({ host, connected, disconnected }) {
     const path = host.shadowRoot.querySelector('path')

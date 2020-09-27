@@ -300,8 +300,10 @@ test('cancels adding a link', () => {
   addAudioNode('Oscillator')
 
   const graphNodeOutput = nodeEditor.querySelector('w-graph-node-output')
-  const socket = graphNodeOutput.shadowRoot.querySelector('w-graph-node-socket')
-  socket.dispatchEvent(new MouseEvent('mousedown'))
+  const outputSocket = graphNodeOutput.shadowRoot.querySelector(
+    'w-graph-node-socket',
+  )
+  outputSocket.dispatchEvent(new MouseEvent('mousedown'))
   nodeEditor.dispatchEvent(new MouseEvent('mousemove'))
 
   expect(nodeEditor.querySelectorAll('w-graph-link')).toHaveLength(1)
@@ -310,4 +312,30 @@ test('cancels adding a link', () => {
   nodeEditor.click()
 
   expect(nodeEditor.querySelectorAll('w-graph-link')).toHaveLength(0)
+})
+
+test('adds a link', () => {
+  const { nodeEditor, addAudioNode } = setup()
+  addAudioNode('Oscillator')
+  addAudioNode('Audio destination')
+
+  const graphNodeOutput = nodeEditor.querySelector('w-graph-node-output')
+  const outputSocket = graphNodeOutput.shadowRoot.querySelector(
+    'w-graph-node-socket',
+  )
+  outputSocket.dispatchEvent(new MouseEvent('mousedown'))
+  nodeEditor.dispatchEvent(new MouseEvent('mousemove'))
+
+  expect(nodeEditor.querySelectorAll('w-graph-link')).toHaveLength(1)
+
+  const graphNodeInput = nodeEditor.querySelector('w-graph-node-input')
+  const inputSocket = graphNodeInput.shadowRoot.querySelector(
+    'w-graph-node-socket',
+  )
+  inputSocket.dispatchEvent(
+    new MouseEvent('mouseup', { bubbles: true, composed: true }),
+  )
+  nodeEditor.click()
+
+  expect(nodeEditor.querySelectorAll('w-graph-link')).toHaveLength(1)
 })

@@ -34,6 +34,7 @@ export default defineCustomElement('w-node-editor', {
     panY: Number,
     panning: Boolean,
     moving: Boolean,
+    linking: Boolean,
   },
   setup({ host, connected, disconnected }) {
     const graph = /** @type {HTMLElement} */ (host.shadowRoot.querySelector(

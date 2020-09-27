@@ -22,7 +22,19 @@ export default function useGraphLinkAdd(host) {
     ))
     graphLink.fromX = event.detail.x
     graphLink.fromY = event.detail.y
+    graphLink.linking = true
     host.appendChild(graphLink)
+    host.linking = true
+  })
+
+  host.addEventListener('graph-link-end', (
+    /** @type {CustomEvent} */ event,
+  ) => {
+    if (!graphLink) {
+      return
+    }
+    graphLink.toX = event.detail.x
+    graphLink.toY = event.detail.y
   })
 
   host.addEventListener('mousemove', (event) => {
@@ -46,6 +58,8 @@ export default function useGraphLinkAdd(host) {
       return
     }
     event.stopImmediatePropagation()
+    host.linking = false
+    graphLink.linking = false
     graphLink = null
   })
 }
