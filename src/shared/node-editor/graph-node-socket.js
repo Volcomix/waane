@@ -16,6 +16,10 @@ export default defineCustomElement('w-graph-node-socket', {
       background-color: rgba(var(--color-on-surface) / 0.08);
     }
 
+    :host(:active) {
+      background-color: rgba(var(--color-on-surface) / 0.16);
+    }
+
     div {
       width: 10px;
       height: 10px;

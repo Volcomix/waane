@@ -1,4 +1,5 @@
 import { css, defineCustomElement, html } from '../core/element.js'
+import useGraphLinkAdd from './use-graph-link-add.js'
 import useGraphNodeMove from './use-graph-node-move.js'
 import useGraphNodeSelection from './use-graph-node-selection.js'
 import useMouseNavigation from './use-mouse-navigation.js'
@@ -34,25 +35,28 @@ export default defineCustomElement('w-node-editor', {
     panning: Boolean,
     moving: Boolean,
   },
-  setup({ host, observe }) {
+  setup({ host, connected, disconnected }) {
     const graph = /** @type {HTMLElement} */ (host.shadowRoot.querySelector(
       'w-graph',
     ))
 
     // The order does matter because each one can stop the immediate
     // propagation to the next one
+    useGraphLinkAdd(host)
     useMouseNavigation(host)
     useGraphNodeMove(host)
     useGraphNodeSelection(host)
 
-    function transform() {
+    const observer = new MutationObserver(() => {
       graph.style.transform = `scale(${host.zoom}) translate(${host.panX}px, ${host.panY}px)`
-    }
+    })
 
-    observe('zoom', transform)
+    connected(() => {
+      observer.observe(host, { attributeFilter: ['zoom', 'pan-x', 'pan-y'] })
+    })
 
-    observe('panX', transform)
-
-    observe('panY', transform)
+    disconnected(() => {
+      observer.disconnect()
+    })
   },
 })

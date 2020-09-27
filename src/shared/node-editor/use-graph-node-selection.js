@@ -75,12 +75,9 @@ export default function useGraphNodeSelection(host) {
     if (host.querySelector('w-graph-node[moving]')) {
       return
     }
-    let element = /** @type {Element} */ (event.target)
-    while (element !== host) {
-      if (element.matches('w-graph-node')) {
-        return
-      }
-      element = element.parentElement
+    const element = /** @type {Element} */ (event.target)
+    if (element.closest('w-graph-node')) {
+      return
     }
     isRectangleSelection = true
     selectionRectangle.fromX = event.pageX
@@ -135,14 +132,10 @@ export default function useGraphNodeSelection(host) {
     if (!event.ctrlKey && !event.metaKey) {
       unselectAll()
     }
-    let element = /** @type {Element} */ (event.target)
-    while (element !== host) {
-      if (element.matches('w-graph-node')) {
-        const graphNode = /** @type {GraphNode} */ (element)
-        graphNode.selected = !graphNode.selected
-        break
-      }
-      element = element.parentElement
+    const element = /** @type {Element} */ (event.target)
+    const graphNode = /** @type {GraphNode} */ (element.closest('w-graph-node'))
+    if (graphNode) {
+      graphNode.selected = !graphNode.selected
     }
   })
 }

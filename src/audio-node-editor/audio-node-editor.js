@@ -1,5 +1,6 @@
 import { defineCustomElement, html } from '../shared/core/element.js'
 import { squaredDist } from '../shared/helpers/geometry.js'
+import useNodeEditorMousePosition from '../shared/node-editor/use-node-editor-mouse-position.js'
 import useGraphNodeMenu from './use-graph-node-menu.js'
 import useNodeEditorMenu from './use-node-editor-menu.js'
 
@@ -52,6 +53,8 @@ export default defineCustomElement('audio-node-editor', {
       '#delete',
     ))
 
+    const getNodeEditorMousePosition = useNodeEditorMousePosition(nodeEditor)
+
     // The order does matter because each one can stop the immediate
     // propagation to the next one
     useGraphNodeMenu(nodeEditor, graphNodeMenu)
@@ -66,25 +69,13 @@ export default defineCustomElement('audio-node-editor', {
     }
 
     /**
-     * @param {number} x
-     * @param {number} y
-     */
-    function toNodeEditorPosition(x, y) {
-      const { width, height } = nodeEditor.getBoundingClientRect()
-      return {
-        x: (x - width / 2) / nodeEditor.zoom - nodeEditor.panX,
-        y: (y - height / 2) / nodeEditor.zoom - nodeEditor.panY,
-      }
-    }
-
-    /**
      * @param {MouseEvent} event
      * @param {string} audioNodeName
      */
     function addAudioNode(event, audioNodeName) {
       cancelMovingGraphNodes()
 
-      const { x, y } = toNodeEditorPosition(event.pageX, event.pageY)
+      const { x, y } = getNodeEditorMousePosition(event)
 
       const audioNode = document.createElement(audioNodeName)
       nodeEditor.appendChild(audioNode)
@@ -108,7 +99,7 @@ export default defineCustomElement('audio-node-editor', {
     graphNodeMenuItemDuplicate.addEventListener('click', (event) => {
       cancelMovingGraphNodes()
 
-      const mousePosition = toNodeEditorPosition(event.pageX, event.pageY)
+      const nodeEditorMousePosition = getNodeEditorMousePosition(event)
 
       const offsetX = (event.clientX - graphNodeMenu.x) / nodeEditor.zoom
       const offsetY = (event.clientY - graphNodeMenu.y) / nodeEditor.zoom
@@ -140,12 +131,12 @@ export default defineCustomElement('audio-node-editor', {
         if (!nearestGraphNode) {
           nearestGraphNode = duplicatedGraphNode
         } else if (
-          duplicatedGraphNode.x <= mousePosition.x &&
-          duplicatedGraphNode.y <= mousePosition.y
+          duplicatedGraphNode.x <= nodeEditorMousePosition.x &&
+          duplicatedGraphNode.y <= nodeEditorMousePosition.y
         ) {
           const graphNodeSquaredDist = squaredDist(
             duplicatedGraphNode,
-            mousePosition,
+            nodeEditorMousePosition,
           )
           if (graphNodeSquaredDist < minSquaredDist) {
             nearestGraphNode = duplicatedGraphNode

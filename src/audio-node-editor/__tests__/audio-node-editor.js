@@ -294,3 +294,20 @@ test('deletes nodes', () => {
   expect(remainingGraphNodes).toHaveLength(1)
   expect(remainingGraphNodes[0]).toBe(graphNode3)
 })
+
+test('cancels adding a link', () => {
+  const { nodeEditor, addAudioNode } = setup()
+  addAudioNode('Oscillator')
+
+  const graphNodeOutput = nodeEditor.querySelector('w-graph-node-output')
+  const socket = graphNodeOutput.shadowRoot.querySelector('w-graph-node-socket')
+  socket.dispatchEvent(new MouseEvent('mousedown'))
+  nodeEditor.dispatchEvent(new MouseEvent('mousemove'))
+
+  expect(nodeEditor.querySelectorAll('w-graph-link')).toHaveLength(1)
+
+  nodeEditor.dispatchEvent(new MouseEvent('mouseup'))
+  nodeEditor.click()
+
+  expect(nodeEditor.querySelectorAll('w-graph-link')).toHaveLength(0)
+})

@@ -9,17 +9,14 @@
  */
 export default function useGraphNodeMenu(host, menu) {
   host.addEventListener('contextmenu', (event) => {
-    let element = /** @type {Element} */ (event.target)
-    while (!element.matches('w-graph-node')) {
-      if (element === host) {
-        return
-      }
-      element = element.parentElement
+    const element = /** @type {Element} */ (event.target)
+    const graphNode = /** @type {GraphNode} */ (element.closest('w-graph-node'))
+    if (!graphNode) {
+      return
     }
     event.stopImmediatePropagation()
     event.preventDefault()
 
-    let graphNode = /** @type {GraphNode} */ (element)
     if (!graphNode.selected) {
       if (!event.ctrlKey && !event.metaKey) {
         host.querySelectorAll(`w-graph-node[selected]`).forEach((
@@ -30,7 +27,6 @@ export default function useGraphNodeMenu(host, menu) {
       }
       graphNode.selected = true
     }
-
     menu.open = true
     menu.x = event.clientX
     menu.y = event.clientY

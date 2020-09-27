@@ -28,15 +28,11 @@ export default function useGraphNodeMove(host) {
     if (host.querySelector('w-graph-node[moving]')) {
       return
     }
-    let element = /** @type {Element} */ (event.target)
-    while (!element.matches('w-graph-node')) {
-      if (element === host) {
-        return
-      }
-      element = element.parentElement
+    const element = /** @type {Element} */ (event.target)
+    const graphNode = /** @type {GraphNode} */ (element.closest('w-graph-node'))
+    if (graphNode) {
+      graphNode.moving = true
     }
-    const graphNode = /** @type {GraphNode} */ (element)
-    graphNode.moving = true
   })
 
   host.addEventListener('mousemove', (event) => {
