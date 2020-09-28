@@ -42,7 +42,7 @@ export default defineCustomElement('w-graph-link', {
     toY: Number,
     linking: Boolean,
   },
-  setup({ host, connected, disconnected }) {
+  setup({ host, connected, disconnected, observe }) {
     const path = host.shadowRoot.querySelector('path')
 
     function getFromPosition() {
@@ -120,14 +120,41 @@ export default defineCustomElement('w-graph-link', {
       )
     })
 
-    connected(() => {
+    function updateObserver() {
+      const { from, to } = host
+      const root = /** @type {Document | ShadowRoot} */ (host.getRootNode())
+
+      const output = /** @type {HTMLElement} */ (from &&
+        root.querySelector(`w-graph-node-output#${host.from}`))
+
+      const input = /** @type {HTMLElement} */ (to &&
+        root.querySelector(`w-graph-node-input#${host.to}`))
+
+      observer.disconnect()
+
       observer.observe(host, {
         attributeFilter: ['from', 'from-x', 'from-y', 'to', 'to-x', 'to-y'],
       })
-    })
+      if (output) {
+        observer.observe(output.closest('w-graph-node'), {
+          attributeFilter: ['x', 'y'],
+        })
+      }
+      if (input) {
+        observer.observe(input.closest('w-graph-node'), {
+          attributeFilter: ['x', 'y'],
+        })
+      }
+    }
+
+    connected(updateObserver)
 
     disconnected(() => {
       observer.disconnect()
     })
+
+    observe('from', updateObserver)
+
+    observe('to', updateObserver)
   },
 })
