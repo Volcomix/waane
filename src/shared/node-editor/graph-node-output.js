@@ -1,5 +1,7 @@
 import { css, defineCustomElement, html } from '../core/element.js'
 
+let outputId = 0
+
 export default defineCustomElement('w-graph-node-output', {
   styles: css`
     :host {
@@ -21,18 +23,14 @@ export default defineCustomElement('w-graph-node-output', {
       'w-graph-node-socket',
     ))
 
+    host.id = `output-${outputId++}`
+
     socket.addEventListener('mousedown', (event) => {
-      const graphNode = /** @type {import('./graph-node.js').default} */ (host.closest(
-        'w-graph-node',
-      ))
       event.stopPropagation()
       host.dispatchEvent(
         new CustomEvent('graph-link-start', {
           bubbles: true,
-          detail: {
-            x: graphNode.x + graphNode.offsetWidth,
-            y: graphNode.y + socket.offsetTop + socket.offsetHeight / 2,
-          },
+          detail: { from: host.id },
         }),
       )
     })

@@ -34,8 +34,10 @@ export default defineCustomElement('w-graph-link', {
     </svg>
   `,
   properties: {
+    from: String,
     fromX: Number,
     fromY: Number,
+    to: String,
     toX: Number,
     toY: Number,
     linking: Boolean,
@@ -43,8 +45,46 @@ export default defineCustomElement('w-graph-link', {
   setup({ host, connected, disconnected }) {
     const path = host.shadowRoot.querySelector('path')
 
+    function getFromPosition() {
+      const { from, fromX, fromY } = host
+      if (!from) {
+        return { fromX, fromY }
+      }
+      const root = /** @type {Document | ShadowRoot} */ (host.getRootNode())
+      const output = /** @type {HTMLElement} */ (root.querySelector(
+        `w-graph-node-output#${from}`,
+      ))
+      const graphNode = /** @type {HTMLElement} */ (output.closest(
+        'w-graph-node',
+      ))
+      return {
+        fromX: graphNode.offsetLeft + graphNode.offsetWidth,
+        fromY: graphNode.offsetTop + output.offsetTop + output.offsetHeight / 2,
+      }
+    }
+
+    function getToPosition() {
+      const { to, toX, toY } = host
+      if (!to) {
+        return { toX, toY }
+      }
+      const root = /** @type {Document | ShadowRoot} */ (host.getRootNode())
+      const output = /** @type {HTMLElement} */ (root.querySelector(
+        `w-graph-node-input#${to}`,
+      ))
+      const graphNode = /** @type {HTMLElement} */ (output.closest(
+        'w-graph-node',
+      ))
+      return {
+        toX: graphNode.offsetLeft,
+        toY: graphNode.offsetTop + output.offsetTop + output.offsetHeight / 2,
+      }
+    }
+
     const observer = new MutationObserver(() => {
-      const { fromX, toX, fromY, toY } = host
+      const { fromX, fromY } = getFromPosition()
+      const { toX, toY } = getToPosition()
+
       const width = Math.abs(toX - fromX)
       const height = Math.abs(toY - fromY)
 
@@ -82,7 +122,7 @@ export default defineCustomElement('w-graph-link', {
 
     connected(() => {
       observer.observe(host, {
-        attributeFilter: ['from-x', 'from-y', 'to-x', 'to-y'],
+        attributeFilter: ['from', 'from-x', 'from-y', 'to', 'to-x', 'to-y'],
       })
     })
 

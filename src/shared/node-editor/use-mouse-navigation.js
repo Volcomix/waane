@@ -1,5 +1,5 @@
 // TODO detect magic mouse
-const isMagicMouse = false
+const isMagicMouse = true
 const zoomFactor = 1.1
 const minZoom = zoomFactor ** -22
 const maxZoom = zoomFactor ** 15
@@ -15,7 +15,7 @@ export default function useMouseNavigation(host) {
   host.addEventListener('wheel', (event) => {
     event.preventDefault()
     if (isMagicMouse) {
-      host.zoom += event.deltaY * -0.01
+      host.zoom += event.deltaY * -0.001
       host.zoom = Math.min(Math.max(0.125, host.zoom), 4)
     } else {
       // Without magic mouse, deltaMode = WheelEvent.DOM_DELTA_PIXEL (0)

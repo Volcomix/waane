@@ -35,7 +35,11 @@ function getStringProperty(attributeName) {
 
     /** @this {HTMLElement} */
     set(value) {
-      this.setAttribute(attributeName, value)
+      if (value === null) {
+        this.removeAttribute(attributeName)
+      } else {
+        this.setAttribute(attributeName, value)
+      }
     },
   }
 }
@@ -53,7 +57,11 @@ function getNumberProperty(attributeName) {
 
     /** @this {HTMLElement} */
     set(value) {
-      this.setAttribute(attributeName, String(value))
+      if (value === null) {
+        this.removeAttribute(attributeName)
+      } else {
+        this.setAttribute(attributeName, String(value))
+      }
     },
   }
 }

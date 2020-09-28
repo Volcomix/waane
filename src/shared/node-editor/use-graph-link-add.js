@@ -20,8 +20,7 @@ export default function useGraphLinkAdd(host) {
     graphLink = /** @type {GraphLink} */ (document.createElement(
       'w-graph-link',
     ))
-    graphLink.fromX = event.detail.x
-    graphLink.fromY = event.detail.y
+    graphLink.from = event.detail.from
     graphLink.linking = true
     host.appendChild(graphLink)
     host.linking = true
@@ -33,8 +32,9 @@ export default function useGraphLinkAdd(host) {
     if (!graphLink) {
       return
     }
-    graphLink.toX = event.detail.x
-    graphLink.toY = event.detail.y
+    graphLink.to = event.detail.to
+    graphLink.toX = null
+    graphLink.toY = null
   })
 
   host.addEventListener('mousemove', (event) => {
@@ -42,6 +42,7 @@ export default function useGraphLinkAdd(host) {
       return
     }
     const { x, y } = getNodeEditorMousePosition(event)
+    graphLink.to = null
     graphLink.toX = x
     graphLink.toY = y
   })
