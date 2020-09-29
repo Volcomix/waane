@@ -349,7 +349,7 @@ test('adds a link', () => {
   expect(nodeEditor.querySelectorAll('w-graph-link')).toHaveLength(1)
 })
 
-test('deletes link when deleting output node', () => {
+test('deletes links when deleting output node', () => {
   const {
     nodeEditor,
     getGraphNodes,
@@ -359,19 +359,34 @@ test('deletes link when deleting output node', () => {
   } = setup()
 
   addAudioNode('Oscillator')
+  addAudioNode('Oscillator')
   addAudioNode('Audio destination')
-  const [fromGraphNode, toGraphNode] = getGraphNodes()
-  addGraphLink(fromGraphNode, toGraphNode)
+  addAudioNode('Audio destination')
+  const [
+    oscillator1,
+    oscillator2,
+    audioDestination1,
+    audioDestination2,
+  ] = getGraphNodes()
 
-  click(fromGraphNode)
-  contextMenu(fromGraphNode)
+  addGraphLink(oscillator1, audioDestination1)
+  addGraphLink(oscillator2, audioDestination1)
+  addGraphLink(oscillator2, audioDestination2)
+  const [graphLink1] = nodeEditor.querySelectorAll('w-graph-link')
+
+  click(oscillator2)
+  contextMenu(oscillator2)
   getMenuItem('Delete').click()
 
-  expect(getGraphNodes()).toEqual([toGraphNode])
-  expect(nodeEditor.querySelectorAll('w-graph-link')).toHaveLength(0)
+  expect(getGraphNodes()).toEqual([
+    oscillator1,
+    audioDestination1,
+    audioDestination2,
+  ])
+  expect([...nodeEditor.querySelectorAll('w-graph-link')]).toEqual([graphLink1])
 })
 
-test('deletes link when deleting input node', () => {
+test('deletes links when deleting input node', () => {
   const {
     nodeEditor,
     getGraphNodes,
@@ -381,14 +396,25 @@ test('deletes link when deleting input node', () => {
   } = setup()
 
   addAudioNode('Oscillator')
+  addAudioNode('Oscillator')
   addAudioNode('Audio destination')
-  const [fromGraphNode, toGraphNode] = getGraphNodes()
-  addGraphLink(fromGraphNode, toGraphNode)
+  addAudioNode('Audio destination')
+  const [
+    oscillator1,
+    oscillator2,
+    audioDestination1,
+    audioDestination2,
+  ] = getGraphNodes()
 
-  click(toGraphNode)
-  contextMenu(toGraphNode)
+  addGraphLink(oscillator1, audioDestination1)
+  addGraphLink(oscillator1, audioDestination2)
+  addGraphLink(oscillator2, audioDestination2)
+  const [graphLink1] = nodeEditor.querySelectorAll('w-graph-link')
+
+  click(audioDestination2)
+  contextMenu(audioDestination2)
   getMenuItem('Delete').click()
 
-  expect(getGraphNodes()).toEqual([fromGraphNode])
-  expect(nodeEditor.querySelectorAll('w-graph-link')).toHaveLength(0)
+  expect(getGraphNodes()).toEqual([oscillator1, oscillator2, audioDestination1])
+  expect([...nodeEditor.querySelectorAll('w-graph-link')]).toEqual([graphLink1])
 })
