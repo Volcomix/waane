@@ -88,6 +88,32 @@ export default defineCustomElement('audio-node-editor', {
       graphNode.moving = true
     }
 
+    /**
+     * @param {Element} graphNode
+     */
+    function removeGraphNodeOutputLinks(graphNode) {
+      graphNode.querySelectorAll('w-graph-node-output').forEach((output) => {
+        nodeEditor
+          .querySelectorAll(`w-graph-link[from='${output.id}']`)
+          .forEach((graphLink) => {
+            graphLink.remove()
+          })
+      })
+    }
+
+    /**
+     * @param {Element} graphNode
+     */
+    function removeGraphNodeInputLinks(graphNode) {
+      graphNode.querySelectorAll('w-graph-node-input').forEach((input) => {
+        nodeEditor
+          .querySelectorAll(`w-graph-link[to='${input.id}']`)
+          .forEach((graphLink) => {
+            graphLink.remove()
+          })
+      })
+    }
+
     nodeEditorMenuItemOscillator.addEventListener('click', (event) => {
       addAudioNode(event, 'node-oscillator')
     })
@@ -152,6 +178,8 @@ export default defineCustomElement('audio-node-editor', {
       nodeEditor
         .querySelectorAll('w-graph-node[selected]')
         .forEach((selectedGraphNode) => {
+          removeGraphNodeOutputLinks(selectedGraphNode)
+          removeGraphNodeInputLinks(selectedGraphNode)
           selectedGraphNode.parentElement.remove()
         })
     })

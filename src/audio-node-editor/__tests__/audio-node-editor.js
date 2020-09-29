@@ -58,6 +58,30 @@ function setup() {
     nodeEditor.dispatchEvent(new MouseEvent('click'))
   }
 
+  /**
+   * @param {HTMLElement} fromGraphNode
+   * @param {HTMLElement} toGraphNode
+   */
+  function addGraphLink(fromGraphNode, toGraphNode) {
+    const graphNodeOutput = fromGraphNode.querySelector('w-graph-node-output')
+    const outputSocket = graphNodeOutput.shadowRoot.querySelector(
+      'w-graph-node-socket',
+    )
+    outputSocket.dispatchEvent(new MouseEvent('mousedown'))
+
+    const graphNodeInput = toGraphNode.querySelector('w-graph-node-input')
+    const inputSocket = graphNodeInput.shadowRoot.querySelector(
+      'w-graph-node-socket',
+    )
+    inputSocket.dispatchEvent(
+      new MouseEvent('mousemove', { bubbles: true, composed: true }),
+    )
+    inputSocket.dispatchEvent(
+      new MouseEvent('mouseup', { bubbles: true, composed: true }),
+    )
+    nodeEditor.click()
+  }
+
   function getMenuItems() {
     return [
       .../** @type {NodeListOf<HTMLElement>} */ (audioNodeEditor.shadowRoot.querySelectorAll(
@@ -89,6 +113,7 @@ function setup() {
     nodeEditor,
     getGraphNodes,
     moveGraphNode,
+    addGraphLink,
     getMenuItems,
     getMenuItem,
     addAudioNode,
@@ -315,27 +340,55 @@ test('cancels adding a link', () => {
 })
 
 test('adds a link', () => {
-  const { nodeEditor, addAudioNode } = setup()
+  const { nodeEditor, getGraphNodes, addGraphLink, addAudioNode } = setup()
   addAudioNode('Oscillator')
   addAudioNode('Audio destination')
-
-  const graphNodeOutput = nodeEditor.querySelector('w-graph-node-output')
-  const outputSocket = graphNodeOutput.shadowRoot.querySelector(
-    'w-graph-node-socket',
-  )
-  outputSocket.dispatchEvent(new MouseEvent('mousedown'))
-  nodeEditor.dispatchEvent(new MouseEvent('mousemove'))
+  const [fromGraphNode, toGraphNode] = getGraphNodes()
+  addGraphLink(fromGraphNode, toGraphNode)
 
   expect(nodeEditor.querySelectorAll('w-graph-link')).toHaveLength(1)
+})
 
-  const graphNodeInput = nodeEditor.querySelector('w-graph-node-input')
-  const inputSocket = graphNodeInput.shadowRoot.querySelector(
-    'w-graph-node-socket',
-  )
-  inputSocket.dispatchEvent(
-    new MouseEvent('mouseup', { bubbles: true, composed: true }),
-  )
-  nodeEditor.click()
+test('deletes link when deleting output node', () => {
+  const {
+    nodeEditor,
+    getGraphNodes,
+    addGraphLink,
+    getMenuItem,
+    addAudioNode,
+  } = setup()
 
-  expect(nodeEditor.querySelectorAll('w-graph-link')).toHaveLength(1)
+  addAudioNode('Oscillator')
+  addAudioNode('Audio destination')
+  const [fromGraphNode, toGraphNode] = getGraphNodes()
+  addGraphLink(fromGraphNode, toGraphNode)
+
+  click(fromGraphNode)
+  contextMenu(fromGraphNode)
+  getMenuItem('Delete').click()
+
+  expect(getGraphNodes()).toEqual([toGraphNode])
+  expect(nodeEditor.querySelectorAll('w-graph-link')).toHaveLength(0)
+})
+
+test('deletes link when deleting input node', () => {
+  const {
+    nodeEditor,
+    getGraphNodes,
+    addGraphLink,
+    getMenuItem,
+    addAudioNode,
+  } = setup()
+
+  addAudioNode('Oscillator')
+  addAudioNode('Audio destination')
+  const [fromGraphNode, toGraphNode] = getGraphNodes()
+  addGraphLink(fromGraphNode, toGraphNode)
+
+  click(toGraphNode)
+  contextMenu(toGraphNode)
+  getMenuItem('Delete').click()
+
+  expect(getGraphNodes()).toEqual([fromGraphNode])
+  expect(nodeEditor.querySelectorAll('w-graph-link')).toHaveLength(0)
 })
