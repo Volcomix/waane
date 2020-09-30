@@ -21,6 +21,16 @@ export default defineCustomElement('w-graph-node-input', {
 
     host.id = `input-${inputId++}`
 
+    socket.addEventListener('mousedown', (event) => {
+      event.stopPropagation()
+      host.dispatchEvent(
+        new CustomEvent('graph-link-disconnect', {
+          bubbles: true,
+          detail: { to: host.id },
+        }),
+      )
+    })
+
     socket.addEventListener('mousemove', (event) => {
       if (!host.matches('w-node-editor[linking] w-graph-node-input')) {
         return

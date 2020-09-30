@@ -26,6 +26,23 @@ export default function useGraphLinkAdd(host) {
     host.linking = true
   })
 
+  host.addEventListener('graph-link-disconnect', (
+    /** @type {CustomEvent} */ event,
+  ) => {
+    graphLink = /** @type {GraphLink} */ (host.querySelector(
+      `w-graph-link[to='${event.detail.to}']`,
+    ))
+    if (!graphLink) {
+      return
+    }
+    // Move at the end of the host DOM to allow selecting
+    // another link after reconnecting this one
+    graphLink.remove()
+    host.appendChild(graphLink)
+    graphLink.linking = true
+    host.linking = true
+  })
+
   host.addEventListener('graph-link-end', (
     /** @type {CustomEvent} */ event,
   ) => {

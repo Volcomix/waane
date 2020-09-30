@@ -473,3 +473,75 @@ test('duplicates links when duplicating nodes', () => {
     expect.anything(),
   ])
 })
+
+test('disconnect a link', () => {
+  const {
+    nodeEditor,
+    getGraphNodes,
+    addGraphLink,
+    getGraphLinks,
+    addAudioNode,
+  } = setup()
+
+  addAudioNode('Oscillator')
+  addAudioNode('Audio destination')
+  const [oscillator, audioDestination] = getGraphNodes()
+
+  addGraphLink(oscillator, audioDestination)
+
+  expect(getGraphLinks()).toHaveLength(1)
+
+  const graphNodeInput = audioDestination.querySelector('w-graph-node-input')
+  const inputSocket = graphNodeInput.shadowRoot.querySelector(
+    'w-graph-node-socket',
+  )
+  inputSocket.dispatchEvent(new MouseEvent('mousedown'))
+  nodeEditor.dispatchEvent(new MouseEvent('mousemove'))
+
+  expect(getGraphLinks()).toHaveLength(1)
+
+  nodeEditor.dispatchEvent(new MouseEvent('mouseup'))
+  nodeEditor.click()
+
+  expect(getGraphLinks()).toHaveLength(0)
+})
+
+test('disconnect a specific link from a node', () => {
+  const {
+    nodeEditor,
+    getGraphNodes,
+    addGraphLink,
+    getGraphLinks,
+    addAudioNode,
+  } = setup()
+
+  addAudioNode('Oscillator')
+  addAudioNode('Oscillator')
+  addAudioNode('Audio destination')
+  const [oscillator1, oscillator2, audioDestination] = getGraphNodes()
+
+  addGraphLink(oscillator1, audioDestination)
+  addGraphLink(oscillator2, audioDestination)
+
+  expect(getGraphLinks()).toHaveLength(2)
+  const [graphLink1] = getGraphLinks()
+
+  const graphNodeInput = audioDestination.querySelector('w-graph-node-input')
+  const inputSocket = graphNodeInput.shadowRoot.querySelector(
+    'w-graph-node-socket',
+  )
+
+  inputSocket.dispatchEvent(new MouseEvent('mousedown'))
+  inputSocket.dispatchEvent(new MouseEvent('mouseup'))
+  nodeEditor.click()
+
+  inputSocket.dispatchEvent(new MouseEvent('mousedown'))
+  nodeEditor.dispatchEvent(new MouseEvent('mousemove'))
+  nodeEditor.dispatchEvent(new MouseEvent('mouseup'))
+  nodeEditor.click()
+
+  expect(getGraphLinks()).toEqual([graphLink1])
+})
+
+// TODO allow linking from a node input when not alread linked
+// TODO disable hover effect on output sockets when linking

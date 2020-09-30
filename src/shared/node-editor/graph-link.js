@@ -16,7 +16,7 @@ export default defineCustomElement('w-graph-link', {
       overflow: visible;
       fill: none;
       stroke-width: 1.5px;
-      stroke: rgba(var(--color-on-background) / var(--text-medium-emphasis));
+      stroke: rgba(var(--color-on-background) / var(--text-disabled));
       transition: stroke 150ms var(--easing-standard);
     }
 
