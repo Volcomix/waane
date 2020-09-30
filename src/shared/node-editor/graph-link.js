@@ -20,6 +20,8 @@ export default defineCustomElement('w-graph-link', {
       transition: stroke 150ms var(--easing-standard);
     }
 
+    /* TODO Put a higher z-index when moving */
+
     :host([linking]) {
       z-index: 8;
     }
@@ -81,7 +83,7 @@ export default defineCustomElement('w-graph-link', {
       }
     }
 
-    const observer = new MutationObserver(() => {
+    function updatePath() {
       const { fromX, fromY } = getFromPosition()
       const { toX, toY } = getToPosition()
 
@@ -118,7 +120,9 @@ export default defineCustomElement('w-graph-link', {
           `${endPoint.x},${endPoint.y}`,
         ].join(' '),
       )
-    })
+    }
+
+    const observer = new MutationObserver(updatePath)
 
     function updateObserver() {
       const { from, to } = host
@@ -147,7 +151,15 @@ export default defineCustomElement('w-graph-link', {
       }
     }
 
-    connected(updateObserver)
+    connected(() => {
+      updateObserver()
+
+      // When creating a new link, ensures that the path is not rendered
+      // before having from-x and from-y values
+      if (host.from && host.to) {
+        updatePath()
+      }
+    })
 
     disconnected(() => {
       observer.disconnect()

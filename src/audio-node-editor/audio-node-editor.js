@@ -7,6 +7,7 @@ import useNodeEditorMenu from './use-node-editor-menu.js'
 /**
  * @typedef {import('../shared/node-editor/node-editor.js').default} NodeEditor
  * @typedef {import('../shared/node-editor/graph-node.js').default} GraphNode
+ * @typedef {import('../shared/node-editor/graph-link.js').default} GraphLink
  * @typedef {import('../shared/base/menu.js').default} Menu
  * @typedef {import('../shared/base/menu-item.js').default} MenuItem
  */
@@ -135,6 +136,8 @@ export default defineCustomElement('audio-node-editor', {
 
       let minSquaredDist = Infinity
 
+      const socketIdsByGraphLink = new WeakMap()
+
       nodeEditor.querySelectorAll('w-graph-node[selected]').forEach((
         /** @type {GraphNode} */ selectedGraphNode,
       ) => {
@@ -169,6 +172,57 @@ export default defineCustomElement('audio-node-editor', {
             minSquaredDist = graphNodeSquaredDist
           }
         }
+
+        // Duplicates links
+        const duplicatedOutputs = duplicatedGraphNode.querySelectorAll(
+          'w-graph-node-output',
+        )
+        selectedGraphNode
+          .querySelectorAll('w-graph-node-output')
+          .forEach((output, outputIndex) => {
+            nodeEditor
+              .querySelectorAll(`w-graph-link[from='${output.id}']`)
+              .forEach((graphLink) => {
+                if (socketIdsByGraphLink.has(graphLink)) {
+                  const duplicatedGraphLink = /** @type {GraphLink} */ (document.createElement(
+                    'w-graph-link',
+                  ))
+                  duplicatedGraphLink.from = duplicatedOutputs[outputIndex].id
+                  duplicatedGraphLink.to = socketIdsByGraphLink.get(graphLink)
+                  nodeEditor.appendChild(duplicatedGraphLink)
+                } else {
+                  socketIdsByGraphLink.set(
+                    graphLink,
+                    duplicatedOutputs[outputIndex].id,
+                  )
+                }
+              })
+          })
+
+        const duplicatedInputs = duplicatedGraphNode.querySelectorAll(
+          'w-graph-node-input',
+        )
+        selectedGraphNode
+          .querySelectorAll('w-graph-node-input')
+          .forEach((input, inputIndex) => {
+            nodeEditor
+              .querySelectorAll(`w-graph-link[to='${input.id}']`)
+              .forEach((graphLink) => {
+                if (socketIdsByGraphLink.has(graphLink)) {
+                  const duplicatedGraphLink = /** @type {GraphLink} */ (document.createElement(
+                    'w-graph-link',
+                  ))
+                  duplicatedGraphLink.from = socketIdsByGraphLink.get(graphLink)
+                  duplicatedGraphLink.to = duplicatedInputs[inputIndex].id
+                  nodeEditor.appendChild(duplicatedGraphLink)
+                } else {
+                  socketIdsByGraphLink.set(
+                    graphLink,
+                    duplicatedInputs[inputIndex].id,
+                  )
+                }
+              })
+          })
       })
 
       nearestGraphNode.moving = true
