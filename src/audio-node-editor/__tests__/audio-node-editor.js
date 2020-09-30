@@ -344,12 +344,38 @@ test('cancels adding a link', () => {
   expect(getGraphLinks()).toHaveLength(0)
 })
 
-test('adds a link', () => {
+test('adds a link from an output to an input', () => {
   const { getGraphNodes, addGraphLink, getGraphLinks, addAudioNode } = setup()
   addAudioNode('Oscillator')
   addAudioNode('Audio destination')
-  const [fromGraphNode, toGraphNode] = getGraphNodes()
-  addGraphLink(fromGraphNode, toGraphNode)
+  const [oscillator, audioDestination] = getGraphNodes()
+  addGraphLink(oscillator, audioDestination)
+
+  expect(getGraphLinks()).toHaveLength(1)
+})
+
+test('adds a link from an input to an output', () => {
+  const { nodeEditor, getGraphNodes, getGraphLinks, addAudioNode } = setup()
+  addAudioNode('Oscillator')
+  addAudioNode('Audio destination')
+  const [oscillator, audioDestination] = getGraphNodes()
+
+  const graphNodeInput = audioDestination.querySelector('w-graph-node-input')
+  const inputSocket = graphNodeInput.shadowRoot.querySelector(
+    'w-graph-node-socket',
+  )
+  const graphNodeOutput = oscillator.querySelector('w-graph-node-output')
+  const outputSocket = graphNodeOutput.shadowRoot.querySelector(
+    'w-graph-node-socket',
+  )
+  inputSocket.dispatchEvent(new MouseEvent('mousedown'))
+  outputSocket.dispatchEvent(
+    new MouseEvent('mousemove', { bubbles: true, composed: true }),
+  )
+  outputSocket.dispatchEvent(
+    new MouseEvent('mouseup', { bubbles: true, composed: true }),
+  )
+  nodeEditor.click()
 
   expect(getGraphLinks()).toHaveLength(1)
 })
@@ -542,6 +568,3 @@ test('disconnect a specific link from a node', () => {
 
   expect(getGraphLinks()).toEqual([graphLink1])
 })
-
-// TODO allow linking from a node input when not alread linked
-// TODO disable hover effect on output sockets when linking

@@ -17,30 +17,31 @@ export default function useGraphLinkAdd(host) {
   host.addEventListener('graph-link-start', (
     /** @type {CustomEvent} */ event,
   ) => {
-    graphLink = /** @type {GraphLink} */ (document.createElement(
-      'w-graph-link',
-    ))
-    graphLink.from = event.detail.from
-    graphLink.linking = true
-    host.appendChild(graphLink)
-    host.linking = true
-  })
-
-  host.addEventListener('graph-link-disconnect', (
-    /** @type {CustomEvent} */ event,
-  ) => {
-    graphLink = /** @type {GraphLink} */ (host.querySelector(
-      `w-graph-link[to='${event.detail.to}']`,
-    ))
-    if (!graphLink) {
-      return
+    if (event.detail.from) {
+      graphLink = /** @type {GraphLink} */ (document.createElement(
+        'w-graph-link',
+      ))
+      graphLink.from = event.detail.from
+      host.linking = 'output'
+    } else if (event.detail.to) {
+      graphLink = /** @type {GraphLink} */ (host.querySelector(
+        `w-graph-link[to='${event.detail.to}']`,
+      ))
+      if (graphLink) {
+        // Move at the end of the host DOM to allow selecting
+        // another link after reconnecting this one
+        graphLink.remove()
+        host.linking = 'output'
+      } else {
+        graphLink = /** @type {GraphLink} */ (document.createElement(
+          'w-graph-link',
+        ))
+        graphLink.to = event.detail.to
+        host.linking = 'input'
+      }
     }
-    // Move at the end of the host DOM to allow selecting
-    // another link after reconnecting this one
-    graphLink.remove()
-    host.appendChild(graphLink)
     graphLink.linking = true
-    host.linking = true
+    host.appendChild(graphLink)
   })
 
   host.addEventListener('graph-link-end', (
@@ -49,9 +50,15 @@ export default function useGraphLinkAdd(host) {
     if (!graphLink) {
       return
     }
-    graphLink.to = event.detail.to
-    graphLink.toX = null
-    graphLink.toY = null
+    if (host.linking === 'output') {
+      graphLink.to = event.detail.to
+      graphLink.toX = null
+      graphLink.toY = null
+    } else if (host.linking === 'input') {
+      graphLink.from = event.detail.from
+      graphLink.fromX = null
+      graphLink.fromY = null
+    }
   })
 
   host.addEventListener('mousemove', (event) => {
@@ -59,9 +66,15 @@ export default function useGraphLinkAdd(host) {
       return
     }
     const { x, y } = getNodeEditorMousePosition(event)
-    graphLink.to = null
-    graphLink.toX = x
-    graphLink.toY = y
+    if (host.linking === 'output') {
+      graphLink.to = null
+      graphLink.toX = x
+      graphLink.toY = y
+    } else if (host.linking === 'input') {
+      graphLink.from = null
+      graphLink.fromX = x
+      graphLink.fromY = y
+    }
   })
 
   host.addEventListener('mouseup', () => {
@@ -76,7 +89,7 @@ export default function useGraphLinkAdd(host) {
       return
     }
     event.stopImmediatePropagation()
-    host.linking = false
+    host.linking = null
     graphLink.linking = false
     graphLink = null
   })

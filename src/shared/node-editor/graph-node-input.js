@@ -23,8 +23,11 @@ export default defineCustomElement('w-graph-node-input', {
 
     socket.addEventListener('mousedown', (event) => {
       event.stopPropagation()
+      if (host.matches('w-node-editor[linking] w-graph-node-input')) {
+        return
+      }
       host.dispatchEvent(
-        new CustomEvent('graph-link-disconnect', {
+        new CustomEvent('graph-link-start', {
           bubbles: true,
           detail: { to: host.id },
         }),
@@ -32,7 +35,7 @@ export default defineCustomElement('w-graph-node-input', {
     })
 
     socket.addEventListener('mousemove', (event) => {
-      if (!host.matches('w-node-editor[linking] w-graph-node-input')) {
+      if (!host.matches(`w-node-editor[linking='output'] w-graph-node-input`)) {
         return
       }
       event.stopPropagation()
@@ -45,7 +48,7 @@ export default defineCustomElement('w-graph-node-input', {
     })
 
     socket.addEventListener('mouseup', (event) => {
-      if (!host.matches('w-node-editor[linking] w-graph-node-input')) {
+      if (!host.matches(`w-node-editor[linking='output'] w-graph-node-input`)) {
         return
       }
       event.stopPropagation()

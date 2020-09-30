@@ -27,12 +27,35 @@ export default defineCustomElement('w-graph-node-output', {
 
     socket.addEventListener('mousedown', (event) => {
       event.stopPropagation()
+      if (host.matches('w-node-editor[linking] w-graph-node-output')) {
+        return
+      }
       host.dispatchEvent(
         new CustomEvent('graph-link-start', {
           bubbles: true,
           detail: { from: host.id },
         }),
       )
+    })
+
+    socket.addEventListener('mousemove', (event) => {
+      if (!host.matches(`w-node-editor[linking='input'] w-graph-node-output`)) {
+        return
+      }
+      event.stopPropagation()
+      host.dispatchEvent(
+        new CustomEvent('graph-link-end', {
+          bubbles: true,
+          detail: { from: host.id },
+        }),
+      )
+    })
+
+    socket.addEventListener('mouseup', (event) => {
+      if (!host.matches(`w-node-editor[linking='input'] w-graph-node-output`)) {
+        return
+      }
+      event.stopPropagation()
     })
   },
 })
