@@ -500,7 +500,7 @@ test('duplicates links when duplicating nodes', () => {
   ])
 })
 
-test('disconnect a link', () => {
+test('disconnects a link', () => {
   const {
     nodeEditor,
     getGraphNodes,
@@ -532,7 +532,7 @@ test('disconnect a link', () => {
   expect(getGraphLinks()).toHaveLength(0)
 })
 
-test('disconnect a specific link from a node', () => {
+test('disconnects a specific link from a node', () => {
   const {
     nodeEditor,
     getGraphNodes,
