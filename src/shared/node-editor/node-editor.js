@@ -22,6 +22,14 @@ export default defineCustomElement('w-node-editor', {
     :host([moving]) {
       cursor: move;
     }
+
+    :host([linking='output']) {
+      --graph-node-output-hover: none;
+    }
+
+    :host([linking='input']) {
+      --graph-node-input-hover: none;
+    }
   `,
   template: html`
     <w-graph>

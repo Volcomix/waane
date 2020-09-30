@@ -12,6 +12,7 @@ export default defineCustomElement('w-graph-node-output', {
       position: absolute;
       right: 0;
       transform: translateX(50%);
+      --graph-node-socket-hover: var(--graph-node-output-hover);
     }
   `,
   template: html`

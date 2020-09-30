@@ -13,7 +13,10 @@ export default defineCustomElement('w-graph-node-socket', {
     }
 
     :host(:hover) {
-      background-color: rgba(var(--color-on-surface) / 0.08);
+      background-color: var(
+        --graph-node-socket-hover,
+        rgba(var(--color-on-surface) / 0.08)
+      );
     }
 
     :host(:active) {

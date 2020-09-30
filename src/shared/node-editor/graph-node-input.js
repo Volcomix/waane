@@ -8,6 +8,7 @@ export default defineCustomElement('w-graph-node-input', {
       position: absolute;
       left: 0px;
       transform: translateX(-50%);
+      --graph-node-socket-hover: var(--graph-node-input-hover);
     }
   `,
   template: html`
