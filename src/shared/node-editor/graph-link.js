@@ -20,8 +20,6 @@ export default defineCustomElement('w-graph-link', {
       transition: stroke 150ms var(--easing-standard);
     }
 
-    /* TODO Put a higher z-index when moving */
-
     :host([linking]) {
       z-index: 8;
     }
