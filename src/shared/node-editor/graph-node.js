@@ -48,7 +48,10 @@ export default defineCustomElement('w-graph-node', {
     }
 
     :host(:hover) w-icon {
-      background-color: rgba(var(--color-on-surface) / 0.04);
+      background-color: var(
+        --graph-node-hover,
+        rgba(var(--color-on-surface) / 0.04)
+      );
     }
 
     :host([selected]) w-icon {

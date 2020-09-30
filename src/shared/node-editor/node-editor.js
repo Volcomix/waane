@@ -23,6 +23,10 @@ export default defineCustomElement('w-node-editor', {
       cursor: move;
     }
 
+    :host([linking]) {
+      --graph-node-hover: none;
+    }
+
     :host([linking='output']) {
       --graph-node-output-hover: none;
     }
