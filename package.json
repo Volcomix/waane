@@ -1,8 +1,8 @@
 {
-  "name": "@waane/node-editor",
+  "name": "waane",
   "version": "1.0.0",
-  "description": "Node editor web components",
-  "main": "src/components/index.js",
+  "description": "Digital Audio Workstation combining a tracker and a node editor",
+  "main": "src/index.js",
   "author": "Volcomix",
   "license": "MIT",
   "type": "module",
