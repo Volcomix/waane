@@ -1,5 +1,7 @@
 import { css, defineCustomElement, html } from '../core/element.js'
 
+/** @typedef {import('./graph-node.js').default} GraphNode */
+
 export default defineCustomElement('w-graph-link', {
   styles: css`
     :host {
@@ -54,12 +56,12 @@ export default defineCustomElement('w-graph-link', {
       const output = /** @type {HTMLElement} */ (root.querySelector(
         `w-graph-node-output#${from}`,
       ))
-      const graphNode = /** @type {HTMLElement} */ (output.closest(
+      const graphNode = /** @type {GraphNode} */ (output.closest(
         'w-graph-node',
       ))
       return {
-        fromX: graphNode.offsetLeft + graphNode.offsetWidth,
-        fromY: graphNode.offsetTop + output.offsetTop + output.offsetHeight / 2,
+        fromX: graphNode.x + graphNode.offsetWidth,
+        fromY: graphNode.y + output.offsetTop + output.offsetHeight / 2,
       }
     }
 
@@ -72,12 +74,12 @@ export default defineCustomElement('w-graph-link', {
       const output = /** @type {HTMLElement} */ (root.querySelector(
         `w-graph-node-input#${to}`,
       ))
-      const graphNode = /** @type {HTMLElement} */ (output.closest(
+      const graphNode = /** @type {GraphNode} */ (output.closest(
         'w-graph-node',
       ))
       return {
-        toX: graphNode.offsetLeft,
-        toY: graphNode.offsetTop + output.offsetTop + output.offsetHeight / 2,
+        toX: graphNode.x,
+        toY: graphNode.y + output.offsetTop + output.offsetHeight / 2,
       }
     }
 
