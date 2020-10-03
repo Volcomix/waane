@@ -1,6 +1,27 @@
-import { afterEach, expect, test } from '@jest/globals'
+import { afterEach, expect, jest, test } from '@jest/globals'
 import '../../index'
 import { html } from '../../shared/core/element'
+
+const handleAudioNodeStart = jest.fn()
+const handleAudioNodeStop = jest.fn()
+const handleAudioNodeConnect = jest.fn()
+const handleAudioNodeDisconnect = jest.fn()
+
+Object.defineProperty(window, 'AudioContext', {
+  writable: true,
+  value: class {
+    destination = {}
+
+    createOscillator() {
+      return {
+        start: handleAudioNodeStart,
+        stop: handleAudioNodeStop,
+        connect: handleAudioNodeConnect,
+        disconnect: handleAudioNodeDisconnect,
+      }
+    }
+  },
+})
 
 /**
  * @param {HTMLElement} element
@@ -127,6 +148,10 @@ function setup() {
 
 afterEach(() => {
   document.body.innerHTML = ''
+  handleAudioNodeStart.mockClear()
+  handleAudioNodeStop.mockClear()
+  handleAudioNodeConnect.mockClear()
+  handleAudioNodeDisconnect.mockClear()
 })
 
 test('has no node by default', () => {
@@ -567,4 +592,27 @@ test('disconnects a specific link from a node', () => {
   nodeEditor.click()
 
   expect(getGraphLinks()).toEqual([graphLink1])
+})
+
+test('starts and stops oscillator', () => {
+  const { getGraphNodes, getMenuItem, addAudioNode } = setup()
+  addAudioNode('Oscillator')
+
+  expect(handleAudioNodeStart).toHaveBeenCalledTimes(1)
+
+  const [oscillator] = getGraphNodes()
+  contextMenu(oscillator)
+  getMenuItem('Delete').click()
+
+  expect(handleAudioNodeStop).toHaveBeenCalledTimes(1)
+})
+
+test('connects oscillator to audio destination', () => {
+  const { getGraphNodes, addGraphLink, addAudioNode } = setup()
+  addAudioNode('Oscillator')
+  addAudioNode('Audio destination')
+  const [oscillator, audioDestination] = getGraphNodes()
+  addGraphLink(oscillator, audioDestination)
+
+  expect(handleAudioNodeConnect).toHaveBeenCalledTimes(1)
 })

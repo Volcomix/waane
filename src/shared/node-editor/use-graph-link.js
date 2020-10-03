@@ -1,21 +1,30 @@
+import useNodeEditorMousePosition from './use-node-editor-mouse-position.js'
+
 /**
  * @typedef {import('./node-editor.js').default} NodeEditor
  * @typedef {import('./graph-link.js').default} GraphLink
+ *
+ * @typedef {object} GraphLinkEventDetail
+ * @property {string} [from]
+ * @property {string} [to]
+ *
+ * @typedef {CustomEvent<GraphLinkEventDetail>} GraphLinkEvent
  */
-
-import useNodeEditorMousePosition from './use-node-editor-mouse-position.js'
 
 /**
  * @param {NodeEditor} host
  */
-export default function useGraphLinkAdd(host) {
+export default function useGraphLink(host) {
   /** @type {GraphLink} */
   let graphLink = null
+
+  /** @type {boolean} */
+  let isConnected
 
   const getNodeEditorMousePosition = useNodeEditorMousePosition(host)
 
   host.addEventListener('graph-link-start', (
-    /** @type {CustomEvent} */ event,
+    /** @type {GraphLinkEvent} */ event,
   ) => {
     if (event.detail.from) {
       graphLink = /** @type {GraphLink} */ (document.createElement(
@@ -23,6 +32,7 @@ export default function useGraphLinkAdd(host) {
       ))
       graphLink.from = event.detail.from
       host.linking = 'output'
+      isConnected = false
     } else if (event.detail.to) {
       graphLink = /** @type {GraphLink} */ (host.querySelector(
         `w-graph-link[to='${event.detail.to}']`,
@@ -32,12 +42,14 @@ export default function useGraphLinkAdd(host) {
         // another link after reconnecting this one
         graphLink.remove()
         host.linking = 'output'
+        isConnected = true
       } else {
         graphLink = /** @type {GraphLink} */ (document.createElement(
           'w-graph-link',
         ))
         graphLink.to = event.detail.to
         host.linking = 'input'
+        isConnected = false
       }
     }
     graphLink.linking = true
@@ -45,7 +57,7 @@ export default function useGraphLinkAdd(host) {
   })
 
   host.addEventListener('graph-link-end', (
-    /** @type {CustomEvent} */ event,
+    /** @type {GraphLinkEvent} */ event,
   ) => {
     if (!graphLink) {
       return
@@ -75,6 +87,7 @@ export default function useGraphLinkAdd(host) {
       graphLink.fromX = x
       graphLink.fromY = y
     }
+    isConnected = false
   })
 
   host.addEventListener('mouseup', () => {
@@ -89,6 +102,9 @@ export default function useGraphLinkAdd(host) {
       return
     }
     event.stopImmediatePropagation()
+    if (!isConnected && graphLink.from && graphLink.to) {
+      host.dispatchEvent(new CustomEvent('graph-link-connect'))
+    }
     host.linking = null
     graphLink.linking = false
     graphLink = null

@@ -1,5 +1,5 @@
 import { css, defineCustomElement, html } from '../core/element.js'
-import useGraphLinkAdd from './use-graph-link-add.js'
+import useGraphLink from './use-graph-link.js'
 import useGraphNodeMove from './use-graph-node-move.js'
 import useGraphNodeSelection from './use-graph-node-selection.js'
 import useMouseNavigation from './use-mouse-navigation.js'
@@ -55,7 +55,7 @@ export default defineCustomElement('w-node-editor', {
 
     // The order does matter because each one can stop the immediate
     // propagation to the next one
-    useGraphLinkAdd(host)
+    useGraphLink(host)
     useMouseNavigation(host)
     useGraphNodeMove(host)
     useGraphNodeSelection(host)

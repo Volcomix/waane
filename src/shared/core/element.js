@@ -104,7 +104,7 @@ function getProperty(attributeName, propertyType) {
   }
 }
 
-/** @typedef {Object.<string, PropertyType>} PropertyTypes */
+/** @typedef {Object<string, PropertyType>} PropertyTypes */
 
 /**
  * @template {PropertyTypes} T
@@ -195,7 +195,7 @@ export function defineCustomElement(
     _connectedCallback = () => {}
     _disconnectedCallback = () => {}
 
-    /** @type {Object.<string, () => void>} */
+    /** @type {Object<string, () => void>} */
     _attributeChangedCallbacks = Object.values(attributesByProperty).reduce(
       (callbacks, attributeName) =>
         Object.assign(callbacks, { [attributeName]: () => {} }),

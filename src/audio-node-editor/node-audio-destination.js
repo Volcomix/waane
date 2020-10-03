@@ -1,4 +1,6 @@
 import { defineCustomElement, html } from '../shared/core/element.js'
+import useAudioContext from './use-audio-context.js'
+import useAudioInputBinding from './use-audio-input-binding.js'
 
 export default defineCustomElement('node-audio-destination', {
   template: html`
@@ -8,4 +10,17 @@ export default defineCustomElement('node-audio-destination', {
     </w-graph-node>
   `,
   shadow: false,
+  setup({ host, connected }) {
+    const audioContext = useAudioContext()
+
+    const bindAudioInput = useAudioInputBinding(host)
+
+    connected(() => {
+      const input = /** @type {HTMLElement} */ (host.querySelector(
+        'w-graph-node-input',
+      ))
+
+      bindAudioInput(input, audioContext.destination)
+    })
+  },
 })
