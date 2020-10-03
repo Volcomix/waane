@@ -77,6 +77,13 @@ export default function useGraphLink(host) {
     if (!graphLink) {
       return
     }
+    if (isConnected) {
+      host.dispatchEvent(
+        new CustomEvent('graph-link-disconnect', {
+          detail: { from: graphLink.from, to: graphLink.to },
+        }),
+      )
+    }
     const { x, y } = getNodeEditorMousePosition(event)
     if (host.linking === 'output') {
       graphLink.to = null
@@ -103,7 +110,11 @@ export default function useGraphLink(host) {
     }
     event.stopImmediatePropagation()
     if (!isConnected && graphLink.from && graphLink.to) {
-      host.dispatchEvent(new CustomEvent('graph-link-connect'))
+      host.dispatchEvent(
+        new CustomEvent('graph-link-connect', {
+          detail: { from: graphLink.from, to: graphLink.to },
+        }),
+      )
     }
     host.linking = null
     graphLink.linking = false

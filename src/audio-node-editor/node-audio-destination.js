@@ -1,6 +1,6 @@
 import { defineCustomElement, html } from '../shared/core/element.js'
 import useAudioContext from './use-audio-context.js'
-import useAudioInputBinding from './use-audio-input-binding.js'
+import { bindAudioInput } from './use-audio-link.js'
 
 export default defineCustomElement('node-audio-destination', {
   template: html`
@@ -12,8 +12,6 @@ export default defineCustomElement('node-audio-destination', {
   shadow: false,
   setup({ host, connected }) {
     const audioContext = useAudioContext()
-
-    const bindAudioInput = useAudioInputBinding(host)
 
     connected(() => {
       const input = /** @type {HTMLElement} */ (host.querySelector(

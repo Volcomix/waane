@@ -1,6 +1,6 @@
 import { defineCustomElement, html } from '../shared/core/element.js'
 import useAudioContext from './use-audio-context.js'
-import useAudioOutputBinding from './use-audio-output-binding.js'
+import { bindAudioOutput } from './use-audio-link.js'
 
 export default defineCustomElement('node-oscillator', {
   template: html`
@@ -13,8 +13,6 @@ export default defineCustomElement('node-oscillator', {
   setup({ host, connected, disconnected }) {
     const audioContext = useAudioContext()
     const oscillator = audioContext.createOscillator()
-
-    const bindAudioOutput = useAudioOutputBinding(host)
 
     connected(() => {
       oscillator.start()

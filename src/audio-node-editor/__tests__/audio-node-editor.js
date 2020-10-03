@@ -607,12 +607,21 @@ test('starts and stops oscillator', () => {
   expect(handleAudioNodeStop).toHaveBeenCalledTimes(1)
 })
 
-test('connects oscillator to audio destination', () => {
-  const { getGraphNodes, addGraphLink, addAudioNode } = setup()
+test('connects and disconnects oscillator to audio destination', () => {
+  const { nodeEditor, getGraphNodes, addGraphLink, addAudioNode } = setup()
   addAudioNode('Oscillator')
   addAudioNode('Audio destination')
   const [oscillator, audioDestination] = getGraphNodes()
   addGraphLink(oscillator, audioDestination)
 
   expect(handleAudioNodeConnect).toHaveBeenCalledTimes(1)
+
+  const graphNodeInput = audioDestination.querySelector('w-graph-node-input')
+  const inputSocket = graphNodeInput.shadowRoot.querySelector(
+    'w-graph-node-socket',
+  )
+  inputSocket.dispatchEvent(new MouseEvent('mousedown'))
+  nodeEditor.dispatchEvent(new MouseEvent('mousemove'))
+
+  expect(handleAudioNodeDisconnect).toHaveBeenCalledTimes(1)
 })
