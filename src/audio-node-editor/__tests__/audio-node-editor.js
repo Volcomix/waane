@@ -665,3 +665,39 @@ test('disconnects audio nodes when deleting input node', () => {
 
   expect(handleAudioNodeDisconnect).toHaveBeenCalledTimes(1)
 })
+
+test('connects linked audio nodes when duplicating them', () => {
+  const { getGraphNodes, addGraphLink, getMenuItem, addAudioNode } = setup()
+
+  addAudioNode('Oscillator')
+  addAudioNode('Audio destination')
+  addAudioNode('Audio destination')
+  addAudioNode('Oscillator')
+  const [
+    oscillator1,
+    audioDestination1,
+    audioDestination2,
+    oscillator2,
+  ] = getGraphNodes()
+
+  addGraphLink(oscillator1, audioDestination1)
+  addGraphLink(oscillator2, audioDestination2)
+
+  expect(handleAudioNodeConnect).toHaveBeenCalledTimes(2)
+  handleAudioNodeConnect.mockClear()
+
+  click(oscillator1)
+  click(audioDestination1, { ctrlKey: true })
+  contextMenu(oscillator1)
+  getMenuItem('Duplicate').click()
+
+  expect(handleAudioNodeConnect).toHaveBeenCalledTimes(1)
+  handleAudioNodeConnect.mockClear()
+
+  click(oscillator2)
+  click(audioDestination2, { ctrlKey: true })
+  contextMenu(oscillator2)
+  getMenuItem('Duplicate').click()
+
+  expect(handleAudioNodeConnect).toHaveBeenCalledTimes(1)
+})

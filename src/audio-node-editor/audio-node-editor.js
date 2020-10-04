@@ -123,8 +123,8 @@ export default defineCustomElement('audio-node-editor', {
               detail: { from: graphLink.from, to: graphLink.to },
             }),
           )
-            graphLink.remove()
-          })
+          graphLink.remove()
+        })
       })
     }
 
@@ -203,6 +203,14 @@ export default defineCustomElement('audio-node-editor', {
                   duplicatedGraphLink.from = duplicatedOutputs[outputIndex].id
                   duplicatedGraphLink.to = socketIdsByGraphLink.get(graphLink)
                   nodeEditor.appendChild(duplicatedGraphLink)
+                  nodeEditor.dispatchEvent(
+                    new CustomEvent('graph-link-connect', {
+                      detail: {
+                        from: duplicatedGraphLink.from,
+                        to: duplicatedGraphLink.to,
+                      },
+                    }),
+                  )
                 } else {
                   socketIdsByGraphLink.set(
                     graphLink,
@@ -228,6 +236,14 @@ export default defineCustomElement('audio-node-editor', {
                   duplicatedGraphLink.from = socketIdsByGraphLink.get(graphLink)
                   duplicatedGraphLink.to = duplicatedInputs[inputIndex].id
                   nodeEditor.appendChild(duplicatedGraphLink)
+                  nodeEditor.dispatchEvent(
+                    new CustomEvent('graph-link-connect', {
+                      detail: {
+                        from: duplicatedGraphLink.from,
+                        to: duplicatedGraphLink.to,
+                      },
+                    }),
+                  )
                 } else {
                   socketIdsByGraphLink.set(
                     graphLink,
