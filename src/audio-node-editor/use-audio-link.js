@@ -63,9 +63,14 @@ export default function useAudioLink(host) {
 
     const inputs = links.get(output)
     inputs.delete(disconnectedInput)
-    inputs.forEach((input) => {
-      const destination = audioNodesByInput.get(input)
-      source.connect(destination)
-    })
+
+    if (inputs.size > 0) {
+      inputs.forEach((input) => {
+        const destination = audioNodesByInput.get(input)
+        source.connect(destination)
+      })
+    } else {
+      links.delete(output)
+    }
   })
 }

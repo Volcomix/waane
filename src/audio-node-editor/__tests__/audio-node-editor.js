@@ -350,25 +350,6 @@ test('deletes nodes', () => {
   expect(remainingGraphNodes[0]).toBe(graphNode3)
 })
 
-test('cancels adding a link when releasing on node editor', () => {
-  const { nodeEditor, getGraphLinks, addAudioNode } = setup()
-  addAudioNode('Oscillator')
-
-  const graphNodeOutput = nodeEditor.querySelector('w-graph-node-output')
-  const outputSocket = graphNodeOutput.shadowRoot.querySelector(
-    'w-graph-node-socket',
-  )
-  outputSocket.dispatchEvent(new MouseEvent('mousedown'))
-  nodeEditor.dispatchEvent(new MouseEvent('mousemove'))
-
-  expect(getGraphLinks()).toHaveLength(1)
-
-  nodeEditor.dispatchEvent(new MouseEvent('mouseup'))
-  nodeEditor.click()
-
-  expect(getGraphLinks()).toHaveLength(0)
-})
-
 test('adds a link from an output to an input', () => {
   const { getGraphNodes, addGraphLink, getGraphLinks, addAudioNode } = setup()
   addAudioNode('Oscillator')
@@ -403,6 +384,25 @@ test('adds a link from an input to an output', () => {
   nodeEditor.click()
 
   expect(getGraphLinks()).toHaveLength(1)
+})
+
+test('cancels adding a link when releasing on node editor', () => {
+  const { nodeEditor, getGraphLinks, addAudioNode } = setup()
+  addAudioNode('Oscillator')
+
+  const graphNodeOutput = nodeEditor.querySelector('w-graph-node-output')
+  const outputSocket = graphNodeOutput.shadowRoot.querySelector(
+    'w-graph-node-socket',
+  )
+  outputSocket.dispatchEvent(new MouseEvent('mousedown'))
+  nodeEditor.dispatchEvent(new MouseEvent('mousemove'))
+
+  expect(getGraphLinks()).toHaveLength(1)
+
+  nodeEditor.dispatchEvent(new MouseEvent('mouseup'))
+  nodeEditor.click()
+
+  expect(getGraphLinks()).toHaveLength(0)
 })
 
 test('cancels adding a link if sockets are already linked', () => {
@@ -621,7 +621,7 @@ test('starts and stops oscillator', () => {
   expect(handleAudioNodeStop).toHaveBeenCalledTimes(1)
 })
 
-test('connects and disconnects oscillator to audio destination', () => {
+test('connects and disconnects audio nodes', () => {
   const { nodeEditor, getGraphNodes, addGraphLink, addAudioNode } = setup()
   addAudioNode('Oscillator')
   addAudioNode('Audio destination')
@@ -636,6 +636,32 @@ test('connects and disconnects oscillator to audio destination', () => {
   )
   inputSocket.dispatchEvent(new MouseEvent('mousedown'))
   nodeEditor.dispatchEvent(new MouseEvent('mousemove'))
+
+  expect(handleAudioNodeDisconnect).toHaveBeenCalledTimes(1)
+})
+
+test('disconnects audio nodes when deleting output node', () => {
+  const { getGraphNodes, addGraphLink, getMenuItem, addAudioNode } = setup()
+  addAudioNode('Oscillator')
+  addAudioNode('Audio destination')
+  const [oscillator, audioDestination] = getGraphNodes()
+  addGraphLink(oscillator, audioDestination)
+
+  contextMenu(oscillator)
+  getMenuItem('Delete').click()
+
+  expect(handleAudioNodeDisconnect).toHaveBeenCalledTimes(1)
+})
+
+test('disconnects audio nodes when deleting input node', () => {
+  const { getGraphNodes, addGraphLink, getMenuItem, addAudioNode } = setup()
+  addAudioNode('Oscillator')
+  addAudioNode('Audio destination')
+  const [oscillator, audioDestination] = getGraphNodes()
+  addGraphLink(oscillator, audioDestination)
+
+  contextMenu(audioDestination)
+  getMenuItem('Delete').click()
 
   expect(handleAudioNodeDisconnect).toHaveBeenCalledTimes(1)
 })

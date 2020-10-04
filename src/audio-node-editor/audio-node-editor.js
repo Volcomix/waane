@@ -99,7 +99,12 @@ export default defineCustomElement('audio-node-editor', {
       graphNode.querySelectorAll('w-graph-node-output').forEach((output) => {
         nodeEditor
           .querySelectorAll(`w-graph-link[from='${output.id}']`)
-          .forEach((graphLink) => {
+          .forEach((/** @type {GraphLink} */ graphLink) => {
+            nodeEditor.dispatchEvent(
+              new CustomEvent('graph-link-disconnect', {
+                detail: { from: graphLink.from, to: graphLink.to },
+              }),
+            )
             graphLink.remove()
           })
       })
@@ -110,9 +115,14 @@ export default defineCustomElement('audio-node-editor', {
      */
     function removeGraphNodeInputLinks(graphNode) {
       graphNode.querySelectorAll('w-graph-node-input').forEach((input) => {
-        nodeEditor
-          .querySelectorAll(`w-graph-link[to='${input.id}']`)
-          .forEach((graphLink) => {
+        nodeEditor.querySelectorAll(`w-graph-link[to='${input.id}']`).forEach((
+          /** @type {GraphLink} */ graphLink,
+        ) => {
+          nodeEditor.dispatchEvent(
+            new CustomEvent('graph-link-disconnect', {
+              detail: { from: graphLink.from, to: graphLink.to },
+            }),
+          )
             graphLink.remove()
           })
       })
