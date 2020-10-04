@@ -350,7 +350,7 @@ test('deletes nodes', () => {
   expect(remainingGraphNodes[0]).toBe(graphNode3)
 })
 
-test('cancels adding a link', () => {
+test('cancels adding a link when releasing on node editor', () => {
   const { nodeEditor, getGraphLinks, addAudioNode } = setup()
   addAudioNode('Oscillator')
 
@@ -401,6 +401,20 @@ test('adds a link from an input to an output', () => {
     new MouseEvent('mouseup', { bubbles: true, composed: true }),
   )
   nodeEditor.click()
+
+  expect(getGraphLinks()).toHaveLength(1)
+})
+
+test('cancels adding a link if sockets are already linked', () => {
+  const { getGraphNodes, addGraphLink, getGraphLinks, addAudioNode } = setup()
+  addAudioNode('Oscillator')
+  addAudioNode('Audio destination')
+  const [oscillator, audioDestination] = getGraphNodes()
+  addGraphLink(oscillator, audioDestination)
+
+  expect(getGraphLinks()).toHaveLength(1)
+
+  addGraphLink(oscillator, audioDestination)
 
   expect(getGraphLinks()).toHaveLength(1)
 })

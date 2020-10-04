@@ -14,11 +14,10 @@ export default defineCustomElement('node-audio-destination', {
     const audioContext = useAudioContext()
 
     connected(() => {
-      const input = /** @type {HTMLElement} */ (host.querySelector(
-        'w-graph-node-input',
-      ))
-
-      bindAudioInput(input, audioContext.destination)
+      bindAudioInput(
+        host.querySelector('w-graph-node-input'),
+        audioContext.destination,
+      )
     })
   },
 })

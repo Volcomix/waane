@@ -38,7 +38,7 @@ export default function useGraphLink(host) {
         `w-graph-link[to='${event.detail.to}']`,
       ))
       if (graphLink) {
-        // Move at the end of the host DOM to allow selecting
+        // Moves at the end of the host DOM to allow selecting
         // another link after reconnecting this one
         graphLink.remove()
         host.linking = 'output'
@@ -110,11 +110,18 @@ export default function useGraphLink(host) {
     }
     event.stopImmediatePropagation()
     if (!isConnected && graphLink.from && graphLink.to) {
-      host.dispatchEvent(
-        new CustomEvent('graph-link-connect', {
-          detail: { from: graphLink.from, to: graphLink.to },
-        }),
+      const existingGraphLinks = host.querySelectorAll(
+        `w-graph-link[from='${graphLink.from}'][to='${graphLink.to}']`,
       )
+      if (existingGraphLinks.length > 1) {
+        graphLink.remove()
+      } else {
+        host.dispatchEvent(
+          new CustomEvent('graph-link-connect', {
+            detail: { from: graphLink.from, to: graphLink.to },
+          }),
+        )
+      }
     }
     host.linking = null
     graphLink.linking = false
