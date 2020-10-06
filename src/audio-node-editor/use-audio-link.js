@@ -3,7 +3,7 @@
 /** @type {WeakMap<HTMLElement, AudioNode>} */
 const audioNodesByOutput = new WeakMap()
 
-/** @type {WeakMap<HTMLElement, AudioNode>} */
+/** @type {WeakMap<HTMLElement, AudioNode | AudioParam>} */
 const audioNodesByInput = new WeakMap()
 
 /** @type {WeakMap<HTMLElement, Set<HTMLElement>>} */
@@ -19,7 +19,7 @@ export function bindAudioOutput(element, audioNode) {
 
 /**
  * @param {HTMLElement} element
- * @param {AudioNode} audioNode
+ * @param {AudioNode | AudioParam} audioNode
  */
 export function bindAudioInput(element, audioNode) {
   audioNodesByInput.set(element, audioNode)
@@ -40,7 +40,7 @@ export default function useAudioLink(host) {
     ))
     const source = audioNodesByOutput.get(output)
     const destination = audioNodesByInput.get(input)
-    source.connect(destination)
+    source.connect(/** @type {AudioNode} */ (destination))
 
     if (links.has(output)) {
       links.get(output).add(input)
@@ -67,7 +67,7 @@ export default function useAudioLink(host) {
     if (inputs.size > 0) {
       inputs.forEach((input) => {
         const destination = audioNodesByInput.get(input)
-        source.connect(destination)
+        source.connect(/** @type {AudioNode} */ (destination))
       })
     } else {
       links.delete(output)

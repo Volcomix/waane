@@ -6,6 +6,8 @@ export default defineCustomElement('w-graph-node', {
   styles: css`
     :host {
       position: absolute;
+      display: flex;
+      flex-direction: column;
       padding: 16px;
       border-radius: 4px;
       background-color: rgb(var(--color-surface));
@@ -43,6 +45,7 @@ export default defineCustomElement('w-graph-node', {
       border-radius: 4px;
       text-align: right;
       color: transparent;
+      pointer-events: none;
       transition: background-color 200ms var(--easing-standard),
         color 100ms var(--easing-accelerated);
     }
@@ -81,9 +84,11 @@ export default defineCustomElement('w-graph-node', {
     }
 
     slot:not([name])::slotted(*) {
+      margin-top: 8px;
+      margin-bottom: 16px;
       display: flex;
       align-items: center;
-      height: 32px;
+      min-height: 48px;
       color: rgba(var(--color-on-surface) / var(--text-medium-emphasis));
       ${typography('body2')}
     }
