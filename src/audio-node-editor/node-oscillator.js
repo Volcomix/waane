@@ -33,7 +33,9 @@ export default defineCustomElement('node-oscillator', {
       )
 
       frequencyField.addEventListener('input', () => {
-        oscillator.frequency.value = frequencyField.value
+        if (isFinite(frequencyField.value)) {
+          oscillator.frequency.value = frequencyField.value
+        }
       })
     })
 

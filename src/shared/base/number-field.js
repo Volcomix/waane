@@ -21,7 +21,9 @@ export default defineCustomElement('w-number-field', {
       transform: translateY(-100%) scale(0.75);
       transform-origin: bottom left;
       color: rgba(var(--color-on-surface) / var(--text-medium-emphasis));
-      transition: color 200ms var(--easing-standard);
+      pointer-events: none;
+      transition: color 200ms var(--easing-standard),
+        transform 200ms var(--easing-standard);
       ${typography('body1')}
     }
 
@@ -61,6 +63,10 @@ export default defineCustomElement('w-number-field', {
 
     :host(:focus-within) input {
       border-bottom-color: rgb(var(--color-primary));
+    }
+
+    :host([value='NaN']:not(:focus-within)) label {
+      transform: translateY(-4px);
     }
   `,
   template: html`
