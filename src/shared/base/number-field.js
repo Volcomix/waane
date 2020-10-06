@@ -8,6 +8,10 @@ export default defineCustomElement('w-number-field', {
       height: 48px;
       flex: 1;
       display: flex;
+      border-bottom: 1px solid rgba(var(--color-on-surface) / 0.42);
+      border-radius: 4px 4px 0 0;
+      background-color: rgba(var(--color-on-surface) / 0.04);
+      transition: border-bottom-color 200ms var(--easing-standard);
     }
 
     label {
@@ -17,6 +21,7 @@ export default defineCustomElement('w-number-field', {
       transform: translateY(-100%) scale(0.75);
       transform-origin: bottom left;
       color: rgba(var(--color-on-surface) / var(--text-medium-emphasis));
+      transition: color 200ms var(--easing-standard);
       ${typography('body1')}
     }
 
@@ -24,12 +29,38 @@ export default defineCustomElement('w-number-field', {
       flex: 1;
       outline: none;
       border: none;
-      border-bottom: 1px solid rgba(var(--color-on-surface) / 0.42);
+      border-bottom: 2px solid transparent;
       border-radius: 4px 4px 0 0;
+      margin-bottom: -1px;
       padding: 20px 16px 6px 16px;
-      background-color: rgba(var(--color-on-surface) / 0.04);
+      background: none;
       color: rgba(var(--color-on-surface) / var(--text-high-emphasis));
+      caret-color: rgb(var(--color-primary));
+      transition: background-color 200ms var(--easing-standard),
+        border-bottom-color 200ms var(--easing-standard);
       ${typography('body1')}
+    }
+
+    :host(:hover) {
+      border-bottom-color: rgba(
+        var(--color-on-surface) / var(--text-high-emphasis)
+      );
+    }
+
+    input:hover {
+      background-color: rgba(var(--color-on-surface) / 0.04);
+    }
+
+    input:focus {
+      background-color: rgba(var(--color-on-surface) / 0.12);
+    }
+
+    :host(:focus-within) label {
+      color: rgba(var(--color-primary) / var(--text-high-emphasis));
+    }
+
+    :host(:focus-within) input {
+      border-bottom-color: rgb(var(--color-primary));
     }
   `,
   template: html`
