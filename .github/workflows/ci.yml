@@ -20,6 +20,8 @@ jobs:
           rsync -r --exclude=__tests__ src/ dist
           cd dist
           git init
+          git config user.email "github-actions@users.noreply.github.com"
+          git config user.name "GitHub Actions"
           git add -A
           git commit -m 'deploy'
           git push -f https://x-access-token:${{ github.token }}@github.com/${{ github.repository }} master:gh-pages
