@@ -101,5 +101,9 @@ export default defineCustomElement('w-number-field', {
     host.addEventListener('mousedown', (event) => {
       event.stopPropagation()
     })
+
+    host.addEventListener('click', (event) => {
+      event.stopPropagation()
+    })
   },
 })
