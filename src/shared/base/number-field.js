@@ -54,19 +54,24 @@ export default defineCustomElement('w-number-field', {
     }
 
     input:focus {
+      border-bottom-color: rgb(var(--color-primary));
       background-color: rgba(var(--color-on-surface) / 0.12);
     }
 
-    :host(:focus-within) label {
+    input:focus + label {
       color: rgba(var(--color-primary) / var(--text-high-emphasis));
     }
 
-    :host(:focus-within) input {
-      border-bottom-color: rgb(var(--color-primary));
+    input:invalid {
+      border-bottom-color: rgb(var(--color-error));
     }
 
-    :host(:not(:focus-within)) input:invalid + label {
-      transform: translateY(-4px);
+    input:invalid + label {
+      color: rgb(var(--color-error));
+    }
+
+    input:not(:focus):invalid + label {
+      transform: translateY(-6px);
     }
   `,
   template: html`

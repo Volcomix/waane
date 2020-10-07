@@ -7,6 +7,7 @@ style.textContent = css`
     --color-secondary: 3 218 198;
     --color-background: 255 255 255;
     --color-surface: 255 255 255;
+    --color-error: 176 0 32;
 
     --color-on-primary: 255 255 255;
     --color-on-secondary: 0 0 0;
