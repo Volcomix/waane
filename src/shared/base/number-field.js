@@ -65,13 +65,13 @@ export default defineCustomElement('w-number-field', {
       border-bottom-color: rgb(var(--color-primary));
     }
 
-    :host([value='NaN']:not(:focus-within)) label {
+    :host(:not(:focus-within)) input:invalid + label {
       transform: translateY(-4px);
     }
   `,
   template: html`
+    <input id="input" type="number" required />
     <label for="input"></label>
-    <input id="input" type="number" />
   `,
   properties: {
     label: String,
@@ -86,11 +86,16 @@ export default defineCustomElement('w-number-field', {
     })
 
     observe('value', () => {
-      input.value = String(host.value)
+      if (isFinite(host.value)) {
+        input.valueAsNumber = host.value
+      }
     })
 
     input.addEventListener('input', () => {
-      host.value = input.valueAsNumber
+      const value = input.valueAsNumber
+      if (isFinite(value)) {
+        host.value = value
+      }
     })
 
     host.addEventListener('mousedown', (event) => {
