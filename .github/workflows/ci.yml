@@ -1,8 +1,8 @@
 name: CI
 on: push
 jobs:
-  test:
-    name: Test
+  build:
+    name: Test and deploy
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -13,3 +13,13 @@ jobs:
 
       - name: Test
         run: yarn test:ci
+
+      - name: Deploy
+        if: ${{ github.ref == 'refs/heads/master' }}
+        run: |
+          rsync -r --exclude=__tests__ src/ dist
+          cd dist
+          git init
+          git add -A
+          git commit -m 'deploy'
+          git push -f https://x-access-token:${{ github.token }}@github.com/${{ github.repository }} master:gh-pages
