@@ -15,6 +15,7 @@ Object.defineProperty(window, 'AudioContext', {
     createOscillator() {
       return {
         frequency: {},
+        detune: {},
         start: handleAudioNodeStart,
         stop: handleAudioNodeStop,
         connect: handleAudioNodeConnect,
