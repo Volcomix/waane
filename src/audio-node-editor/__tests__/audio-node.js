@@ -38,23 +38,3 @@ test('adds an audio destination node', () => {
     }),
   ])
 })
-
-test('starts and stops oscillator', () => {
-  const {
-    handleAudioNodeStart,
-    handleAudioNodeStop,
-    getGraphNodes,
-    getMenuItem,
-    addAudioNode,
-  } = setup()
-
-  addAudioNode('Oscillator')
-
-  expect(handleAudioNodeStart).toHaveBeenCalledTimes(1)
-
-  const [oscillator] = getGraphNodes()
-  contextMenu(oscillator)
-  getMenuItem('Delete').click()
-
-  expect(handleAudioNodeStop).toHaveBeenCalledTimes(1)
-})

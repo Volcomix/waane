@@ -3,8 +3,7 @@ import { click, contextMenu, setup } from './helpers'
 
 test('connects and disconnects audio nodes', () => {
   const {
-    handleAudioNodeConnect,
-    handleAudioNodeDisconnect,
+    oscillatorMock,
     nodeEditor,
     getGraphNodes,
     addGraphLink,
@@ -16,7 +15,7 @@ test('connects and disconnects audio nodes', () => {
   const [oscillator, audioDestination] = getGraphNodes()
   addGraphLink(oscillator, audioDestination)
 
-  expect(handleAudioNodeConnect).toHaveBeenCalledTimes(1)
+  expect(oscillatorMock.connect).toHaveBeenCalledTimes(1)
 
   const graphNodeInput = audioDestination.querySelector('w-graph-node-input')
   const inputSocket = graphNodeInput.shadowRoot.querySelector(
@@ -25,12 +24,12 @@ test('connects and disconnects audio nodes', () => {
   inputSocket.dispatchEvent(new MouseEvent('mousedown'))
   nodeEditor.dispatchEvent(new MouseEvent('mousemove'))
 
-  expect(handleAudioNodeDisconnect).toHaveBeenCalledTimes(1)
+  expect(oscillatorMock.disconnect).toHaveBeenCalledTimes(1)
 })
 
 test('disconnects audio nodes when deleting output node', () => {
   const {
-    handleAudioNodeDisconnect,
+    oscillatorMock,
     getGraphNodes,
     addGraphLink,
     getMenuItem,
@@ -45,12 +44,12 @@ test('disconnects audio nodes when deleting output node', () => {
   contextMenu(oscillator)
   getMenuItem('Delete').click()
 
-  expect(handleAudioNodeDisconnect).toHaveBeenCalledTimes(1)
+  expect(oscillatorMock.disconnect).toHaveBeenCalledTimes(1)
 })
 
 test('disconnects audio nodes when deleting input node', () => {
   const {
-    handleAudioNodeDisconnect,
+    oscillatorMock,
     getGraphNodes,
     addGraphLink,
     getMenuItem,
@@ -65,12 +64,12 @@ test('disconnects audio nodes when deleting input node', () => {
   contextMenu(audioDestination)
   getMenuItem('Delete').click()
 
-  expect(handleAudioNodeDisconnect).toHaveBeenCalledTimes(1)
+  expect(oscillatorMock.disconnect).toHaveBeenCalledTimes(1)
 })
 
 test('connects linked audio nodes when duplicating them', () => {
   const {
-    handleAudioNodeConnect,
+    oscillatorMock,
     getGraphNodes,
     addGraphLink,
     getMenuItem,
@@ -91,21 +90,21 @@ test('connects linked audio nodes when duplicating them', () => {
   addGraphLink(oscillator1, audioDestination1)
   addGraphLink(oscillator2, audioDestination2)
 
-  expect(handleAudioNodeConnect).toHaveBeenCalledTimes(2)
-  handleAudioNodeConnect.mockClear()
+  expect(oscillatorMock.connect).toHaveBeenCalledTimes(2)
+  oscillatorMock.connect.mockClear()
 
   click(oscillator1)
   click(audioDestination1, { ctrlKey: true })
   contextMenu(oscillator1)
   getMenuItem('Duplicate').click()
 
-  expect(handleAudioNodeConnect).toHaveBeenCalledTimes(1)
-  handleAudioNodeConnect.mockClear()
+  expect(oscillatorMock.connect).toHaveBeenCalledTimes(1)
+  oscillatorMock.connect.mockClear()
 
   click(oscillator2)
   click(audioDestination2, { ctrlKey: true })
   contextMenu(oscillator2)
   getMenuItem('Duplicate').click()
 
-  expect(handleAudioNodeConnect).toHaveBeenCalledTimes(1)
+  expect(oscillatorMock.connect).toHaveBeenCalledTimes(1)
 })

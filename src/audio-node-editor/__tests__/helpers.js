@@ -2,28 +2,29 @@ import { jest } from '@jest/globals'
 import '../../index'
 import { html } from '../../shared/core/element'
 
-const handleAudioNodeStart = jest.fn()
-const handleAudioNodeStop = jest.fn()
-const handleAudioNodeConnect = jest.fn()
-const handleAudioNodeDisconnect = jest.fn()
+const oscillatorMock = {
+  frequency: { value: 440 },
+  detune: { value: 0 },
+  start: jest.fn(),
+  stop: jest.fn(),
+  connect: jest.fn(),
+  disconnect: jest.fn(),
+}
 
 Object.defineProperty(window, 'AudioContext', {
   writable: true,
   value: class {
     destination = {}
-
-    createOscillator() {
-      return {
-        frequency: {},
-        detune: {},
-        start: handleAudioNodeStart,
-        stop: handleAudioNodeStop,
-        connect: handleAudioNodeConnect,
-        disconnect: handleAudioNodeDisconnect,
-      }
-    }
+    createOscillator = () => oscillatorMock
   },
 })
+
+function clearOscillatorMock() {
+  oscillatorMock.start.mockClear()
+  oscillatorMock.stop.mockClear()
+  oscillatorMock.connect.mockClear()
+  oscillatorMock.disconnect.mockClear()
+}
 
 /**
  * @param {HTMLElement} element
@@ -47,10 +48,7 @@ export function contextMenu(element, eventInitDict = {}) {
 }
 
 export function setup() {
-  handleAudioNodeStart.mockClear()
-  handleAudioNodeStop.mockClear()
-  handleAudioNodeConnect.mockClear()
-  handleAudioNodeDisconnect.mockClear()
+  clearOscillatorMock()
 
   document.body.innerHTML = html`<audio-node-editor></audio-node-editor>`
   const audioNodeEditor = /** @type {HTMLElement} */ (document.body.querySelector(
@@ -89,15 +87,21 @@ export function setup() {
   /**
    * @param {HTMLElement} fromGraphNode
    * @param {HTMLElement} toGraphNode
+   * @param {string} [inputLabel]
    */
-  function addGraphLink(fromGraphNode, toGraphNode) {
+  function addGraphLink(fromGraphNode, toGraphNode, inputLabel) {
     const graphNodeOutput = fromGraphNode.querySelector('w-graph-node-output')
     const outputSocket = graphNodeOutput.shadowRoot.querySelector(
       'w-graph-node-socket',
     )
     outputSocket.dispatchEvent(new MouseEvent('mousedown'))
 
-    const graphNodeInput = toGraphNode.querySelector('w-graph-node-input')
+    const graphNodeInput = inputLabel
+      ? toGraphNode
+          .querySelector(`w-number-field[label='${inputLabel}']`)
+          .closest('w-graph-node-input')
+      : toGraphNode.querySelector('w-graph-node-input')
+
     const inputSocket = graphNodeInput.shadowRoot.querySelector(
       'w-graph-node-socket',
     )
@@ -142,10 +146,7 @@ export function setup() {
   }
 
   return {
-    handleAudioNodeStart,
-    handleAudioNodeStop,
-    handleAudioNodeConnect,
-    handleAudioNodeDisconnect,
+    oscillatorMock,
     nodeEditor,
     getGraphNodes,
     moveGraphNode,
