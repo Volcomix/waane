@@ -125,6 +125,9 @@ export default function useGraphNodeSelection(host) {
   })
 
   host.addEventListener('click', (event) => {
+    if (event.composedPath()[0] instanceof HTMLInputElement) {
+      return
+    }
     if (selectionRectangle.isConnected) {
       selectionRectangle.remove()
       return

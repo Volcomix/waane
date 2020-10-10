@@ -4,6 +4,11 @@ let inputId = 0
 
 export default defineCustomElement('w-graph-node-input', {
   styles: css`
+    :host {
+      display: flex;
+      align-items: center;
+    }
+
     w-graph-node-socket {
       position: absolute;
       left: 0px;

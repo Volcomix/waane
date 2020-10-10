@@ -5,7 +5,9 @@ let outputId = 0
 export default defineCustomElement('w-graph-node-output', {
   styles: css`
     :host {
+      display: flex;
       justify-content: flex-end;
+      align-items: center;
     }
 
     w-graph-node-socket {

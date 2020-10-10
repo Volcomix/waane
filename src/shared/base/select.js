@@ -1,7 +1,7 @@
 import { css, defineCustomElement, html } from '../core/element.js'
 import typography from '../core/typography.js'
 
-export default defineCustomElement('w-number-field', {
+export default defineCustomElement('w-select', {
   styles: css`
     :host {
       position: relative;
@@ -37,10 +37,17 @@ export default defineCustomElement('w-number-field', {
       padding: 20px 16px 6px 16px;
       background: none;
       color: rgba(var(--color-on-surface) / var(--text-high-emphasis));
-      caret-color: rgb(var(--color-primary));
+      cursor: pointer;
       transition: background-color 200ms var(--easing-standard),
         border-bottom-color 200ms var(--easing-standard);
       ${typography('body1')}
+    }
+
+    w-menu {
+      position: absolute;
+      top: 100%;
+      width: 100%;
+      margin-top: 1px;
     }
 
     :host(:hover) {
@@ -61,45 +68,54 @@ export default defineCustomElement('w-number-field', {
     input:focus + label {
       color: rgba(var(--color-primary) / var(--text-high-emphasis));
     }
-
-    input:invalid {
-      border-bottom-color: rgb(var(--color-error));
-    }
-
-    input:invalid + label {
-      color: rgb(var(--color-error));
-    }
-
-    input:not(:focus):invalid + label {
-      transform: translateY(-6px);
-    }
   `,
   template: html`
-    <input id="input" type="number" required />
+    <input id="input" readonly />
     <label for="input"></label>
+    <w-menu><slot></slot></w-menu>
   `,
   properties: {
     label: String,
-    value: Number,
+    value: String,
   },
   setup({ host, observe }) {
     const label = host.shadowRoot.querySelector('label')
     const input = host.shadowRoot.querySelector('input')
+    const menu = /** @type {import('./menu.js').default} */ (host.shadowRoot.querySelector(
+      'w-menu',
+    ))
+
+    /** @type {boolean} */
+    let isMenuOpenOnMouseDown
 
     observe('label', () => {
       label.textContent = host.label
     })
 
     observe('value', () => {
-      if (isFinite(host.value)) {
-        input.valueAsNumber = host.value
-      }
+      input.value = host.value
     })
 
-    input.addEventListener('input', () => {
-      const value = input.valueAsNumber
-      if (isFinite(value)) {
-        host.value = value
+    host.addEventListener('mousedown', () => {
+      isMenuOpenOnMouseDown = menu.open
+    })
+
+    host.addEventListener('click', () => {
+      menu.open = !isMenuOpenOnMouseDown
+    })
+
+    menu.addEventListener('mousedown', (event) => {
+      event.stopPropagation()
+    })
+
+    menu.addEventListener('click', (event) => {
+      // Prevents a menu item click to reopen the menu
+      event.stopPropagation()
+
+      const menuItem = /** @type {import('./menu-item.js').default} */ (event.target)
+      if (menuItem.value != null) {
+        host.value = menuItem.value
+        input.dispatchEvent(new Event('change', { composed: true }))
       }
     })
   },

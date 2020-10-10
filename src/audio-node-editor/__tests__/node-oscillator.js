@@ -1,5 +1,11 @@
 import { expect, test } from '@jest/globals'
-import { contextMenu, setup } from './helpers'
+import {
+  contextMenu,
+  findByLabel,
+  getSelectOption,
+  getSelectOptions,
+  setup,
+} from './helpers'
 
 test('starts and stops', () => {
   const { oscillatorMock, getGraphNodes, getMenuItem, addAudioNode } = setup()
@@ -14,13 +20,48 @@ test('starts and stops', () => {
   expect(oscillatorMock.stop).toHaveBeenCalledTimes(1)
 })
 
+test('changes type', () => {
+  const { oscillatorMock, getGraphNodes, addAudioNode } = setup()
+  addAudioNode('Oscillator')
+  const [oscillator] = getGraphNodes()
+  const typeField = findByLabel(oscillator, 'w-select', 'Type')
+  const typeFieldInput = typeField.shadowRoot.querySelector('input')
+
+  expect(typeFieldInput.value).toBe('sine')
+  typeField.click()
+  expect(
+    getSelectOptions(typeField).map((option) => option.textContent),
+  ).toEqual(['Sine', 'Square', 'Sawtooth', 'Triangle'])
+  document.body.dispatchEvent(new MouseEvent('mousedown'))
+  expect(getSelectOptions(typeField)).toHaveLength(0)
+
+  typeField.click()
+  getSelectOption(typeField, 'Square').click()
+  expect(typeFieldInput.value).toBe('square')
+  expect(oscillatorMock.type).toBe('square')
+
+  typeField.click()
+  getSelectOption(typeField, 'Sawtooth').click()
+  expect(typeFieldInput.value).toBe('sawtooth')
+  expect(oscillatorMock.type).toBe('sawtooth')
+
+  typeField.click()
+  getSelectOption(typeField, 'Triangle').click()
+  expect(typeFieldInput.value).toBe('triangle')
+  expect(oscillatorMock.type).toBe('triangle')
+
+  typeField.click()
+  getSelectOption(typeField, 'Sine').click()
+  expect(typeFieldInput.value).toBe('sine')
+  expect(oscillatorMock.type).toBe('sine')
+})
+
 test('changes frequency', () => {
   const { oscillatorMock, getGraphNodes, addAudioNode } = setup()
   addAudioNode('Oscillator')
   const [oscillator] = getGraphNodes()
-  const frequencyFieldInput = oscillator
-    .querySelector(`w-number-field[label='Frequency']`)
-    .shadowRoot.querySelector('input')
+  const frequencyField = findByLabel(oscillator, 'w-number-field', 'Frequency')
+  const frequencyFieldInput = frequencyField.shadowRoot.querySelector('input')
 
   expect(frequencyFieldInput.valueAsNumber).toBe(440)
 
@@ -45,9 +86,8 @@ test('changes detune', () => {
   const { oscillatorMock, getGraphNodes, addAudioNode } = setup()
   addAudioNode('Oscillator')
   const [oscillator] = getGraphNodes()
-  const detuneFieldInput = oscillator
-    .querySelector(`w-number-field[label='Detune']`)
-    .shadowRoot.querySelector('input')
+  const detuneField = findByLabel(oscillator, 'w-number-field', 'Detune')
+  const detuneFieldInput = detuneField.shadowRoot.querySelector('input')
 
   expect(detuneFieldInput.valueAsNumber).toBe(0)
 

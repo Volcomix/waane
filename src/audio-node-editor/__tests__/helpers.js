@@ -3,6 +3,7 @@ import '../../index'
 import { html } from '../../shared/core/element'
 
 const oscillatorMock = {
+  type: 'sine',
   frequency: { value: 440 },
   detune: { value: 0 },
   start: jest.fn(),
@@ -28,6 +29,20 @@ function clearOscillatorMock() {
 
 /**
  * @param {HTMLElement} element
+ * @param {string} selectors
+ * @param {string} label
+ */
+export function findByLabel(element, selectors, label) {
+  return /** @type {HTMLElement} */ ([
+    ...element.querySelectorAll(selectors),
+  ].find(
+    (element) =>
+      element.shadowRoot.querySelector('label').textContent === label,
+  ))
+}
+
+/**
+ * @param {HTMLElement} element
  * @param {MouseEventInit} eventInitDict
  */
 export function click(element, eventInitDict = {}) {
@@ -44,6 +59,29 @@ export function click(element, eventInitDict = {}) {
 export function contextMenu(element, eventInitDict = {}) {
   element.dispatchEvent(
     new MouseEvent('contextmenu', { bubbles: true, ...eventInitDict }),
+  )
+}
+
+/**
+ * @param {HTMLElement} element
+ */
+export function getSelectOptions(element) {
+  if (!element.shadowRoot.querySelector('w-menu[open]')) {
+    return []
+  }
+  return /** @type {HTMLElement[]} */ (element.shadowRoot
+    .querySelector('slot')
+    .assignedElements()
+    .filter((assignedElement) => assignedElement.matches('w-menu-item')))
+}
+
+/**
+ * @param {HTMLElement} element
+ * @param {string} textContent
+ */
+export function getSelectOption(element, textContent) {
+  return getSelectOptions(element).find(
+    (option) => option.textContent === textContent,
   )
 }
 
@@ -97,9 +135,9 @@ export function setup() {
     outputSocket.dispatchEvent(new MouseEvent('mousedown'))
 
     const graphNodeInput = inputLabel
-      ? toGraphNode
-          .querySelector(`w-number-field[label='${inputLabel}']`)
-          .closest('w-graph-node-input')
+      ? findByLabel(toGraphNode, 'w-number-field', inputLabel).closest(
+          'w-graph-node-input',
+        )
       : toGraphNode.querySelector('w-graph-node-input')
 
     const inputSocket = graphNodeInput.shadowRoot.querySelector(

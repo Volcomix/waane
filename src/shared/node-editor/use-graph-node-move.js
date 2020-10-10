@@ -25,6 +25,9 @@ export default function useGraphNodeMove(host) {
     if (event.button !== 0 || event.altKey) {
       return
     }
+    if (event.composedPath()[0] instanceof HTMLInputElement) {
+      return
+    }
     if (host.querySelector('w-graph-node[moving]')) {
       return
     }
