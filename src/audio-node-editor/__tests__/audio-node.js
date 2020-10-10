@@ -10,8 +10,8 @@ test('opens context menu on node editor', () => {
   const { nodeEditor, getMenuItems } = setup()
   contextMenu(nodeEditor)
   expect(getMenuItems().map((menuItem) => menuItem.textContent)).toEqual([
-    'Oscillator',
-    'Audio destination',
+    expect.stringContaining('Oscillator'),
+    expect.stringContaining('Audio destination'),
   ])
   document.body.dispatchEvent(new MouseEvent('mousedown'))
   expect(getMenuItems()).toHaveLength(0)

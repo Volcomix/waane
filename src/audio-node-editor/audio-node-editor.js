@@ -17,8 +17,10 @@ export default defineCustomElement('audio-node-editor', {
   template: html`
     <w-node-editor></w-node-editor>
     <w-menu id="node-editor-menu">
-      <w-menu-item id="oscillator">Oscillator</w-menu-item>
-      <w-menu-item id="audio-destination">Audio destination</w-menu-item>
+      <w-menu-item value="node-oscillator">Oscillator</w-menu-item>
+      <w-menu-item value="node-audio-destination">
+        Audio destination
+      </w-menu-item>
     </w-menu>
     <w-menu id="graph-node-menu">
       <w-menu-item id="duplicate">
@@ -42,12 +44,6 @@ export default defineCustomElement('audio-node-editor', {
     const graphNodeMenu = /** @type {Menu} */ (host.shadowRoot.querySelector(
       '#graph-node-menu',
     ))
-    const nodeEditorMenuItemOscillator = /** @type {MenuItem} */ (nodeEditorMenu.querySelector(
-      '#oscillator',
-    ))
-    const nodeEditorMenuItemAudioDestination = /** @type {MenuItem} */ (nodeEditorMenu.querySelector(
-      '#audio-destination',
-    ))
     const graphNodeMenuItemDuplicate = /** @type {MenuItem} */ (graphNodeMenu.querySelector(
       '#duplicate',
     ))
@@ -70,26 +66,6 @@ export default defineCustomElement('audio-node-editor', {
       ) => {
         movingGraphNode.moving = false
       })
-    }
-
-    /**
-     * @param {MouseEvent} event
-     * @param {string} audioNodeName
-     */
-    function addAudioNode(event, audioNodeName) {
-      cancelMovingGraphNodes()
-
-      const { x, y } = getNodeEditorMousePosition(event)
-
-      const audioNode = document.createElement(audioNodeName)
-      nodeEditor.appendChild(audioNode)
-
-      const graphNode = /** @type {GraphNode} */ (audioNode.querySelector(
-        'w-graph-node',
-      ))
-      graphNode.x = x
-      graphNode.y = y
-      graphNode.moving = true
     }
 
     /**
@@ -128,12 +104,25 @@ export default defineCustomElement('audio-node-editor', {
       })
     }
 
-    nodeEditorMenuItemOscillator.addEventListener('click', (event) => {
-      addAudioNode(event, 'node-oscillator')
-    })
+    nodeEditorMenu.addEventListener('click', (event) => {
+      const menuItem = /** @type {MenuItem} */ (event.target)
+      if (!menuItem.value) {
+        return
+      }
 
-    nodeEditorMenuItemAudioDestination.addEventListener('click', (event) => {
-      addAudioNode(event, 'node-audio-destination')
+      cancelMovingGraphNodes()
+
+      const { x, y } = getNodeEditorMousePosition(event)
+
+      const audioNode = document.createElement(menuItem.value)
+      nodeEditor.appendChild(audioNode)
+
+      const graphNode = /** @type {GraphNode} */ (audioNode.querySelector(
+        'w-graph-node',
+      ))
+      graphNode.x = x
+      graphNode.y = y
+      graphNode.moving = true
     })
 
     graphNodeMenuItemDuplicate.addEventListener('click', (event) => {

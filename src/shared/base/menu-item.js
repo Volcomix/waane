@@ -24,4 +24,7 @@ export default defineCustomElement('w-menu-item', {
       margin-right: 20px;
     }
   `,
+  properties: {
+    value: String,
+  },
 })
