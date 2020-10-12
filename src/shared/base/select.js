@@ -137,14 +137,15 @@ export default defineCustomElement('w-select', {
     observe('value', () => {
       input.value = host.value
       menuSlot.assignedElements().forEach((element) => {
-        if (element.matches('w-menu-item')) {
-          const menuItem = /** @type {MenuItem} */ (element)
-          if (menuItem.value === host.value) {
-            span.textContent = menuItem.textContent
-            menuItem.selected = true
-          } else {
-            menuItem.selected = false
-          }
+        if (!element.matches('w-menu-item')) {
+          return
+        }
+        const menuItem = /** @type {MenuItem} */ (element)
+        if (menuItem.value === host.value) {
+          span.textContent = menuItem.textContent
+          menuItem.selected = true
+        } else {
+          menuItem.selected = false
         }
       })
     })
