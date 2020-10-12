@@ -43,6 +43,18 @@ export default defineCustomElement('w-select', {
       ${typography('body1')}
     }
 
+    w-icon {
+      position: absolute;
+      right: 0;
+      height: 100%;
+      margin: 0 12px;
+      display: flex;
+      align-items: center;
+      pointer-events: none;
+      transition: color 200ms var(--easing-standard),
+        transform 200ms var(--easing-standard);
+    }
+
     w-menu {
       position: absolute;
       top: 100%;
@@ -62,17 +74,26 @@ export default defineCustomElement('w-select', {
 
     input:focus {
       border-bottom-color: rgb(var(--color-primary));
-      background-color: rgba(var(--color-on-surface) / 0.12);
+      background-color: rgba(var(--color-on-surface) / 0.08);
     }
 
     input:focus + label {
       color: rgba(var(--color-primary) / var(--text-high-emphasis));
+    }
+
+    :host(:focus-within) w-icon {
+      color: rgb(var(--color-primary));
+    }
+
+    w-menu[open] + w-icon {
+      transform: rotate(180deg);
     }
   `,
   template: html`
     <input id="input" readonly />
     <label for="input"></label>
     <w-menu><slot></slot></w-menu>
+    <w-icon>arrow_drop_down</w-icon>
   `,
   properties: {
     label: String,

@@ -55,7 +55,7 @@ export default defineCustomElement('w-number-field', {
 
     input:focus {
       border-bottom-color: rgb(var(--color-primary));
-      background-color: rgba(var(--color-on-surface) / 0.12);
+      background-color: rgba(var(--color-on-surface) / 0.08);
     }
 
     input:focus + label {
