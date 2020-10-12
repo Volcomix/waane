@@ -125,7 +125,7 @@ export default defineCustomElement('w-select', {
     const span = host.shadowRoot.querySelector('span')
     const input = host.shadowRoot.querySelector('input')
     const menu = /** @type {Menu} */ (host.shadowRoot.querySelector('w-menu'))
-    const slot = host.shadowRoot.querySelector('slot')
+    const menuSlot = menu.querySelector('slot')
 
     /** @type {boolean} */
     let isMenuOpenOnMouseDown
@@ -136,12 +136,17 @@ export default defineCustomElement('w-select', {
 
     observe('value', () => {
       input.value = host.value
-      const selectedMenuItem = slot
-        .assignedElements()
-        .find(
-          (/** @type {MenuItem} */ menuItem) => menuItem.value === input.value,
-        )
-      span.textContent = selectedMenuItem.textContent
+      menuSlot.assignedElements().forEach((element) => {
+        if (element.matches('w-menu-item')) {
+          const menuItem = /** @type {MenuItem} */ (element)
+          if (menuItem.value === host.value) {
+            span.textContent = menuItem.textContent
+            menuItem.selected = true
+          } else {
+            menuItem.selected = false
+          }
+        }
+      })
     })
 
     host.addEventListener('mousedown', () => {
