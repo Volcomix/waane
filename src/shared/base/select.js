@@ -1,6 +1,11 @@
 import { css, defineCustomElement, html } from '../core/element.js'
 import typography from '../core/typography.js'
 
+/**
+ * @typedef {import('./menu.js').default} Menu
+ * @typedef {import('./menu-item.js').default} MenuItem
+ */
+
 export default defineCustomElement('w-select', {
   styles: css`
     :host {
@@ -27,6 +32,21 @@ export default defineCustomElement('w-select', {
       ${typography('body1')}
     }
 
+    span {
+      position: absolute;
+      top: 1px;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      padding: 20px 48px 6px 16px;
+      color: rgba(var(--color-on-surface) / var(--text-high-emphasis));
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      pointer-events: none;
+      ${typography('body1')}
+    }
+
     input {
       flex: 1;
       outline: none;
@@ -34,9 +54,9 @@ export default defineCustomElement('w-select', {
       border-bottom: 2px solid transparent;
       border-radius: 4px 4px 0 0;
       margin-bottom: -1px;
-      padding: 20px 16px 6px 16px;
+      padding: 20px 48px 6px 16px;
       background: none;
-      color: rgba(var(--color-on-surface) / var(--text-high-emphasis));
+      color: transparent;
       cursor: pointer;
       transition: background-color 200ms var(--easing-standard),
         border-bottom-color 200ms var(--easing-standard);
@@ -90,6 +110,7 @@ export default defineCustomElement('w-select', {
     }
   `,
   template: html`
+    <span></span>
     <input id="input" readonly />
     <label for="input"></label>
     <w-menu><slot></slot></w-menu>
@@ -101,10 +122,10 @@ export default defineCustomElement('w-select', {
   },
   setup({ host, observe }) {
     const label = host.shadowRoot.querySelector('label')
+    const span = host.shadowRoot.querySelector('span')
     const input = host.shadowRoot.querySelector('input')
-    const menu = /** @type {import('./menu.js').default} */ (host.shadowRoot.querySelector(
-      'w-menu',
-    ))
+    const menu = /** @type {Menu} */ (host.shadowRoot.querySelector('w-menu'))
+    const slot = host.shadowRoot.querySelector('slot')
 
     /** @type {boolean} */
     let isMenuOpenOnMouseDown
@@ -115,6 +136,12 @@ export default defineCustomElement('w-select', {
 
     observe('value', () => {
       input.value = host.value
+      const selectedMenuItem = slot
+        .assignedElements()
+        .find(
+          (/** @type {MenuItem} */ menuItem) => menuItem.value === input.value,
+        )
+      span.textContent = selectedMenuItem.textContent
     })
 
     host.addEventListener('mousedown', () => {
@@ -133,7 +160,7 @@ export default defineCustomElement('w-select', {
       // Prevents a menu item click to reopen the menu
       event.stopPropagation()
 
-      const menuItem = /** @type {import('./menu-item.js').default} */ (event.target)
+      const menuItem = /** @type {MenuItem} */ (event.target)
       if (menuItem.value != null) {
         host.value = menuItem.value
         input.dispatchEvent(new Event('change', { composed: true }))
