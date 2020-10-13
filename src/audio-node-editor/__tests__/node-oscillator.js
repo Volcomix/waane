@@ -1,7 +1,7 @@
 import { expect, test } from '@jest/globals'
 import {
   contextMenu,
-  findByLabel,
+  findFieldInputByLabel,
   getSelectOption,
   getSelectOptions,
   setup,
@@ -24,7 +24,12 @@ test('changes type', () => {
   const { oscillatorMock, getGraphNodes, addAudioNode } = setup()
   addAudioNode('Oscillator')
   const [oscillator] = getGraphNodes()
-  const typeField = findByLabel(oscillator, 'w-select', 'Type')
+  const typeField = /** @type {HTMLElement} */ ([
+    ...oscillator.querySelectorAll('w-select'),
+  ].find(
+    (element) =>
+      element.shadowRoot.querySelector('label').textContent === 'Type',
+  ))
   const typeFieldInput = typeField.shadowRoot.querySelector('input')
 
   expect(typeFieldInput.value).toBe('sine')
@@ -60,8 +65,11 @@ test('changes frequency', () => {
   const { oscillatorMock, getGraphNodes, addAudioNode } = setup()
   addAudioNode('Oscillator')
   const [oscillator] = getGraphNodes()
-  const frequencyField = findByLabel(oscillator, 'w-number-field', 'Frequency')
-  const frequencyFieldInput = frequencyField.shadowRoot.querySelector('input')
+  const frequencyFieldInput = findFieldInputByLabel(
+    oscillator,
+    'w-number-field',
+    'Frequency',
+  )
 
   expect(frequencyFieldInput.valueAsNumber).toBe(440)
 
@@ -86,8 +94,11 @@ test('changes detune', () => {
   const { oscillatorMock, getGraphNodes, addAudioNode } = setup()
   addAudioNode('Oscillator')
   const [oscillator] = getGraphNodes()
-  const detuneField = findByLabel(oscillator, 'w-number-field', 'Detune')
-  const detuneFieldInput = detuneField.shadowRoot.querySelector('input')
+  const detuneFieldInput = findFieldInputByLabel(
+    oscillator,
+    'w-number-field',
+    'Detune',
+  )
 
   expect(detuneFieldInput.valueAsNumber).toBe(0)
 

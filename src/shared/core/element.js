@@ -247,10 +247,15 @@ export function defineCustomElement(
     }
 
     /**
+     * @template {PropertyType} T
      * @param {string} name
+     * @param {PrimitiveType<T>} oldValue
+     * @param {PrimitiveType<T>} newValue
      */
-    attributeChangedCallback(name) {
-      this._attributeChangedCallbacks[name]()
+    attributeChangedCallback(name, oldValue, newValue) {
+      if (newValue !== oldValue) {
+        this._attributeChangedCallbacks[name]()
+      }
     }
   }
 

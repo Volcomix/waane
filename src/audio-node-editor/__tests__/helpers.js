@@ -32,13 +32,24 @@ function clearOscillatorMock() {
  * @param {string} selectors
  * @param {string} label
  */
-export function findByLabel(element, selectors, label) {
-  return /** @type {HTMLElement} */ ([
-    ...element.querySelectorAll(selectors),
-  ].find(
+export function findFieldByLabel(element, selectors, label) {
+  return [...element.querySelectorAll(selectors)].find(
     (element) =>
-      element.shadowRoot.querySelector('label').textContent === label,
-  ))
+      element.shadowRoot
+        .querySelector('w-text-field')
+        .shadowRoot.querySelector('label').textContent === label,
+  )
+}
+
+/**
+ * @param {HTMLElement} element
+ * @param {string} selectors
+ * @param {string} label
+ */
+export function findFieldInputByLabel(element, selectors, label) {
+  return findFieldByLabel(element, selectors, label)
+    .shadowRoot.querySelector('w-text-field')
+    .shadowRoot.querySelector('input')
 }
 
 /**
@@ -135,7 +146,7 @@ export function setup() {
     outputSocket.dispatchEvent(new MouseEvent('mousedown'))
 
     const graphNodeInput = inputLabel
-      ? findByLabel(toGraphNode, 'w-number-field', inputLabel).closest(
+      ? findFieldByLabel(toGraphNode, 'w-number-field', inputLabel).closest(
           'w-graph-node-input',
         )
       : toGraphNode.querySelector('w-graph-node-input')
