@@ -3,6 +3,8 @@
  * @typedef {import('./graph-node.js').default} GraphNode
  */
 
+import { isField } from '../helpers/field.js'
+
 /**
  * @param {NodeEditor} host
  */
@@ -25,7 +27,7 @@ export default function useGraphNodeMove(host) {
     if (event.button !== 0 || event.altKey) {
       return
     }
-    if (event.composedPath()[0] instanceof HTMLInputElement) {
+    if (isField(/** @type {HTMLElement} */ (event.target))) {
       return
     }
     if (host.querySelector('w-graph-node[moving]')) {

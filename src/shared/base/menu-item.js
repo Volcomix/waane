@@ -1,4 +1,5 @@
 import { css, defineCustomElement } from '../core/element.js'
+import typography from '../core/typography.js'
 
 export default defineCustomElement('w-menu-item', {
   styles: css`
@@ -10,6 +11,7 @@ export default defineCustomElement('w-menu-item', {
       cursor: pointer;
       user-select: none;
       transition: background-color 100ms var(--easing-standard);
+      ${typography('body1')}
     }
 
     :host(:hover) {

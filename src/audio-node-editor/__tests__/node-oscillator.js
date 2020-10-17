@@ -1,6 +1,7 @@
 import { expect, test } from '@jest/globals'
 import {
   contextMenu,
+  findFieldByLabel,
   findFieldInputByLabel,
   getSelectOption,
   getSelectOptions,
@@ -24,13 +25,10 @@ test('changes type', () => {
   const { oscillatorMock, getGraphNodes, addAudioNode } = setup()
   addAudioNode('Oscillator')
   const [oscillator] = getGraphNodes()
-  const typeField = /** @type {HTMLElement} */ ([
-    ...oscillator.querySelectorAll('w-select'),
-  ].find(
-    (element) =>
-      element.shadowRoot.querySelector('label').textContent === 'Type',
-  ))
-  const typeFieldInput = typeField.shadowRoot.querySelector('input')
+  const typeField = findFieldByLabel(oscillator, 'w-select', 'Type')
+  const typeFieldInput = typeField.shadowRoot
+    .querySelector('w-text-field')
+    .shadowRoot.querySelector('input')
 
   expect(typeFieldInput.value).toBe('sine')
   typeField.click()

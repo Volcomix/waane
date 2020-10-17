@@ -33,7 +33,11 @@ function clearOscillatorMock() {
  * @param {string} label
  */
 export function findFieldByLabel(element, selectors, label) {
-  return [...element.querySelectorAll(selectors)].find(
+  return [
+    .../** @type {NodeListOf<HTMLElement>} */ (element.querySelectorAll(
+      selectors,
+    )),
+  ].find(
     (element) =>
       element.shadowRoot
         .querySelector('w-text-field')

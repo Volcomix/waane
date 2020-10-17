@@ -1,4 +1,5 @@
 import { css, defineCustomElement } from '../core/element.js'
+import { isField } from '../helpers/field.js'
 import { doOverlap } from '../helpers/geometry.js'
 
 /** @typedef {import('./graph-node.js').default} GraphNode */
@@ -125,7 +126,7 @@ export default function useGraphNodeSelection(host) {
   })
 
   host.addEventListener('click', (event) => {
-    if (event.composedPath()[0] instanceof HTMLInputElement) {
+    if (isField(/** @type {HTMLElement} */ (event.target))) {
       return
     }
     if (selectionRectangle.isConnected) {
