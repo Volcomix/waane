@@ -22,7 +22,17 @@ export function bindAudioOutput(element, audioNode) {
  * @param {AudioNode | AudioParam} audioNode
  */
 export function bindAudioInput(element, audioNode) {
-  audioNodesByInput.set(element, audioNode)
+  if (element.matches('w-number-field')) {
+    const numberField = /** @type {import('../shared/base/number-field.js').default} */ (element)
+    const audioParam = /** @type {AudioParam} */ (audioNode)
+
+    numberField.value = audioParam.value
+
+    numberField.addEventListener('input', () => {
+      audioParam.value = numberField.value
+    })
+  }
+  audioNodesByInput.set(element.closest('w-graph-node-input'), audioNode)
 }
 
 /**

@@ -35,40 +35,24 @@ export default defineCustomElement('node-oscillator', {
       const typeField = /** @type {Select} */ (host.querySelector(
         `w-select[label='Type']`,
       ))
-      const frequencyField = /** @type {NumberField} */ (host.querySelector(
-        `w-number-field[label='Frequency']`,
-      ))
-      const detuneField = /** @type {NumberField} */ (host.querySelector(
-        `w-number-field[label='Detune']`,
-      ))
-
       typeField.value = oscillator.type
-      frequencyField.value = oscillator.frequency.value
-      detuneField.value = oscillator.detune.value
-
-      oscillator.start()
-
-      bindAudioOutput(host.querySelector('w-graph-node-output'), oscillator)
-      bindAudioInput(
-        frequencyField.closest('w-graph-node-input'),
-        oscillator.frequency,
-      )
-      bindAudioInput(
-        detuneField.closest('w-graph-node-input'),
-        oscillator.detune,
-      )
 
       typeField.addEventListener('change', () => {
         oscillator.type = /** @type {OscillatorType} */ (typeField.value)
       })
 
-      frequencyField.addEventListener('input', () => {
-        oscillator.frequency.value = frequencyField.value
-      })
+      bindAudioOutput(host.querySelector('w-graph-node-output'), oscillator)
 
-      detuneField.addEventListener('input', () => {
-        oscillator.detune.value = detuneField.value
-      })
+      bindAudioInput(
+        host.querySelector(`w-number-field[label='Frequency']`),
+        oscillator.frequency,
+      )
+      bindAudioInput(
+        host.querySelector(`w-number-field[label='Detune']`),
+        oscillator.detune,
+      )
+
+      oscillator.start()
     })
 
     disconnected(() => {
