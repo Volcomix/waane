@@ -88,6 +88,10 @@ export default defineCustomElement('w-text-field', {
         border-bottom-color 200ms var(--easing-standard);
     }
 
+    ::slotted(*) {
+      pointer-events: none;
+    }
+
     span:not([tabindex]) {
       pointer-events: none;
     }
