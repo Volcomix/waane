@@ -1,4 +1,7 @@
-/** @typedef {import('../shared/node-editor/use-graph-link.js').GraphLinkEvent} GraphLinkEvent */
+/**
+ * @typedef {import('../shared/node-editor/use-graph-link.js').GraphLinkEvent} GraphLinkEvent
+ * @typedef {import('../shared/base/number-field.js').default} NumberField
+ */
 
 /** @type {WeakMap<HTMLElement, AudioNode>} */
 const audioNodesByOutput = new WeakMap()
@@ -23,7 +26,7 @@ export function bindAudioOutput(element, audioNode) {
  */
 export function bindAudioInput(element, audioNode) {
   if (element.matches('w-number-field')) {
-    const numberField = /** @type {import('../shared/base/number-field.js').default} */ (element)
+    const numberField = /** @type {NumberField} */ (element)
     const audioParam = /** @type {AudioParam} */ (audioNode)
 
     numberField.value = audioParam.value
