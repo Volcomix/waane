@@ -38,6 +38,7 @@ export default defineCustomElement('w-text-field', {
       background: none;
       color: rgba(var(--color-on-surface) / var(--text-high-emphasis));
       caret-color: rgb(var(--color-primary));
+      box-shadow: none;
       transition: background-color 200ms var(--easing-standard),
         border-bottom-color 200ms var(--easing-standard);
       ${typography('body1')}
