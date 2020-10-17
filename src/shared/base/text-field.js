@@ -44,6 +44,14 @@ export default defineCustomElement('w-text-field', {
       ${typography('body1')}
     }
 
+    input[type='number'] {
+      appearance: textfield;
+    }
+
+    input[type='number']::-webkit-inner-spin-button {
+      appearance: none;
+    }
+
     :host(:hover) {
       border-bottom-color: rgba(
         var(--color-on-surface) / var(--text-high-emphasis)
