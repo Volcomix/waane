@@ -1,5 +1,12 @@
 import { expect, test } from '@jest/globals'
-import { contextMenu, setup } from './helpers'
+import {
+  click,
+  contextMenu,
+  findFieldByLabel,
+  findFieldInputByLabel,
+  getSelectOption,
+  setup,
+} from './helpers'
 
 test('has no node by default', () => {
   const { getGraphNodes } = setup()
@@ -37,4 +44,52 @@ test('adds an audio destination node', () => {
       selected: true,
     }),
   ])
+})
+
+test('duplicates audio properties', () => {
+  const {
+    oscillatorMock,
+    nodeEditor,
+    getGraphNodes,
+    getMenuItem,
+    addAudioNode,
+  } = setup()
+  addAudioNode('Oscillator')
+  const [oscillator1] = getGraphNodes()
+
+  const typeField1 = findFieldByLabel(oscillator1, 'w-select', 'Type')
+  typeField1.click()
+  getSelectOption(typeField1, 'Sawtooth').click()
+
+  const frequencyFieldInput1 = findFieldInputByLabel(
+    oscillator1,
+    'w-number-field',
+    'Frequency',
+  )
+  frequencyFieldInput1.valueAsNumber = 880
+  frequencyFieldInput1.dispatchEvent(
+    new InputEvent('input', { composed: true }),
+  )
+
+  oscillatorMock.type = 'sine'
+  oscillatorMock.frequency.value = 440
+
+  click(oscillator1)
+  contextMenu(oscillator1)
+  getMenuItem('Duplicate').click()
+  nodeEditor.dispatchEvent(new MouseEvent('mousemove'))
+  click(nodeEditor)
+
+  const oscillator2 = getGraphNodes()[1]
+  const typeFieldInput2 = findFieldInputByLabel(oscillator2, 'w-select', 'Type')
+  const frequencyFieldInput2 = findFieldInputByLabel(
+    oscillator2,
+    'w-number-field',
+    'Frequency',
+  )
+
+  expect(typeFieldInput2.value).toBe('sawtooth')
+  expect(oscillatorMock.type).toBe('sawtooth')
+  expect(frequencyFieldInput2.valueAsNumber).toBe(880)
+  expect(oscillatorMock.frequency.value).toBe(880)
 })

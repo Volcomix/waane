@@ -53,23 +53,44 @@ import { bindAudioInput } from './use-audio-link.js'
  */
 export default function createAudioNode(setup) {
   return function (options) {
+    const { host, observe } = options
     setup({
       ...options,
       useAudioProperty(field, /** @type {any} */ audioNode, propertyName) {
+        if (host.hasAttribute(/** @type {string} */ (propertyName))) {
+          audioNode[propertyName] = /** @type {string} */ (host[propertyName])
+        } else {
+          host[propertyName] = audioNode[propertyName]
+        }
         field.value = audioNode[propertyName]
 
+        observe(propertyName, () => {
+          field.value = /** @type {string} */ (host[propertyName])
+          audioNode[propertyName] = host[propertyName]
+        })
+
         field.addEventListener('change', () => {
-          audioNode[propertyName] = field.value
+          host[propertyName] = /** @type {any} */ (field.value)
         })
       },
       useAudioParam(numberField, /** @type {any} */ audioNode, propertyName) {
         /** @type {AudioParam} */
         const audioParam = audioNode[propertyName]
+        if (host.hasAttribute(/** @type {string} */ (propertyName))) {
+          audioParam.value = /** @type {number} */ (host[propertyName])
+        } else {
+          host[propertyName] = /** @type {any} */ (audioParam.value)
+        }
         numberField.value = audioParam.value
         bindAudioInput(numberField.closest('w-graph-node-input'), audioParam)
 
+        observe(propertyName, () => {
+          numberField.value = /** @type {number} */ (host[propertyName])
+          audioNode[propertyName].value = host[propertyName]
+        })
+
         numberField.addEventListener('input', () => {
-          audioParam.value = numberField.value
+          host[propertyName] = /** @type {any} */ (numberField.value)
         })
       },
     })

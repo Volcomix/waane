@@ -23,6 +23,11 @@ export default defineCustomElement('node-oscillator', {
     </w-graph-node>
   `,
   shadow: false,
+  properties: {
+    type: String,
+    frequency: Number,
+    detune: Number,
+  },
   setup: createAudioNode(
     ({ host, connected, disconnected, useAudioProperty, useAudioParam }) => {
       const audioContext = useAudioContext()
