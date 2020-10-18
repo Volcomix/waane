@@ -176,8 +176,8 @@ export function defineCustomElement(
     (result, propertyName) =>
       Object.assign(result, {
         [propertyName]: (
-          propertyName.substr(0, 1) +
-          propertyName.substr(1).replace(/[A-Z]/g, '-$&')
+          propertyName.substring(0, 1) +
+          propertyName.substring(1).replace(/[A-Z]/g, '-$&')
         ).toLowerCase(),
       }),
     {},
