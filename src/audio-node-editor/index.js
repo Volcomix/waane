@@ -1,5 +1,6 @@
 import './audio-node-editor.js'
 import './node-audio-destination.js'
+import './node-biquad-filter.js'
 import './node-constant.js'
 import './node-gain.js'
 import './node-oscillator.js'

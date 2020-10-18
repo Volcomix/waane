@@ -19,6 +19,7 @@ test('opens context menu on node editor', () => {
   expect(getMenuItems().map((menuItem) => menuItem.textContent)).toEqual([
     expect.stringContaining('Constant'),
     expect.stringContaining('Oscillator'),
+    expect.stringContaining('Biquad filter'),
     expect.stringContaining('Gain'),
     expect.stringContaining('Audio destination'),
   ])

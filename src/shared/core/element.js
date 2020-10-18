@@ -175,7 +175,10 @@ export function defineCustomElement(
   const attributesByProperty = Object.keys(properties).reduce(
     (result, propertyName) =>
       Object.assign(result, {
-        [propertyName]: propertyName.replace(/[A-Z]/g, '-$&').toLowerCase(),
+        [propertyName]: (
+          propertyName.substr(0, 1) +
+          propertyName.substr(1).replace(/[A-Z]/g, '-$&')
+        ).toLowerCase(),
       }),
     {},
   )
