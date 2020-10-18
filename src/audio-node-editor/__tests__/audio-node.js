@@ -17,6 +17,7 @@ test('opens context menu on node editor', () => {
   const { nodeEditor, getMenuItems } = setup()
   contextMenu(nodeEditor)
   expect(getMenuItems().map((menuItem) => menuItem.textContent)).toEqual([
+    expect.stringContaining('Constant'),
     expect.stringContaining('Oscillator'),
     expect.stringContaining('Gain'),
     expect.stringContaining('Audio destination'),
