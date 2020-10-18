@@ -1,11 +1,7 @@
 import { defineCustomElement, html } from '../shared/core/element.js'
 import useAudioContext from './use-audio-context.js'
-import { bindAudioInput, bindAudioOutput } from './use-audio-link.js'
-
-/**
- * @typedef {import('../shared/base/select.js').default} Select
- * @typedef {import('../shared/base/number-field.js').default} NumberField
- */
+import { bindAudioOutput } from './use-audio-link.js'
+import createAudioNode from './use-audio-node.js'
 
 export default defineCustomElement('node-oscillator', {
   template: html`
@@ -27,36 +23,35 @@ export default defineCustomElement('node-oscillator', {
     </w-graph-node>
   `,
   shadow: false,
-  setup({ host, connected, disconnected }) {
-    const audioContext = useAudioContext()
-    const oscillator = audioContext.createOscillator()
+  setup: createAudioNode(
+    ({ host, connected, disconnected, useAudioProperty, useAudioParam }) => {
+      const audioContext = useAudioContext()
+      const oscillator = audioContext.createOscillator()
 
-    connected(() => {
-      const typeField = /** @type {Select} */ (host.querySelector(
-        `w-select[label='Type']`,
-      ))
-      typeField.value = oscillator.type
+      connected(() => {
+        bindAudioOutput(host.querySelector('w-graph-node-output'), oscillator)
 
-      typeField.addEventListener('change', () => {
-        oscillator.type = /** @type {OscillatorType} */ (typeField.value)
+        useAudioProperty(
+          host.querySelector(`w-select[label='Type']`),
+          oscillator,
+          'type',
+        )
+        useAudioParam(
+          host.querySelector(`w-number-field[label='Frequency']`),
+          oscillator,
+          'frequency',
+        )
+        useAudioParam(
+          host.querySelector(`w-number-field[label='Detune']`),
+          oscillator,
+          'detune',
+        )
+        oscillator.start()
       })
 
-      bindAudioOutput(host.querySelector('w-graph-node-output'), oscillator)
-
-      bindAudioInput(
-        host.querySelector(`w-number-field[label='Frequency']`),
-        oscillator.frequency,
-      )
-      bindAudioInput(
-        host.querySelector(`w-number-field[label='Detune']`),
-        oscillator.detune,
-      )
-
-      oscillator.start()
-    })
-
-    disconnected(() => {
-      oscillator.stop()
-    })
-  },
+      disconnected(() => {
+        oscillator.stop()
+      })
+    },
+  ),
 })
