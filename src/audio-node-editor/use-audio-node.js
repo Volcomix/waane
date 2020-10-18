@@ -17,11 +17,21 @@ import { bindAudioInput } from './use-audio-link.js'
  */
 
 /**
+ * @template {PropertyTypes} T, U
+ * @typedef {{ [K in keyof T]: T[K] extends U ? K : never }} FilterProperties
+ */
+
+/**
+ * @template {PropertyTypes} T, U
+ * @typedef {FilterProperties<T, U>[keyof T]} FilterPropertyNames
+ */
+
+/**
  * @template {PropertyTypes} T
  * @callback UseAudioProperty
  * @param {Select} field
  * @param {AudioNode} audioNode
- * @param {keyof T} propertyName
+ * @param {FilterPropertyNames<T, typeof String>} propertyName
  * @returns {void}
  */
 
@@ -30,7 +40,7 @@ import { bindAudioInput } from './use-audio-link.js'
  * @callback UseAudioParam
  * @param {NumberField} numberField
  * @param {AudioNode} audioNode
- * @param {keyof T} propertyName
+ * @param {FilterPropertyNames<T, typeof Number>} propertyName
  * @returns {void}
  */
 
@@ -58,7 +68,7 @@ export default function createAudioNode(setup) {
       ...options,
       useAudioProperty(field, /** @type {any} */ audioNode, propertyName) {
         if (host.hasAttribute(/** @type {string} */ (propertyName))) {
-          audioNode[propertyName] = /** @type {string} */ (host[propertyName])
+          audioNode[propertyName] = host[propertyName]
         } else {
           host[propertyName] = audioNode[propertyName]
         }
