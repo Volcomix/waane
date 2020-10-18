@@ -35,7 +35,6 @@ export default defineCustomElement('node-oscillator', {
 
       connected(() => {
         bindAudioOutput(host.querySelector('w-graph-node-output'), oscillator)
-
         useAudioProperty(
           host.querySelector(`w-select[label='Type']`),
           oscillator,

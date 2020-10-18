@@ -1,5 +1,6 @@
 import './audio-node-editor.js'
 import './node-audio-destination.js'
+import './node-gain.js'
 import './node-oscillator.js'
 import './use-audio-context.js'
 import './use-audio-link.js'

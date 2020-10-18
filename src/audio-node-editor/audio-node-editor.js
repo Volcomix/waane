@@ -18,6 +18,7 @@ export default defineCustomElement('audio-node-editor', {
     <w-node-editor></w-node-editor>
     <w-menu id="node-editor-menu">
       <w-menu-item value="node-oscillator">Oscillator</w-menu-item>
+      <w-menu-item value="node-gain">Gain</w-menu-item>
       <w-menu-item value="node-audio-destination">
         Audio destination
       </w-menu-item>
