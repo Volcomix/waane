@@ -88,7 +88,7 @@ export default defineCustomElement('w-graph-node', {
       margin-bottom: 16px;
       min-height: 48px;
       color: rgba(var(--color-on-surface) / var(--text-medium-emphasis));
-      ${typography('body2')}
+      ${typography('body1')}
     }
   `,
   template: html`
