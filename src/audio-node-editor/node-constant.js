@@ -7,7 +7,7 @@ export default defineCustomElement('node-constant', {
   template: html`
     <w-graph-node>
       <span slot="title">Constant</span>
-      <w-graph-node-output>Output</w-graph-node-output>
+      <w-graph-node-output type="audio">Output</w-graph-node-output>
       <w-graph-node-input>
         <w-number-field label="Offset"></w-number-field>
       </w-graph-node-input>

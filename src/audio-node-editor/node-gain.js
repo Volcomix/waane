@@ -7,11 +7,11 @@ export default defineCustomElement('node-gain', {
   template: html`
     <w-graph-node>
       <span slot="title">Gain</span>
-      <w-graph-node-output>Output</w-graph-node-output>
+      <w-graph-node-output type="audio">Output</w-graph-node-output>
       <w-graph-node-input>
         <w-number-field label="Gain"></w-number-field>
       </w-graph-node-input>
-      <w-graph-node-input>Input</w-graph-node-input>
+      <w-graph-node-input type="audio">Input</w-graph-node-input>
     </w-graph-node>
   `,
   shadow: false,

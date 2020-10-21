@@ -7,7 +7,7 @@ export default defineCustomElement('node-oscillator', {
   template: html`
     <w-graph-node>
       <span slot="title">Oscillator</span>
-      <w-graph-node-output>Output</w-graph-node-output>
+      <w-graph-node-output type="audio">Output</w-graph-node-output>
       <w-select label="Type">
         <w-menu-item value="sine">Sine</w-menu-item>
         <w-menu-item value="square">Square</w-menu-item>

@@ -20,6 +20,9 @@ export default defineCustomElement('w-graph-node-input', {
     <slot></slot>
     <w-graph-node-socket></w-graph-node-socket>
   `,
+  properties: {
+    type: String,
+  },
   setup({ host }) {
     const socket = /** @type {HTMLElement} */ (host.shadowRoot.querySelector(
       'w-graph-node-socket',

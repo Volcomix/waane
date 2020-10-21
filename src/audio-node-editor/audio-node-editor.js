@@ -1,4 +1,4 @@
-import { defineCustomElement, html } from '../shared/core/element.js'
+import { css, defineCustomElement, html } from '../shared/core/element.js'
 import { squaredDist } from '../shared/helpers/geometry.js'
 import useNodeEditorMousePosition from '../shared/node-editor/use-node-editor-mouse-position.js'
 import useAudioLink from './use-audio-link.js'
@@ -14,6 +14,12 @@ import useNodeEditorMenu from './use-node-editor-menu.js'
  */
 
 export default defineCustomElement('audio-node-editor', {
+  styles: css`
+    w-graph-node-output[type='audio'],
+    w-graph-node-input[type='audio'] {
+      --color-secondary: var(--color-additional1);
+    }
+  `,
   template: html`
     <w-node-editor></w-node-editor>
     <w-menu id="node-editor-menu">

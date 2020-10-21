@@ -7,7 +7,7 @@ export default defineCustomElement('node-biquad-filter', {
   template: html`
     <w-graph-node>
       <span slot="title">Biquad filter</span>
-      <w-graph-node-output>Output</w-graph-node-output>
+      <w-graph-node-output type="audio">Output</w-graph-node-output>
       <w-select label="Type">
         <w-menu-item value="lowpass">Lowpass</w-menu-item>
         <w-menu-item value="highpass">Highpass</w-menu-item>
@@ -30,7 +30,7 @@ export default defineCustomElement('node-biquad-filter', {
       <w-graph-node-input>
         <w-number-field label="Gain"></w-number-field>
       </w-graph-node-input>
-      <w-graph-node-input>Input</w-graph-node-input>
+      <w-graph-node-input type="audio">Input</w-graph-node-input>
     </w-graph-node>
   `,
   shadow: false,
