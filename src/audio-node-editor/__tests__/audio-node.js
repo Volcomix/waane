@@ -17,10 +17,11 @@ test('opens context menu on node editor', () => {
   const { nodeEditor, getMenuItems } = setup()
   contextMenu(nodeEditor)
   expect(getMenuItems().map((menuItem) => menuItem.textContent)).toEqual([
-    expect.stringContaining('Constant'),
+    expect.stringContaining('Track'),
     expect.stringContaining('Oscillator'),
-    expect.stringContaining('Biquad filter'),
+    expect.stringContaining('Constant'),
     expect.stringContaining('Gain'),
+    expect.stringContaining('Biquad filter'),
     expect.stringContaining('Audio destination'),
   ])
   document.body.dispatchEvent(new MouseEvent('mousedown'))
