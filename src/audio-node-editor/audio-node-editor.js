@@ -20,8 +20,8 @@ export default defineCustomElement('audio-node-editor', {
       --color-secondary: var(--color-additional1);
     }
 
-    w-graph-node-output[type='envelope'],
-    w-graph-node-input[type='envelope'] {
+    w-graph-node-output[type='trigger'],
+    w-graph-node-input[type='trigger'] {
       --color-secondary: var(--color-additional2);
     }
   `,
