@@ -17,12 +17,12 @@ export default defineCustomElement('audio-node-editor', {
   styles: css`
     w-graph-node-output[type='audio'],
     w-graph-node-input[type='audio'] {
-      --color-secondary: var(--color-additional1);
+      --socket-color: var(--color-additional1);
     }
 
     w-graph-node-output[type='trigger'],
     w-graph-node-input[type='trigger'] {
-      --color-secondary: var(--color-additional2);
+      --socket-color: var(--color-additional2);
     }
   `,
   template: html`
