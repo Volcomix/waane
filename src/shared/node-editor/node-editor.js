@@ -28,11 +28,13 @@ export default defineCustomElement('w-node-editor', {
     }
 
     :host([linking='output']) {
-      --graph-node-output-hover: none;
+      --output-socket-hover: none;
+      --output-socket-opacity: 0.38;
     }
 
     :host([linking='input']) {
-      --graph-node-input-hover: none;
+      --input-socket-hover: none;
+      --input-socket-opacity: 0.38;
     }
   `,
   template: html`

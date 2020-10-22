@@ -23,7 +23,7 @@ export default defineCustomElement('w-select', {
     }
 
     w-icon {
-      transition: transform 200ms var(--easing-standard);
+      transition: transform 250ms var(--easing-standard);
     }
 
     w-menu[open] + w-text-field w-icon {
