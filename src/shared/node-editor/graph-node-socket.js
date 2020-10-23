@@ -12,7 +12,7 @@ export default defineCustomElement('w-graph-node-socket', {
       transition: background-color 200ms var(--easing-standard);
     }
 
-    :host(:hover) {
+    :host(:hover:not([disabled])) {
       background-color: var(
         --socket-hover,
         rgba(var(--color-on-surface) / 0.08)
@@ -34,6 +34,13 @@ export default defineCustomElement('w-graph-node-socket', {
     :host(:not(:active)) div {
       opacity: var(--socket-opacity);
     }
+
+    :host([disabled]) div {
+      opacity: var(--text-disabled);
+    }
   `,
   template: html`<div></div>`,
+  properties: {
+    disabled: Boolean,
+  },
 })

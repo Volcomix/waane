@@ -29,12 +29,12 @@ export default defineCustomElement('w-node-editor', {
 
     :host([linking='output']) {
       --output-socket-hover: none;
-      --output-socket-opacity: 0.38;
+      --output-socket-opacity: var(--text-disabled);
     }
 
     :host([linking='input']) {
       --input-socket-hover: none;
-      --input-socket-opacity: 0.38;
+      --input-socket-opacity: var(--text-disabled);
     }
   `,
   template: html`

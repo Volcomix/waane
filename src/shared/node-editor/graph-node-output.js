@@ -23,14 +23,19 @@ export default defineCustomElement('w-graph-node-output', {
     <w-graph-node-socket></w-graph-node-socket>
   `,
   properties: {
+    disabled: Boolean,
     type: String,
   },
-  setup({ host }) {
-    const socket = /** @type {HTMLElement} */ (host.shadowRoot.querySelector(
+  setup({ host, observe }) {
+    const socket = /** @type {import('./graph-node-socket.js').default} */ (host.shadowRoot.querySelector(
       'w-graph-node-socket',
     ))
 
     host.id = `output-${outputId++}`
+
+    observe('disabled', () => {
+      socket.disabled = host.disabled
+    })
 
     socket.addEventListener('mousedown', (event) => {
       event.stopPropagation()

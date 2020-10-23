@@ -1,6 +1,7 @@
 import { css, defineCustomElement, html } from '../shared/core/element.js'
 import { squaredDist } from '../shared/helpers/geometry.js'
 import useNodeEditorMousePosition from '../shared/node-editor/use-node-editor-mouse-position.js'
+import useAudioLinkType from './use-audio-link-type.js'
 import useAudioLink from './use-audio-link.js'
 import useGraphNodeMenu from './use-graph-node-menu.js'
 import useNodeEditorMenu from './use-node-editor-menu.js'
@@ -73,6 +74,7 @@ export default defineCustomElement('audio-node-editor', {
     useGraphNodeMenu(nodeEditor, graphNodeMenu)
     useNodeEditorMenu(nodeEditor, nodeEditorMenu)
 
+    useAudioLinkType(nodeEditor)
     useAudioLink(nodeEditor)
 
     function cancelMovingGraphNodes() {
