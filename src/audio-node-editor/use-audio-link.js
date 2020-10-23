@@ -1,10 +1,10 @@
 /** @typedef {import('../shared/node-editor/use-graph-link.js').GraphLinkEvent} GraphLinkEvent */
 
 /** @type {WeakMap<HTMLElement, AudioNode>} */
-const audioNodesByOutput = new WeakMap()
+const audioOutputs = new WeakMap()
 
 /** @type {WeakMap<HTMLElement, AudioNode | AudioParam>} */
-const audioNodesByInput = new WeakMap()
+const audioInputs = new WeakMap()
 
 /** @type {WeakMap<HTMLElement, Set<HTMLElement>>} */
 const links = new WeakMap()
@@ -14,7 +14,7 @@ const links = new WeakMap()
  * @param {AudioNode} audioNode
  */
 export function bindAudioOutput(element, audioNode) {
-  audioNodesByOutput.set(element, audioNode)
+  audioOutputs.set(element, audioNode)
 }
 
 /**
@@ -22,7 +22,7 @@ export function bindAudioOutput(element, audioNode) {
  * @param {AudioNode | AudioParam} audioNode
  */
 export function bindAudioInput(element, audioNode) {
-  audioNodesByInput.set(element, audioNode)
+  audioInputs.set(element, audioNode)
 }
 
 /**
@@ -38,8 +38,8 @@ export default function useAudioLink(host) {
     const input = /** @type {HTMLElement} */ (host.querySelector(
       `w-graph-node-input#${event.detail.to}`,
     ))
-    const source = audioNodesByOutput.get(output)
-    const destination = audioNodesByInput.get(input)
+    const source = audioOutputs.get(output)
+    const destination = audioInputs.get(input)
     source.connect(/** @type {AudioNode} */ (destination))
 
     if (links.has(output)) {
@@ -58,7 +58,7 @@ export default function useAudioLink(host) {
     const disconnectedInput = /** @type {HTMLElement} */ (host.querySelector(
       `w-graph-node-input#${event.detail.to}`,
     ))
-    const source = audioNodesByOutput.get(output)
+    const source = audioOutputs.get(output)
     source.disconnect()
 
     const inputs = links.get(output)
@@ -66,7 +66,7 @@ export default function useAudioLink(host) {
 
     if (inputs.size > 0) {
       inputs.forEach((input) => {
-        const destination = audioNodesByInput.get(input)
+        const destination = audioInputs.get(input)
         source.connect(/** @type {AudioNode} */ (destination))
       })
     } else {

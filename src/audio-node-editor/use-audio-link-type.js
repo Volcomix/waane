@@ -36,18 +36,25 @@ export default function useAudioLinkType(host) {
         linkingType = input.type
       }
     }
-    if (linking === 'output' && linkingType === 'trigger') {
-      host.querySelectorAll(`w-graph-node-input[type='audio']`).forEach((
-        /** @type {GraphNodeInput} */ input,
-      ) => {
-        input.disabled = true
-      })
-    } else if (linking === 'input' && linkingType === 'audio') {
-      host.querySelectorAll(`w-graph-node-output[type='trigger']`).forEach((
-        /** @type {GraphNodeOutput} */ output,
-      ) => {
-        output.disabled = true
-      })
+
+    const disabledLinkType =
+      linkingType === 'audio'
+        ? 'trigger'
+        : linkingType === 'trigger'
+        ? 'audio'
+        : null
+
+    if (disabledLinkType) {
+      const disabledSocketType = linking === 'output' ? 'input' : 'output'
+      host
+        .querySelectorAll(
+          `w-graph-node-${disabledSocketType}[type='${disabledLinkType}']`,
+        )
+        .forEach((
+          /** @type {GraphNodeOutput | GraphNodeInput} */ outputOrInput,
+        ) => {
+          outputOrInput.disabled = true
+        })
     }
   })
 
