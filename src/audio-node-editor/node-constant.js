@@ -14,7 +14,9 @@ export default defineCustomElement('node-constant', {
     </w-graph-node>
   `,
   shadow: false,
-  properties: { offset: Number },
+  properties: {
+    offset: Number,
+  },
   setup: createAudioNode(({ host, connected, disconnected, useAudioParam }) => {
     const audioContext = useAudioContext()
     const constant = audioContext.createConstantSource()

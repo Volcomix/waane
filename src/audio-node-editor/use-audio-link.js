@@ -1,9 +1,18 @@
-/** @typedef {import('../shared/node-editor/use-graph-link.js').GraphLinkEvent} GraphLinkEvent */
+/**
+ * @typedef {import('../shared/node-editor/use-graph-link.js').GraphLinkEvent} GraphLinkEvent
+ * @typedef {import('./node-schedule.js').Schedule} Schedule
+ *
+ * @typedef {AudioNode | AudioParam | Schedule} Destination
+ *
+ * @typedef {object} Source
+ * @property {(destination: Destination) => void} connect
+ * @property {() => void} disconnect
+ */
 
-/** @type {WeakMap<HTMLElement, AudioNode>} */
+/** @type {WeakMap<HTMLElement, Source>} */
 const audioOutputs = new WeakMap()
 
-/** @type {WeakMap<HTMLElement, AudioNode | AudioParam>} */
+/** @type {WeakMap<HTMLElement, Destination>} */
 const audioInputs = new WeakMap()
 
 /** @type {WeakMap<HTMLElement, Set<HTMLElement>>} */
@@ -11,18 +20,18 @@ const links = new WeakMap()
 
 /**
  * @param {HTMLElement} element
- * @param {AudioNode} audioNode
+ * @param {Source} source
  */
-export function bindAudioOutput(element, audioNode) {
-  audioOutputs.set(element, audioNode)
+export function bindAudioOutput(element, source) {
+  audioOutputs.set(element, source)
 }
 
 /**
  * @param {HTMLElement} element
- * @param {AudioNode | AudioParam} audioNode
+ * @param {Destination} destination
  */
-export function bindAudioInput(element, audioNode) {
-  audioInputs.set(element, audioNode)
+export function bindAudioInput(element, destination) {
+  audioInputs.set(element, destination)
 }
 
 /**

@@ -15,7 +15,9 @@ export default defineCustomElement('node-gain', {
     </w-graph-node>
   `,
   shadow: false,
-  properties: { gain: Number },
+  properties: {
+    gain: Number,
+  },
   setup: createAudioNode(({ host, connected, useAudioParam }) => {
     const audioContext = useAudioContext()
     const gain = audioContext.createGain()
