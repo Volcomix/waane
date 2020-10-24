@@ -23,7 +23,7 @@ export default defineCustomElement('node-track', {
     /** @type {number} */
     let timeoutID
 
-    let nextTriggerTime = 0
+    let nextTriggerTime = audioContext.currentTime
 
     function scheduleTrigger() {
       while (nextTriggerTime < audioContext.currentTime + 0.1) {
