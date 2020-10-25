@@ -9,11 +9,12 @@ export default defineCustomElement('w-graph-node-socket', {
       display: flex;
       justify-content: center;
       align-items: center;
+      pointer-events: var(--socket-pointer-events, auto);
       transition: background-color 200ms var(--easing-standard);
     }
 
-    :host(:not([disabled])) {
-      pointer-events: var(--socket-pointer-events);
+    :host([disabled]) {
+      pointer-events: none;
     }
 
     :host(:hover:not([disabled])) {

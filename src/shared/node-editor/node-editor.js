@@ -21,6 +21,7 @@ export default defineCustomElement('w-node-editor', {
 
     :host([selecting]) {
       --graph-node-pointer-events: none;
+      --socket-pointer-events: none;
     }
 
     :host([moving]) {
@@ -29,7 +30,6 @@ export default defineCustomElement('w-node-editor', {
 
     :host([linking]) {
       --graph-node-pointer-events: none;
-      --socket-pointer-events: auto;
     }
 
     :host([linking='output']) {
