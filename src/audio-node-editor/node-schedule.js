@@ -11,14 +11,18 @@ import { bindAudioInput, bindAudioOutput } from './use-audio-link.js'
  * @typedef {Source & ScheduleProperties} Schedule
  */
 
+const targetValueLabel = 'Target value'
+const startTimeLabel = 'Start time'
+const timeConstantLabel = 'Time constant'
+
 export default defineCustomElement('node-schedule', {
   template: html`
     <w-graph-node>
       <span slot="title">Schedule</span>
       <w-graph-node-output>Envelope</w-graph-node-output>
-      <w-number-field label="Target value"></w-number-field>
-      <w-number-field label="Start time"></w-number-field>
-      <w-number-field label="Time constant"></w-number-field>
+      <w-number-field label="${targetValueLabel}"></w-number-field>
+      <w-number-field label="${startTimeLabel}"></w-number-field>
+      <w-number-field label="${timeConstantLabel}"></w-number-field>
       <w-graph-node-input type="trigger">Trigger</w-graph-node-input>
     </w-graph-node>
   `,
@@ -58,13 +62,13 @@ export default defineCustomElement('node-schedule', {
 
     connected(() => {
       const targetValueField = /** @type {NumberField} */ (host.querySelector(
-        `w-number-field[label='Target value']`,
+        `w-number-field[label='${targetValueLabel}']`,
       ))
       const startTimeField = /** @type {NumberField} */ (host.querySelector(
-        `w-number-field[label='Start time']`,
+        `w-number-field[label='${startTimeLabel}']`,
       ))
       const timeConstantField = /** @type {NumberField} */ (host.querySelector(
-        `w-number-field[label='Time constant']`,
+        `w-number-field[label='${timeConstantLabel}']`,
       ))
 
       targetValueField.value = host.targetValue

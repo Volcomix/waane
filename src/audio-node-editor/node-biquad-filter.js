@@ -3,12 +3,18 @@ import useAudioContext from './use-audio-context.js'
 import { bindAudioInput, bindAudioOutput } from './use-audio-link.js'
 import createAudioNode from './use-audio-node.js'
 
+const typeLabel = 'Type'
+const frequencyLabel = 'Frequency'
+const detuneLabel = 'Detune'
+const QLabel = 'Q'
+const gainLabel = 'Gain'
+
 export default defineCustomElement('node-biquad-filter', {
   template: html`
     <w-graph-node>
       <span slot="title">Biquad filter</span>
       <w-graph-node-output type="audio">Output</w-graph-node-output>
-      <w-select label="Type">
+      <w-select label="${typeLabel}">
         <w-menu-item value="lowpass">Lowpass</w-menu-item>
         <w-menu-item value="highpass">Highpass</w-menu-item>
         <w-menu-item value="bandpass">Bandpass</w-menu-item>
@@ -19,16 +25,16 @@ export default defineCustomElement('node-biquad-filter', {
         <w-menu-item value="allpass">Allpass</w-menu-item>
       </w-select>
       <w-graph-node-input>
-        <w-number-field label="Frequency"></w-number-field>
+        <w-number-field label="${frequencyLabel}"></w-number-field>
       </w-graph-node-input>
       <w-graph-node-input>
-        <w-number-field label="Detune"></w-number-field>
+        <w-number-field label="${detuneLabel}"></w-number-field>
       </w-graph-node-input>
       <w-graph-node-input>
-        <w-number-field label="Q"></w-number-field>
+        <w-number-field label="${QLabel}"></w-number-field>
       </w-graph-node-input>
       <w-graph-node-input>
-        <w-number-field label="Gain"></w-number-field>
+        <w-number-field label="${gainLabel}"></w-number-field>
       </w-graph-node-input>
       <w-graph-node-input type="audio">Input</w-graph-node-input>
     </w-graph-node>
@@ -49,27 +55,27 @@ export default defineCustomElement('node-biquad-filter', {
       connected(() => {
         bindAudioOutput(host.querySelector('w-graph-node-output'), biquadFilter)
         useAudioProperty(
-          host.querySelector(`w-select[label='Type']`),
+          host.querySelector(`w-select[label='${typeLabel}']`),
           biquadFilter,
           'type',
         )
         useAudioParam(
-          host.querySelector(`w-number-field[label='Frequency']`),
+          host.querySelector(`w-number-field[label='${frequencyLabel}']`),
           biquadFilter,
           'frequency',
         )
         useAudioParam(
-          host.querySelector(`w-number-field[label='Detune']`),
+          host.querySelector(`w-number-field[label='${detuneLabel}']`),
           biquadFilter,
           'detune',
         )
         useAudioParam(
-          host.querySelector(`w-number-field[label='Q']`),
+          host.querySelector(`w-number-field[label='${QLabel}']`),
           biquadFilter,
           'Q',
         )
         useAudioParam(
-          host.querySelector(`w-number-field[label='Gain']`),
+          host.querySelector(`w-number-field[label='${gainLabel}']`),
           biquadFilter,
           'gain',
         )

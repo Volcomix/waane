@@ -3,13 +3,15 @@ import useAudioContext from './use-audio-context.js'
 import { bindAudioOutput } from './use-audio-link.js'
 import createAudioNode from './use-audio-node.js'
 
+const offsetLabel = 'Offset'
+
 export default defineCustomElement('node-constant', {
   template: html`
     <w-graph-node>
       <span slot="title">Constant</span>
       <w-graph-node-output type="audio">Output</w-graph-node-output>
       <w-graph-node-input>
-        <w-number-field label="Offset"></w-number-field>
+        <w-number-field label="${offsetLabel}"></w-number-field>
       </w-graph-node-input>
     </w-graph-node>
   `,
@@ -24,7 +26,7 @@ export default defineCustomElement('node-constant', {
     connected(() => {
       bindAudioOutput(host.querySelector('w-graph-node-output'), constant)
       useAudioParam(
-        host.querySelector(`w-number-field[label='Offset']`),
+        host.querySelector(`w-number-field[label='${offsetLabel}']`),
         constant,
         'offset',
       )
