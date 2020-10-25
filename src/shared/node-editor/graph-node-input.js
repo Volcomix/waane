@@ -13,7 +13,7 @@ export default defineCustomElement('w-graph-node-input', {
       position: absolute;
       left: 0px;
       transform: translateX(-50%);
-      --socket-hover: var(--input-socket-hover);
+      --socket-pointer-events: var(--input-socket-pointer-events);
       --socket-opacity: var(--input-socket-opacity);
     }
   `,
@@ -38,12 +38,6 @@ export default defineCustomElement('w-graph-node-input', {
 
     socket.addEventListener('mousedown', (event) => {
       event.stopPropagation()
-      if (host.disabled) {
-        return
-      }
-      if (host.matches('w-node-editor[linking] w-graph-node-input')) {
-        return
-      }
       host.dispatchEvent(
         new CustomEvent('graph-link-start', {
           bubbles: true,
@@ -53,12 +47,6 @@ export default defineCustomElement('w-graph-node-input', {
     })
 
     socket.addEventListener('mousemove', (event) => {
-      if (host.disabled) {
-        return
-      }
-      if (!host.matches(`w-node-editor[linking='output'] w-graph-node-input`)) {
-        return
-      }
       event.stopPropagation()
       host.dispatchEvent(
         new CustomEvent('graph-link-end', {
@@ -69,12 +57,6 @@ export default defineCustomElement('w-graph-node-input', {
     })
 
     socket.addEventListener('mouseup', (event) => {
-      if (host.disabled) {
-        return
-      }
-      if (!host.matches(`w-node-editor[linking='output'] w-graph-node-input`)) {
-        return
-      }
       event.stopPropagation()
     })
   },

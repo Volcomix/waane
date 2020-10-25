@@ -37,42 +37,6 @@ test('adds a link from an input to an output', () => {
   expect(getGraphLinks()).toHaveLength(1)
 })
 
-test('cancels adding a link to a disabled input', () => {
-  const { getGraphNodes, addGraphLink, getGraphLinks, addAudioNode } = setup()
-  addAudioNode('Track')
-  addAudioNode('Audio destination')
-  const [track, audioDestination] = getGraphNodes()
-  addGraphLink(track, audioDestination)
-
-  expect(getGraphLinks()).toHaveLength(0)
-})
-
-test('cancells adding a link to a disabled output', () => {
-  const { nodeEditor, getGraphNodes, getGraphLinks, addAudioNode } = setup()
-  addAudioNode('Track')
-  addAudioNode('Audio destination')
-  const [track, audioDestination] = getGraphNodes()
-
-  const graphNodeInput = audioDestination.querySelector('w-graph-node-input')
-  const inputSocket = graphNodeInput.shadowRoot.querySelector(
-    'w-graph-node-socket',
-  )
-  const graphNodeOutput = track.querySelector('w-graph-node-output')
-  const outputSocket = graphNodeOutput.shadowRoot.querySelector(
-    'w-graph-node-socket',
-  )
-  inputSocket.dispatchEvent(new MouseEvent('mousedown'))
-  outputSocket.dispatchEvent(
-    new MouseEvent('mousemove', { bubbles: true, composed: true }),
-  )
-  outputSocket.dispatchEvent(
-    new MouseEvent('mouseup', { bubbles: true, composed: true }),
-  )
-  nodeEditor.click()
-
-  expect(getGraphLinks()).toHaveLength(0)
-})
-
 test('cancels adding a link when releasing on node editor', () => {
   const { nodeEditor, getGraphLinks, addAudioNode } = setup()
   addAudioNode('Oscillator')

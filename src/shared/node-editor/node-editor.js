@@ -19,21 +19,26 @@ export default defineCustomElement('w-node-editor', {
       cursor: all-scroll;
     }
 
+    :host([selecting]) {
+      --graph-node-pointer-events: none;
+    }
+
     :host([moving]) {
       cursor: move;
     }
 
     :host([linking]) {
-      --graph-node-hover: none;
+      --graph-node-pointer-events: none;
+      --socket-pointer-events: auto;
     }
 
     :host([linking='output']) {
-      --output-socket-hover: none;
+      --output-socket-pointer-events: none;
       --output-socket-opacity: var(--text-disabled);
     }
 
     :host([linking='input']) {
-      --input-socket-hover: none;
+      --input-socket-pointer-events: none;
       --input-socket-opacity: var(--text-disabled);
     }
   `,
@@ -47,6 +52,7 @@ export default defineCustomElement('w-node-editor', {
     panX: Number,
     panY: Number,
     panning: Boolean,
+    selecting: Boolean,
     moving: Boolean,
     linking: String, // 'output' or 'input'
   },

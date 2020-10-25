@@ -14,6 +14,7 @@ export default defineCustomElement('w-graph-node', {
       color: rgba(var(--color-on-surface) / var(--text-high-emphasis));
       transition: color 150ms var(--easing-standard),
         box-shadow 150ms var(--easing-standard);
+      pointer-events: var(--graph-node-pointer-events);
       user-select: none;
       ${elevation(1)}
     }
@@ -51,10 +52,7 @@ export default defineCustomElement('w-graph-node', {
     }
 
     :host(:hover) w-icon {
-      background-color: var(
-        --graph-node-hover,
-        rgba(var(--color-on-surface) / 0.04)
-      );
+      background-color: rgba(var(--color-on-surface) / 0.04);
     }
 
     :host([selected]) w-icon {

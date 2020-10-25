@@ -2,7 +2,10 @@ import { css, defineCustomElement } from '../core/element.js'
 import { isField } from '../helpers/field.js'
 import { doOverlap } from '../helpers/geometry.js'
 
-/** @typedef {import('./graph-node.js').default} GraphNode */
+/**
+ * @typedef {import('./node-editor.js').default} NodeEditor
+ * @typedef {import('./graph-node.js').default} GraphNode
+ */
 
 /**
  * @param {SelectionRectangle} selectionRectangle
@@ -53,10 +56,9 @@ const SelectionRectangle = defineCustomElement('w-selection-rectangle', {
 })
 
 /**
- * @param {HTMLElement} host
+ * @param {NodeEditor} host
  */
 export default function useGraphNodeSelection(host) {
-  let isRectangleSelection = false
   const selectionRectangle = /** @type {SelectionRectangle} */ (document.createElement(
     'w-selection-rectangle',
   ))
@@ -80,13 +82,13 @@ export default function useGraphNodeSelection(host) {
     if (element.closest('w-graph-node')) {
       return
     }
-    isRectangleSelection = true
+    host.selecting = true
     selectionRectangle.fromX = event.pageX
     selectionRectangle.fromY = event.pageY
   })
 
   host.addEventListener('mousemove', (event) => {
-    if (!isRectangleSelection) {
+    if (!host.selecting) {
       return
     }
     if (!selectionRectangle.isConnected) {
@@ -113,7 +115,7 @@ export default function useGraphNodeSelection(host) {
   })
 
   host.addEventListener('mouseup', () => {
-    isRectangleSelection = false
+    host.selecting = false
     if (!selectionRectangle.isConnected) {
       return
     }

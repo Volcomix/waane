@@ -12,11 +12,12 @@ export default defineCustomElement('w-graph-node-socket', {
       transition: background-color 200ms var(--easing-standard);
     }
 
+    :host(:not([disabled])) {
+      pointer-events: var(--socket-pointer-events);
+    }
+
     :host(:hover:not([disabled])) {
-      background-color: var(
-        --socket-hover,
-        rgba(var(--color-on-surface) / 0.08)
-      );
+      background-color: rgba(var(--color-on-surface) / 0.08);
     }
 
     :host(:active) {
