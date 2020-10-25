@@ -28,6 +28,14 @@ import { bindAudioInput } from './use-audio-link.js'
 
 /**
  * @template {PropertyTypes} T
+ * @callback UseProperty
+ * @param {NumberField} field
+ * @param {FilterPropertyNames<T, typeof Number>} propertyName
+ * @returns {void}
+ */
+
+/**
+ * @template {PropertyTypes} T
  * @callback UseAudioProperty
  * @param {Select} field
  * @param {AudioNode} audioNode
@@ -38,7 +46,7 @@ import { bindAudioInput } from './use-audio-link.js'
 /**
  * @template {PropertyTypes} T
  * @callback UseAudioParam
- * @param {NumberField} numberField
+ * @param {NumberField} field
  * @param {AudioNode} audioNode
  * @param {FilterPropertyNames<T, typeof Number>} propertyName
  * @returns {void}
@@ -47,6 +55,7 @@ import { bindAudioInput } from './use-audio-link.js'
 /**
  * @template {PropertyTypes} T
  * @typedef {object} UseAudioNodeOptions
+ * @property {UseProperty<T>} useProperty
  * @property {UseAudioProperty<T>} useAudioProperty
  * @property {UseAudioParam<T>} useAudioParam
  */
@@ -66,6 +75,17 @@ export default function createAudioNode(setup) {
     const { host, observe } = options
     setup({
       ...options,
+      useProperty(field, propertyName) {
+        field.value = /** @type {number} */ (host[propertyName])
+
+        observe(propertyName, () => {
+          field.value = /** @type {number} */ (host[propertyName])
+        })
+
+        field.addEventListener('input', () => {
+          host[propertyName] = /** @type {any} */ (field.value)
+        })
+      },
       useAudioProperty(field, /** @type {any} */ audioNode, propertyName) {
         if (host.hasAttribute(/** @type {string} */ (propertyName))) {
           audioNode[propertyName] = host[propertyName]

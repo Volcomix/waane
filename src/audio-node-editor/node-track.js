@@ -20,19 +20,6 @@ export default defineCustomElement('node-track', {
     /** @type {Set<Schedule>} */
     const schedules = new Set()
 
-    /** @type {number} */
-    let timeoutID
-
-    let nextTriggerTime = audioContext.currentTime
-
-    function scheduleTrigger() {
-      while (nextTriggerTime < audioContext.currentTime + 0.1) {
-        schedules.forEach((schedule) => schedule.trigger(nextTriggerTime))
-        nextTriggerTime += 0.5
-      }
-      timeoutID = window.setTimeout(scheduleTrigger, 25)
-    }
-
     const track = {
       /**
        * @param {Schedule} schedule
@@ -44,6 +31,19 @@ export default defineCustomElement('node-track', {
       disconnect() {
         schedules.clear()
       },
+    }
+
+    /** @type {number} */
+    let timeoutID
+
+    let nextTriggerTime = audioContext.currentTime
+
+    function scheduleTrigger() {
+      while (nextTriggerTime < audioContext.currentTime + 0.1) {
+        schedules.forEach((schedule) => schedule.trigger(nextTriggerTime))
+        nextTriggerTime += 0.5
+      }
+      timeoutID = window.setTimeout(scheduleTrigger, 25)
     }
 
     connected(() => {

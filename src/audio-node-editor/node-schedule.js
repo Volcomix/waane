@@ -1,5 +1,6 @@
 import { defineCustomElement, html } from '../shared/core/element.js'
 import { bindAudioInput, bindAudioOutput } from './use-audio-link.js'
+import createAudioNode from './use-audio-node.js'
 
 /**
  * @typedef {import('../shared/base/number-field.js').default} NumberField
@@ -32,7 +33,7 @@ export default defineCustomElement('node-schedule', {
     startTime: Number,
     timeConstant: Number,
   },
-  setup({ host, connected, observe }) {
+  setup: createAudioNode(({ host, connected, useProperty }) => {
     /** @type {Set<AudioParam>} */
     const audioParams = new Set()
 
@@ -61,46 +62,20 @@ export default defineCustomElement('node-schedule', {
     }
 
     connected(() => {
-      const targetValueField = /** @type {NumberField} */ (host.querySelector(
-        `w-number-field[label='${targetValueLabel}']`,
-      ))
-      const startTimeField = /** @type {NumberField} */ (host.querySelector(
-        `w-number-field[label='${startTimeLabel}']`,
-      ))
-      const timeConstantField = /** @type {NumberField} */ (host.querySelector(
-        `w-number-field[label='${timeConstantLabel}']`,
-      ))
-
-      targetValueField.value = host.targetValue
-      startTimeField.value = host.startTime
-      timeConstantField.value = host.timeConstant
-
       bindAudioOutput(host.querySelector('w-graph-node-output'), schedule)
+      useProperty(
+        host.querySelector(`w-number-field[label='${targetValueLabel}']`),
+        'targetValue',
+      )
+      useProperty(
+        host.querySelector(`w-number-field[label='${startTimeLabel}']`),
+        'startTime',
+      )
+      useProperty(
+        host.querySelector(`w-number-field[label='${timeConstantLabel}']`),
+        'timeConstant',
+      )
       bindAudioInput(host.querySelector('w-graph-node-input'), schedule)
-
-      observe('targetValue', () => {
-        targetValueField.value = host.targetValue
-      })
-
-      observe('startTime', () => {
-        startTimeField.value = host.startTime
-      })
-
-      observe('timeConstant', () => {
-        timeConstantField.value = host.timeConstant
-      })
-
-      targetValueField.addEventListener('input', () => {
-        host.targetValue = targetValueField.value
-      })
-
-      startTimeField.addEventListener('input', () => {
-        host.startTime = startTimeField.value
-      })
-
-      timeConstantField.addEventListener('input', () => {
-        host.timeConstant = timeConstantField.value
-      })
     })
-  },
+  }),
 })
