@@ -7,11 +7,8 @@ import useMouseNavigation from './use-mouse-navigation.js'
 export default defineCustomElement('w-node-editor', {
   styles: css`
     :host {
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
+      flex: 1;
+      position: relative;
       overflow: hidden;
     }
 

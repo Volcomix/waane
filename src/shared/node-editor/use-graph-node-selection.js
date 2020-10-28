@@ -83,8 +83,8 @@ export default function useGraphNodeSelection(host) {
       return
     }
     host.selecting = true
-    selectionRectangle.fromX = event.pageX
-    selectionRectangle.fromY = event.pageY
+    selectionRectangle.fromX = event.offsetX
+    selectionRectangle.fromY = event.offsetY
   })
 
   host.addEventListener('mousemove', (event) => {
@@ -98,8 +98,8 @@ export default function useGraphNodeSelection(host) {
         unselectAll()
       }
     }
-    selectionRectangle.toX = event.pageX
-    selectionRectangle.toY = event.pageY
+    selectionRectangle.toX = event.offsetX
+    selectionRectangle.toY = event.offsetY
 
     const selectionBox = getSelectionBox(selectionRectangle)
     host.querySelectorAll('w-graph-node').forEach((

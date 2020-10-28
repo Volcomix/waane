@@ -23,7 +23,7 @@ export default defineCustomElement('w-graph-link', {
     }
 
     :host([linking]) {
-      z-index: 8;
+      z-index: 3;
     }
 
     :host([linking]) svg {

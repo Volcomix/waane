@@ -1,4 +1,5 @@
 import { css, defineCustomElement, html } from '../shared/core/element.js'
+import elevation from '../shared/core/elevation.js'
 import { squaredDist } from '../shared/helpers/geometry.js'
 import useNodeEditorMousePosition from '../shared/node-editor/use-node-editor-mouse-position.js'
 import useAudioLinkType from './use-audio-link-type.js'
@@ -16,6 +17,19 @@ import useNodeEditorMenu from './use-node-editor-menu.js'
 
 export default defineCustomElement('audio-node-editor', {
   styles: css`
+    :host {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      display: flex;
+      justify-content: center;
+      background-color: rgb(var(--color-surface));
+      ${elevation(4)}
+    }
+
     w-graph-node-output[type='audio'],
     w-graph-node-input[type='audio'] {
       --socket-color: var(--color-additional1);
@@ -27,6 +41,10 @@ export default defineCustomElement('audio-node-editor', {
     }
   `,
   template: html`
+    <header>
+      <w-tab>Tracks</w-tab>
+      <w-tab active>Nodes</w-tab>
+    </header>
     <w-node-editor></w-node-editor>
     <w-menu id="node-editor-menu">
       <w-menu-item value="node-track">Track</w-menu-item>

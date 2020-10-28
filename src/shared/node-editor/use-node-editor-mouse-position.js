@@ -6,10 +6,10 @@ export default function useNodeEditorMousePosition(host) {
    * @param {MouseEvent} event
    */
   function getNodeEditorMousePosition(event) {
-    const { width, height } = host.getBoundingClientRect()
+    const { x, y, width, height } = host.getBoundingClientRect()
     return {
-      x: (event.pageX - width / 2) / host.zoom - host.panX,
-      y: (event.pageY - height / 2) / host.zoom - host.panY,
+      x: (event.clientX - x - width / 2) / host.zoom - host.panX,
+      y: (event.clientY - y - height / 2) / host.zoom - host.panY,
     }
   }
   return getNodeEditorMousePosition

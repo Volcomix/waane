@@ -20,16 +20,12 @@ export default defineCustomElement('w-graph-node', {
     }
 
     :host([selected]) {
-      ${elevation(3)}
+      ${elevation(2)}
     }
 
     :host(:hover),
-    :host([selecting]) {
-      ${elevation(4)}
-    }
-
     :host([moving]) {
-      z-index: 5;
+      ${elevation(3)}
     }
 
     :host([selected][selecting]) {

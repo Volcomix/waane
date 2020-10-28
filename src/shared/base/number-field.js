@@ -18,13 +18,16 @@ export default defineCustomElement('w-number-field', {
     const textField = /** @type {import('./text-field.js').default} */ (host.shadowRoot.querySelector(
       'w-text-field',
     ))
+    textField.value = '0'
 
     observe('label', () => {
       textField.label = host.label
     })
 
     observe('value', () => {
-      textField.value = String(host.value)
+      if (Number(textField.value) !== host.value) {
+        textField.value = String(host.value)
+      }
     })
 
     textField.addEventListener('input', () => {
