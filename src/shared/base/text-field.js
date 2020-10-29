@@ -12,7 +12,6 @@ export default defineCustomElement('w-text-field', {
     :host {
       position: relative;
       height: 48px;
-      flex: 1;
       display: flex;
       border-bottom: 1px solid rgba(var(--color-on-surface) / 0.42);
       border-radius: 4px 4px 0 0;

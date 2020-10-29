@@ -1,12 +1,6 @@
-import { css, defineCustomElement, html } from '../core/element.js'
+import { defineCustomElement, html } from '../core/element.js'
 
 export default defineCustomElement('w-number-field', {
-  styles: css`
-    :host {
-      flex: 1;
-      display: flex;
-    }
-  `,
   template: html`
     <w-text-field type="number" step="any" required></w-text-field>
   `,
