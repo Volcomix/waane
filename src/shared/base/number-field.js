@@ -27,5 +27,11 @@ export default defineCustomElement('w-number-field', {
     textField.addEventListener('input', () => {
       host.value = Number(textField.value)
     })
+
+    textField.addEventListener('blur', () => {
+      if (parseFloat(textField.value) === host.value) {
+        textField.value = String(host.value)
+      }
+    })
   },
 })
