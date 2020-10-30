@@ -81,7 +81,7 @@ export default function useAudioLinkType(host) {
     }
   })
 
-  host.addEventListener('mouseup', () => {
+  host.addEventListener('click', () => {
     if (linking === null) {
       return
     }

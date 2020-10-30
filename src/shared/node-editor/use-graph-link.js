@@ -104,11 +104,10 @@ export default function useGraphLink(host) {
     graphLink.remove()
   })
 
-  host.addEventListener('click', (event) => {
+  host.addEventListener('click', () => {
     if (!graphLink) {
       return
     }
-    event.stopImmediatePropagation()
     if (!isConnected && graphLink.from && graphLink.to) {
       const existingGraphLinks = host.querySelectorAll(
         `w-graph-link[from='${graphLink.from}'][to='${graphLink.to}']`,
