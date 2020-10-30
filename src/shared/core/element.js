@@ -1,4 +1,19 @@
+/**
+ * Alias for String.raw
+ * Use it along with VS Code extension lit-html
+ * to get template syntax highlighting.
+ *
+ * See https://marketplace.visualstudio.com/items?itemName=bierner.lit-html
+ */
 export const html = String.raw
+
+/**
+ * Alias for String.raw
+ * Use it along with VS Code extension vscode-styled-components
+ * to get styles syntax highlighting.
+ *
+ * See https://marketplace.visualstudio.com/items?itemName=jpoissonnier.vscode-styled-components
+ */
 export const css = String.raw
 
 /** @typedef {typeof String | typeof Number | typeof Boolean} PropertyType */
