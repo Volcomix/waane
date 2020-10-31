@@ -101,11 +101,14 @@ export default function useGraphNodeSelection(host) {
     selectionRectangle.toX = event.offsetX
     selectionRectangle.toY = event.offsetY
 
+    const { x: hostX, y: hostY } = host.getBoundingClientRect()
     const selectionBox = getSelectionBox(selectionRectangle)
     host.querySelectorAll('w-graph-node').forEach((
       /** @type {GraphNode} */ graphNode,
     ) => {
-      const { x, y, width, height } = graphNode.getBoundingClientRect()
+      let { x, y, width, height } = graphNode.getBoundingClientRect()
+      x -= hostX
+      y -= hostY
       const graphNodeBox = {
         min: { x, y },
         max: { x: x + width, y: y + height },
