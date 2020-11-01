@@ -16,7 +16,6 @@ export default defineCustomElement('w-text-field', {
       border-bottom: 1px solid rgba(var(--color-on-surface) / 0.42);
       border-radius: 4px 4px 0 0;
       background-color: rgba(var(--color-on-surface) / 0.04);
-      transition: border-bottom-color 200ms var(--easing-standard);
     }
 
     :host(:hover) {

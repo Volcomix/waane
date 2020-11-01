@@ -83,4 +83,24 @@ export default defineCustomElement('audio-tracker', {
       </audio-track>
     </div>
   `,
+  setup({ host }) {
+    const fab = /** @type {HTMLElement} */ (host.shadowRoot.querySelector(
+      'w-fab',
+    ))
+    const div = host.shadowRoot.querySelector('div')
+
+    let trackIndex = 4
+
+    fab.addEventListener('click', () => {
+      const audioTrack = /** @type {import('./audio-track.js').default} */ (document.createElement(
+        'audio-track',
+      ))
+      audioTrack.label = `${trackIndex++}`
+      for (let i = 0; i < 16; i++) {
+        const trackEffect = document.createElement('track-effect')
+        audioTrack.appendChild(trackEffect)
+      }
+      div.appendChild(audioTrack)
+    })
+  },
 })

@@ -17,7 +17,6 @@ export default defineCustomElement('audio-track', {
       padding: 16px 0 8px;
       display: flex;
       flex-direction: column;
-      transition: border-color 200ms var(--easing-standard);
     }
 
     :host(:hover) {
