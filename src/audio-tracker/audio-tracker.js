@@ -3,8 +3,12 @@ import { css, defineCustomElement, html } from '../shared/core/element.js'
 export default defineCustomElement('audio-tracker', {
   styles: css`
     div {
-      margin: 16px;
+      box-sizing: border-box;
+      height: 100%;
+      padding: 16px;
       display: flex;
+      align-items: flex-start;
+      background-color: rgb(var(--color-surface));
     }
   `,
   template: html`

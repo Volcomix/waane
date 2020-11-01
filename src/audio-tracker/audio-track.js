@@ -1,4 +1,5 @@
-import { css, defineCustomElement } from '../shared/core/element.js'
+import { css, defineCustomElement, html } from '../shared/core/element.js'
+import typography from '../shared/core/typography.js'
 
 const link = document.createElement('link')
 link.href =
@@ -13,7 +14,7 @@ export default defineCustomElement('audio-track', {
       border: 1px solid rgba(var(--color-on-surface) / 0.42);
       border-radius: 4px;
       margin-right: 8px;
-      padding: 4px 0;
+      padding: 16px 0 8px;
       display: flex;
       flex-direction: column;
       transition: border-color 200ms var(--easing-standard);
@@ -23,7 +24,7 @@ export default defineCustomElement('audio-track', {
       border-color: rgba(var(--color-on-surface) / var(--text-high-emphasis));
     }
 
-    :host::after {
+    :host::before {
       content: '';
       position: absolute;
       top: -1px;
@@ -36,12 +37,39 @@ export default defineCustomElement('audio-track', {
       transition: border-color 200ms var(--easing-standard);
     }
 
-    :host(:focus-within)::after {
+    :host(:focus-within)::before {
       border-color: rgb(var(--color-primary));
+    }
+
+    label {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 0 4px;
+      background-color: rgb(var(--color-surface));
+      color: rgba(var(--color-on-surface) / var(--text-medium-emphasis));
+      transition: color 200ms var(--easing-standard);
+      ${typography('caption')}
+    }
+
+    :host(:focus-within) label {
+      color: rgba(var(--color-primary) / var(--text-high-emphasis));
     }
 
     ::slotted(:nth-child(4n + 1)) {
       color: rgba(var(--color-on-surface) / var(--text-high-emphasis));
     }
   `,
+  template: html`<label></label><slot></slot>`,
+  properties: {
+    label: String,
+  },
+  setup({ host, observe }) {
+    const label = host.shadowRoot.querySelector('label')
+
+    observe('label', () => {
+      label.textContent = host.label
+    })
+  },
 })
