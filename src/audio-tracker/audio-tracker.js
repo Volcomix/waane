@@ -1,5 +1,10 @@
 import { css, defineCustomElement, html } from '../shared/core/element.js'
 
+/**
+ * @typedef {import('./audio-track.js').default} AudioTrack
+ * @typedef {import('./track-effect.js').default} TrackEffect
+ */
+
 export default defineCustomElement('audio-tracker', {
   styles: css`
     :host {
@@ -89,15 +94,27 @@ export default defineCustomElement('audio-tracker', {
     ))
     const div = host.shadowRoot.querySelector('div')
 
+    host.shadowRoot.querySelectorAll('audio-track').forEach((audioTrack) => {
+      audioTrack.querySelectorAll('track-effect').forEach((
+        /** @type {TrackEffect} */ trackEffect,
+        i,
+      ) => {
+        trackEffect.beat = i % 4 === 0
+      })
+    })
+
     let trackIndex = 4
 
     fab.addEventListener('click', () => {
-      const audioTrack = /** @type {import('./audio-track.js').default} */ (document.createElement(
+      const audioTrack = /** @type {AudioTrack} */ (document.createElement(
         'audio-track',
       ))
       audioTrack.label = `${trackIndex++}`
       for (let i = 0; i < 16; i++) {
-        const trackEffect = document.createElement('track-effect')
+        const trackEffect = /** @type {TrackEffect} */ (document.createElement(
+          'track-effect',
+        ))
+        trackEffect.beat = i % 4 === 0
         audioTrack.appendChild(trackEffect)
       }
       div.appendChild(audioTrack)

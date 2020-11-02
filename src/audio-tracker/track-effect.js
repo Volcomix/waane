@@ -13,6 +13,10 @@ export default defineCustomElement('track-effect', {
       ${typography('body2')}
     }
 
+    :host([beat]) {
+      color: rgba(var(--color-on-surface) / var(--text-high-emphasis));
+    }
+
     :host(:hover) {
       background-color: rgba(var(--color-on-surface) / 0.04);
     }
@@ -30,6 +34,7 @@ export default defineCustomElement('track-effect', {
   template: html`<span tabindex="0">··</span>`,
   properties: {
     value: String,
+    beat: Boolean,
   },
   setup({ host, observe }) {
     const span = host.shadowRoot.querySelector('span')

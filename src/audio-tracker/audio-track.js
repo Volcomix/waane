@@ -55,10 +55,6 @@ export default defineCustomElement('audio-track', {
     :host(:focus-within) label {
       color: rgba(var(--color-primary) / var(--text-high-emphasis));
     }
-
-    ::slotted(:nth-child(4n + 1)) {
-      color: rgba(var(--color-on-surface) / var(--text-high-emphasis));
-    }
   `,
   template: html`<label></label><slot></slot>`,
   properties: {
