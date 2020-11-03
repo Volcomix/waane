@@ -11,7 +11,7 @@ export default defineCustomElement('w-graph-node-input', {
 
     w-graph-node-socket {
       position: absolute;
-      left: 0px;
+      left: 0;
       transform: translateX(-50%);
       --socket-pointer-events: var(--input-socket-pointer-events);
       --socket-opacity: var(--input-socket-opacity);

@@ -9,21 +9,40 @@ document.head.appendChild(link)
 
 export default defineCustomElement('audio-track', {
   styles: css`
+    :host,
+    div {
+      border: 1px solid rgba(var(--color-on-surface) / 0.42);
+    }
+
     :host {
       position: relative;
-      border: 1px solid rgba(var(--color-on-surface) / 0.42);
-      border-radius: 4px;
-      margin-right: 8px;
-      padding: 16px 0 8px;
+      border-top: none;
+      border-radius: 0 0 4px 4px;
+      margin: 17px 8px 0 0;
+      padding-bottom: 8px;
       display: flex;
       flex-direction: column;
     }
 
-    :host(:hover) {
+    div {
+      position: sticky;
+      top: 0;
+      right: 0;
+      left: 0;
+      z-index: 1;
+      height: 16px;
+      margin: -17px -1px 0 -1px;
+      border-bottom: none;
+      border-radius: 4px 4px 0 0;
+    }
+
+    :host(:hover),
+    :host(:hover) div {
       border-color: rgba(var(--color-on-surface) / var(--text-high-emphasis));
     }
 
-    :host::before {
+    :host::before,
+    div::before {
       content: '';
       position: absolute;
       top: -1px;
@@ -31,12 +50,24 @@ export default defineCustomElement('audio-track', {
       bottom: -1px;
       left: -1px;
       border: 2px solid transparent;
-      border-radius: 4px;
       pointer-events: none;
       transition: border-color 200ms var(--easing-standard);
     }
 
-    :host(:focus-within)::before {
+    :host::before {
+      top: 0;
+      border-top: none;
+      border-radius: 0 0 4px 4px;
+    }
+
+    div::before {
+      bottom: 0;
+      border-bottom: none;
+      border-radius: 4px 4px 0 0;
+    }
+
+    :host(:focus-within)::before,
+    :host(:focus-within) div::before {
       border-color: rgb(var(--color-primary));
     }
 
@@ -56,7 +87,10 @@ export default defineCustomElement('audio-track', {
       color: rgba(var(--color-primary) / var(--text-high-emphasis));
     }
   `,
-  template: html`<label></label><slot></slot>`,
+  template: html`
+    <div><label></label></div>
+    <slot></slot>
+  `,
   properties: {
     label: String,
   },

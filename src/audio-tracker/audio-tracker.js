@@ -20,6 +20,17 @@ export default defineCustomElement('audio-tracker', {
       background-color: rgb(var(--color-surface));
     }
 
+    div::before {
+      content: '';
+      position: fixed;
+      right: 0;
+      left: 0;
+      z-index: 1;
+      height: 57px;
+      margin-top: -40px;
+      background-color: rgb(var(--color-surface));
+    }
+
     div > *:last-child::after {
       content: '';
       position: absolute;
