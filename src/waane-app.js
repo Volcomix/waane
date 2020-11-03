@@ -46,6 +46,10 @@ export default defineCustomElement('waane-app', {
       'audio-node-editor',
     ))
 
+    host.addEventListener('contextmenu', (event) => {
+      event.preventDefault()
+    })
+
     tracksTab.addEventListener('click', () => {
       tracksTab.active = true
       nodesTab.active = false

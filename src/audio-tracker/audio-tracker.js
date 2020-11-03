@@ -1,6 +1,7 @@
 import { css, defineCustomElement, html } from '../shared/core/element.js'
 
 /**
+ * @typedef {import('../shared/base/menu').default} Menu
  * @typedef {import('./audio-track.js').default} AudioTrack
  * @typedef {import('./track-effect.js').default} TrackEffect
  */
@@ -52,14 +53,27 @@ export default defineCustomElement('audio-tracker', {
       Add track
     </w-fab>
     <div></div>
+    <w-menu>
+      <w-menu-item id="delete">
+        <w-icon>delete</w-icon>
+        <span>Delete track</span>
+      </w-menu-item>
+    </w-menu>
   `,
   setup({ host }) {
     const fab = /** @type {HTMLElement} */ (host.shadowRoot.querySelector(
       'w-fab',
     ))
     const div = host.shadowRoot.querySelector('div')
+    const menu = /** @type {Menu} */ (host.shadowRoot.querySelector('w-menu'))
+    const menuItemDelete = /** @type {HTMLElement} */ (host.shadowRoot.querySelector(
+      '#delete',
+    ))
 
     let trackId = 1
+
+    /** @type {HTMLElement} */
+    let selectedAudioTrack
 
     fab.addEventListener('click', () => {
       const audioTrack = /** @type {AudioTrack} */ (document.createElement(
@@ -74,6 +88,22 @@ export default defineCustomElement('audio-tracker', {
         audioTrack.appendChild(trackEffect)
       }
       div.appendChild(audioTrack)
+    })
+
+    div.addEventListener('contextmenu', (event) => {
+      const element = /** @type {Element} */ (event.target)
+      selectedAudioTrack = element.closest('audio-track')
+      if (!selectedAudioTrack) {
+        return
+      }
+      menu.open = true
+      menu.x = event.clientX
+      menu.y = event.clientY
+    })
+
+    menuItemDelete.addEventListener('click', () => {
+      // TODO remove selection in track nodes on node editor
+      selectedAudioTrack.remove()
     })
   },
 })

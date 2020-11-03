@@ -4,7 +4,6 @@
  */
 export default function useNodeEditorMenu(host, menu) {
   host.addEventListener('contextmenu', (event) => {
-    event.preventDefault()
     menu.open = true
     menu.x = event.clientX
     menu.y = event.clientY
