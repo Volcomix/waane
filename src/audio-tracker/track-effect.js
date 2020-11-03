@@ -42,5 +42,21 @@ export default defineCustomElement('track-effect', {
     observe('value', () => {
       span.textContent = host.value
     })
+
+    host.addEventListener('keydown', (event) => {
+      if (event.key === 'Delete') {
+        host.value = '··'
+        return
+      }
+      if (!/^[0-9A-F]$/i.test(event.key)) {
+        return
+      }
+      let value = host.value
+      if (/^[0-9A-F]+$/.test(value)) {
+        host.value = `${value.substr(1)}${event.key.toUpperCase()}`
+      } else {
+        host.value = `0${event.key.toUpperCase()}`
+      }
+    })
   },
 })
