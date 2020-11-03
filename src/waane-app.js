@@ -17,6 +17,7 @@ export default defineCustomElement('waane-app', {
     }
 
     main {
+      position: relative;
       flex: 1;
     }
   `,

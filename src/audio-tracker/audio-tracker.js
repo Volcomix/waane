@@ -7,17 +7,26 @@ import { css, defineCustomElement, html } from '../shared/core/element.js'
 
 export default defineCustomElement('audio-tracker', {
   styles: css`
-    :host {
-      position: relative;
-    }
-
     div {
-      box-sizing: border-box;
-      height: 100%;
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
       padding: 40px 16px 16px 16px;
       display: flex;
       align-items: flex-start;
+      overflow: auto;
       background-color: rgb(var(--color-surface));
+    }
+
+    div > *:last-child::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: -16px;
+      width: 1px;
+      height: 1px;
     }
 
     w-fab {
