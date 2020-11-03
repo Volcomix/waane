@@ -51,62 +51,7 @@ export default defineCustomElement('audio-tracker', {
       <w-icon>add</w-icon>
       Add track
     </w-fab>
-    <div>
-      <audio-track label="1">
-        <track-effect value="FF"></track-effect>
-        <track-effect></track-effect>
-        <track-effect></track-effect>
-        <track-effect value="88"></track-effect>
-        <track-effect></track-effect>
-        <track-effect value="88"></track-effect>
-        <track-effect></track-effect>
-        <track-effect value="88"></track-effect>
-        <track-effect value="FF"></track-effect>
-        <track-effect></track-effect>
-        <track-effect></track-effect>
-        <track-effect value="88"></track-effect>
-        <track-effect></track-effect>
-        <track-effect></track-effect>
-        <track-effect value="88"></track-effect>
-        <track-effect value="88"></track-effect>
-      </audio-track>
-      <audio-track label="2">
-        <track-effect></track-effect>
-        <track-effect></track-effect>
-        <track-effect></track-effect>
-        <track-effect></track-effect>
-        <track-effect value="FF"></track-effect>
-        <track-effect></track-effect>
-        <track-effect></track-effect>
-        <track-effect></track-effect>
-        <track-effect></track-effect>
-        <track-effect value="88"></track-effect>
-        <track-effect></track-effect>
-        <track-effect></track-effect>
-        <track-effect value="FF"></track-effect>
-        <track-effect></track-effect>
-        <track-effect></track-effect>
-        <track-effect></track-effect>
-      </audio-track>
-      <audio-track label="3">
-        <track-effect value="88"></track-effect>
-        <track-effect></track-effect>
-        <track-effect value="88"></track-effect>
-        <track-effect></track-effect>
-        <track-effect value="88"></track-effect>
-        <track-effect></track-effect>
-        <track-effect value="88"></track-effect>
-        <track-effect></track-effect>
-        <track-effect value="88"></track-effect>
-        <track-effect></track-effect>
-        <track-effect value="88"></track-effect>
-        <track-effect></track-effect>
-        <track-effect value="88"></track-effect>
-        <track-effect></track-effect>
-        <track-effect value="88"></track-effect>
-        <track-effect></track-effect>
-      </audio-track>
-    </div>
+    <div></div>
   `,
   setup({ host }) {
     const fab = /** @type {HTMLElement} */ (host.shadowRoot.querySelector(
@@ -114,22 +59,13 @@ export default defineCustomElement('audio-tracker', {
     ))
     const div = host.shadowRoot.querySelector('div')
 
-    host.shadowRoot.querySelectorAll('audio-track').forEach((audioTrack) => {
-      audioTrack.querySelectorAll('track-effect').forEach((
-        /** @type {TrackEffect} */ trackEffect,
-        i,
-      ) => {
-        trackEffect.beat = i % 4 === 0
-      })
-    })
-
-    let trackIndex = 4
+    let trackId = 1
 
     fab.addEventListener('click', () => {
       const audioTrack = /** @type {AudioTrack} */ (document.createElement(
         'audio-track',
       ))
-      audioTrack.label = `${trackIndex++}`
+      audioTrack.label = `${trackId++}`
       for (let i = 0; i < 16; i++) {
         const trackEffect = /** @type {TrackEffect} */ (document.createElement(
           'track-effect',
