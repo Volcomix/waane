@@ -1,4 +1,5 @@
 import { css, defineCustomElement, html } from '../shared/core/element.js'
+import useKeyboardNavigation from './use-keyboard-navigation.js'
 
 /**
  * @typedef {import('../shared/base/menu').default} Menu
@@ -69,6 +70,8 @@ export default defineCustomElement('audio-tracker', {
     const menuItemDelete = /** @type {HTMLElement} */ (host.shadowRoot.querySelector(
       '#delete',
     ))
+
+    useKeyboardNavigation(div)
 
     let trackId = 1
 
