@@ -19,21 +19,41 @@ export default defineCustomElement('audio-node-editor', {
     w-fab {
       position: absolute;
       left: 8px;
+      opacity: 0;
+      transform: translateY(-50%) scale(0.3);
+      transition: opacity 75ms linear 75ms,
+        transform 150ms var(--easing-accelerated);
+    }
+
+    :host([active]) w-fab {
+      opacity: 1;
       transform: translateY(-50%);
+      transition: opacity 75ms linear, transform 150ms var(--easing-decelerated);
     }
 
     w-node-editor {
       height: 100%;
+      opacity: 0;
+      transform: translateX(100px);
+      transition: opacity 150ms var(--easing-accelerated),
+        transform 150ms var(--easing-accelerated);
+    }
+
+    :host([active]) w-node-editor {
+      opacity: 1;
+      transform: none;
+      transition-timing-function: var(--easing-decelerated),
+        var(--easing-decelerated);
     }
 
     w-graph-node-output[type='audio'],
     w-graph-node-input[type='audio'] {
-      --socket-color: var(--color-additional1);
+      --color-socket: var(--color-additional1);
     }
 
     w-graph-node-output[type='trigger'],
     w-graph-node-input[type='trigger'] {
-      --socket-color: var(--color-additional2);
+      --color-socket: var(--color-additional2);
     }
   `,
   template: html`
@@ -65,6 +85,9 @@ export default defineCustomElement('audio-node-editor', {
       </w-menu-item>
     </w-menu>
   `,
+  properties: {
+    active: Boolean,
+  },
   setup({ host }) {
     const fab = /** @type {HTMLElement} */ (host.shadowRoot.querySelector(
       'w-fab',

@@ -12,7 +12,18 @@ export default defineCustomElement('audio-tracker', {
     w-fab {
       position: absolute;
       left: 8px;
+      opacity: 0;
+      transform: translateY(-50%) scale(0.3);
+      transition: opacity 75ms linear 75ms,
+        transform 150ms var(--easing-accelerated);
+      --color-fab: var(--color-secondary);
+      --color-on-fab: var(--color-on-secondary);
+    }
+
+    :host([active]) w-fab {
+      opacity: 1;
       transform: translateY(-50%);
+      transition: opacity 75ms linear, transform 150ms var(--easing-decelerated);
     }
 
     div {
@@ -26,6 +37,17 @@ export default defineCustomElement('audio-tracker', {
       align-items: flex-start;
       overflow: auto;
       background-color: rgb(var(--color-surface));
+      opacity: 0;
+      transform: translateX(-100px);
+      transition: opacity 150ms var(--easing-accelerated),
+        transform 150ms var(--easing-accelerated);
+    }
+
+    :host([active]) div {
+      opacity: 1;
+      transform: none;
+      transition-timing-function: var(--easing-decelerated),
+        var(--easing-decelerated);
     }
 
     div::before {
@@ -61,6 +83,9 @@ export default defineCustomElement('audio-tracker', {
       </w-menu-item>
     </w-menu>
   `,
+  properties: {
+    active: Boolean,
+  },
   setup({ host }) {
     const fab = /** @type {HTMLElement} */ (host.shadowRoot.querySelector(
       'w-fab',

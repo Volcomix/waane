@@ -29,7 +29,7 @@ export default defineCustomElement('w-graph-node-socket', {
       width: 10px;
       height: 10px;
       border-radius: 50%;
-      background-color: rgb(var(--socket-color, var(--color-secondary)));
+      background-color: rgb(var(--color-socket, var(--color-secondary)));
       transition: opacity 300ms var(--easing-standard);
     }
 

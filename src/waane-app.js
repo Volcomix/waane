@@ -28,7 +28,7 @@ export default defineCustomElement('waane-app', {
     </header>
     <main>
       <audio-tracker hidden></audio-tracker>
-      <audio-node-editor></audio-node-editor>
+      <audio-node-editor active></audio-node-editor>
     </main>
   `,
   setup({ host }) {
@@ -39,10 +39,10 @@ export default defineCustomElement('waane-app', {
       'w-tab',
     ))
 
-    const audioTracker = /** @type {HTMLElement} */ (host.shadowRoot.querySelector(
+    const audioTracker = /** @type {import('./audio-tracker/audio-tracker.js').default} */ (host.shadowRoot.querySelector(
       'audio-tracker',
     ))
-    const audioNodeEditor = /** @type {HTMLElement} */ (host.shadowRoot.querySelector(
+    const audioNodeEditor = /** @type {import('./audio-node-editor/audio-node-editor.js').default} */ (host.shadowRoot.querySelector(
       'audio-node-editor',
     ))
 
@@ -51,17 +51,25 @@ export default defineCustomElement('waane-app', {
     })
 
     tracksTab.addEventListener('click', () => {
-      tracksTab.active = true
       nodesTab.active = false
       audioTracker.hidden = false
-      audioNodeEditor.hidden = true
+      audioNodeEditor.active = false
+      setTimeout(() => {
+        tracksTab.active = true
+        audioTracker.active = true
+        audioNodeEditor.hidden = true
+      }, 150)
     })
 
     nodesTab.addEventListener('click', () => {
       tracksTab.active = false
-      nodesTab.active = true
-      audioTracker.hidden = true
+      audioTracker.active = false
       audioNodeEditor.hidden = false
+      setTimeout(() => {
+        nodesTab.active = true
+        audioTracker.hidden = true
+        audioNodeEditor.active = true
+      }, 150)
     })
   },
 })

@@ -9,8 +9,8 @@ export default defineCustomElement('w-fab', {
       padding: 12px 20px 12px 12px;
       display: flex;
       align-items: center;
-      background-color: rgb(var(--color-primary));
-      color: rgb(var(--color-on-primary));
+      background-color: rgb(var(--color-fab, var(--color-primary)));
+      color: rgb(var(--color-on-fab, var(--color-on-primary)));
       white-space: nowrap;
       cursor: pointer;
       user-select: none;
@@ -40,11 +40,15 @@ export default defineCustomElement('w-fab', {
     }
 
     :host(:hover)::before {
-      background-color: rgba(var(--color-on-primary) / 0.08);
+      background-color: rgba(
+        var(--color-on-fab, var(--color-on-primary)) / 0.08
+      );
     }
 
     :host(:active)::before {
-      background-color: rgba(var(--color-on-primary) / 0.32);
+      background-color: rgba(
+        var(--color-on-fab, var(--color-on-primary)) / 0.32
+      );
     }
 
     ::slotted(w-icon) {
