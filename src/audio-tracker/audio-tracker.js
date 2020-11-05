@@ -9,6 +9,12 @@ import useKeyboardNavigation from './use-keyboard-navigation.js'
 
 export default defineCustomElement('audio-tracker', {
   styles: css`
+    w-fab {
+      position: absolute;
+      left: 8px;
+      transform: translateY(-50%);
+    }
+
     div {
       position: absolute;
       top: 0;
@@ -40,12 +46,6 @@ export default defineCustomElement('audio-tracker', {
       right: -16px;
       width: 1px;
       height: 1px;
-    }
-
-    w-fab {
-      position: absolute;
-      left: 8px;
-      transform: translateY(-50%);
     }
   `,
   template: html`

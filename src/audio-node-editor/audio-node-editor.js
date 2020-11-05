@@ -16,6 +16,12 @@ import useNodeEditorMenu from './use-node-editor-menu.js'
 
 export default defineCustomElement('audio-node-editor', {
   styles: css`
+    w-fab {
+      position: absolute;
+      left: 8px;
+      transform: translateY(-50%);
+    }
+
     w-node-editor {
       height: 100%;
     }
@@ -31,6 +37,10 @@ export default defineCustomElement('audio-node-editor', {
     }
   `,
   template: html`
+    <w-fab>
+      <w-icon>add</w-icon>
+      Add node
+    </w-fab>
     <w-node-editor></w-node-editor>
     <w-menu id="node-editor-menu">
       <w-menu-item value="node-track">Track</w-menu-item>
@@ -56,6 +66,9 @@ export default defineCustomElement('audio-node-editor', {
     </w-menu>
   `,
   setup({ host }) {
+    const fab = /** @type {HTMLElement} */ (host.shadowRoot.querySelector(
+      'w-fab',
+    ))
     const nodeEditor = /** @type {NodeEditor} */ (host.shadowRoot.querySelector(
       'w-node-editor',
     ))
@@ -125,6 +138,13 @@ export default defineCustomElement('audio-node-editor', {
         })
       })
     }
+
+    fab.addEventListener('click', () => {
+      const { x, y } = fab.getBoundingClientRect()
+      nodeEditorMenu.open = true
+      nodeEditorMenu.x = x
+      nodeEditorMenu.y = y
+    })
 
     nodeEditorMenu.addEventListener('click', (event) => {
       const menuItem = /** @type {MenuItem} */ (event.target)
