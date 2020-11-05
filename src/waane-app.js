@@ -7,6 +7,7 @@ export default defineCustomElement('waane-app', {
       height: 100%;
       display: flex;
       flex-direction: column;
+      overflow: hidden;
     }
 
     header {
