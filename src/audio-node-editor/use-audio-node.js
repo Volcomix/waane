@@ -29,8 +29,8 @@ import { bindAudioInput } from './use-audio-link.js'
 /**
  * @template {PropertyTypes} T
  * @callback UseProperty
- * @param {NumberField} field
- * @param {FilterPropertyNames<T, typeof Number>} propertyName
+ * @param {NumberField | Select} field
+ * @param {FilterPropertyNames<T, typeof Number | typeof String>} propertyName
  * @returns {void}
  */
 
@@ -99,7 +99,7 @@ export default function createAudioNode(setup) {
           audioNode[propertyName] = host[propertyName]
         })
 
-        field.addEventListener('change', () => {
+        field.addEventListener('input', () => {
           host[propertyName] = /** @type {any} */ (field.value)
         })
       },

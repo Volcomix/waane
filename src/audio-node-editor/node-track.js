@@ -1,9 +1,12 @@
+import useAudioTrack from '../audio-tracker/use-audio-track.js'
 import { defineCustomElement, html } from '../shared/core/element.js'
 import useAudioContext from './use-audio-context.js'
 import { bindAudioOutput } from './use-audio-link.js'
+import createAudioNode from './use-audio-node.js'
 
 /**
  * @typedef {import('./node-schedule.js').Schedule} Schedule
+ * @typedef {import('../shared/base/select.js').default} Select
  */
 
 export default defineCustomElement('node-track', {
@@ -11,10 +14,14 @@ export default defineCustomElement('node-track', {
     <w-graph-node>
       <span slot="title">Track</span>
       <w-graph-node-output type="trigger">On</w-graph-node-output>
+      <w-select label="Track"></w-select>
     </w-graph-node>
   `,
   shadow: false,
-  setup({ host, connected, disconnected }) {
+  properties: {
+    track: String,
+  },
+  setup: createAudioNode(({ host, connected, disconnected, useProperty }) => {
     const audioContext = useAudioContext()
 
     /** @type {Set<Schedule>} */
@@ -47,12 +54,15 @@ export default defineCustomElement('node-track', {
     }
 
     connected(() => {
+      const selectField = /** @type {Select} */ (host.querySelector('w-select'))
+      useAudioTrack(selectField)
       bindAudioOutput(host.querySelector('w-graph-node-output'), track)
+      useProperty(selectField, 'track')
       scheduleTrigger()
     })
 
     disconnected(() => {
       window.clearTimeout(timeoutID)
     })
-  },
+  }),
 })

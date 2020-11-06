@@ -11,6 +11,7 @@ export default defineCustomElement('w-text-field', {
   styles: css`
     :host {
       position: relative;
+      min-width: 140px;
       height: 48px;
       display: flex;
       border-bottom: 1px solid rgba(var(--color-on-surface) / 0.42);
@@ -134,7 +135,7 @@ export default defineCustomElement('w-text-field', {
     }
   `,
   template: html`
-    <input id="input" placeholder=" " />
+    <input id="input" required placeholder=" " />
     <label for="input"></label>
     <span><slot></slot></span>
     <slot name="trailing"></slot>
@@ -144,7 +145,6 @@ export default defineCustomElement('w-text-field', {
     value: String,
     type: String,
     step: String,
-    required: Boolean,
   },
   setup({ host, observe }) {
     const label = host.shadowRoot.querySelector('label')
@@ -160,20 +160,19 @@ export default defineCustomElement('w-text-field', {
     })
 
     observe('type', () => {
-      input.type = host.type
-      if (host.type === 'hidden') {
+      if (host.type === 'select') {
+        input.removeAttribute('type')
+        input.hidden = true
         span.tabIndex = 0
       } else {
+        input.type = host.type
+        input.hidden = false
         span.removeAttribute('tabIndex')
       }
     })
 
     observe('step', () => {
       input.step = host.step
-    })
-
-    observe('required', () => {
-      input.required = host.required
     })
 
     input.addEventListener('input', () => {

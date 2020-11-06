@@ -1,5 +1,6 @@
 import { css, defineCustomElement, html } from '../shared/core/element.js'
 import typography from '../shared/core/typography.js'
+import { registerAudioTrack } from './use-audio-track.js'
 
 const link = document.createElement('link')
 link.href =
@@ -94,8 +95,12 @@ export default defineCustomElement('audio-track', {
   properties: {
     label: String,
   },
-  setup({ host, observe }) {
+  setup({ host, connected, observe }) {
     const label = host.shadowRoot.querySelector('label')
+
+    connected(() => {
+      registerAudioTrack(host)
+    })
 
     observe('label', () => {
       label.textContent = host.label

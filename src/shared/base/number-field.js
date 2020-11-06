@@ -1,9 +1,7 @@
 import { defineCustomElement, html } from '../core/element.js'
 
 export default defineCustomElement('w-number-field', {
-  template: html`
-    <w-text-field type="number" step="any" required></w-text-field>
-  `,
+  template: html`<w-text-field type="number" step="any"></w-text-field>`,
   properties: {
     label: String,
     value: Number,

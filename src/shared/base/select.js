@@ -32,7 +32,7 @@ export default defineCustomElement('w-select', {
   `,
   template: html`
     <w-menu><slot></slot></w-menu>
-    <w-text-field type="hidden">
+    <w-text-field type="select">
       <span></span>
       <w-icon slot="trailing">arrow_drop_down</w-icon>
     </w-text-field>
@@ -91,7 +91,7 @@ export default defineCustomElement('w-select', {
       const menuItem = /** @type {MenuItem} */ (event.target)
       if (menuItem.value != null) {
         host.value = menuItem.value
-        host.dispatchEvent(new Event('change'))
+        host.dispatchEvent(new Event('input'))
       }
     })
   },
