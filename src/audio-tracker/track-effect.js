@@ -40,12 +40,16 @@ export default defineCustomElement('track-effect', {
     const span = host.shadowRoot.querySelector('span')
 
     observe('value', () => {
-      span.textContent = host.value
+      if (host.value === null) {
+        span.textContent = '··'
+      } else {
+        span.textContent = host.value
+      }
     })
 
     host.addEventListener('keydown', (event) => {
       if (event.key === 'Delete') {
-        host.value = '··'
+        host.value = null
         return
       }
       if (!/^[0-9A-F]$/i.test(event.key)) {

@@ -76,10 +76,10 @@ export default function createAudioNode(setup) {
     setup({
       ...options,
       useProperty(field, propertyName) {
-        field.value = /** @type {number} */ (host[propertyName])
+        field.value = /** @type {number | string} */ (host[propertyName])
 
         observe(propertyName, () => {
-          field.value = /** @type {number} */ (host[propertyName])
+          field.value = /** @type {number | string} */ (host[propertyName])
         })
 
         field.addEventListener('input', () => {
