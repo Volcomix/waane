@@ -1,5 +1,5 @@
 import { expect, test } from '@jest/globals'
-import { click, contextMenu, setup } from './helpers'
+import { click, contextMenu, setup } from '../../testing/helpers'
 
 test('connects and disconnects audio nodes', () => {
   const {

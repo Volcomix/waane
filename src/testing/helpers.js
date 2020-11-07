@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals'
-import '../../index'
-import { html } from '../../shared/core/element'
+import '../index'
+import { html } from '../shared/core/element'
 
 const oscillatorMock = {
   type: 'sine',
@@ -103,17 +103,16 @@ export function getSelectOption(element, textContent) {
 export function setup() {
   clearOscillatorMock()
 
-  document.body.innerHTML = html`<audio-node-editor></audio-node-editor>`
-  const audioNodeEditor = /** @type {HTMLElement} */ (document.body.querySelector(
-    'audio-node-editor',
-  ))
+  document.body.innerHTML = html`<waane-app></waane-app>`
+  const waaneApp = document.body.querySelector('waane-app')
+  const audioNodeEditor = waaneApp.shadowRoot.querySelector('audio-node-editor')
   const nodeEditor = /** @type {HTMLElement} */ (audioNodeEditor.shadowRoot.querySelector(
     'w-node-editor',
   ))
 
   function getGraphNodes() {
     return [
-      .../** @type {NodeListOf<import('../../shared/node-editor/graph-node.js').default>} */ (nodeEditor.querySelectorAll(
+      .../** @type {NodeListOf<import('../shared/node-editor/graph-node.js').default>} */ (nodeEditor.querySelectorAll(
         'w-graph-node',
       )),
     ]

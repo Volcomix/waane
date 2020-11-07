@@ -1,5 +1,5 @@
 import { expect, test } from '@jest/globals'
-import { click, contextMenu, setup } from './helpers'
+import { click, contextMenu, setup } from '../../testing/helpers'
 
 test('adds a link from an output to an input', () => {
   const { getGraphNodes, addGraphLink, getGraphLinks, addAudioNode } = setup()

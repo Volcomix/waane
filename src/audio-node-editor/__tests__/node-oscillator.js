@@ -6,7 +6,7 @@ import {
   getSelectOption,
   getSelectOptions,
   setup,
-} from './helpers'
+} from '../../testing/helpers'
 
 test('starts and stops', () => {
   const { oscillatorMock, getGraphNodes, getMenuItem, addAudioNode } = setup()

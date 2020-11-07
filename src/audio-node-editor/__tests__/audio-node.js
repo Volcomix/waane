@@ -6,7 +6,7 @@ import {
   findFieldInputByLabel,
   getSelectOption,
   setup,
-} from './helpers'
+} from '../../testing/helpers'
 
 test('has no node by default', () => {
   const { getGraphNodes } = setup()
