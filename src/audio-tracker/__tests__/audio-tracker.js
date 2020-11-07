@@ -1,36 +1,14 @@
 import { expect, test } from '@jest/globals'
 import '../../index'
-import { html } from '../../shared/core/element'
-
-function setup() {
-  document.body.innerHTML = html`<audio-tracker></audio-tracker>`
-  const audioTracker = document.body.querySelector('audio-tracker')
-  const addButton = /** @type {HTMLElement} */ (audioTracker.shadowRoot.querySelector(
-    'w-fab',
-  ))
-
-  function getAudioTracks() {
-    return [...audioTracker.shadowRoot.querySelectorAll('audio-track')]
-  }
-
-  function addAudioTrack() {
-    addButton.click()
-  }
-
-  return {
-    audioTracker,
-    getAudioTracks,
-    addAudioTrack,
-  }
-}
+import { setup } from '../../testing/helpers'
 
 test('has no track by default', () => {
-  const { getAudioTracks } = setup()
+  const { getAudioTracks } = setup('Tracks')
   expect(getAudioTracks()).toHaveLength(0)
 })
 
 test('adds tracks', () => {
-  const { getAudioTracks, addAudioTrack } = setup()
+  const { getAudioTracks, addAudioTrack } = setup('Tracks')
   addAudioTrack()
   expect(
     getAudioTracks().map(
@@ -46,7 +24,7 @@ test('adds tracks', () => {
 })
 
 test('deletes tracks', () => {
-  const { audioTracker, getAudioTracks, addAudioTrack } = setup()
+  const { audioTracker, getAudioTracks, addAudioTrack } = setup('Tracks')
   addAudioTrack()
   addAudioTrack()
   const audioTracks = getAudioTracks()

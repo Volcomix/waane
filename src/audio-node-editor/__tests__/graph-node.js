@@ -2,7 +2,7 @@ import { expect, test } from '@jest/globals'
 import { click, contextMenu, setup } from '../../testing/helpers'
 
 test('selects nodes', () => {
-  const { nodeEditor, getGraphNodes, addAudioNode } = setup()
+  const { nodeEditor, getGraphNodes, addAudioNode } = setup('Nodes')
   addAudioNode('Oscillator')
   addAudioNode('Oscillator')
   const [graphNode1, graphNode2] = getGraphNodes()
@@ -19,7 +19,7 @@ test('selects nodes', () => {
 })
 
 test('inverts node selection', () => {
-  const { getGraphNodes, addAudioNode } = setup()
+  const { getGraphNodes, addAudioNode } = setup('Nodes')
   addAudioNode('Oscillator')
   addAudioNode('Oscillator')
   const [graphNode1, graphNode2] = getGraphNodes()
@@ -41,7 +41,7 @@ test('inverts node selection', () => {
 })
 
 test('moves nodes', () => {
-  const { getGraphNodes, moveGraphNode, addAudioNode } = setup()
+  const { getGraphNodes, moveGraphNode, addAudioNode } = setup('Nodes')
   addAudioNode('Oscillator')
   addAudioNode('Oscillator')
   addAudioNode('Oscillator')
@@ -75,7 +75,7 @@ test('moves nodes', () => {
 })
 
 test('opens context menu on selected nodes', () => {
-  const { getGraphNodes, getMenuItems, addAudioNode } = setup()
+  const { getGraphNodes, getMenuItems, addAudioNode } = setup('Nodes')
   addAudioNode('Oscillator')
   addAudioNode('Oscillator')
   addAudioNode('Oscillator')
@@ -114,7 +114,9 @@ test('opens context menu on selected nodes', () => {
 })
 
 test('duplicates nodes', () => {
-  const { nodeEditor, getGraphNodes, getMenuItem, addAudioNode } = setup()
+  const { nodeEditor, getGraphNodes, getMenuItem, addAudioNode } = setup(
+    'Nodes',
+  )
   addAudioNode('Oscillator')
   addAudioNode('Oscillator')
   addAudioNode('Oscillator')
@@ -140,7 +142,7 @@ test('duplicates nodes', () => {
 })
 
 test('deletes nodes', () => {
-  const { getGraphNodes, getMenuItem, addAudioNode } = setup()
+  const { getGraphNodes, getMenuItem, addAudioNode } = setup('Nodes')
   addAudioNode('Oscillator')
   addAudioNode('Oscillator')
   addAudioNode('Oscillator')

@@ -9,7 +9,9 @@ import {
 } from '../../testing/helpers'
 
 test('starts and stops', () => {
-  const { oscillatorMock, getGraphNodes, getMenuItem, addAudioNode } = setup()
+  const { oscillatorMock, getGraphNodes, getMenuItem, addAudioNode } = setup(
+    'Nodes',
+  )
   addAudioNode('Oscillator')
 
   expect(oscillatorMock.start).toHaveBeenCalledTimes(1)
@@ -22,7 +24,7 @@ test('starts and stops', () => {
 })
 
 test('changes type', () => {
-  const { oscillatorMock, getGraphNodes, addAudioNode } = setup()
+  const { oscillatorMock, getGraphNodes, addAudioNode } = setup('Nodes')
   addAudioNode('Oscillator')
   const [oscillator] = getGraphNodes()
   const typeField = findFieldByLabel(oscillator, 'w-select', 'Type')
@@ -60,7 +62,7 @@ test('changes type', () => {
 })
 
 test('changes frequency', () => {
-  const { oscillatorMock, getGraphNodes, addAudioNode } = setup()
+  const { oscillatorMock, getGraphNodes, addAudioNode } = setup('Nodes')
   addAudioNode('Oscillator')
   const [oscillator] = getGraphNodes()
   const frequencyFieldInput = findFieldInputByLabel(
@@ -78,7 +80,9 @@ test('changes frequency', () => {
 })
 
 test('connects to frequency', () => {
-  const { oscillatorMock, getGraphNodes, addGraphLink, addAudioNode } = setup()
+  const { oscillatorMock, getGraphNodes, addGraphLink, addAudioNode } = setup(
+    'Nodes',
+  )
   addAudioNode('Oscillator')
   addAudioNode('Oscillator')
   const [oscillator1, oscillator2] = getGraphNodes()
@@ -89,7 +93,7 @@ test('connects to frequency', () => {
 })
 
 test('changes detune', () => {
-  const { oscillatorMock, getGraphNodes, addAudioNode } = setup()
+  const { oscillatorMock, getGraphNodes, addAudioNode } = setup('Nodes')
   addAudioNode('Oscillator')
   const [oscillator] = getGraphNodes()
   const detuneFieldInput = findFieldInputByLabel(
@@ -107,7 +111,9 @@ test('changes detune', () => {
 })
 
 test('connects to detune', () => {
-  const { oscillatorMock, getGraphNodes, addGraphLink, addAudioNode } = setup()
+  const { oscillatorMock, getGraphNodes, addGraphLink, addAudioNode } = setup(
+    'Nodes',
+  )
   addAudioNode('Oscillator')
   addAudioNode('Oscillator')
   const [oscillator1, oscillator2] = getGraphNodes()

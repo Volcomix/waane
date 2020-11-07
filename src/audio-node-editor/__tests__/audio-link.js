@@ -8,7 +8,7 @@ test('connects and disconnects audio nodes', () => {
     getGraphNodes,
     addGraphLink,
     addAudioNode,
-  } = setup()
+  } = setup('Nodes')
 
   addAudioNode('Oscillator')
   addAudioNode('Audio destination')
@@ -34,7 +34,7 @@ test('disconnects audio nodes when deleting output node', () => {
     addGraphLink,
     getMenuItem,
     addAudioNode,
-  } = setup()
+  } = setup('Nodes')
 
   addAudioNode('Oscillator')
   addAudioNode('Audio destination')
@@ -54,7 +54,7 @@ test('disconnects audio nodes when deleting input node', () => {
     addGraphLink,
     getMenuItem,
     addAudioNode,
-  } = setup()
+  } = setup('Nodes')
 
   addAudioNode('Oscillator')
   addAudioNode('Audio destination')
@@ -74,7 +74,7 @@ test('connects linked audio nodes when duplicating them', () => {
     addGraphLink,
     getMenuItem,
     addAudioNode,
-  } = setup()
+  } = setup('Nodes')
 
   addAudioNode('Oscillator')
   addAudioNode('Audio destination')

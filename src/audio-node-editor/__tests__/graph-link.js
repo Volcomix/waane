@@ -2,7 +2,9 @@ import { expect, test } from '@jest/globals'
 import { click, contextMenu, setup } from '../../testing/helpers'
 
 test('adds a link from an output to an input', () => {
-  const { getGraphNodes, addGraphLink, getGraphLinks, addAudioNode } = setup()
+  const { getGraphNodes, addGraphLink, getGraphLinks, addAudioNode } = setup(
+    'Nodes',
+  )
   addAudioNode('Oscillator')
   addAudioNode('Audio destination')
   const [oscillator, audioDestination] = getGraphNodes()
@@ -12,7 +14,9 @@ test('adds a link from an output to an input', () => {
 })
 
 test('adds a link from an input to an output', () => {
-  const { nodeEditor, getGraphNodes, getGraphLinks, addAudioNode } = setup()
+  const { nodeEditor, getGraphNodes, getGraphLinks, addAudioNode } = setup(
+    'Nodes',
+  )
   addAudioNode('Oscillator')
   addAudioNode('Audio destination')
   const [oscillator, audioDestination] = getGraphNodes()
@@ -38,7 +42,7 @@ test('adds a link from an input to an output', () => {
 })
 
 test('cancels adding a link when releasing on node editor', () => {
-  const { nodeEditor, getGraphLinks, addAudioNode } = setup()
+  const { nodeEditor, getGraphLinks, addAudioNode } = setup('Nodes')
   addAudioNode('Oscillator')
 
   const graphNodeOutput = nodeEditor.querySelector('w-graph-node-output')
@@ -57,7 +61,9 @@ test('cancels adding a link when releasing on node editor', () => {
 })
 
 test('cancels adding a link if sockets are already linked', () => {
-  const { getGraphNodes, addGraphLink, getGraphLinks, addAudioNode } = setup()
+  const { getGraphNodes, addGraphLink, getGraphLinks, addAudioNode } = setup(
+    'Nodes',
+  )
   addAudioNode('Oscillator')
   addAudioNode('Audio destination')
   const [oscillator, audioDestination] = getGraphNodes()
@@ -77,7 +83,7 @@ test('deletes links when deleting output node', () => {
     getGraphLinks,
     getMenuItem,
     addAudioNode,
-  } = setup()
+  } = setup('Nodes')
 
   addAudioNode('Oscillator')
   addAudioNode('Oscillator')
@@ -114,7 +120,7 @@ test('deletes links when deleting input node', () => {
     getGraphLinks,
     getMenuItem,
     addAudioNode,
-  } = setup()
+  } = setup('Nodes')
 
   addAudioNode('Oscillator')
   addAudioNode('Oscillator')
@@ -147,7 +153,7 @@ test('duplicates links when duplicating nodes', () => {
     getGraphLinks,
     getMenuItem,
     addAudioNode,
-  } = setup()
+  } = setup('Nodes')
 
   addAudioNode('Oscillator')
   addAudioNode('Oscillator')
@@ -197,7 +203,7 @@ test('disconnects a link', () => {
     addGraphLink,
     getGraphLinks,
     addAudioNode,
-  } = setup()
+  } = setup('Nodes')
 
   addAudioNode('Oscillator')
   addAudioNode('Audio destination')
@@ -229,7 +235,7 @@ test('disconnects a specific link from a node', () => {
     addGraphLink,
     getGraphLinks,
     addAudioNode,
-  } = setup()
+  } = setup('Nodes')
 
   addAudioNode('Oscillator')
   addAudioNode('Oscillator')

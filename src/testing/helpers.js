@@ -100,15 +100,57 @@ export function getSelectOption(element, textContent) {
   )
 }
 
-export function setup() {
+/**
+ * @param {'Tracks' | 'Nodes'} initialTabTextContent
+ */
+export function setup(initialTabTextContent) {
   clearOscillatorMock()
 
   document.body.innerHTML = html`<waane-app></waane-app>`
   const waaneApp = document.body.querySelector('waane-app')
+
   const audioNodeEditor = waaneApp.shadowRoot.querySelector('audio-node-editor')
   const nodeEditor = /** @type {HTMLElement} */ (audioNodeEditor.shadowRoot.querySelector(
     'w-node-editor',
   ))
+
+  const audioTracker = waaneApp.shadowRoot.querySelector('audio-tracker')
+  const addButton = /** @type {HTMLElement} */ (audioTracker.shadowRoot.querySelector(
+    'w-fab',
+  ))
+
+  const tabs = [...waaneApp.shadowRoot.querySelectorAll('w-tab')]
+  const initialTab = /** @type {HTMLElement} */ (tabs.find(
+    (tab) => tab.textContent === initialTabTextContent,
+  ))
+  initialTab.click()
+
+  function getMenuItems() {
+    return [
+      .../** @type {NodeListOf<HTMLElement>} */ (audioNodeEditor.shadowRoot.querySelectorAll(
+        'w-menu[open] w-menu-item',
+      )),
+    ]
+  }
+
+  /**
+   * @param {string} textContent
+   */
+  function getMenuItem(textContent) {
+    return getMenuItems().find((element) =>
+      element.textContent.includes(textContent),
+    )
+  }
+
+  /**
+   * @param {string} audioNodeName
+   */
+  function addAudioNode(audioNodeName) {
+    contextMenu(nodeEditor)
+    getMenuItem(audioNodeName).click()
+    nodeEditor.dispatchEvent(new MouseEvent('mousemove'))
+    click(nodeEditor)
+  }
 
   function getGraphNodes() {
     return [
@@ -170,42 +212,30 @@ export function setup() {
     return [...nodeEditor.querySelectorAll('w-graph-link')]
   }
 
-  function getMenuItems() {
-    return [
-      .../** @type {NodeListOf<HTMLElement>} */ (audioNodeEditor.shadowRoot.querySelectorAll(
-        'w-menu[open] w-menu-item',
-      )),
-    ]
+  function addAudioTrack() {
+    addButton.click()
   }
 
-  /**
-   * @param {string} textContent
-   */
-  function getMenuItem(textContent) {
-    return getMenuItems().find((element) =>
-      element.textContent.includes(textContent),
-    )
-  }
-
-  /**
-   * @param {string} audioNodeName
-   */
-  function addAudioNode(audioNodeName) {
-    contextMenu(nodeEditor)
-    getMenuItem(audioNodeName).click()
-    nodeEditor.dispatchEvent(new MouseEvent('mousemove'))
-    click(nodeEditor)
+  function getAudioTracks() {
+    return [...audioTracker.shadowRoot.querySelectorAll('audio-track')]
   }
 
   return {
     oscillatorMock,
+
     nodeEditor,
+    audioTracker,
+
+    getMenuItems,
+    getMenuItem,
+
+    addAudioNode,
     getGraphNodes,
     moveGraphNode,
     addGraphLink,
     getGraphLinks,
-    getMenuItems,
-    getMenuItem,
-    addAudioNode,
+
+    getAudioTracks,
+    addAudioTrack,
   }
 }
