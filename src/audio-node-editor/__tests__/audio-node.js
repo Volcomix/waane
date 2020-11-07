@@ -30,7 +30,7 @@ test('opens context menu on node editor', () => {
 })
 
 test('adds an oscillator node', () => {
-  const { getGraphNodes, addAudioNode } = setup('Nodes')
+  const { addAudioNode, getGraphNodes } = setup('Nodes')
   addAudioNode('Oscillator')
   expect(getGraphNodes()).toEqual([
     expect.objectContaining({
@@ -41,7 +41,7 @@ test('adds an oscillator node', () => {
 })
 
 test('adds an audio destination node', () => {
-  const { getGraphNodes, addAudioNode } = setup('Nodes')
+  const { addAudioNode, getGraphNodes } = setup('Nodes')
   addAudioNode('Audio destination')
   expect(getGraphNodes()).toEqual([
     expect.objectContaining({
@@ -55,9 +55,9 @@ test('duplicates audio properties', () => {
   const {
     oscillatorMock,
     nodeEditor,
-    getGraphNodes,
     getMenuItem,
     addAudioNode,
+    getGraphNodes,
   } = setup('Nodes')
   addAudioNode('Oscillator')
   const [oscillator1] = getGraphNodes()

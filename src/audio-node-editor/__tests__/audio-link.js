@@ -5,9 +5,9 @@ test('connects and disconnects audio nodes', () => {
   const {
     oscillatorMock,
     nodeEditor,
+    addAudioNode,
     getGraphNodes,
     addGraphLink,
-    addAudioNode,
   } = setup('Nodes')
 
   addAudioNode('Oscillator')
@@ -30,10 +30,10 @@ test('connects and disconnects audio nodes', () => {
 test('disconnects audio nodes when deleting output node', () => {
   const {
     oscillatorMock,
-    getGraphNodes,
-    addGraphLink,
     getMenuItem,
     addAudioNode,
+    getGraphNodes,
+    addGraphLink,
   } = setup('Nodes')
 
   addAudioNode('Oscillator')
@@ -50,10 +50,10 @@ test('disconnects audio nodes when deleting output node', () => {
 test('disconnects audio nodes when deleting input node', () => {
   const {
     oscillatorMock,
-    getGraphNodes,
-    addGraphLink,
     getMenuItem,
     addAudioNode,
+    getGraphNodes,
+    addGraphLink,
   } = setup('Nodes')
 
   addAudioNode('Oscillator')
@@ -70,10 +70,10 @@ test('disconnects audio nodes when deleting input node', () => {
 test('connects linked audio nodes when duplicating them', () => {
   const {
     oscillatorMock,
-    getGraphNodes,
-    addGraphLink,
     getMenuItem,
     addAudioNode,
+    getGraphNodes,
+    addGraphLink,
   } = setup('Nodes')
 
   addAudioNode('Oscillator')

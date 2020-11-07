@@ -1,4 +1,7 @@
-import useAudioTrack from '../audio-tracker/use-audio-track.js'
+import {
+  deregisterTrackField,
+  registerTrackField,
+} from '../audio-tracker/use-audio-track.js'
 import { defineCustomElement, html } from '../shared/core/element.js'
 import useAudioContext from './use-audio-context.js'
 import { bindAudioOutput } from './use-audio-link.js'
@@ -40,6 +43,9 @@ export default defineCustomElement('node-track', {
       },
     }
 
+    /** @type {Select} */
+    let selectField
+
     /** @type {number} */
     let timeoutID
 
@@ -54,14 +60,15 @@ export default defineCustomElement('node-track', {
     }
 
     connected(() => {
-      const selectField = /** @type {Select} */ (host.querySelector('w-select'))
-      useAudioTrack(selectField)
+      selectField = host.querySelector('w-select')
       bindAudioOutput(host.querySelector('w-graph-node-output'), track)
       useProperty(selectField, 'track')
+      registerTrackField(selectField)
       scheduleTrigger()
     })
 
     disconnected(() => {
+      deregisterTrackField(selectField)
       window.clearTimeout(timeoutID)
     })
   }),

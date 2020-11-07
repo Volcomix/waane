@@ -2,6 +2,8 @@ import { jest } from '@jest/globals'
 import '../index'
 import { html } from '../shared/core/element'
 
+jest.useFakeTimers()
+
 const oscillatorMock = {
   type: 'sine',
   frequency: { value: 440 },
@@ -108,6 +110,11 @@ export function setup(initialTabTextContent) {
 
   document.body.innerHTML = html`<waane-app></waane-app>`
   const waaneApp = document.body.querySelector('waane-app')
+  const tabs = [
+    .../** @type {NodeListOf<HTMLElement>} */ (waaneApp.shadowRoot.querySelectorAll(
+      'w-tab',
+    )),
+  ]
 
   const audioNodeEditor = waaneApp.shadowRoot.querySelector('audio-node-editor')
   const nodeEditor = /** @type {HTMLElement} */ (audioNodeEditor.shadowRoot.querySelector(
@@ -119,15 +126,18 @@ export function setup(initialTabTextContent) {
     'w-fab',
   ))
 
-  const tabs = [...waaneApp.shadowRoot.querySelectorAll('w-tab')]
-  const initialTab = /** @type {HTMLElement} */ (tabs.find(
-    (tab) => tab.textContent === initialTabTextContent,
-  ))
-  initialTab.click()
+  /**
+   * @param {'Tracks' | 'Nodes'} tabTextContent
+   */
+  function navigateTo(tabTextContent) {
+    tabs.find((tab) => tab.textContent === tabTextContent).click()
+    jest.runOnlyPendingTimers()
+  }
 
   function getMenuItems() {
+    const view = waaneApp.shadowRoot.querySelector('main > [active]')
     return [
-      .../** @type {NodeListOf<HTMLElement>} */ (audioNodeEditor.shadowRoot.querySelectorAll(
+      .../** @type {NodeListOf<HTMLElement>} */ (view.shadowRoot.querySelectorAll(
         'w-menu[open] w-menu-item',
       )),
     ]
@@ -137,8 +147,8 @@ export function setup(initialTabTextContent) {
    * @param {string} textContent
    */
   function getMenuItem(textContent) {
-    return getMenuItems().find((element) =>
-      element.textContent.includes(textContent),
+    return getMenuItems().find((menuItem) =>
+      menuItem.textContent.includes(textContent),
     )
   }
 
@@ -217,8 +227,14 @@ export function setup(initialTabTextContent) {
   }
 
   function getAudioTracks() {
-    return [...audioTracker.shadowRoot.querySelectorAll('audio-track')]
+    return [
+      .../** @type {NodeListOf<import('../audio-tracker/audio-track.js').default>} */ (audioTracker.shadowRoot.querySelectorAll(
+        'audio-track',
+      )),
+    ]
   }
+
+  navigateTo(initialTabTextContent)
 
   return {
     oscillatorMock,
@@ -226,16 +242,19 @@ export function setup(initialTabTextContent) {
     nodeEditor,
     audioTracker,
 
+    navigateTo,
+
     getMenuItems,
     getMenuItem,
 
     addAudioNode,
     getGraphNodes,
     moveGraphNode,
+
     addGraphLink,
     getGraphLinks,
 
-    getAudioTracks,
     addAudioTrack,
+    getAudioTracks,
   }
 }

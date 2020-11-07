@@ -9,7 +9,7 @@ import {
 } from '../../testing/helpers'
 
 test('starts and stops', () => {
-  const { oscillatorMock, getGraphNodes, getMenuItem, addAudioNode } = setup(
+  const { oscillatorMock, getMenuItem, addAudioNode, getGraphNodes } = setup(
     'Nodes',
   )
   addAudioNode('Oscillator')
@@ -24,7 +24,7 @@ test('starts and stops', () => {
 })
 
 test('changes type', () => {
-  const { oscillatorMock, getGraphNodes, addAudioNode } = setup('Nodes')
+  const { oscillatorMock, addAudioNode, getGraphNodes } = setup('Nodes')
   addAudioNode('Oscillator')
   const [oscillator] = getGraphNodes()
   const typeField = findFieldByLabel(oscillator, 'w-select', 'Type')
@@ -62,7 +62,7 @@ test('changes type', () => {
 })
 
 test('changes frequency', () => {
-  const { oscillatorMock, getGraphNodes, addAudioNode } = setup('Nodes')
+  const { oscillatorMock, addAudioNode, getGraphNodes } = setup('Nodes')
   addAudioNode('Oscillator')
   const [oscillator] = getGraphNodes()
   const frequencyFieldInput = findFieldInputByLabel(
@@ -80,7 +80,7 @@ test('changes frequency', () => {
 })
 
 test('connects to frequency', () => {
-  const { oscillatorMock, getGraphNodes, addGraphLink, addAudioNode } = setup(
+  const { oscillatorMock, addAudioNode, getGraphNodes, addGraphLink } = setup(
     'Nodes',
   )
   addAudioNode('Oscillator')
@@ -93,7 +93,7 @@ test('connects to frequency', () => {
 })
 
 test('changes detune', () => {
-  const { oscillatorMock, getGraphNodes, addAudioNode } = setup('Nodes')
+  const { oscillatorMock, addAudioNode, getGraphNodes } = setup('Nodes')
   addAudioNode('Oscillator')
   const [oscillator] = getGraphNodes()
   const detuneFieldInput = findFieldInputByLabel(
@@ -111,7 +111,7 @@ test('changes detune', () => {
 })
 
 test('connects to detune', () => {
-  const { oscillatorMock, getGraphNodes, addGraphLink, addAudioNode } = setup(
+  const { oscillatorMock, addAudioNode, getGraphNodes, addGraphLink } = setup(
     'Nodes',
   )
   addAudioNode('Oscillator')

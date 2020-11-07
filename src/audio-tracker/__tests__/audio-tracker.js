@@ -1,6 +1,6 @@
 import { expect, test } from '@jest/globals'
 import '../../index'
-import { setup } from '../../testing/helpers'
+import { contextMenu, setup } from '../../testing/helpers'
 
 test('has no track by default', () => {
   const { getAudioTracks } = setup('Tracks')
@@ -8,7 +8,7 @@ test('has no track by default', () => {
 })
 
 test('adds tracks', () => {
-  const { getAudioTracks, addAudioTrack } = setup('Tracks')
+  const { addAudioTrack, getAudioTracks } = setup('Tracks')
   addAudioTrack()
   expect(
     getAudioTracks().map(
@@ -24,7 +24,7 @@ test('adds tracks', () => {
 })
 
 test('deletes tracks', () => {
-  const { audioTracker, getAudioTracks, addAudioTrack } = setup('Tracks')
+  const { getMenuItem, addAudioTrack, getAudioTracks } = setup('Tracks')
   addAudioTrack()
   addAudioTrack()
   const audioTracks = getAudioTracks()
@@ -32,14 +32,8 @@ test('deletes tracks', () => {
 
   expect(audioTracks).toHaveLength(2)
 
-  audioTrack1.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true }))
-  ;[
-    .../** @type {NodeListOf<HTMLElement>} */ (audioTracker.shadowRoot.querySelectorAll(
-      'w-menu[open] w-menu-item',
-    )),
-  ]
-    .find((element) => element.textContent.includes('Delete track'))
-    .click()
+  contextMenu(audioTrack1)
+  getMenuItem('Delete track').click()
 
   const remainingAudioGracks = getAudioTracks()
   expect(remainingAudioGracks).toHaveLength(1)

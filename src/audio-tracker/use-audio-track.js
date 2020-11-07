@@ -27,9 +27,16 @@ export function registerAudioTrack(audioTrack) {
 }
 
 /**
+ * @param {AudioTrack} audioTrack
+ */
+export function deregisterAudioTrack(audioTrack) {
+  audioTracks.delete(audioTrack)
+}
+
+/**
  * @param {Select} selectField
  */
-export default function useAudioTrack(selectField) {
+export function registerTrackField(selectField) {
   audioTracks.forEach((audioTrack) => {
     const menuItem = /** @type {MenuItem} */ (document.createElement(
       'w-menu-item',
@@ -39,4 +46,11 @@ export default function useAudioTrack(selectField) {
     selectField.appendChild(menuItem)
   })
   selectFields.add(selectField)
+}
+
+/**
+ * @param {Select} selectField
+ */
+export function deregisterTrackField(selectField) {
+  selectFields.delete(selectField)
 }
