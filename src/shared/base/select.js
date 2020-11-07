@@ -58,6 +58,7 @@ export default defineCustomElement('w-select', {
 
     observe('value', () => {
       textField.value = host.value
+      span.textContent = null
       menuSlot.assignedElements().forEach((element) => {
         if (!element.matches('w-menu-item')) {
           return

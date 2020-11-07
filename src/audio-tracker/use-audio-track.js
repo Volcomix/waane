@@ -31,6 +31,15 @@ export function registerAudioTrack(audioTrack) {
  */
 export function deregisterAudioTrack(audioTrack) {
   audioTracks.delete(audioTrack)
+  selectFields.forEach((selectField) => {
+    if (selectField.value === audioTrack.label) {
+      selectField.value = null
+    }
+    const menuItem = selectField.querySelector(
+      `w-menu-item[value='${audioTrack.label}']`,
+    )
+    menuItem.remove()
+  })
 }
 
 /**

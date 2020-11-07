@@ -7,6 +7,8 @@ import {
   setup,
 } from '../../testing/helpers'
 
+/** @typedef {import('../../shared/base/select.js').default} Select */
+
 test('is initialized with existing tracks', () => {
   const {
     navigateTo,
@@ -41,7 +43,7 @@ test('updates when adding tracks', () => {
   )
   addAudioNode('Track')
   const [nodeTrack] = getGraphNodes()
-  const trackField = /** @type {import('../../shared/base/select.js').default} */ (findFieldByLabel(
+  const trackField = /** @type {Select} */ (findFieldByLabel(
     nodeTrack,
     'w-select',
     'Track',
@@ -63,4 +65,55 @@ test('updates when adding tracks', () => {
   trackField.click()
   getSelectOption(trackField, '1').click()
   expect(trackField.value).toBe('1')
+})
+
+test('updates when deleting tracks', () => {
+  const {
+    navigateTo,
+    getMenuItem,
+    addAudioNode,
+    getGraphNodes,
+    addAudioTrack,
+    getAudioTracks,
+  } = setup('Tracks')
+  addAudioTrack()
+  addAudioTrack()
+  addAudioTrack()
+  const [audioTrack1, audioTrack2] = getAudioTracks()
+  navigateTo('Nodes')
+  addAudioNode('Track')
+  const [nodeTrack] = getGraphNodes()
+  const trackField = /** @type {Select} */ (findFieldByLabel(
+    nodeTrack,
+    'w-select',
+    'Track',
+  ))
+  trackField.click()
+  expect(
+    getSelectOptions(trackField).map((option) => option.textContent),
+  ).toEqual(['1', '2', '3'])
+  expect(trackField.value).toBeNull()
+
+  getSelectOption(trackField, '2').click()
+  expect(trackField.value).toBe('2')
+
+  navigateTo('Tracks')
+  contextMenu(audioTrack1)
+  getMenuItem('Delete track').click()
+  navigateTo('Nodes')
+  trackField.click()
+  expect(
+    getSelectOptions(trackField).map((option) => option.textContent),
+  ).toEqual(['2', '3'])
+  expect(trackField.value).toBe('2')
+
+  navigateTo('Tracks')
+  contextMenu(audioTrack2)
+  getMenuItem('Delete track').click()
+  navigateTo('Nodes')
+  trackField.click()
+  expect(
+    getSelectOptions(trackField).map((option) => option.textContent),
+  ).toEqual(['3'])
+  expect(trackField.value).toBeNull()
 })
