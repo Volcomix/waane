@@ -130,7 +130,6 @@ export default defineCustomElement('audio-tracker', {
     })
 
     menuItemDelete.addEventListener('click', () => {
-      // TODO remove selection in track nodes on node editor
       selectedAudioTrack.remove()
     })
   },
