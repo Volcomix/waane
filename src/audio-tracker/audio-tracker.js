@@ -118,17 +118,12 @@ export default defineCustomElement('audio-tracker', {
         'audio-track',
       ))
       audioTrack.label = `${trackId++}`
-
-      /** @type {TrackEffect[]} */
-      const trackEffects = []
-
       for (let i = 0; i < 16; i++) {
         const trackEffect = /** @type {TrackEffect} */ (document.createElement(
           'track-effect',
         ))
         trackEffect.beat = i % 4 === 0
         audioTrack.appendChild(trackEffect)
-        trackEffects.push(trackEffect)
       }
       div.appendChild(audioTrack)
     })

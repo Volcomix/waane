@@ -1,6 +1,7 @@
 import { css, defineCustomElement, html } from './shared/core/element.js'
 import elevation from './shared/core/elevation.js'
 import useExport from './use-export.js'
+import useImport from './use-import.js'
 
 export default defineCustomElement('waane-app', {
   styles: css`
@@ -80,6 +81,7 @@ export default defineCustomElement('waane-app', {
     ))
 
     useExport(exportButton, audioTracker, audioNodeEditor)
+    useImport(importButton, audioTracker, audioNodeEditor)
 
     host.addEventListener('contextmenu', (event) => {
       event.preventDefault()
