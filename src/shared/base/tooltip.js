@@ -4,6 +4,7 @@ import typography from '../core/typography.js'
 export default defineCustomElement('w-tooltip', {
   styles: css`
     :host {
+      position: relative;
       display: flex;
       justify-content: center;
     }
@@ -11,7 +12,6 @@ export default defineCustomElement('w-tooltip', {
     span {
       position: absolute;
       top: 100%;
-      right: 0;
       height: 24px;
       margin-top: 4px;
       padding: 0 8px;

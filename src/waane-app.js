@@ -12,16 +12,24 @@ export default defineCustomElement('waane-app', {
     }
 
     header {
+      position: relative;
       display: flex;
       justify-content: center;
-      align-items: center;
       background-color: rgb(var(--color-surface));
       ${elevation(4)}
     }
 
-    w-tooltip {
+    .actions {
       position: absolute;
-      right: 6px;
+      top: 0;
+      right: 4px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
+
+    w-tooltip {
+      margin: 0 6px;
     }
 
     main {
@@ -33,11 +41,18 @@ export default defineCustomElement('waane-app', {
     <header>
       <w-tab>Tracks</w-tab>
       <w-tab active>Nodes</w-tab>
-      <w-tooltip text="Export">
-        <w-button>
-          <w-icon>get_app</w-icon>
-        </w-button>
-      </w-tooltip>
+      <div class="actions">
+        <w-tooltip text="Export">
+          <w-button>
+            <w-icon>get_app</w-icon>
+          </w-button>
+        </w-tooltip>
+        <w-tooltip text="Import">
+          <w-button>
+            <w-icon>publish</w-icon>
+          </w-button>
+        </w-tooltip>
+      </div>
     </header>
     <main>
       <audio-tracker hidden></audio-tracker>
@@ -52,7 +67,10 @@ export default defineCustomElement('waane-app', {
       'w-tab',
     ))
     const exportButton = /** @type {HTMLElement} */ (host.shadowRoot.querySelector(
-      'w-button',
+      `w-tooltip[text='Export'] w-button`,
+    ))
+    const importButton = /** @type {HTMLElement} */ (host.shadowRoot.querySelector(
+      `w-tooltip[text='Import'] w-button`,
     ))
     const audioTracker = /** @type {import('./audio-tracker/audio-tracker.js').default} */ (host.shadowRoot.querySelector(
       'audio-tracker',
