@@ -86,6 +86,15 @@ export default function useExport(button, audioTracker, audioNodeEditor) {
     const nodes = exportNodes(audioNodeEditor)
     const links = exportLinks(audioNodeEditor)
     const tracks = exportTracks(audioTracker)
-    console.log({ nodeEditor, nodes, links, tracks })
+    const blob = new Blob(
+      [JSON.stringify({ nodeEditor, nodes, links, tracks }, null, 2)],
+      { type: 'application/json' },
+    )
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = 'waane-export.json'
+    link.click()
+    URL.revokeObjectURL(url)
   })
 }
