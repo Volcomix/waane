@@ -50,12 +50,12 @@ export default function useImport(button, audioTracker, audioNodeEditor) {
         )
         content.nodes.forEach((node) => {
           const audioNode = document.createElement(node.name)
+          nodeEditor.appendChild(audioNode)
           Object.entries(node.attributes).forEach(
             ([attributeName, attributeValue]) => {
               audioNode.setAttribute(attributeName, attributeValue)
             },
           )
-          nodeEditor.appendChild(audioNode)
           const graphNode = /** @type {import('./shared/node-editor/graph-node.js').default} */ (audioNode.querySelector(
             'w-graph-node',
           ))
