@@ -83,6 +83,7 @@ export default defineCustomElement('audio-track', {
       padding: 0 4px;
       background-color: rgb(var(--color-surface));
       color: rgba(var(--color-on-surface) / var(--text-medium-emphasis));
+      user-select: none;
       transition: color 200ms var(--easing-standard);
       ${typography('caption')}
     }

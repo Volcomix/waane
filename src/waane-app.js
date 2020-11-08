@@ -14,8 +14,14 @@ export default defineCustomElement('waane-app', {
     header {
       display: flex;
       justify-content: center;
+      align-items: center;
       background-color: rgb(var(--color-surface));
       ${elevation(4)}
+    }
+
+    w-button {
+      position: absolute;
+      right: 6px;
     }
 
     main {
@@ -27,6 +33,9 @@ export default defineCustomElement('waane-app', {
     <header>
       <w-tab>Tracks</w-tab>
       <w-tab active>Nodes</w-tab>
+      <w-button>
+        <w-icon>get_app</w-icon>
+      </w-button>
     </header>
     <main>
       <audio-tracker hidden></audio-tracker>
@@ -40,7 +49,9 @@ export default defineCustomElement('waane-app', {
     ] = /** @type {NodeListOf<import('./shared/base/tab.js').default>} */ (host.shadowRoot.querySelectorAll(
       'w-tab',
     ))
-
+    const exportButton = /** @type {HTMLElement} */ (host.shadowRoot.querySelector(
+      'w-button',
+    ))
     const audioTracker = /** @type {import('./audio-tracker/audio-tracker.js').default} */ (host.shadowRoot.querySelector(
       'audio-tracker',
     ))
@@ -48,7 +59,7 @@ export default defineCustomElement('waane-app', {
       'audio-node-editor',
     ))
 
-    useExport(host, audioTracker, audioNodeEditor)
+    useExport(exportButton, audioTracker, audioNodeEditor)
 
     host.addEventListener('contextmenu', (event) => {
       event.preventDefault()

@@ -74,16 +74,12 @@ function exportTracks(audioTracker) {
 }
 
 /**
- * @param {HTMLElement} host
+ * @param {HTMLElement} button
  * @param {HTMLElement} audioTracker
  * @param {HTMLElement} audioNodeEditor
  */
-export default function useExport(host, audioTracker, audioNodeEditor) {
-  host.addEventListener('click', (event) => {
-    const target = /** @type {Element} */ (event.composedPath()[0])
-    if (!target.matches('header')) {
-      return
-    }
+export default function useExport(button, audioTracker, audioNodeEditor) {
+  button.addEventListener('click', () => {
     const nodeEditor = exportAttributes(
       audioNodeEditor.shadowRoot.querySelector('w-node-editor').attributes,
     )
