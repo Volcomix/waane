@@ -19,7 +19,7 @@ export default defineCustomElement('waane-app', {
       ${elevation(4)}
     }
 
-    w-button {
+    w-tooltip {
       position: absolute;
       right: 6px;
     }
@@ -33,9 +33,11 @@ export default defineCustomElement('waane-app', {
     <header>
       <w-tab>Tracks</w-tab>
       <w-tab active>Nodes</w-tab>
-      <w-button>
-        <w-icon>get_app</w-icon>
-      </w-button>
+      <w-tooltip text="Export">
+        <w-button>
+          <w-icon>get_app</w-icon>
+        </w-button>
+      </w-tooltip>
     </header>
     <main>
       <audio-tracker hidden></audio-tracker>
