@@ -1,7 +1,7 @@
 import {
   bindAudioTrack,
   unbindAudioTrack,
-} from '../audio-tracker/use-audio-track.js'
+} from '../audio-tracker/use-audio-tracker.js'
 import { defineCustomElement, html } from '../shared/core/element.js'
 import { bindAudioOutput } from './use-audio-link.js'
 import createAudioNode from './use-audio-node.js'
@@ -9,6 +9,9 @@ import createAudioNode from './use-audio-node.js'
 /**
  * @typedef {import('./node-schedule.js').Schedule} Schedule
  * @typedef {import('../shared/base/select.js').default} Select
+ *
+ * @typedef {object} Track
+ * @property {(timer: number) => void} trigger
  */
 
 export default defineCustomElement('node-track', {

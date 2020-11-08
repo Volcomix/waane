@@ -1,6 +1,5 @@
-import useAudioContext from '../audio-node-editor/use-audio-context.js'
 import { css, defineCustomElement, html } from '../shared/core/element.js'
-import { tracksByField } from './use-audio-track.js'
+import useAudioTracker from './use-audio-tracker.js'
 import useKeyboardNavigation from './use-keyboard-navigation.js'
 
 /**
@@ -98,56 +97,20 @@ export default defineCustomElement('audio-tracker', {
       '#delete',
     ))
 
-    const audioContext = useAudioContext()
     useKeyboardNavigation(div)
+    const { start, stop } = useAudioTracker()
 
     let trackId = 1
 
     /** @type {AudioTrack} */
-    let selectedAudioTrack
-
-    /** @type {number} */
-    let timeoutID
-
-    let triggerTime = audioContext.currentTime
-    let line = 0
-
-    /** @type {Map<string, TrackEffect[]>} */
-    const trackEffectsByTrackLabel = new Map()
-
-    function trigger() {
-      tracksByField.forEach((track, selectField) => {
-        const trackLabel = selectField.value
-        if (trackLabel === null) {
-          return
-        }
-        const value = trackEffectsByTrackLabel.get(trackLabel)[line].value
-        if (value === null) {
-          return
-        }
-        track.trigger(triggerTime)
-      })
-    }
-
-    function scheduleTrigger() {
-      while (triggerTime < audioContext.currentTime + 0.1) {
-        trigger()
-        const secondsPerBeat = 60 / 120
-        triggerTime += 0.25 * secondsPerBeat
-        line++
-        if (line === 16) {
-          line = 0
-        }
-      }
-      timeoutID = window.setTimeout(scheduleTrigger, 25)
-    }
+    let selectedAudioTrack = null
 
     connected(() => {
-      scheduleTrigger()
+      start()
     })
 
     disconnected(() => {
-      window.clearTimeout(timeoutID)
+      stop()
     })
 
     fab.addEventListener('click', () => {
@@ -168,7 +131,6 @@ export default defineCustomElement('audio-tracker', {
         trackEffects.push(trackEffect)
       }
       div.appendChild(audioTrack)
-      trackEffectsByTrackLabel.set(audioTrack.label, trackEffects)
     })
 
     div.addEventListener('contextmenu', (event) => {
@@ -183,8 +145,8 @@ export default defineCustomElement('audio-tracker', {
     })
 
     menuItemDelete.addEventListener('click', () => {
-      trackEffectsByTrackLabel.delete(selectedAudioTrack.label)
       selectedAudioTrack.remove()
+      selectedAudioTrack = null
     })
   },
 })

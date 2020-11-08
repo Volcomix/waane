@@ -1,6 +1,9 @@
 import { css, defineCustomElement, html } from '../shared/core/element.js'
 import typography from '../shared/core/typography.js'
-import { deregisterAudioTrack, registerAudioTrack } from './use-audio-track.js'
+import {
+  deregisterAudioTrack,
+  registerAudioTrack,
+} from './use-audio-tracker.js'
 
 const link = document.createElement('link')
 link.href =
