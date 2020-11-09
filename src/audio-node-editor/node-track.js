@@ -14,12 +14,14 @@ import createAudioNode from './use-audio-node.js'
  * @property {(timer: number) => void} trigger
  */
 
+const trackLabel = 'Track'
+
 export default defineCustomElement('node-track', {
   template: html`
     <w-graph-node>
       <span slot="title">Track</span>
       <w-graph-node-output type="trigger">On</w-graph-node-output>
-      <w-select label="Track"></w-select>
+      <w-select label="${trackLabel}"></w-select>
     </w-graph-node>
   `,
   shadow: false,
@@ -54,7 +56,7 @@ export default defineCustomElement('node-track', {
     let selectField
 
     connected(() => {
-      selectField = host.querySelector('w-select')
+      selectField = host.querySelector(`w-select[label='${trackLabel}']`)
 
       // Must be done first to ensure the select options are populated
       bindAudioTrack(selectField, track)

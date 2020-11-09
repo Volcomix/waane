@@ -3,6 +3,9 @@ import elevation from './shared/core/elevation.js'
 import useExport from './use-export.js'
 import useImport from './use-import.js'
 
+const exportTooltip = 'Export'
+const importTooltip = 'Import'
+
 export default defineCustomElement('waane-app', {
   styles: css`
     :host {
@@ -43,12 +46,12 @@ export default defineCustomElement('waane-app', {
       <w-tab>Tracks</w-tab>
       <w-tab active>Nodes</w-tab>
       <div class="actions">
-        <w-tooltip text="Export">
+        <w-tooltip text="${exportTooltip}">
           <w-button>
             <w-icon>get_app</w-icon>
           </w-button>
         </w-tooltip>
-        <w-tooltip text="Import">
+        <w-tooltip text="${importTooltip}">
           <w-button>
             <w-icon>publish</w-icon>
           </w-button>
@@ -68,10 +71,10 @@ export default defineCustomElement('waane-app', {
       'w-tab',
     ))
     const exportButton = /** @type {HTMLElement} */ (host.shadowRoot.querySelector(
-      `w-tooltip[text='Export'] w-button`,
+      `w-tooltip[text='${exportTooltip}'] w-button`,
     ))
     const importButton = /** @type {HTMLElement} */ (host.shadowRoot.querySelector(
-      `w-tooltip[text='Import'] w-button`,
+      `w-tooltip[text='${importTooltip}'] w-button`,
     ))
     const audioTracker = /** @type {import('./audio-tracker/audio-tracker.js').default} */ (host.shadowRoot.querySelector(
       'audio-tracker',

@@ -48,6 +48,8 @@ export default function useImport(button, audioTracker, audioNodeEditor) {
             nodeEditor.setAttribute(attributeName, attributeValue)
           },
         )
+        const outputs = new Map()
+        const inputs = new Map()
         content.nodes.forEach((node) => {
           const audioNode = document.createElement(node.name)
           nodeEditor.appendChild(audioNode)
@@ -61,6 +63,30 @@ export default function useImport(button, audioTracker, audioNodeEditor) {
           ))
           graphNode.x = node.x
           graphNode.y = node.y
+          audioNode
+            .querySelectorAll('w-graph-node-output')
+            .forEach((output, index) => {
+              outputs.set(node.outputs[index], output.id)
+            })
+          audioNode
+            .querySelectorAll('w-graph-node-input')
+            .forEach((input, index) => {
+              inputs.set(node.inputs[index], input.id)
+            })
+        })
+        content.links.forEach((link) => {
+          const graphLink = document.createElement('w-graph-link')
+          graphLink.from = outputs.get(link.from)
+          graphLink.to = inputs.get(link.to)
+          nodeEditor.appendChild(graphLink)
+          nodeEditor.dispatchEvent(
+            new CustomEvent('graph-link-connect', {
+              detail: {
+                from: graphLink.from,
+                to: graphLink.to,
+              },
+            }),
+          )
         })
       })
       fileReader.readAsText(file)
