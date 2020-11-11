@@ -6,12 +6,11 @@ import useImport from './use-import.js'
 
 /**
  * @typedef {import('./shared/base/tab.js').default} Tab
+ * @typedef {import('./button-play-pause.js').default} ButtonPlayPause
  * @typedef {import('./shared/base/menu.js').default} Menu
  * @typedef {import('./audio-tracker/audio-tracker.js').default} AudioTracker
  * @typedef {import('./audio-node-editor/audio-node-editor.js').default} AudioNodeEditor
  */
-
-const playTooltip = 'Play'
 
 export default defineCustomElement('waane-app', {
   styles: css`
@@ -39,7 +38,7 @@ export default defineCustomElement('waane-app', {
       align-items: center;
     }
 
-    w-tooltip {
+    .actions > *:not(w-menu) {
       margin: 0 6px;
     }
 
@@ -59,11 +58,7 @@ export default defineCustomElement('waane-app', {
       <w-tab>Tracks</w-tab>
       <w-tab active>Nodes</w-tab>
       <div class="actions">
-        <w-tooltip text="${playTooltip}">
-          <w-button>
-            <w-icon>play_arrow</w-icon>
-          </w-button>
-        </w-tooltip>
+        <button-play-pause></button-play-pause>
         <w-button>
           <w-icon>more_vert</w-icon>
         </w-button>
@@ -87,11 +82,10 @@ export default defineCustomElement('waane-app', {
   setup({ host }) {
     const [tracksTab, nodesTab] = /** @type {NodeListOf<Tab>} */ (host.shadowRoot.querySelectorAll('w-tab'))
 
-    /** @type {HTMLElement} */
-    const playButton = host.shadowRoot.querySelector(`w-tooltip[text='${playTooltip}'] w-button`)
+    const buttonPlayPause = /** @type {ButtonPlayPause} */ (host.shadowRoot.querySelector('button-play-pause'))
 
     /** @type {HTMLElement} */
-    const moreButton = host.shadowRoot.querySelector('.actions > w-button')
+    const buttonMore = host.shadowRoot.querySelector('w-button')
 
     /** @type {Menu} */
     const menu = host.shadowRoot.querySelector('w-menu')
@@ -135,15 +129,17 @@ export default defineCustomElement('waane-app', {
       }, 150)
     })
 
-    playButton.addEventListener('click', () => {
+    buttonPlayPause.addEventListener('click', () => {
       if (isAudioTrackerStarted()) {
         stopAudioTracker()
+        buttonPlayPause.active = false
       } else {
         startAudioTracker()
+        buttonPlayPause.active = true
       }
     })
 
-    moreButton.addEventListener('click', () => {
+    buttonMore.addEventListener('click', () => {
       menu.open = true
     })
   },
