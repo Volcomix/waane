@@ -61,9 +61,11 @@ function importAttributes(attributes, element) {
  * @param {HTMLElement} audioTracker
  */
 function importTracks(content, audioTracker) {
+  /** @type {Map<string, string>} */
+  const trackLabels = new Map()
+
   content.tracks.forEach((track) => {
     const audioTrack = /** @type {AudioTrack} */ (document.createElement('audio-track'))
-    audioTrack.label = track.label
     for (let i = 0; i < 16; i++) {
       const trackEffect = /** @type {TrackEffect} */ (document.createElement('track-effect'))
       trackEffect.beat = i % 4 === 0
@@ -73,21 +75,27 @@ function importTracks(content, audioTracker) {
       audioTrack.appendChild(trackEffect)
     }
     audioTracker.shadowRoot.querySelector('div').appendChild(audioTrack)
+    trackLabels.set(track.label, audioTrack.label)
   })
+  return trackLabels
 }
 
 /**
  * @param {ImportContent} content
+ * @param {Map<string, string>} trackLabels
  * @param {HTMLElement} nodeEditor
  */
-function importNodes(content, nodeEditor) {
+function importNodes(content, trackLabels, nodeEditor) {
   /** @type {Map<string, string>} */
-  const outputs = new Map()
+  const nodeOutputs = new Map()
 
   /** @type {Map<string, string>} */
-  const inputs = new Map()
+  const nodeInputs = new Map()
 
   content.nodes.forEach((node) => {
+    if (node.attributes.track) {
+      node.attributes.track = trackLabels.get(node.attributes.track)
+    }
     const audioNode = document.createElement(node.name)
     nodeEditor.appendChild(audioNode)
     importAttributes(node.attributes, audioNode)
@@ -95,13 +103,13 @@ function importNodes(content, nodeEditor) {
     graphNode.x = node.x
     graphNode.y = node.y
     audioNode.querySelectorAll('w-graph-node-output').forEach((output, index) => {
-      outputs.set(node.outputs[index], output.id)
+      nodeOutputs.set(node.outputs[index], output.id)
     })
     audioNode.querySelectorAll('w-graph-node-input').forEach((input, index) => {
-      inputs.set(node.inputs[index], input.id)
+      nodeInputs.set(node.inputs[index], input.id)
     })
   })
-  return { outputs, inputs }
+  return { nodeOutputs, nodeInputs }
 }
 
 /**
@@ -150,9 +158,9 @@ export default function useImport(button, audioTracker, audioNodeEditor) {
         const nodeEditor = audioNodeEditor.shadowRoot.querySelector('w-node-editor')
 
         clear(audioTracker, audioNodeEditor)
-        importTracks(content, audioTracker)
+        const trackLabels = importTracks(content, audioTracker)
         importAttributes(content.nodeEditor, nodeEditor)
-        const { outputs, inputs } = importNodes(content, nodeEditor)
+        const { nodeOutputs, nodeInputs } = importNodes(content, trackLabels, nodeEditor)
         let wasAudioNodeEditorHidden = false
         if (audioNodeEditor.hidden) {
           wasAudioNodeEditorHidden = true
@@ -161,7 +169,7 @@ export default function useImport(button, audioTracker, audioNodeEditor) {
           // to be positionned correctly
           audioNodeEditor.hidden = false
         }
-        importLinks(content, outputs, inputs, nodeEditor)
+        importLinks(content, nodeOutputs, nodeInputs, nodeEditor)
         if (wasAudioNodeEditorHidden) {
           audioNodeEditor.hidden = true
         }
