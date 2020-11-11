@@ -33,7 +33,7 @@ import { clearAllIds } from './shared/helpers/id.js'
  * @param {HTMLElement} audioTracker
  * @param {HTMLElement} audioNodeEditor
  */
-function clear(audioTracker, audioNodeEditor) {
+export function clearAll(audioTracker, audioNodeEditor) {
   audioNodeEditor.shadowRoot.querySelectorAll('w-graph-node').forEach((graphNode) => {
     graphNode.parentElement.remove()
   })
@@ -157,7 +157,7 @@ export default function useImport(element, audioTracker, audioNodeEditor) {
         /** @type {HTMLElement} */
         const nodeEditor = audioNodeEditor.shadowRoot.querySelector('w-node-editor')
 
-        clear(audioTracker, audioNodeEditor)
+        clearAll(audioTracker, audioNodeEditor)
         const trackLabels = importTracks(content, audioTracker)
         importAttributes(content.nodeEditor, nodeEditor)
         const { nodeOutputs, nodeInputs } = importNodes(content, trackLabels, nodeEditor)

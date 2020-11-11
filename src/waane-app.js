@@ -2,7 +2,7 @@ import useAudioTracker from './audio-tracker/use-audio-tracker.js'
 import { css, defineCustomElement, html } from './shared/core/element.js'
 import elevation from './shared/core/elevation.js'
 import useExport from './use-export.js'
-import useImport from './use-import.js'
+import useImport, { clearAll } from './use-import.js'
 
 /**
  * @typedef {import('./shared/base/tab.js').default} Tab
@@ -63,10 +63,15 @@ export default defineCustomElement('waane-app', {
           <w-icon>more_vert</w-icon>
         </w-button>
         <w-menu>
-          <w-menu-item id="import">
-            <w-icon>publish</w-icon>
-            <span>Import</span>
+          <w-menu-item id="new">
+            <w-icon>create_new_folder</w-icon>
+            <span>New</span>
           </w-menu-item>
+          <w-menu-item id="open">
+            <w-icon>folder_open</w-icon>
+            <span>Open</span>
+          </w-menu-item>
+          <hr />
           <w-menu-item id="export">
             <w-icon>get_app</w-icon>
             <span>Export</span>
@@ -91,17 +96,23 @@ export default defineCustomElement('waane-app', {
     const menu = host.shadowRoot.querySelector('w-menu')
 
     /** @type {HTMLElement} */
-    const importMenuItem = host.shadowRoot.querySelector('#import')
+    const menuItemNew = host.shadowRoot.querySelector('#new')
 
     /** @type {HTMLElement} */
-    const exportMenuItem = host.shadowRoot.querySelector('#export')
+    const menuItemOpen = host.shadowRoot.querySelector('#open')
+
+    /** @type {HTMLElement} */
+    const menuItemExport = host.shadowRoot.querySelector('#export')
 
     const audioTracker = /** @type {AudioTracker} */ (host.shadowRoot.querySelector('audio-tracker'))
     const audioNodeEditor = /** @type {AudioNodeEditor} */ (host.shadowRoot.querySelector('audio-node-editor'))
 
+    /** @type {boolean} */
+    let isMenuOpenOnMouseDown
+
     const { startAudioTracker, stopAudioTracker, isAudioTrackerStarted } = useAudioTracker()
-    useImport(importMenuItem, audioTracker, audioNodeEditor)
-    useExport(exportMenuItem, audioTracker, audioNodeEditor)
+    useImport(menuItemOpen, audioTracker, audioNodeEditor)
+    useExport(menuItemExport, audioTracker, audioNodeEditor)
 
     host.addEventListener('contextmenu', (event) => {
       event.preventDefault()
@@ -139,8 +150,18 @@ export default defineCustomElement('waane-app', {
       }
     })
 
+    buttonMore.addEventListener('mousedown', () => {
+      isMenuOpenOnMouseDown = menu.open
+    })
+
     buttonMore.addEventListener('click', () => {
-      menu.open = true
+      if (!isMenuOpenOnMouseDown) {
+        menu.open = true
+      }
+    })
+
+    menuItemNew.addEventListener('click', () => {
+      clearAll(audioTracker, audioNodeEditor)
     })
   },
 })
