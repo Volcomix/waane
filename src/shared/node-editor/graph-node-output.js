@@ -1,10 +1,9 @@
 import { css, defineCustomElement, html } from '../core/element.js'
+import { nextId } from '../helpers/id.js'
 
 /**
  * @typedef {import('./graph-node-socket.js').default} GraphNodeSocket
  */
-
-let outputId = 0
 
 export default defineCustomElement('w-graph-node-output', {
   styles: css`
@@ -33,7 +32,7 @@ export default defineCustomElement('w-graph-node-output', {
   setup({ host, observe }) {
     const socket = /** @type {GraphNodeSocket} */ (host.shadowRoot.querySelector('w-graph-node-socket'))
 
-    host.id = `output-${outputId++}`
+    host.id = `output-${nextId('output')}`
 
     observe('disabled', () => {
       socket.disabled = host.disabled

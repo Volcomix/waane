@@ -1,3 +1,5 @@
+import { clearAllIds } from './shared/helpers/id.js'
+
 /**
  * @typedef {import('./audio-tracker/audio-track.js').default} AudioTrack
  * @typedef {import('./audio-tracker/track-effect.js').default} TrackEffect
@@ -41,6 +43,7 @@ function clear(audioTracker, audioNodeEditor) {
   audioTracker.shadowRoot.querySelectorAll('audio-track').forEach((audioTrack) => {
     audioTrack.remove()
   })
+  clearAllIds()
 }
 
 /**

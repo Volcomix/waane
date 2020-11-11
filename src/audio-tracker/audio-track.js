@@ -1,5 +1,6 @@
 import { css, defineCustomElement, html } from '../shared/core/element.js'
 import typography from '../shared/core/typography.js'
+import { nextId } from '../shared/helpers/id.js'
 import { deregisterAudioTrack, registerAudioTrack } from './use-audio-tracker.js'
 
 const link = document.createElement('link')
@@ -99,6 +100,7 @@ export default defineCustomElement('audio-track', {
     const label = host.shadowRoot.querySelector('label')
 
     connected(() => {
+      host.label = `${nextId('track')}`
       registerAudioTrack(host)
     })
 

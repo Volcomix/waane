@@ -1,6 +1,7 @@
 import { jest } from '@jest/globals'
 import '../index'
 import { html } from '../shared/core/element'
+import { clearAllIds } from '../shared/helpers/id'
 
 /**
  * @typedef {import('../shared/node-editor/graph-node.js').default} GraphNode
@@ -101,6 +102,7 @@ export function getSelectOption(element, textContent) {
  * @param {'Tracks' | 'Nodes'} initialTabTextContent
  */
 export function setup(initialTabTextContent) {
+  clearAllIds()
   clearOscillatorMock()
 
   document.body.innerHTML = html`<waane-app></waane-app>`

@@ -97,8 +97,6 @@ export default defineCustomElement('audio-tracker', {
     useKeyboardNavigation(div)
     const { start, stop } = useAudioTracker()
 
-    let trackId = 1
-
     /** @type {AudioTrack} */
     let selectedAudioTrack = null
 
@@ -112,7 +110,6 @@ export default defineCustomElement('audio-tracker', {
 
     fab.addEventListener('click', () => {
       const audioTrack = /** @type {AudioTrack} */ (document.createElement('audio-track'))
-      audioTrack.label = `${trackId++}`
       for (let i = 0; i < 16; i++) {
         const trackEffect = /** @type {TrackEffect} */ (document.createElement('track-effect'))
         trackEffect.beat = i % 4 === 0
