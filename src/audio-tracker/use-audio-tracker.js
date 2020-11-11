@@ -68,10 +68,13 @@ export default function useAudioTracker() {
   const audioContext = useAudioContext()
 
   /** @type {number} */
-  let timeoutID
+  let timeoutID = null
 
-  let triggerTime = audioContext.currentTime
-  let line = 0
+  /** @type {number} */
+  let triggerTime
+
+  /** @type {number} */
+  let line
 
   function trigger() {
     tracksByField.forEach((track, selectField) => {
@@ -101,9 +104,20 @@ export default function useAudioTracker() {
   }
 
   return {
-    start: scheduleTrigger,
-    stop: () => {
+    startAudioTracker() {
+      triggerTime = audioContext.currentTime
+      line = 0
+      scheduleTrigger()
+    },
+    stopAudioTracker() {
+      if (timeoutID === null) {
+        return
+      }
       window.clearTimeout(timeoutID)
+      timeoutID = null
+    },
+    isAudioTrackerStarted() {
+      return timeoutID !== null
     },
   }
 }

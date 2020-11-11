@@ -13,7 +13,7 @@
         "track": "1"
       },
       "outputs": [
-        "output-0"
+        "output-1"
       ],
       "inputs": []
     },
@@ -26,10 +26,10 @@
         "time-constant": "0.06"
       },
       "outputs": [
-        "output-1"
+        "output-2"
       ],
       "inputs": [
-        "input-0"
+        "input-1"
       ]
     },
     {
@@ -42,10 +42,10 @@
         "target-value": "1"
       },
       "outputs": [
-        "output-2"
+        "output-3"
       ],
       "inputs": [
-        "input-1"
+        "input-2"
       ]
     },
     {
@@ -56,10 +56,10 @@
         "offset": "0"
       },
       "outputs": [
-        "output-3"
+        "output-4"
       ],
       "inputs": [
-        "input-2"
+        "input-3"
       ]
     },
     {
@@ -70,11 +70,11 @@
         "gain": "130"
       },
       "outputs": [
-        "output-4"
+        "output-5"
       ],
       "inputs": [
-        "input-3",
-        "input-4"
+        "input-4",
+        "input-5"
       ]
     },
     {
@@ -87,11 +87,11 @@
         "detune": "0"
       },
       "outputs": [
-        "output-5"
+        "output-6"
       ],
       "inputs": [
-        "input-5",
-        "input-6"
+        "input-6",
+        "input-7"
       ]
     },
     {
@@ -106,14 +106,14 @@
         "gain": "0"
       },
       "outputs": [
-        "output-6"
+        "output-7"
       ],
       "inputs": [
-        "input-7",
         "input-8",
         "input-9",
         "input-10",
-        "input-11"
+        "input-11",
+        "input-12"
       ]
     },
     {
@@ -124,11 +124,11 @@
         "gain": "1"
       },
       "outputs": [
-        "output-7"
+        "output-8"
       ],
       "inputs": [
-        "input-12",
-        "input-13"
+        "input-13",
+        "input-14"
       ]
     },
     {
@@ -139,11 +139,11 @@
         "gain": "0"
       },
       "outputs": [
-        "output-8"
+        "output-9"
       ],
       "inputs": [
-        "input-14",
-        "input-15"
+        "input-15",
+        "input-16"
       ]
     },
     {
@@ -153,7 +153,7 @@
       "attributes": {},
       "outputs": [],
       "inputs": [
-        "input-16"
+        "input-17"
       ]
     },
     {
@@ -210,11 +210,11 @@
         "gain": "500"
       },
       "outputs": [
-        "output-15"
+        "output-13"
       ],
       "inputs": [
-        "input-26",
-        "input-27"
+        "input-22",
+        "input-23"
       ]
     },
     {
@@ -227,11 +227,11 @@
         "detune": "0"
       },
       "outputs": [
-        "output-16"
+        "output-14"
       ],
       "inputs": [
-        "input-28",
-        "input-29"
+        "input-24",
+        "input-25"
       ]
     },
     {
@@ -246,14 +246,14 @@
         "gain": "0"
       },
       "outputs": [
-        "output-17"
+        "output-15"
       ],
       "inputs": [
-        "input-30",
-        "input-31",
-        "input-32",
-        "input-33",
-        "input-34"
+        "input-26",
+        "input-27",
+        "input-28",
+        "input-29",
+        "input-30"
       ]
     },
     {
@@ -268,14 +268,14 @@
         "gain": "0"
       },
       "outputs": [
-        "output-18"
+        "output-16"
       ],
       "inputs": [
-        "input-35",
-        "input-36",
-        "input-37",
-        "input-38",
-        "input-39"
+        "input-31",
+        "input-32",
+        "input-33",
+        "input-34",
+        "input-35"
       ]
     },
     {
@@ -286,11 +286,11 @@
         "gain": "5000"
       },
       "outputs": [
-        "output-19"
+        "output-17"
       ],
       "inputs": [
-        "input-40",
-        "input-41"
+        "input-36",
+        "input-37"
       ]
     },
     {
@@ -301,21 +301,17 @@
         "gain": "0.2"
       },
       "outputs": [
-        "output-20"
+        "output-18"
       ],
       "inputs": [
-        "input-42",
-        "input-43"
+        "input-38",
+        "input-39"
       ]
     }
   ],
   "links": [
     {
-      "from": "output-0",
-      "to": "input-0"
-    },
-    {
-      "from": "output-0",
+      "from": "output-1",
       "to": "input-1"
     },
     {
@@ -324,11 +320,11 @@
     },
     {
       "from": "output-2",
-      "to": "input-2"
+      "to": "input-3"
     },
     {
       "from": "output-3",
-      "to": "input-4"
+      "to": "input-3"
     },
     {
       "from": "output-4",
@@ -336,22 +332,26 @@
     },
     {
       "from": "output-5",
-      "to": "input-11"
+      "to": "input-6"
     },
     {
-      "from": "output-3",
-      "to": "input-14"
+      "from": "output-6",
+      "to": "input-12"
     },
     {
-      "from": "output-7",
+      "from": "output-4",
       "to": "input-15"
     },
     {
-      "from": "output-0",
+      "from": "output-8",
+      "to": "input-16"
+    },
+    {
+      "from": "output-1",
       "to": "input-18"
     },
     {
-      "from": "output-2",
+      "from": "output-3",
       "to": "input-19"
     },
     {
@@ -360,39 +360,43 @@
     },
     {
       "from": "output-12",
-      "to": "input-27"
+      "to": "input-23"
+    },
+    {
+      "from": "output-13",
+      "to": "input-24"
+    },
+    {
+      "from": "output-14",
+      "to": "input-30"
     },
     {
       "from": "output-15",
-      "to": "input-28"
-    },
-    {
-      "from": "output-16",
-      "to": "input-34"
-    },
-    {
-      "from": "output-17",
-      "to": "input-39"
-    },
-    {
-      "from": "output-11",
-      "to": "input-41"
-    },
-    {
-      "from": "output-20",
-      "to": "input-15"
-    },
-    {
-      "from": "output-18",
-      "to": "input-43"
-    },
-    {
-      "from": "output-19",
       "to": "input-35"
     },
     {
-      "from": "output-6",
-      "to": "input-13"
+      "from": "output-11",
+      "to": "input-37"
+    },
+    {
+      "from": "output-18",
+      "to": "input-16"
+    },
+    {
+      "from": "output-16",
+      "to": "input-39"
+    },
+    {
+      "from": "output-17",
+      "to": "input-31"
+    },
+    {
+      "from": "output-7",
+      "to": "input-14"
+    },
+    {
+      "from": "output-9",
+      "to": "input-17"
     }
   ],
   "tracks": [

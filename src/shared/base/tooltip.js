@@ -12,6 +12,7 @@ export default defineCustomElement('w-tooltip', {
     span {
       position: absolute;
       top: 100%;
+      z-index: 30;
       height: 24px;
       margin-top: 4px;
       padding: 0 8px;

@@ -136,12 +136,12 @@ function importLinks(content, outputs, inputs, nodeEditor) {
 }
 
 /**
- * @param {HTMLElement} button
+ * @param {HTMLElement} element
  * @param {HTMLElement} audioTracker
  * @param {HTMLElement} audioNodeEditor
  */
-export default function useImport(button, audioTracker, audioNodeEditor) {
-  button.addEventListener('click', () => {
+export default function useImport(element, audioTracker, audioNodeEditor) {
+  element.addEventListener('click', () => {
     const input = document.createElement('input')
     input.type = 'file'
     input.addEventListener('change', async () => {
