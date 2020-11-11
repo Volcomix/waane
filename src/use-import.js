@@ -150,7 +150,18 @@ export default function useImport(button, audioTracker, audioNodeEditor) {
         importTracks(content, audioTracker)
         importAttributes(content.nodeEditor, nodeEditor)
         const { outputs, inputs } = importNodes(content, nodeEditor)
+        let wasAudioNodeEditorHidden = false
+        if (audioNodeEditor.hidden) {
+          wasAudioNodeEditorHidden = true
+
+          // Audio node editor must not be hidden for the graph links
+          // to be positionned correctly
+          audioNodeEditor.hidden = false
+        }
         importLinks(content, outputs, inputs, nodeEditor)
+        if (wasAudioNodeEditorHidden) {
+          audioNodeEditor.hidden = true
+        }
       })
       fileReader.readAsText(file)
     })
