@@ -106,6 +106,7 @@ export default function createAudioNode(setup) {
       useAudioParam(numberField, /** @type {any} */ audioNode, propertyName) {
         /** @type {AudioParam} */
         const audioParam = audioNode[propertyName]
+
         if (host.hasAttribute(/** @type {string} */ (propertyName))) {
           audioParam.value = /** @type {number} */ (host[propertyName])
         } else {

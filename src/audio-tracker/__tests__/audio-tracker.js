@@ -10,17 +10,12 @@ test('has no track by default', () => {
 test('adds tracks', () => {
   const { addAudioTrack, getAudioTracks } = setup('Tracks')
   addAudioTrack()
-  expect(
-    getAudioTracks().map(
-      (audioTrack) => audioTrack.shadowRoot.querySelector('label').textContent,
-    ),
-  ).toEqual(['1'])
+  expect(getAudioTracks().map((audioTrack) => audioTrack.shadowRoot.querySelector('label').textContent)).toEqual(['1'])
   addAudioTrack()
-  expect(
-    getAudioTracks().map(
-      (audioTrack) => audioTrack.shadowRoot.querySelector('label').textContent,
-    ),
-  ).toEqual(['1', '2'])
+  expect(getAudioTracks().map((audioTrack) => audioTrack.shadowRoot.querySelector('label').textContent)).toEqual([
+    '1',
+    '2',
+  ])
 })
 
 test('deletes tracks', () => {

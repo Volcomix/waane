@@ -19,9 +19,7 @@ export default function useGraphNodeMenu(host, menu) {
 
     if (!graphNode.selected) {
       if (!event.ctrlKey && !event.metaKey) {
-        host.querySelectorAll(`w-graph-node[selected]`).forEach((
-          /** @type {GraphNode} */ selectedGraphNode,
-        ) => {
+        host.querySelectorAll(`w-graph-node[selected]`).forEach((/** @type {GraphNode} */ selectedGraphNode) => {
           selectedGraphNode.selected = false
         })
       }

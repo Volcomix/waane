@@ -20,9 +20,7 @@ export default defineCustomElement('w-text-field', {
     }
 
     :host(:hover) {
-      border-bottom-color: rgba(
-        var(--color-on-surface) / var(--text-high-emphasis)
-      );
+      border-bottom-color: rgba(var(--color-on-surface) / var(--text-high-emphasis));
     }
 
     input {
@@ -56,8 +54,7 @@ export default defineCustomElement('w-text-field', {
       transform-origin: bottom left;
       color: rgba(var(--color-on-surface) / var(--text-medium-emphasis));
       pointer-events: none;
-      transition: color 200ms var(--easing-standard),
-        transform 200ms var(--easing-standard);
+      transition: color 200ms var(--easing-standard), transform 200ms var(--easing-standard);
       ${typography('body1')}
     }
 
@@ -83,8 +80,7 @@ export default defineCustomElement('w-text-field', {
       outline: none;
       border-bottom: 2px solid transparent;
       border-radius: 4px 4px 0 0;
-      transition: background-color 200ms var(--easing-standard),
-        border-bottom-color 200ms var(--easing-standard);
+      transition: background-color 200ms var(--easing-standard), border-bottom-color 200ms var(--easing-standard);
     }
 
     ::slotted(*) {
@@ -122,11 +118,7 @@ export default defineCustomElement('w-text-field', {
       transition: color 200ms var(--easing-standard);
     }
 
-    :host(:focus-within)
-      input:not(:invalid)
-      + label
-      + span
-      + slot[name='trailing'] {
+    :host(:focus-within) input:not(:invalid) + label + span + slot[name='trailing'] {
       color: rgb(var(--color-primary));
     }
 

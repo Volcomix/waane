@@ -2,9 +2,7 @@ import { expect, test } from '@jest/globals'
 import { click, contextMenu, setup } from '../../testing/helpers'
 
 test('adds a link from an output to an input', () => {
-  const { addAudioNode, getGraphNodes, addGraphLink, getGraphLinks } = setup(
-    'Nodes',
-  )
+  const { addAudioNode, getGraphNodes, addGraphLink, getGraphLinks } = setup('Nodes')
   addAudioNode('Oscillator')
   addAudioNode('Audio destination')
   const [oscillator, audioDestination] = getGraphNodes()
@@ -14,28 +12,18 @@ test('adds a link from an output to an input', () => {
 })
 
 test('adds a link from an input to an output', () => {
-  const { nodeEditor, addAudioNode, getGraphNodes, getGraphLinks } = setup(
-    'Nodes',
-  )
+  const { nodeEditor, addAudioNode, getGraphNodes, getGraphLinks } = setup('Nodes')
   addAudioNode('Oscillator')
   addAudioNode('Audio destination')
   const [oscillator, audioDestination] = getGraphNodes()
 
   const graphNodeInput = audioDestination.querySelector('w-graph-node-input')
-  const inputSocket = graphNodeInput.shadowRoot.querySelector(
-    'w-graph-node-socket',
-  )
+  const inputSocket = graphNodeInput.shadowRoot.querySelector('w-graph-node-socket')
   const graphNodeOutput = oscillator.querySelector('w-graph-node-output')
-  const outputSocket = graphNodeOutput.shadowRoot.querySelector(
-    'w-graph-node-socket',
-  )
+  const outputSocket = graphNodeOutput.shadowRoot.querySelector('w-graph-node-socket')
   inputSocket.dispatchEvent(new MouseEvent('mousedown'))
-  outputSocket.dispatchEvent(
-    new MouseEvent('mousemove', { bubbles: true, composed: true }),
-  )
-  outputSocket.dispatchEvent(
-    new MouseEvent('mouseup', { bubbles: true, composed: true }),
-  )
+  outputSocket.dispatchEvent(new MouseEvent('mousemove', { bubbles: true, composed: true }))
+  outputSocket.dispatchEvent(new MouseEvent('mouseup', { bubbles: true, composed: true }))
   nodeEditor.click()
 
   expect(getGraphLinks()).toHaveLength(1)
@@ -46,9 +34,7 @@ test('cancels adding a link when releasing on node editor', () => {
   addAudioNode('Oscillator')
 
   const graphNodeOutput = nodeEditor.querySelector('w-graph-node-output')
-  const outputSocket = graphNodeOutput.shadowRoot.querySelector(
-    'w-graph-node-socket',
-  )
+  const outputSocket = graphNodeOutput.shadowRoot.querySelector('w-graph-node-socket')
   outputSocket.dispatchEvent(new MouseEvent('mousedown'))
   nodeEditor.dispatchEvent(new MouseEvent('mousemove'))
 
@@ -61,9 +47,7 @@ test('cancels adding a link when releasing on node editor', () => {
 })
 
 test('cancels adding a link if sockets are already linked', () => {
-  const { addAudioNode, getGraphNodes, addGraphLink, getGraphLinks } = setup(
-    'Nodes',
-  )
+  const { addAudioNode, getGraphNodes, addGraphLink, getGraphLinks } = setup('Nodes')
   addAudioNode('Oscillator')
   addAudioNode('Audio destination')
   const [oscillator, audioDestination] = getGraphNodes()
@@ -77,24 +61,12 @@ test('cancels adding a link if sockets are already linked', () => {
 })
 
 test('deletes links when deleting output node', () => {
-  const {
-    getMenuItem,
-    addAudioNode,
-    getGraphNodes,
-    addGraphLink,
-    getGraphLinks,
-  } = setup('Nodes')
-
+  const { getMenuItem, addAudioNode, getGraphNodes, addGraphLink, getGraphLinks } = setup('Nodes')
   addAudioNode('Oscillator')
   addAudioNode('Oscillator')
   addAudioNode('Audio destination')
   addAudioNode('Audio destination')
-  const [
-    oscillator1,
-    oscillator2,
-    audioDestination1,
-    audioDestination2,
-  ] = getGraphNodes()
+  const [oscillator1, oscillator2, audioDestination1, audioDestination2] = getGraphNodes()
 
   addGraphLink(oscillator1, audioDestination1)
   addGraphLink(oscillator2, audioDestination1)
@@ -105,33 +77,17 @@ test('deletes links when deleting output node', () => {
   contextMenu(oscillator2)
   getMenuItem('Delete').click()
 
-  expect(getGraphNodes()).toEqual([
-    oscillator1,
-    audioDestination1,
-    audioDestination2,
-  ])
+  expect(getGraphNodes()).toEqual([oscillator1, audioDestination1, audioDestination2])
   expect(getGraphLinks()).toEqual([graphLink1])
 })
 
 test('deletes links when deleting input node', () => {
-  const {
-    getMenuItem,
-    addAudioNode,
-    getGraphNodes,
-    addGraphLink,
-    getGraphLinks,
-  } = setup('Nodes')
-
+  const { getMenuItem, addAudioNode, getGraphNodes, addGraphLink, getGraphLinks } = setup('Nodes')
   addAudioNode('Oscillator')
   addAudioNode('Oscillator')
   addAudioNode('Audio destination')
   addAudioNode('Audio destination')
-  const [
-    oscillator1,
-    oscillator2,
-    audioDestination1,
-    audioDestination2,
-  ] = getGraphNodes()
+  const [oscillator1, oscillator2, audioDestination1, audioDestination2] = getGraphNodes()
 
   addGraphLink(oscillator1, audioDestination1)
   addGraphLink(oscillator1, audioDestination2)
@@ -147,24 +103,12 @@ test('deletes links when deleting input node', () => {
 })
 
 test('duplicates links when duplicating nodes', () => {
-  const {
-    getMenuItem,
-    addAudioNode,
-    getGraphNodes,
-    addGraphLink,
-    getGraphLinks,
-  } = setup('Nodes')
-
+  const { getMenuItem, addAudioNode, getGraphNodes, addGraphLink, getGraphLinks } = setup('Nodes')
   addAudioNode('Oscillator')
   addAudioNode('Oscillator')
   addAudioNode('Audio destination')
   addAudioNode('Audio destination')
-  const [
-    oscillator1,
-    oscillator2,
-    audioDestination1,
-    audioDestination2,
-  ] = getGraphNodes()
+  const [oscillator1, oscillator2, audioDestination1, audioDestination2] = getGraphNodes()
 
   addGraphLink(oscillator1, audioDestination1)
   addGraphLink(oscillator2, audioDestination1)
@@ -188,23 +132,11 @@ test('duplicates links when duplicating nodes', () => {
       textContent: expect.stringContaining('Audio destination'),
     }),
   ])
-  expect(getGraphLinks()).toEqual([
-    graphLink1,
-    graphLink2,
-    graphLink3,
-    expect.anything(),
-  ])
+  expect(getGraphLinks()).toEqual([graphLink1, graphLink2, graphLink3, expect.anything()])
 })
 
 test('disconnects a link', () => {
-  const {
-    nodeEditor,
-    addAudioNode,
-    getGraphNodes,
-    addGraphLink,
-    getGraphLinks,
-  } = setup('Nodes')
-
+  const { nodeEditor, addAudioNode, getGraphNodes, addGraphLink, getGraphLinks } = setup('Nodes')
   addAudioNode('Oscillator')
   addAudioNode('Audio destination')
   const [oscillator, audioDestination] = getGraphNodes()
@@ -214,9 +146,7 @@ test('disconnects a link', () => {
   expect(getGraphLinks()).toHaveLength(1)
 
   const graphNodeInput = audioDestination.querySelector('w-graph-node-input')
-  const inputSocket = graphNodeInput.shadowRoot.querySelector(
-    'w-graph-node-socket',
-  )
+  const inputSocket = graphNodeInput.shadowRoot.querySelector('w-graph-node-socket')
   inputSocket.dispatchEvent(new MouseEvent('mousedown'))
   nodeEditor.dispatchEvent(new MouseEvent('mousemove'))
 
@@ -229,14 +159,7 @@ test('disconnects a link', () => {
 })
 
 test('disconnects a specific link from a node', () => {
-  const {
-    nodeEditor,
-    addAudioNode,
-    getGraphNodes,
-    addGraphLink,
-    getGraphLinks,
-  } = setup('Nodes')
-
+  const { nodeEditor, addAudioNode, getGraphNodes, addGraphLink, getGraphLinks } = setup('Nodes')
   addAudioNode('Oscillator')
   addAudioNode('Oscillator')
   addAudioNode('Audio destination')
@@ -249,9 +172,7 @@ test('disconnects a specific link from a node', () => {
   const [graphLink1] = getGraphLinks()
 
   const graphNodeInput = audioDestination.querySelector('w-graph-node-input')
-  const inputSocket = graphNodeInput.shadowRoot.querySelector(
-    'w-graph-node-socket',
-  )
+  const inputSocket = graphNodeInput.shadowRoot.querySelector('w-graph-node-socket')
 
   inputSocket.dispatchEvent(new MouseEvent('mousedown'))
   inputSocket.dispatchEvent(new MouseEvent('mouseup'))

@@ -23,16 +23,14 @@ export default defineCustomElement('w-tooltip', {
       pointer-events: none;
       opacity: 0;
       transform: scale(0.8);
-      transition: opacity 150ms var(--easing-accelerated),
-        transform 0 linear 150ms;
+      transition: opacity 150ms var(--easing-accelerated), transform 0 linear 150ms;
       ${typography('caption')}
     }
 
     :host(:hover) span {
       opacity: 1;
       transform: none;
-      transition: opacity 150ms var(--easing-decelerated) 150ms,
-        transform 150ms var(--easing-decelerated) 150ms;
+      transition: opacity 150ms var(--easing-decelerated) 150ms, transform 150ms var(--easing-decelerated) 150ms;
     }
   `,
   template: html`

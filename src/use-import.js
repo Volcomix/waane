@@ -1,4 +1,9 @@
 /**
+ * @typedef {import('./audio-tracker/audio-track.js').default} AudioTrack
+ * @typedef {import('./audio-tracker/track-effect.js').default} TrackEffect
+ * @typedef {import('./shared/node-editor/graph-node.js').default} GraphNode
+ * @typedef {import('./shared/node-editor/graph-link.js').default} GraphLink
+ *
  * @typedef {object} ImportNode
  * @property {string} name
  * @property {number} x
@@ -27,15 +32,15 @@
  * @param {HTMLElement} audioNodeEditor
  */
 function clear(audioTracker, audioNodeEditor) {
-  audioNodeEditor.shadowRoot
-    .querySelectorAll('w-graph-node')
-    .forEach((graphNode) => graphNode.parentElement.remove())
-  audioNodeEditor.shadowRoot
-    .querySelectorAll('w-graph-link')
-    .forEach((graphLink) => graphLink.remove())
-  audioTracker.shadowRoot
-    .querySelectorAll('audio-track')
-    .forEach((audioTrack) => audioTrack.remove())
+  audioNodeEditor.shadowRoot.querySelectorAll('w-graph-node').forEach((graphNode) => {
+    graphNode.parentElement.remove()
+  })
+  audioNodeEditor.shadowRoot.querySelectorAll('w-graph-link').forEach((graphLink) => {
+    graphLink.remove()
+  })
+  audioTracker.shadowRoot.querySelectorAll('audio-track').forEach((audioTrack) => {
+    audioTrack.remove()
+  })
 }
 
 /**
@@ -54,14 +59,10 @@ function importAttributes(attributes, element) {
  */
 function importTracks(content, audioTracker) {
   content.tracks.forEach((track) => {
-    const audioTrack = /** @type {import('./audio-tracker/audio-track.js').default} */ (document.createElement(
-      'audio-track',
-    ))
+    const audioTrack = /** @type {AudioTrack} */ (document.createElement('audio-track'))
     audioTrack.label = track.label
     for (let i = 0; i < 16; i++) {
-      const trackEffect = /** @type {import('./audio-tracker/track-effect.js').default} */ (document.createElement(
-        'track-effect',
-      ))
+      const trackEffect = /** @type {TrackEffect} */ (document.createElement('track-effect'))
       trackEffect.beat = i % 4 === 0
       if (i in track.effects) {
         trackEffect.value = track.effects[i]
@@ -87,16 +88,12 @@ function importNodes(content, nodeEditor) {
     const audioNode = document.createElement(node.name)
     nodeEditor.appendChild(audioNode)
     importAttributes(node.attributes, audioNode)
-    const graphNode = /** @type {import('./shared/node-editor/graph-node.js').default} */ (audioNode.querySelector(
-      'w-graph-node',
-    ))
+    const graphNode = /** @type {GraphNode} */ (audioNode.querySelector('w-graph-node'))
     graphNode.x = node.x
     graphNode.y = node.y
-    audioNode
-      .querySelectorAll('w-graph-node-output')
-      .forEach((output, index) => {
-        outputs.set(node.outputs[index], output.id)
-      })
+    audioNode.querySelectorAll('w-graph-node-output').forEach((output, index) => {
+      outputs.set(node.outputs[index], output.id)
+    })
     audioNode.querySelectorAll('w-graph-node-input').forEach((input, index) => {
       inputs.set(node.inputs[index], input.id)
     })
@@ -112,9 +109,7 @@ function importNodes(content, nodeEditor) {
  */
 function importLinks(content, outputs, inputs, nodeEditor) {
   content.links.forEach((link) => {
-    const graphLink = /** @type {import('./shared/node-editor/graph-link.js').default} */ (document.createElement(
-      'w-graph-link',
-    ))
+    const graphLink = /** @type {GraphLink} */ (document.createElement('w-graph-link'))
     graphLink.from = outputs.get(link.from)
     graphLink.to = inputs.get(link.to)
     nodeEditor.appendChild(graphLink)
@@ -149,9 +144,7 @@ export default function useImport(button, audioTracker, audioNodeEditor) {
         const content = JSON.parse(/** @type {string} */ (fileReader.result))
 
         /** @type {HTMLElement} */
-        const nodeEditor = audioNodeEditor.shadowRoot.querySelector(
-          'w-node-editor',
-        )
+        const nodeEditor = audioNodeEditor.shadowRoot.querySelector('w-node-editor')
 
         clear(audioTracker, audioNodeEditor)
         importTracks(content, audioTracker)

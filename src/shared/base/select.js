@@ -44,9 +44,7 @@ export default defineCustomElement('w-select', {
   setup({ host, observe }) {
     const menu = /** @type {Menu} */ (host.shadowRoot.querySelector('w-menu'))
     const menuSlot = menu.querySelector('slot')
-    const textField = /** @type {TextField} */ (host.shadowRoot.querySelector(
-      'w-text-field',
-    ))
+    const textField = /** @type {TextField} */ (host.shadowRoot.querySelector('w-text-field'))
     const span = host.shadowRoot.querySelector('span')
 
     /** @type {boolean} */

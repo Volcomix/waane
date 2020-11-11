@@ -1,9 +1,9 @@
+import { isField } from '../helpers/field.js'
+
 /**
  * @typedef {import('./node-editor.js').default} NodeEditor
  * @typedef {import('./graph-node.js').default} GraphNode
  */
-
-import { isField } from '../helpers/field.js'
 
 /**
  * @param {NodeEditor} host

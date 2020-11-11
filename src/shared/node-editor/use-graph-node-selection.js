@@ -5,11 +5,12 @@ import { doOverlap } from '../helpers/geometry.js'
 /**
  * @typedef {import('./node-editor.js').default} NodeEditor
  * @typedef {import('./graph-node.js').default} GraphNode
+ * @typedef {import('../helpers/geometry.js').Box} Box
  */
 
 /**
  * @param {SelectionRectangle} selectionRectangle
- * @returns {import('../helpers/geometry.js').Box}
+ * @returns {Box}
  */
 function getSelectionBox(selectionRectangle) {
   return {
@@ -59,14 +60,10 @@ const SelectionRectangle = defineCustomElement('w-selection-rectangle', {
  * @param {NodeEditor} host
  */
 export default function useGraphNodeSelection(host) {
-  const selectionRectangle = /** @type {SelectionRectangle} */ (document.createElement(
-    'w-selection-rectangle',
-  ))
+  const selectionRectangle = /** @type {SelectionRectangle} */ (document.createElement('w-selection-rectangle'))
 
   function unselectAll() {
-    host.querySelectorAll(`w-graph-node[selected]`).forEach((
-      /** @type {GraphNode} */ selectedGraphNode,
-    ) => {
+    host.querySelectorAll(`w-graph-node[selected]`).forEach((/** @type {GraphNode} */ selectedGraphNode) => {
       selectedGraphNode.selected = false
     })
   }
@@ -103,9 +100,7 @@ export default function useGraphNodeSelection(host) {
 
     const { x: hostX, y: hostY } = host.getBoundingClientRect()
     const selectionBox = getSelectionBox(selectionRectangle)
-    host.querySelectorAll('w-graph-node').forEach((
-      /** @type {GraphNode} */ graphNode,
-    ) => {
+    host.querySelectorAll('w-graph-node').forEach((/** @type {GraphNode} */ graphNode) => {
       let { x, y, width, height } = graphNode.getBoundingClientRect()
       x -= hostX
       y -= hostY
@@ -122,9 +117,7 @@ export default function useGraphNodeSelection(host) {
     if (!selectionRectangle.isConnected) {
       return
     }
-    host.querySelectorAll(`w-graph-node[selecting]`).forEach((
-      /** @type {GraphNode} */ graphNode,
-    ) => {
+    host.querySelectorAll(`w-graph-node[selecting]`).forEach((/** @type {GraphNode} */ graphNode) => {
       graphNode.selected = !graphNode.selected
       graphNode.selecting = false
     })

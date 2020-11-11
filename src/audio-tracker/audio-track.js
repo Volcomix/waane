@@ -1,13 +1,9 @@
 import { css, defineCustomElement, html } from '../shared/core/element.js'
 import typography from '../shared/core/typography.js'
-import {
-  deregisterAudioTrack,
-  registerAudioTrack,
-} from './use-audio-tracker.js'
+import { deregisterAudioTrack, registerAudioTrack } from './use-audio-tracker.js'
 
 const link = document.createElement('link')
-link.href =
-  'https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500&display=swap'
+link.href = 'https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500&display=swap'
 link.rel = 'stylesheet'
 document.head.appendChild(link)
 

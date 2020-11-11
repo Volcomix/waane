@@ -15,8 +15,7 @@ export default defineCustomElement('w-tab', {
       text-transform: uppercase;
       cursor: pointer;
       user-select: none;
-      transition: background-color 200ms var(--easing-standard),
-        color 300ms linear, border-bottom-color 300ms linear;
+      transition: background-color 200ms var(--easing-standard), color 300ms linear, border-bottom-color 300ms linear;
       ${typography('button')}
     }
 

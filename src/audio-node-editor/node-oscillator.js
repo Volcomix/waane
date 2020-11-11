@@ -32,34 +32,20 @@ export default defineCustomElement('node-oscillator', {
     frequency: Number,
     detune: Number,
   },
-  setup: createAudioNode(
-    ({ host, connected, disconnected, useAudioProperty, useAudioParam }) => {
-      const audioContext = useAudioContext()
-      const oscillator = audioContext.createOscillator()
+  setup: createAudioNode(({ host, connected, disconnected, useAudioProperty, useAudioParam }) => {
+    const audioContext = useAudioContext()
+    const oscillator = audioContext.createOscillator()
 
-      connected(() => {
-        bindAudioOutput(host.querySelector('w-graph-node-output'), oscillator)
-        useAudioProperty(
-          host.querySelector(`w-select[label='${typeLabel}']`),
-          oscillator,
-          'type',
-        )
-        useAudioParam(
-          host.querySelector(`w-number-field[label='${frequencyLabel}']`),
-          oscillator,
-          'frequency',
-        )
-        useAudioParam(
-          host.querySelector(`w-number-field[label='${detuneLabel}']`),
-          oscillator,
-          'detune',
-        )
-        oscillator.start()
-      })
+    connected(() => {
+      bindAudioOutput(host.querySelector('w-graph-node-output'), oscillator)
+      useAudioProperty(host.querySelector(`w-select[label='${typeLabel}']`), oscillator, 'type')
+      useAudioParam(host.querySelector(`w-number-field[label='${frequencyLabel}']`), oscillator, 'frequency')
+      useAudioParam(host.querySelector(`w-number-field[label='${detuneLabel}']`), oscillator, 'detune')
+      oscillator.start()
+    })
 
-      disconnected(() => {
-        oscillator.stop()
-      })
-    },
-  ),
+    disconnected(() => {
+      oscillator.stop()
+    })
+  }),
 })

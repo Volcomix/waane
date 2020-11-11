@@ -26,15 +26,8 @@ export default defineCustomElement('node-gain', {
 
     connected(() => {
       bindAudioOutput(host.querySelector('w-graph-node-output'), gain)
-      useAudioParam(
-        host.querySelector(`w-number-field[label='${gainLabel}']`),
-        gain,
-        'gain',
-      )
-      bindAudioInput(
-        host.querySelector('w-graph-node-input:last-of-type'),
-        gain,
-      )
+      useAudioParam(host.querySelector(`w-number-field[label='${gainLabel}']`), gain, 'gain')
+      bindAudioInput(host.querySelector('w-graph-node-input:last-of-type'), gain)
     })
   }),
 })

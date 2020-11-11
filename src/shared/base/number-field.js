@@ -1,5 +1,9 @@
 import { defineCustomElement, html } from '../core/element.js'
 
+/**
+ * @typedef {import('./text-field.js').default} TextField
+ */
+
 export default defineCustomElement('w-number-field', {
   template: html`<w-text-field type="number" step="any"></w-text-field>`,
   properties: {
@@ -7,9 +11,7 @@ export default defineCustomElement('w-number-field', {
     value: Number,
   },
   setup({ host, observe }) {
-    const textField = /** @type {import('./text-field.js').default} */ (host.shadowRoot.querySelector(
-      'w-text-field',
-    ))
+    const textField = /** @type {TextField} */ (host.shadowRoot.querySelector('w-text-field'))
     textField.value = '0'
 
     observe('label', () => {

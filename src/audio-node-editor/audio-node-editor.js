@@ -21,8 +21,7 @@ export default defineCustomElement('audio-node-editor', {
       left: 8px;
       opacity: 0;
       transform: translateY(-50%) scale(0.3);
-      transition: opacity 75ms linear 75ms,
-        transform 150ms var(--easing-accelerated);
+      transition: opacity 75ms linear 75ms, transform 150ms var(--easing-accelerated);
     }
 
     :host([active]) w-fab {
@@ -35,15 +34,13 @@ export default defineCustomElement('audio-node-editor', {
       height: 100%;
       opacity: 0;
       transform: translateX(100px);
-      transition: opacity 150ms var(--easing-accelerated),
-        transform 150ms var(--easing-accelerated);
+      transition: opacity 150ms var(--easing-accelerated), transform 150ms var(--easing-accelerated);
     }
 
     :host([active]) w-node-editor {
       opacity: 1;
       transform: none;
-      transition-timing-function: var(--easing-decelerated),
-        var(--easing-decelerated);
+      transition-timing-function: var(--easing-decelerated), var(--easing-decelerated);
     }
 
     w-graph-node-output[type='audio'],
@@ -69,9 +66,7 @@ export default defineCustomElement('audio-node-editor', {
       <w-menu-item value="node-constant">Constant</w-menu-item>
       <w-menu-item value="node-gain">Gain</w-menu-item>
       <w-menu-item value="node-biquad-filter">Biquad filter</w-menu-item>
-      <w-menu-item value="node-audio-destination">
-        Audio destination
-      </w-menu-item>
+      <w-menu-item value="node-audio-destination">Audio destination</w-menu-item>
     </w-menu>
     <w-menu id="graph-node-menu">
       <w-menu-item id="duplicate">
@@ -89,24 +84,14 @@ export default defineCustomElement('audio-node-editor', {
     active: Boolean,
   },
   setup({ host }) {
-    const fab = /** @type {HTMLElement} */ (host.shadowRoot.querySelector(
-      'w-fab',
-    ))
-    const nodeEditor = /** @type {NodeEditor} */ (host.shadowRoot.querySelector(
-      'w-node-editor',
-    ))
-    const nodeEditorMenu = /** @type {Menu} */ (host.shadowRoot.querySelector(
-      '#node-editor-menu',
-    ))
-    const graphNodeMenu = /** @type {Menu} */ (host.shadowRoot.querySelector(
-      '#graph-node-menu',
-    ))
-    const graphNodeMenuItemDuplicate = /** @type {MenuItem} */ (graphNodeMenu.querySelector(
-      '#duplicate',
-    ))
-    const graphNodeMenuItemDelete = /** @type {MenuItem} */ (graphNodeMenu.querySelector(
-      '#delete',
-    ))
+    /** @type {HTMLElement} */
+    const fab = host.shadowRoot.querySelector('w-fab')
+
+    const nodeEditor = /** @type {NodeEditor} */ (host.shadowRoot.querySelector('w-node-editor'))
+    const nodeEditorMenu = /** @type {Menu} */ (host.shadowRoot.querySelector('#node-editor-menu'))
+    const graphNodeMenu = /** @type {Menu} */ (host.shadowRoot.querySelector('#graph-node-menu'))
+    const graphNodeMenuItemDuplicate = /** @type {MenuItem} */ (graphNodeMenu.querySelector('#duplicate'))
+    const graphNodeMenuItemDelete = /** @type {MenuItem} */ (graphNodeMenu.querySelector('#delete'))
 
     const getNodeEditorMousePosition = useNodeEditorMousePosition(nodeEditor)
 
@@ -119,42 +104,44 @@ export default defineCustomElement('audio-node-editor', {
     useAudioLink(nodeEditor)
 
     function cancelMovingGraphNodes() {
-      nodeEditor.querySelectorAll('w-graph-node[moving]').forEach((
-        /** @type {GraphNode} */ movingGraphNode,
-      ) => {
+      nodeEditor.querySelectorAll('w-graph-node[moving]').forEach((/** @type {GraphNode} */ movingGraphNode) => {
         movingGraphNode.moving = false
       })
     }
 
     /**
-     * @param {Element} graphNode
+     * @param {HTMLElement} graphNode
      */
     function removeGraphNodeOutputLinks(graphNode) {
       graphNode.querySelectorAll('w-graph-node-output').forEach((output) => {
-        nodeEditor
-          .querySelectorAll(`w-graph-link[from='${output.id}']`)
-          .forEach((/** @type {GraphLink} */ graphLink) => {
-            nodeEditor.dispatchEvent(
-              new CustomEvent('graph-link-disconnect', {
-                detail: { from: graphLink.from, to: graphLink.to },
-              }),
-            )
-            graphLink.remove()
-          })
-      })
-    }
-
-    /**
-     * @param {Element} graphNode
-     */
-    function removeGraphNodeInputLinks(graphNode) {
-      graphNode.querySelectorAll('w-graph-node-input').forEach((input) => {
-        nodeEditor.querySelectorAll(`w-graph-link[to='${input.id}']`).forEach((
+        nodeEditor.querySelectorAll(`w-graph-link[from='${output.id}']`).forEach((
           /** @type {GraphLink} */ graphLink,
         ) => {
           nodeEditor.dispatchEvent(
             new CustomEvent('graph-link-disconnect', {
-              detail: { from: graphLink.from, to: graphLink.to },
+              detail: {
+                from: graphLink.from,
+                to: graphLink.to,
+              },
+            }),
+          )
+          graphLink.remove()
+        })
+      })
+    }
+
+    /**
+     * @param {HTMLElement} graphNode
+     */
+    function removeGraphNodeInputLinks(graphNode) {
+      graphNode.querySelectorAll('w-graph-node-input').forEach((input) => {
+        nodeEditor.querySelectorAll(`w-graph-link[to='${input.id}']`).forEach((/** @type {GraphLink} */ graphLink) => {
+          nodeEditor.dispatchEvent(
+            new CustomEvent('graph-link-disconnect', {
+              detail: {
+                from: graphLink.from,
+                to: graphLink.to,
+              },
             }),
           )
           graphLink.remove()
@@ -182,9 +169,7 @@ export default defineCustomElement('audio-node-editor', {
       const audioNode = document.createElement(menuItem.value)
       nodeEditor.appendChild(audioNode)
 
-      const graphNode = /** @type {GraphNode} */ (audioNode.querySelector(
-        'w-graph-node',
-      ))
+      const graphNode = /** @type {GraphNode} */ (audioNode.querySelector('w-graph-node'))
       graphNode.x = x
       graphNode.y = y
       graphNode.moving = true
@@ -205,9 +190,7 @@ export default defineCustomElement('audio-node-editor', {
 
       const socketIdsByGraphLink = new WeakMap()
 
-      nodeEditor.querySelectorAll('w-graph-node[selected]').forEach((
-        /** @type {GraphNode} */ selectedGraphNode,
-      ) => {
+      nodeEditor.querySelectorAll('w-graph-node[selected]').forEach((/** @type {GraphNode} */ selectedGraphNode) => {
         // Unselects the already existing node (the one that was duplicated)
         selectedGraphNode.selected = false
 
@@ -216,9 +199,7 @@ export default defineCustomElement('audio-node-editor', {
         nodeEditor.appendChild(duplicatedAudioNode)
 
         // Sets the duplicated graph node position
-        const duplicatedGraphNode = /** @type {GraphNode} */ (duplicatedAudioNode.querySelector(
-          'w-graph-node',
-        ))
+        const duplicatedGraphNode = /** @type {GraphNode} */ (duplicatedAudioNode.querySelector('w-graph-node'))
         duplicatedGraphNode.x = selectedGraphNode.x + offsetX
         duplicatedGraphNode.y = selectedGraphNode.y + offsetY
         duplicatedGraphNode.selected = true
@@ -230,10 +211,7 @@ export default defineCustomElement('audio-node-editor', {
           duplicatedGraphNode.x <= nodeEditorMousePosition.x &&
           duplicatedGraphNode.y <= nodeEditorMousePosition.y
         ) {
-          const graphNodeSquaredDist = squaredDist(
-            duplicatedGraphNode,
-            nodeEditorMousePosition,
-          )
+          const graphNodeSquaredDist = squaredDist(duplicatedGraphNode, nodeEditorMousePosition)
           if (graphNodeSquaredDist < minSquaredDist) {
             nearestGraphNode = duplicatedGraphNode
             minSquaredDist = graphNodeSquaredDist
@@ -241,84 +219,60 @@ export default defineCustomElement('audio-node-editor', {
         }
 
         // Duplicates links
-        const duplicatedOutputs = duplicatedGraphNode.querySelectorAll(
-          'w-graph-node-output',
-        )
-        selectedGraphNode
-          .querySelectorAll('w-graph-node-output')
-          .forEach((output, outputIndex) => {
-            nodeEditor
-              .querySelectorAll(`w-graph-link[from='${output.id}']`)
-              .forEach((graphLink) => {
-                if (socketIdsByGraphLink.has(graphLink)) {
-                  const duplicatedGraphLink = /** @type {GraphLink} */ (document.createElement(
-                    'w-graph-link',
-                  ))
-                  duplicatedGraphLink.from = duplicatedOutputs[outputIndex].id
-                  duplicatedGraphLink.to = socketIdsByGraphLink.get(graphLink)
-                  nodeEditor.appendChild(duplicatedGraphLink)
-                  nodeEditor.dispatchEvent(
-                    new CustomEvent('graph-link-connect', {
-                      detail: {
-                        from: duplicatedGraphLink.from,
-                        to: duplicatedGraphLink.to,
-                      },
-                    }),
-                  )
-                } else {
-                  socketIdsByGraphLink.set(
-                    graphLink,
-                    duplicatedOutputs[outputIndex].id,
-                  )
-                }
-              })
+        const duplicatedOutputs = duplicatedGraphNode.querySelectorAll('w-graph-node-output')
+        selectedGraphNode.querySelectorAll('w-graph-node-output').forEach((output, outputIndex) => {
+          nodeEditor.querySelectorAll(`w-graph-link[from='${output.id}']`).forEach((graphLink) => {
+            if (socketIdsByGraphLink.has(graphLink)) {
+              const duplicatedGraphLink = /** @type {GraphLink} */ (document.createElement('w-graph-link'))
+              duplicatedGraphLink.from = duplicatedOutputs[outputIndex].id
+              duplicatedGraphLink.to = socketIdsByGraphLink.get(graphLink)
+              nodeEditor.appendChild(duplicatedGraphLink)
+              nodeEditor.dispatchEvent(
+                new CustomEvent('graph-link-connect', {
+                  detail: {
+                    from: duplicatedGraphLink.from,
+                    to: duplicatedGraphLink.to,
+                  },
+                }),
+              )
+            } else {
+              socketIdsByGraphLink.set(graphLink, duplicatedOutputs[outputIndex].id)
+            }
           })
+        })
 
-        const duplicatedInputs = duplicatedGraphNode.querySelectorAll(
-          'w-graph-node-input',
-        )
-        selectedGraphNode
-          .querySelectorAll('w-graph-node-input')
-          .forEach((input, inputIndex) => {
-            nodeEditor
-              .querySelectorAll(`w-graph-link[to='${input.id}']`)
-              .forEach((graphLink) => {
-                if (socketIdsByGraphLink.has(graphLink)) {
-                  const duplicatedGraphLink = /** @type {GraphLink} */ (document.createElement(
-                    'w-graph-link',
-                  ))
-                  duplicatedGraphLink.from = socketIdsByGraphLink.get(graphLink)
-                  duplicatedGraphLink.to = duplicatedInputs[inputIndex].id
-                  nodeEditor.appendChild(duplicatedGraphLink)
-                  nodeEditor.dispatchEvent(
-                    new CustomEvent('graph-link-connect', {
-                      detail: {
-                        from: duplicatedGraphLink.from,
-                        to: duplicatedGraphLink.to,
-                      },
-                    }),
-                  )
-                } else {
-                  socketIdsByGraphLink.set(
-                    graphLink,
-                    duplicatedInputs[inputIndex].id,
-                  )
-                }
-              })
+        const duplicatedInputs = duplicatedGraphNode.querySelectorAll('w-graph-node-input')
+        selectedGraphNode.querySelectorAll('w-graph-node-input').forEach((input, inputIndex) => {
+          nodeEditor.querySelectorAll(`w-graph-link[to='${input.id}']`).forEach((graphLink) => {
+            if (socketIdsByGraphLink.has(graphLink)) {
+              const duplicatedGraphLink = /** @type {GraphLink} */ (document.createElement('w-graph-link'))
+              duplicatedGraphLink.from = socketIdsByGraphLink.get(graphLink)
+              duplicatedGraphLink.to = duplicatedInputs[inputIndex].id
+              nodeEditor.appendChild(duplicatedGraphLink)
+              nodeEditor.dispatchEvent(
+                new CustomEvent('graph-link-connect', {
+                  detail: {
+                    from: duplicatedGraphLink.from,
+                    to: duplicatedGraphLink.to,
+                  },
+                }),
+              )
+            } else {
+              socketIdsByGraphLink.set(graphLink, duplicatedInputs[inputIndex].id)
+            }
           })
+        })
       })
 
       nearestGraphNode.moving = true
     })
 
     graphNodeMenuItemDelete.addEventListener('click', () => {
-      nodeEditor
-        .querySelectorAll('w-graph-node[selected]')
-        .forEach((selectedGraphNode) => {
-          removeGraphNodeOutputLinks(selectedGraphNode)
-          removeGraphNodeInputLinks(selectedGraphNode)
-          selectedGraphNode.parentElement.remove()
-        })
+      nodeEditor.querySelectorAll('w-graph-node[selected]').forEach((/** @type {HTMLElement} */ selectedGraphNode) => {
+        removeGraphNodeOutputLinks(selectedGraphNode)
+        removeGraphNodeInputLinks(selectedGraphNode)
+        selectedGraphNode.parentElement.remove()
+      })
     })
   },
 })

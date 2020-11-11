@@ -1,7 +1,4 @@
-import {
-  bindAudioTrack,
-  unbindAudioTrack,
-} from '../audio-tracker/use-audio-tracker.js'
+import { bindAudioTrack, unbindAudioTrack } from '../audio-tracker/use-audio-tracker.js'
 import { defineCustomElement, html } from '../shared/core/element.js'
 import { bindAudioOutput } from './use-audio-link.js'
 import createAudioNode from './use-audio-node.js'

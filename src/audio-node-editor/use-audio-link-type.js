@@ -21,9 +21,7 @@ export default function useAudioLinkType(host) {
       linking = 'output'
       return output.type
     } else {
-      const graphLink = /** @type {GraphLink} */ (host.querySelector(
-        `w-graph-link[to='${event.detail.to}']`,
-      ))
+      const graphLink = /** @type {GraphLink} */ (host.querySelector(`w-graph-link[to='${event.detail.to}']`))
       const output = /** @type {GraphNodeOutput} */ (graphLink?.from &&
         host.querySelector(`w-graph-node-output#${graphLink.from}`))
       if (output) {
@@ -41,16 +39,12 @@ export default function useAudioLinkType(host) {
    * @param {string} selectors
    */
   function disableSockets(selectors) {
-    host.querySelectorAll(selectors).forEach((
-      /** @type {GraphNodeOutput | GraphNodeInput} */ outputOrInput,
-    ) => {
+    host.querySelectorAll(selectors).forEach((/** @type {GraphNodeOutput | GraphNodeInput} */ outputOrInput) => {
       outputOrInput.disabled = true
     })
   }
 
-  host.addEventListener('graph-link-start', (
-    /** @type {GraphLinkEvent} */ event,
-  ) => {
+  host.addEventListener('graph-link-start', (/** @type {GraphLinkEvent} */ event) => {
     const linkingType = getLinkingType(event)
 
     switch (linking) {
@@ -85,15 +79,11 @@ export default function useAudioLinkType(host) {
     if (linking === null) {
       return
     }
-    host
-      .querySelectorAll(
-        `w-graph-node-output[disabled], w-graph-node-input[disabled]`,
-      )
-      .forEach((
-        /** @type {GraphNodeOutput | GraphNodeInput} */ outputOrInput,
-      ) => {
-        outputOrInput.disabled = false
-      })
+    host.querySelectorAll(`w-graph-node-output[disabled], w-graph-node-input[disabled]`).forEach((
+      /** @type {GraphNodeOutput | GraphNodeInput} */ outputOrInput,
+    ) => {
+      outputOrInput.disabled = false
+    })
     linking = null
   })
 }

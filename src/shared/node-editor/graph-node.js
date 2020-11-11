@@ -12,8 +12,7 @@ export default defineCustomElement('w-graph-node', {
       border-radius: 4px;
       background-color: rgb(var(--color-surface));
       color: rgba(var(--color-on-surface) / var(--text-high-emphasis));
-      transition: color 150ms var(--easing-standard),
-        box-shadow 150ms var(--easing-standard);
+      transition: color 150ms var(--easing-standard), box-shadow 150ms var(--easing-standard);
       pointer-events: var(--graph-node-pointer-events);
       user-select: none;
       ${elevation(1)}
@@ -43,8 +42,7 @@ export default defineCustomElement('w-graph-node', {
       text-align: right;
       color: transparent;
       pointer-events: none;
-      transition: background-color 200ms var(--easing-standard),
-        color 100ms var(--easing-accelerated);
+      transition: background-color 200ms var(--easing-standard), color 100ms var(--easing-accelerated);
     }
 
     :host(:hover) w-icon {
@@ -54,8 +52,7 @@ export default defineCustomElement('w-graph-node', {
     :host([selected]) w-icon {
       background-color: rgba(var(--color-primary) / 0.08);
       color: rgb(var(--color-primary));
-      transition: background-color 200ms var(--easing-standard),
-        color 100ms var(--easing-decelerated);
+      transition: background-color 200ms var(--easing-standard), color 100ms var(--easing-decelerated);
     }
 
     :host(:active) w-icon,

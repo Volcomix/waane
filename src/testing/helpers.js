@@ -2,6 +2,11 @@ import { jest } from '@jest/globals'
 import '../index'
 import { html } from '../shared/core/element'
 
+/**
+ * @typedef {import('../shared/node-editor/graph-node.js').default} GraphNode
+ * @typedef {import('../audio-tracker/audio-track.js').default} AudioTrack
+ */
+
 jest.useFakeTimers()
 
 const oscillatorMock = {
@@ -35,15 +40,9 @@ function clearOscillatorMock() {
  * @param {string} label
  */
 export function findFieldByLabel(element, selectors, label) {
-  return [
-    .../** @type {NodeListOf<HTMLElement>} */ (element.querySelectorAll(
-      selectors,
-    )),
-  ].find(
+  return [.../** @type {NodeListOf<HTMLElement>} */ (element.querySelectorAll(selectors))].find(
     (element) =>
-      element.shadowRoot
-        .querySelector('w-text-field')
-        .shadowRoot.querySelector('label').textContent === label,
+      element.shadowRoot.querySelector('w-text-field').shadowRoot.querySelector('label').textContent === label,
   )
 }
 
@@ -74,9 +73,7 @@ export function click(element, eventInitDict = {}) {
  * @param {MouseEventInit} eventInitDict
  */
 export function contextMenu(element, eventInitDict = {}) {
-  element.dispatchEvent(
-    new MouseEvent('contextmenu', { bubbles: true, ...eventInitDict }),
-  )
+  element.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, ...eventInitDict }))
 }
 
 /**
@@ -97,9 +94,7 @@ export function getSelectOptions(element) {
  * @param {string} textContent
  */
 export function getSelectOption(element, textContent) {
-  return getSelectOptions(element).find(
-    (option) => option.textContent === textContent,
-  )
+  return getSelectOptions(element).find((option) => option.textContent === textContent)
 }
 
 /**
@@ -110,21 +105,17 @@ export function setup(initialTabTextContent) {
 
   document.body.innerHTML = html`<waane-app></waane-app>`
   const waaneApp = document.body.querySelector('waane-app')
-  const tabs = [
-    .../** @type {NodeListOf<HTMLElement>} */ (waaneApp.shadowRoot.querySelectorAll(
-      'w-tab',
-    )),
-  ]
+  const tabs = [.../** @type {NodeListOf<HTMLElement>} */ (waaneApp.shadowRoot.querySelectorAll('w-tab'))]
 
   const audioNodeEditor = waaneApp.shadowRoot.querySelector('audio-node-editor')
-  const nodeEditor = /** @type {HTMLElement} */ (audioNodeEditor.shadowRoot.querySelector(
-    'w-node-editor',
-  ))
+
+  /** @type {HTMLElement} */
+  const nodeEditor = audioNodeEditor.shadowRoot.querySelector('w-node-editor')
 
   const audioTracker = waaneApp.shadowRoot.querySelector('audio-tracker')
-  const addButton = /** @type {HTMLElement} */ (audioTracker.shadowRoot.querySelector(
-    'w-fab',
-  ))
+
+  /** @type {HTMLElement} */
+  const addButton = audioTracker.shadowRoot.querySelector('w-fab')
 
   /**
    * @param {'Tracks' | 'Nodes'} tabTextContent
@@ -136,20 +127,14 @@ export function setup(initialTabTextContent) {
 
   function getMenuItems() {
     const view = waaneApp.shadowRoot.querySelector('main > [active]')
-    return [
-      .../** @type {NodeListOf<HTMLElement>} */ (view.shadowRoot.querySelectorAll(
-        'w-menu[open] w-menu-item',
-      )),
-    ]
+    return [.../** @type {NodeListOf<HTMLElement>} */ (view.shadowRoot.querySelectorAll('w-menu[open] w-menu-item'))]
   }
 
   /**
    * @param {string} textContent
    */
   function getMenuItem(textContent) {
-    return getMenuItems().find((menuItem) =>
-      menuItem.textContent.includes(textContent),
-    )
+    return getMenuItems().find((menuItem) => menuItem.textContent.includes(textContent))
   }
 
   /**
@@ -163,11 +148,7 @@ export function setup(initialTabTextContent) {
   }
 
   function getGraphNodes() {
-    return [
-      .../** @type {NodeListOf<import('../shared/node-editor/graph-node.js').default>} */ (nodeEditor.querySelectorAll(
-        'w-graph-node',
-      )),
-    ]
+    return [.../** @type {NodeListOf<GraphNode>} */ (nodeEditor.querySelectorAll('w-graph-node'))]
   }
 
   /**
@@ -195,26 +176,16 @@ export function setup(initialTabTextContent) {
    */
   function addGraphLink(fromGraphNode, toGraphNode, inputLabel) {
     const graphNodeOutput = fromGraphNode.querySelector('w-graph-node-output')
-    const outputSocket = graphNodeOutput.shadowRoot.querySelector(
-      'w-graph-node-socket',
-    )
+    const outputSocket = graphNodeOutput.shadowRoot.querySelector('w-graph-node-socket')
     outputSocket.dispatchEvent(new MouseEvent('mousedown'))
 
     const graphNodeInput = inputLabel
-      ? findFieldByLabel(toGraphNode, 'w-number-field', inputLabel).closest(
-          'w-graph-node-input',
-        )
+      ? findFieldByLabel(toGraphNode, 'w-number-field', inputLabel).closest('w-graph-node-input')
       : toGraphNode.querySelector('w-graph-node-input')
 
-    const inputSocket = graphNodeInput.shadowRoot.querySelector(
-      'w-graph-node-socket',
-    )
-    inputSocket.dispatchEvent(
-      new MouseEvent('mousemove', { bubbles: true, composed: true }),
-    )
-    inputSocket.dispatchEvent(
-      new MouseEvent('mouseup', { bubbles: true, composed: true }),
-    )
+    const inputSocket = graphNodeInput.shadowRoot.querySelector('w-graph-node-socket')
+    inputSocket.dispatchEvent(new MouseEvent('mousemove', { bubbles: true, composed: true }))
+    inputSocket.dispatchEvent(new MouseEvent('mouseup', { bubbles: true, composed: true }))
     nodeEditor.click()
   }
 
@@ -227,11 +198,7 @@ export function setup(initialTabTextContent) {
   }
 
   function getAudioTracks() {
-    return [
-      .../** @type {NodeListOf<import('../audio-tracker/audio-track.js').default>} */ (audioTracker.shadowRoot.querySelectorAll(
-        'audio-track',
-      )),
-    ]
+    return [.../** @type {NodeListOf<AudioTrack>} */ (audioTracker.shadowRoot.querySelectorAll('audio-track'))]
   }
 
   navigateTo(initialTabTextContent)

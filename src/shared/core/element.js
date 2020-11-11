@@ -168,13 +168,7 @@ function getProperty(attributeName, propertyType) {
  */
 export function defineCustomElement(
   name,
-  {
-    styles,
-    template = html`<slot></slot>`,
-    shadow = true,
-    properties = /** @type {T} */ ({}),
-    setup = () => {},
-  },
+  { styles, template = html`<slot></slot>`, shadow = true, properties = /** @type {T} */ ({}), setup = () => {} },
 ) {
   const templateElement = document.createElement('template')
   templateElement.innerHTML = styles
@@ -191,8 +185,7 @@ export function defineCustomElement(
     (result, propertyName) =>
       Object.assign(result, {
         [propertyName]: (
-          propertyName.substring(0, 1) +
-          propertyName.substring(1).replace(/[A-Z]/g, '-$&')
+          propertyName.substring(0, 1) + propertyName.substring(1).replace(/[A-Z]/g, '-$&')
         ).toLowerCase(),
       }),
     {},
@@ -201,10 +194,7 @@ export function defineCustomElement(
   const reflectedProperties = Object.entries(properties).reduce(
     (result, [propertyName, propertyType]) =>
       Object.assign(result, {
-        [propertyName]: getProperty(
-          attributesByProperty[propertyName],
-          propertyType,
-        ),
+        [propertyName]: getProperty(attributesByProperty[propertyName], propertyType),
       }),
     {},
   )
@@ -215,8 +205,7 @@ export function defineCustomElement(
 
     /** @type {Object<string, () => void>} */
     _attributeChangedCallbacks = Object.values(attributesByProperty).reduce(
-      (callbacks, attributeName) =>
-        Object.assign(callbacks, { [attributeName]: () => {} }),
+      (callbacks, attributeName) => Object.assign(callbacks, { [attributeName]: () => {} }),
       {},
     )
 
@@ -239,10 +228,7 @@ export function defineCustomElement(
         disconnected: (callback) => {
           this._disconnectedCallback = callback
         },
-        observe: /** @type {Observe<T>} */ ((
-          /** @type {string} */ propertyName,
-          callback,
-        ) => {
+        observe: /** @type {Observe<T>} */ ((/** @type {string} */ propertyName, callback) => {
           const attributeName = attributesByProperty[propertyName]
           this._attributeChangedCallbacks[attributeName] = callback
         }),
@@ -279,7 +265,5 @@ export function defineCustomElement(
 
   customElements.define(name, CustomElement)
 
-  return /** @type {HTMLElement & Properties<T>} */ (
-    /** @type {unknown} */ (CustomElement)
-  )
+  return /** @type {HTMLElement & Properties<T>} */ (/** @type {unknown} */ (CustomElement))
 }

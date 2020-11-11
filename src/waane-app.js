@@ -3,6 +3,12 @@ import elevation from './shared/core/elevation.js'
 import useExport from './use-export.js'
 import useImport from './use-import.js'
 
+/**
+ * @typedef {import('./shared/base/tab.js').default} Tab
+ * @typedef {import('./audio-tracker/audio-tracker.js').default} AudioTracker
+ * @typedef {import('./audio-node-editor/audio-node-editor.js').default} AudioNodeEditor
+ */
+
 const exportTooltip = 'Export'
 const importTooltip = 'Import'
 
@@ -64,24 +70,16 @@ export default defineCustomElement('waane-app', {
     </main>
   `,
   setup({ host }) {
-    const [
-      tracksTab,
-      nodesTab,
-    ] = /** @type {NodeListOf<import('./shared/base/tab.js').default>} */ (host.shadowRoot.querySelectorAll(
-      'w-tab',
-    ))
-    const exportButton = /** @type {HTMLElement} */ (host.shadowRoot.querySelector(
-      `w-tooltip[text='${exportTooltip}'] w-button`,
-    ))
-    const importButton = /** @type {HTMLElement} */ (host.shadowRoot.querySelector(
-      `w-tooltip[text='${importTooltip}'] w-button`,
-    ))
-    const audioTracker = /** @type {import('./audio-tracker/audio-tracker.js').default} */ (host.shadowRoot.querySelector(
-      'audio-tracker',
-    ))
-    const audioNodeEditor = /** @type {import('./audio-node-editor/audio-node-editor.js').default} */ (host.shadowRoot.querySelector(
-      'audio-node-editor',
-    ))
+    const [tracksTab, nodesTab] = /** @type {NodeListOf<Tab>} */ (host.shadowRoot.querySelectorAll('w-tab'))
+
+    /** @type {HTMLElement} */
+    const exportButton = host.shadowRoot.querySelector(`w-tooltip[text='${exportTooltip}'] w-button`)
+
+    /** @type {HTMLElement} */
+    const importButton = host.shadowRoot.querySelector(`w-tooltip[text='${importTooltip}'] w-button`)
+
+    const audioTracker = /** @type {AudioTracker} */ (host.shadowRoot.querySelector('audio-tracker'))
+    const audioNodeEditor = /** @type {AudioNodeEditor} */ (host.shadowRoot.querySelector('audio-node-editor'))
 
     useExport(exportButton, audioTracker, audioNodeEditor)
     useImport(importButton, audioTracker, audioNodeEditor)

@@ -1,24 +1,12 @@
 import { expect, test } from '@jest/globals'
-import {
-  contextMenu,
-  findFieldByLabel,
-  getSelectOption,
-  getSelectOptions,
-  setup,
-} from '../../testing/helpers'
+import { contextMenu, findFieldByLabel, getSelectOption, getSelectOptions, setup } from '../../testing/helpers'
 
-/** @typedef {import('../../shared/base/select.js').default} Select */
+/**
+ * @typedef {import('../../shared/base/select.js').default} Select
+ */
 
 test('is initialized with existing tracks', () => {
-  const {
-    navigateTo,
-    getMenuItem,
-    addAudioNode,
-    getGraphNodes,
-    addAudioTrack,
-    getAudioTracks,
-  } = setup('Tracks')
-
+  const { navigateTo, getMenuItem, addAudioNode, getGraphNodes, addAudioTrack, getAudioTracks } = setup('Tracks')
   addAudioTrack()
   addAudioTrack()
   const audioTracks = getAudioTracks()
@@ -32,22 +20,14 @@ test('is initialized with existing tracks', () => {
   const trackField = findFieldByLabel(nodeTrack, 'w-select', 'Track')
   trackField.click()
 
-  expect(
-    getSelectOptions(trackField).map((option) => option.textContent),
-  ).toEqual(['2'])
+  expect(getSelectOptions(trackField).map((option) => option.textContent)).toEqual(['2'])
 })
 
 test('updates when adding tracks', () => {
-  const { navigateTo, addAudioNode, getGraphNodes, addAudioTrack } = setup(
-    'Nodes',
-  )
+  const { navigateTo, addAudioNode, getGraphNodes, addAudioTrack } = setup('Nodes')
   addAudioNode('Track')
   const [nodeTrack] = getGraphNodes()
-  const trackField = /** @type {Select} */ (findFieldByLabel(
-    nodeTrack,
-    'w-select',
-    'Track',
-  ))
+  const trackField = /** @type {Select} */ (findFieldByLabel(nodeTrack, 'w-select', 'Track'))
 
   trackField.click()
   expect(getSelectOptions(trackField)).toHaveLength(0)
@@ -57,9 +37,7 @@ test('updates when adding tracks', () => {
   addAudioTrack()
   navigateTo('Nodes')
   trackField.click()
-  expect(
-    getSelectOptions(trackField).map((option) => option.textContent),
-  ).toEqual(['1'])
+  expect(getSelectOptions(trackField).map((option) => option.textContent)).toEqual(['1'])
   expect(trackField.value).toBeNull()
 
   trackField.click()
@@ -68,14 +46,7 @@ test('updates when adding tracks', () => {
 })
 
 test('updates when deleting tracks', () => {
-  const {
-    navigateTo,
-    getMenuItem,
-    addAudioNode,
-    getGraphNodes,
-    addAudioTrack,
-    getAudioTracks,
-  } = setup('Tracks')
+  const { navigateTo, getMenuItem, addAudioNode, getGraphNodes, addAudioTrack, getAudioTracks } = setup('Tracks')
   addAudioTrack()
   addAudioTrack()
   addAudioTrack()
@@ -83,15 +54,9 @@ test('updates when deleting tracks', () => {
   navigateTo('Nodes')
   addAudioNode('Track')
   const [nodeTrack] = getGraphNodes()
-  const trackField = /** @type {Select} */ (findFieldByLabel(
-    nodeTrack,
-    'w-select',
-    'Track',
-  ))
+  const trackField = /** @type {Select} */ (findFieldByLabel(nodeTrack, 'w-select', 'Track'))
   trackField.click()
-  expect(
-    getSelectOptions(trackField).map((option) => option.textContent),
-  ).toEqual(['1', '2', '3'])
+  expect(getSelectOptions(trackField).map((option) => option.textContent)).toEqual(['1', '2', '3'])
   expect(trackField.value).toBeNull()
 
   getSelectOption(trackField, '2').click()
@@ -102,9 +67,7 @@ test('updates when deleting tracks', () => {
   getMenuItem('Delete track').click()
   navigateTo('Nodes')
   trackField.click()
-  expect(
-    getSelectOptions(trackField).map((option) => option.textContent),
-  ).toEqual(['2', '3'])
+  expect(getSelectOptions(trackField).map((option) => option.textContent)).toEqual(['2', '3'])
   expect(trackField.value).toBe('2')
 
   navigateTo('Tracks')
@@ -112,8 +75,6 @@ test('updates when deleting tracks', () => {
   getMenuItem('Delete track').click()
   navigateTo('Nodes')
   trackField.click()
-  expect(
-    getSelectOptions(trackField).map((option) => option.textContent),
-  ).toEqual(['3'])
+  expect(getSelectOptions(trackField).map((option) => option.textContent)).toEqual(['3'])
   expect(trackField.value).toBeNull()
 })

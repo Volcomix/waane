@@ -23,20 +23,14 @@ export default function useGraphLink(host) {
 
   const getNodeEditorMousePosition = useNodeEditorMousePosition(host)
 
-  host.addEventListener('graph-link-start', (
-    /** @type {GraphLinkEvent} */ event,
-  ) => {
+  host.addEventListener('graph-link-start', (/** @type {GraphLinkEvent} */ event) => {
     if (event.detail.from) {
-      graphLink = /** @type {GraphLink} */ (document.createElement(
-        'w-graph-link',
-      ))
+      graphLink = /** @type {GraphLink} */ (document.createElement('w-graph-link'))
       graphLink.from = event.detail.from
       host.linking = 'output'
       isConnected = false
     } else if (event.detail.to) {
-      graphLink = /** @type {GraphLink} */ (host.querySelector(
-        `w-graph-link[to='${event.detail.to}']`,
-      ))
+      graphLink = /** @type {GraphLink} */ (host.querySelector(`w-graph-link[to='${event.detail.to}']`))
       if (graphLink) {
         // Moves at the end of the host DOM to allow selecting
         // another link after reconnecting this one
@@ -44,9 +38,7 @@ export default function useGraphLink(host) {
         host.linking = 'output'
         isConnected = true
       } else {
-        graphLink = /** @type {GraphLink} */ (document.createElement(
-          'w-graph-link',
-        ))
+        graphLink = /** @type {GraphLink} */ (document.createElement('w-graph-link'))
         graphLink.to = event.detail.to
         host.linking = 'input'
         isConnected = false
@@ -56,9 +48,7 @@ export default function useGraphLink(host) {
     host.appendChild(graphLink)
   })
 
-  host.addEventListener('graph-link-end', (
-    /** @type {GraphLinkEvent} */ event,
-  ) => {
+  host.addEventListener('graph-link-end', (/** @type {GraphLinkEvent} */ event) => {
     if (!graphLink) {
       return
     }
@@ -109,9 +99,7 @@ export default function useGraphLink(host) {
       return
     }
     if (!isConnected && graphLink.from && graphLink.to) {
-      const existingGraphLinks = host.querySelectorAll(
-        `w-graph-link[from='${graphLink.from}'][to='${graphLink.to}']`,
-      )
+      const existingGraphLinks = host.querySelectorAll(`w-graph-link[from='${graphLink.from}'][to='${graphLink.to}']`)
       if (existingGraphLinks.length > 1) {
         graphLink.remove()
       } else {

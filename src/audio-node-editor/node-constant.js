@@ -25,11 +25,7 @@ export default defineCustomElement('node-constant', {
 
     connected(() => {
       bindAudioOutput(host.querySelector('w-graph-node-output'), constant)
-      useAudioParam(
-        host.querySelector(`w-number-field[label='${offsetLabel}']`),
-        constant,
-        'offset',
-      )
+      useAudioParam(host.querySelector(`w-number-field[label='${offsetLabel}']`), constant, 'offset')
       constant.start()
     })
 

@@ -9,9 +9,7 @@ import {
 } from '../../testing/helpers'
 
 test('starts and stops', () => {
-  const { oscillatorMock, getMenuItem, addAudioNode, getGraphNodes } = setup(
-    'Nodes',
-  )
+  const { oscillatorMock, getMenuItem, addAudioNode, getGraphNodes } = setup('Nodes')
   addAudioNode('Oscillator')
 
   expect(oscillatorMock.start).toHaveBeenCalledTimes(1)
@@ -28,15 +26,16 @@ test('changes type', () => {
   addAudioNode('Oscillator')
   const [oscillator] = getGraphNodes()
   const typeField = findFieldByLabel(oscillator, 'w-select', 'Type')
-  const typeFieldInput = typeField.shadowRoot
-    .querySelector('w-text-field')
-    .shadowRoot.querySelector('input')
+  const typeFieldInput = typeField.shadowRoot.querySelector('w-text-field').shadowRoot.querySelector('input')
 
   expect(typeFieldInput.value).toBe('sine')
   typeField.click()
-  expect(
-    getSelectOptions(typeField).map((option) => option.textContent),
-  ).toEqual(['Sine', 'Square', 'Sawtooth', 'Triangle'])
+  expect(getSelectOptions(typeField).map((option) => option.textContent)).toEqual([
+    'Sine',
+    'Square',
+    'Sawtooth',
+    'Triangle',
+  ])
   document.body.dispatchEvent(new MouseEvent('mousedown'))
   expect(getSelectOptions(typeField)).toHaveLength(0)
 
@@ -65,11 +64,7 @@ test('changes frequency', () => {
   const { oscillatorMock, addAudioNode, getGraphNodes } = setup('Nodes')
   addAudioNode('Oscillator')
   const [oscillator] = getGraphNodes()
-  const frequencyFieldInput = findFieldInputByLabel(
-    oscillator,
-    'w-number-field',
-    'Frequency',
-  )
+  const frequencyFieldInput = findFieldInputByLabel(oscillator, 'w-number-field', 'Frequency')
 
   expect(frequencyFieldInput.valueAsNumber).toBe(440)
 
@@ -80,9 +75,7 @@ test('changes frequency', () => {
 })
 
 test('connects to frequency', () => {
-  const { oscillatorMock, addAudioNode, getGraphNodes, addGraphLink } = setup(
-    'Nodes',
-  )
+  const { oscillatorMock, addAudioNode, getGraphNodes, addGraphLink } = setup('Nodes')
   addAudioNode('Oscillator')
   addAudioNode('Oscillator')
   const [oscillator1, oscillator2] = getGraphNodes()
@@ -96,11 +89,7 @@ test('changes detune', () => {
   const { oscillatorMock, addAudioNode, getGraphNodes } = setup('Nodes')
   addAudioNode('Oscillator')
   const [oscillator] = getGraphNodes()
-  const detuneFieldInput = findFieldInputByLabel(
-    oscillator,
-    'w-number-field',
-    'Detune',
-  )
+  const detuneFieldInput = findFieldInputByLabel(oscillator, 'w-number-field', 'Detune')
 
   expect(detuneFieldInput.valueAsNumber).toBe(0)
 
@@ -111,9 +100,7 @@ test('changes detune', () => {
 })
 
 test('connects to detune', () => {
-  const { oscillatorMock, addAudioNode, getGraphNodes, addGraphLink } = setup(
-    'Nodes',
-  )
+  const { oscillatorMock, addAudioNode, getGraphNodes, addGraphLink } = setup('Nodes')
   addAudioNode('Oscillator')
   addAudioNode('Oscillator')
   const [oscillator1, oscillator2] = getGraphNodes()

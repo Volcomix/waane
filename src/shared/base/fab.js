@@ -40,15 +40,11 @@ export default defineCustomElement('w-fab', {
     }
 
     :host(:hover)::before {
-      background-color: rgba(
-        var(--color-on-fab, var(--color-on-primary)) / 0.08
-      );
+      background-color: rgba(var(--color-on-fab, var(--color-on-primary)) / 0.08);
     }
 
     :host(:active)::before {
-      background-color: rgba(
-        var(--color-on-fab, var(--color-on-primary)) / 0.32
-      );
+      background-color: rgba(var(--color-on-fab, var(--color-on-primary)) / 0.32);
     }
 
     ::slotted(w-icon) {

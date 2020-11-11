@@ -14,10 +14,7 @@ export default defineCustomElement('node-audio-destination', {
     const audioContext = useAudioContext()
 
     connected(() => {
-      bindAudioInput(
-        host.querySelector('w-graph-node-input'),
-        audioContext.destination,
-      )
+      bindAudioInput(host.querySelector('w-graph-node-input'), audioContext.destination)
     })
   },
 })

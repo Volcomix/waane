@@ -52,10 +52,7 @@
       import elevation from '../elevation.js'
 
       const style = document.createElement('style')
-      style.textContent = Array.from(
-        { length: 25 },
-        (_, z) => `.surface--z${z} {${elevation(z)}}`,
-      ).join('\n')
+      style.textContent = Array.from({ length: 25 }, (_, z) => `.surface--z${z} {${elevation(z)}}`).join('\n')
       document.head.appendChild(style)
 
       document.body.querySelectorAll('section').forEach((section) => {

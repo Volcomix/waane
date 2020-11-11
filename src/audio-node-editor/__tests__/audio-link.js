@@ -2,14 +2,7 @@ import { expect, test } from '@jest/globals'
 import { click, contextMenu, setup } from '../../testing/helpers'
 
 test('connects and disconnects audio nodes', () => {
-  const {
-    oscillatorMock,
-    nodeEditor,
-    addAudioNode,
-    getGraphNodes,
-    addGraphLink,
-  } = setup('Nodes')
-
+  const { oscillatorMock, nodeEditor, addAudioNode, getGraphNodes, addGraphLink } = setup('Nodes')
   addAudioNode('Oscillator')
   addAudioNode('Audio destination')
   const [oscillator, audioDestination] = getGraphNodes()
@@ -18,9 +11,7 @@ test('connects and disconnects audio nodes', () => {
   expect(oscillatorMock.connect).toHaveBeenCalledTimes(1)
 
   const graphNodeInput = audioDestination.querySelector('w-graph-node-input')
-  const inputSocket = graphNodeInput.shadowRoot.querySelector(
-    'w-graph-node-socket',
-  )
+  const inputSocket = graphNodeInput.shadowRoot.querySelector('w-graph-node-socket')
   inputSocket.dispatchEvent(new MouseEvent('mousedown'))
   nodeEditor.dispatchEvent(new MouseEvent('mousemove'))
 
@@ -28,14 +19,7 @@ test('connects and disconnects audio nodes', () => {
 })
 
 test('disconnects audio nodes when deleting output node', () => {
-  const {
-    oscillatorMock,
-    getMenuItem,
-    addAudioNode,
-    getGraphNodes,
-    addGraphLink,
-  } = setup('Nodes')
-
+  const { oscillatorMock, getMenuItem, addAudioNode, getGraphNodes, addGraphLink } = setup('Nodes')
   addAudioNode('Oscillator')
   addAudioNode('Audio destination')
   const [oscillator, audioDestination] = getGraphNodes()
@@ -48,14 +32,7 @@ test('disconnects audio nodes when deleting output node', () => {
 })
 
 test('disconnects audio nodes when deleting input node', () => {
-  const {
-    oscillatorMock,
-    getMenuItem,
-    addAudioNode,
-    getGraphNodes,
-    addGraphLink,
-  } = setup('Nodes')
-
+  const { oscillatorMock, getMenuItem, addAudioNode, getGraphNodes, addGraphLink } = setup('Nodes')
   addAudioNode('Oscillator')
   addAudioNode('Audio destination')
   const [oscillator, audioDestination] = getGraphNodes()
@@ -68,24 +45,12 @@ test('disconnects audio nodes when deleting input node', () => {
 })
 
 test('connects linked audio nodes when duplicating them', () => {
-  const {
-    oscillatorMock,
-    getMenuItem,
-    addAudioNode,
-    getGraphNodes,
-    addGraphLink,
-  } = setup('Nodes')
-
+  const { oscillatorMock, getMenuItem, addAudioNode, getGraphNodes, addGraphLink } = setup('Nodes')
   addAudioNode('Oscillator')
   addAudioNode('Audio destination')
   addAudioNode('Audio destination')
   addAudioNode('Oscillator')
-  const [
-    oscillator1,
-    audioDestination1,
-    audioDestination2,
-    oscillator2,
-  ] = getGraphNodes()
+  const [oscillator1, audioDestination1, audioDestination2, oscillator2] = getGraphNodes()
 
   addGraphLink(oscillator1, audioDestination1)
   addGraphLink(oscillator2, audioDestination2)

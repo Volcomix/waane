@@ -40,13 +40,9 @@ export default defineCustomElement('node-schedule', {
     /** @type {Schedule} */
     const schedule = {
       trigger(time) {
-        audioParams.forEach((audioParam) =>
-          audioParam.setTargetAtTime(
-            host.targetValue,
-            time + host.startTime,
-            host.timeConstant,
-          ),
-        )
+        audioParams.forEach((audioParam) => {
+          audioParam.setTargetAtTime(host.targetValue, time + host.startTime, host.timeConstant)
+        })
       },
 
       /**
@@ -63,18 +59,9 @@ export default defineCustomElement('node-schedule', {
 
     connected(() => {
       bindAudioOutput(host.querySelector('w-graph-node-output'), schedule)
-      useProperty(
-        host.querySelector(`w-number-field[label='${targetValueLabel}']`),
-        'targetValue',
-      )
-      useProperty(
-        host.querySelector(`w-number-field[label='${startTimeLabel}']`),
-        'startTime',
-      )
-      useProperty(
-        host.querySelector(`w-number-field[label='${timeConstantLabel}']`),
-        'timeConstant',
-      )
+      useProperty(host.querySelector(`w-number-field[label='${targetValueLabel}']`), 'targetValue')
+      useProperty(host.querySelector(`w-number-field[label='${startTimeLabel}']`), 'startTime')
+      useProperty(host.querySelector(`w-number-field[label='${timeConstantLabel}']`), 'timeConstant')
       bindAudioInput(host.querySelector('w-graph-node-input'), schedule)
     })
   }),

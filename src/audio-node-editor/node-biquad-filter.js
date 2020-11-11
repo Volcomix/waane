@@ -47,43 +47,18 @@ export default defineCustomElement('node-biquad-filter', {
     Q: Number,
     gain: Number,
   },
-  setup: createAudioNode(
-    ({ host, connected, useAudioProperty, useAudioParam }) => {
-      const audioContext = useAudioContext()
-      const biquadFilter = audioContext.createBiquadFilter()
+  setup: createAudioNode(({ host, connected, useAudioProperty, useAudioParam }) => {
+    const audioContext = useAudioContext()
+    const biquadFilter = audioContext.createBiquadFilter()
 
-      connected(() => {
-        bindAudioOutput(host.querySelector('w-graph-node-output'), biquadFilter)
-        useAudioProperty(
-          host.querySelector(`w-select[label='${typeLabel}']`),
-          biquadFilter,
-          'type',
-        )
-        useAudioParam(
-          host.querySelector(`w-number-field[label='${frequencyLabel}']`),
-          biquadFilter,
-          'frequency',
-        )
-        useAudioParam(
-          host.querySelector(`w-number-field[label='${detuneLabel}']`),
-          biquadFilter,
-          'detune',
-        )
-        useAudioParam(
-          host.querySelector(`w-number-field[label='${QLabel}']`),
-          biquadFilter,
-          'Q',
-        )
-        useAudioParam(
-          host.querySelector(`w-number-field[label='${gainLabel}']`),
-          biquadFilter,
-          'gain',
-        )
-        bindAudioInput(
-          host.querySelector('w-graph-node-input:last-of-type'),
-          biquadFilter,
-        )
-      })
-    },
-  ),
+    connected(() => {
+      bindAudioOutput(host.querySelector('w-graph-node-output'), biquadFilter)
+      useAudioProperty(host.querySelector(`w-select[label='${typeLabel}']`), biquadFilter, 'type')
+      useAudioParam(host.querySelector(`w-number-field[label='${frequencyLabel}']`), biquadFilter, 'frequency')
+      useAudioParam(host.querySelector(`w-number-field[label='${detuneLabel}']`), biquadFilter, 'detune')
+      useAudioParam(host.querySelector(`w-number-field[label='${QLabel}']`), biquadFilter, 'Q')
+      useAudioParam(host.querySelector(`w-number-field[label='${gainLabel}']`), biquadFilter, 'gain')
+      bindAudioInput(host.querySelector('w-graph-node-input:last-of-type'), biquadFilter)
+    })
+  }),
 })

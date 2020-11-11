@@ -114,9 +114,7 @@ test('opens context menu on selected nodes', () => {
 })
 
 test('duplicates nodes', () => {
-  const { nodeEditor, getMenuItem, addAudioNode, getGraphNodes } = setup(
-    'Nodes',
-  )
+  const { nodeEditor, getMenuItem, addAudioNode, getGraphNodes } = setup('Nodes')
   addAudioNode('Oscillator')
   addAudioNode('Oscillator')
   addAudioNode('Oscillator')

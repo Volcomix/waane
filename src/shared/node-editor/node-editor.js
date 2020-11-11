@@ -54,9 +54,8 @@ export default defineCustomElement('w-node-editor', {
     linking: String, // 'output' or 'input'
   },
   setup({ host, connected, disconnected }) {
-    const graph = /** @type {HTMLElement} */ (host.shadowRoot.querySelector(
-      'w-graph',
-    ))
+    /** @type {HTMLElement} */
+    const graph = host.shadowRoot.querySelector('w-graph')
 
     // The order does matter because each one can stop the immediate
     // propagation to the next one

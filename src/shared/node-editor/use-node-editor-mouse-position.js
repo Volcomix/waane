@@ -1,5 +1,9 @@
 /**
- * @param {import('./node-editor.js').default} host
+ * @typedef {import('./node-editor.js').default} NodeEditor
+ */
+
+/**
+ * @param {NodeEditor} host
  */
 export default function useNodeEditorMousePosition(host) {
   /**

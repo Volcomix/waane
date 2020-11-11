@@ -1,10 +1,19 @@
 /**
+ * @typedef {import('./shared/node-editor/graph-node.js').default} GraphNode
+ * @typedef {import('./shared/node-editor/graph-link.js').default} GraphLink
+ * @typedef {import('./audio-tracker/track-effect.js').default} TrackEffect
+ * @typedef {import('./audio-tracker/audio-track.js').default} AudioTrack
+ */
+
+/**
  * @param {NamedNodeMap} attributes
  */
 function exportAttributes(attributes) {
   return [...attributes].reduce(
     (attributes, { name, value }) =>
-      Object.assign(attributes, { [name]: value }),
+      Object.assign(attributes, {
+        [name]: value,
+      }),
     {},
   )
 }
@@ -13,22 +22,16 @@ function exportAttributes(attributes) {
  * @param {HTMLElement} audioNodeEditor
  */
 function exportNodes(audioNodeEditor) {
-  return [
-    .../** @type {NodeListOf<import('./shared/node-editor/graph-node.js').default>} */ (audioNodeEditor.shadowRoot.querySelectorAll(
-      'w-graph-node',
-    )),
-  ].map((graphNode) => ({
-    name: graphNode.parentElement.tagName.toLowerCase(),
-    x: graphNode.x,
-    y: graphNode.y,
-    attributes: exportAttributes(graphNode.parentElement.attributes),
-    outputs: [...graphNode.querySelectorAll('w-graph-node-output')].map(
-      (output) => output.id,
-    ),
-    inputs: [...graphNode.querySelectorAll('w-graph-node-input')].map(
-      (input) => input.id,
-    ),
-  }))
+  return [.../** @type {NodeListOf<GraphNode>} */ (audioNodeEditor.shadowRoot.querySelectorAll('w-graph-node'))].map(
+    (graphNode) => ({
+      name: graphNode.parentElement.tagName.toLowerCase(),
+      x: graphNode.x,
+      y: graphNode.y,
+      attributes: exportAttributes(graphNode.parentElement.attributes),
+      outputs: [...graphNode.querySelectorAll('w-graph-node-output')].map((output) => output.id),
+      inputs: [...graphNode.querySelectorAll('w-graph-node-input')].map((input) => input.id),
+    }),
+  )
 }
 
 /**
@@ -36,9 +39,7 @@ function exportNodes(audioNodeEditor) {
  */
 function exportLinks(audioNodeEditor) {
   return [
-    .../** @type {NodeListOf<import('./shared/node-editor/graph-link.js').default>} */ (audioNodeEditor.shadowRoot.querySelectorAll(
-      'w-graph-link',
-    )),
+    .../** @type {NodeListOf<GraphLink>} */ (audioNodeEditor.shadowRoot.querySelectorAll('w-graph-link')),
   ].map(({ from, to }) => ({ from, to }))
 }
 
@@ -46,15 +47,14 @@ function exportLinks(audioNodeEditor) {
  * @param {HTMLElement} audioTrack
  */
 function exportEffects(audioTrack) {
-  return [
-    .../** @type {NodeListOf<import('./audio-tracker/track-effect.js').default>} */ (audioTrack.querySelectorAll(
-      'track-effect',
-    )),
-  ].reduce(
-    (effects, trackEffect, index) =>
-      trackEffect.value === null
-        ? effects
-        : Object.assign(effects, { [index]: trackEffect.value }),
+  return [.../** @type {NodeListOf<TrackEffect>} */ (audioTrack.querySelectorAll('track-effect'))].reduce(
+    (effects, trackEffect, index) => {
+      if (trackEffect.value === null) {
+        return effects
+      } else {
+        return Object.assign(effects, { [index]: trackEffect.value })
+      }
+    },
     {},
   )
 }
@@ -63,14 +63,12 @@ function exportEffects(audioTrack) {
  * @param {HTMLElement} audioTracker
  */
 function exportTracks(audioTracker) {
-  return [
-    .../** @type {NodeListOf<import('./audio-tracker/audio-track.js').default>} */ (audioTracker.shadowRoot.querySelectorAll(
-      'audio-track',
-    )),
-  ].map((audioTrack) => ({
-    label: audioTrack.label,
-    effects: exportEffects(audioTrack),
-  }))
+  return [.../** @type {NodeListOf<AudioTrack>} */ (audioTracker.shadowRoot.querySelectorAll('audio-track'))].map(
+    (audioTrack) => ({
+      label: audioTrack.label,
+      effects: exportEffects(audioTrack),
+    }),
+  )
 }
 
 /**
@@ -80,16 +78,11 @@ function exportTracks(audioTracker) {
  */
 export default function useExport(button, audioTracker, audioNodeEditor) {
   button.addEventListener('click', () => {
-    const nodeEditor = exportAttributes(
-      audioNodeEditor.shadowRoot.querySelector('w-node-editor').attributes,
-    )
+    const nodeEditor = exportAttributes(audioNodeEditor.shadowRoot.querySelector('w-node-editor').attributes)
     const nodes = exportNodes(audioNodeEditor)
     const links = exportLinks(audioNodeEditor)
     const tracks = exportTracks(audioTracker)
-    const blob = new Blob(
-      [JSON.stringify({ nodeEditor, nodes, links, tracks }, null, 2)],
-      { type: 'application/json' },
-    )
+    const blob = new Blob([JSON.stringify({ nodeEditor, nodes, links, tracks }, null, 2)], { type: 'application/json' })
     const url = URL.createObjectURL(blob)
     const link = document.createElement('a')
     link.href = url

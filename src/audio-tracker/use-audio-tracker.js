@@ -20,14 +20,10 @@ const tracksByField = new Map()
  */
 export function registerAudioTrack(audioTrack) {
   trackEffectsByTrackLabel.set(audioTrack.label, [
-    .../** @type {NodeListOf<TrackEffect>} */ (audioTrack.querySelectorAll(
-      'track-effect',
-    )),
+    .../** @type {NodeListOf<TrackEffect>} */ (audioTrack.querySelectorAll('track-effect')),
   ])
   const template = document.createElement('template')
-  template.innerHTML = html`
-    <w-menu-item value="${audioTrack.label}">${audioTrack.label}</w-menu-item>
-  `
+  template.innerHTML = html`<w-menu-item value="${audioTrack.label}">${audioTrack.label}</w-menu-item>`
   tracksByField.forEach((_, selectField) => {
     selectField.appendChild(template.content.cloneNode(true))
   })
@@ -42,9 +38,7 @@ export function deregisterAudioTrack(audioTrack) {
     if (selectField.value === audioTrack.label) {
       selectField.value = null
     }
-    const menuItem = selectField.querySelector(
-      `w-menu-item[value='${audioTrack.label}']`,
-    )
+    const menuItem = selectField.querySelector(`w-menu-item[value='${audioTrack.label}']`)
     menuItem.remove()
   })
 }
@@ -55,9 +49,7 @@ export function deregisterAudioTrack(audioTrack) {
  */
 export function bindAudioTrack(selectField, track) {
   trackEffectsByTrackLabel.forEach((_, trackLabel) => {
-    const menuItem = /** @type {MenuItem} */ (document.createElement(
-      'w-menu-item',
-    ))
+    const menuItem = /** @type {MenuItem} */ (document.createElement('w-menu-item'))
     menuItem.textContent = trackLabel
     menuItem.value = trackLabel
     selectField.appendChild(menuItem)

@@ -1,6 +1,10 @@
 /**
+ * @typedef {import('../shared/base/menu.js').default} Menu
+ */
+
+/**
  * @param {HTMLElement} host
- * @param {import('../shared/base/menu.js').default} menu
+ * @param {Menu} menu
  */
 export default function useNodeEditorMenu(host, menu) {
   host.addEventListener('contextmenu', (event) => {

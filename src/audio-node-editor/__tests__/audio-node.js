@@ -52,13 +52,7 @@ test('adds an audio destination node', () => {
 })
 
 test('duplicates audio properties', () => {
-  const {
-    oscillatorMock,
-    nodeEditor,
-    getMenuItem,
-    addAudioNode,
-    getGraphNodes,
-  } = setup('Nodes')
+  const { oscillatorMock, nodeEditor, getMenuItem, addAudioNode, getGraphNodes } = setup('Nodes')
   addAudioNode('Oscillator')
   const [oscillator1] = getGraphNodes()
 
@@ -66,15 +60,9 @@ test('duplicates audio properties', () => {
   typeField1.click()
   getSelectOption(typeField1, 'Sawtooth').click()
 
-  const frequencyFieldInput1 = findFieldInputByLabel(
-    oscillator1,
-    'w-number-field',
-    'Frequency',
-  )
+  const frequencyFieldInput1 = findFieldInputByLabel(oscillator1, 'w-number-field', 'Frequency')
   frequencyFieldInput1.valueAsNumber = 880
-  frequencyFieldInput1.dispatchEvent(
-    new InputEvent('input', { composed: true }),
-  )
+  frequencyFieldInput1.dispatchEvent(new InputEvent('input', { composed: true }))
 
   oscillatorMock.type = 'sine'
   oscillatorMock.frequency.value = 440
@@ -87,11 +75,7 @@ test('duplicates audio properties', () => {
 
   const oscillator2 = getGraphNodes()[1]
   const typeFieldInput2 = findFieldInputByLabel(oscillator2, 'w-select', 'Type')
-  const frequencyFieldInput2 = findFieldInputByLabel(
-    oscillator2,
-    'w-number-field',
-    'Frequency',
-  )
+  const frequencyFieldInput2 = findFieldInputByLabel(oscillator2, 'w-number-field', 'Frequency')
 
   expect(typeFieldInput2.value).toBe('sawtooth')
   expect(oscillatorMock.type).toBe('sawtooth')

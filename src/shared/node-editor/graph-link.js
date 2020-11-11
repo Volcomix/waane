@@ -1,6 +1,8 @@
 import { css, defineCustomElement, html } from '../core/element.js'
 
-/** @typedef {import('./graph-node.js').default} GraphNode */
+/**
+ * @typedef {import('./graph-node.js').default} GraphNode
+ */
 
 export default defineCustomElement('w-graph-link', {
   styles: css`
@@ -53,12 +55,11 @@ export default defineCustomElement('w-graph-link', {
         return { fromX, fromY }
       }
       const root = /** @type {Document | ShadowRoot} */ (host.getRootNode())
-      const output = /** @type {HTMLElement} */ (root.querySelector(
-        `w-graph-node-output#${from}`,
-      ))
-      const graphNode = /** @type {GraphNode} */ (output.closest(
-        'w-graph-node',
-      ))
+
+      /** @type {HTMLElement} */
+      const output = root.querySelector(`w-graph-node-output#${from}`)
+
+      const graphNode = /** @type {GraphNode} */ (output.closest('w-graph-node'))
       return {
         fromX: graphNode.x + graphNode.offsetWidth,
         fromY: graphNode.y + output.offsetTop + output.offsetHeight / 2,
@@ -71,12 +72,11 @@ export default defineCustomElement('w-graph-link', {
         return { toX, toY }
       }
       const root = /** @type {Document | ShadowRoot} */ (host.getRootNode())
-      const output = /** @type {HTMLElement} */ (root.querySelector(
-        `w-graph-node-input#${to}`,
-      ))
-      const graphNode = /** @type {GraphNode} */ (output.closest(
-        'w-graph-node',
-      ))
+
+      /** @type {HTMLElement} */
+      const output = root.querySelector(`w-graph-node-input#${to}`)
+
+      const graphNode = /** @type {GraphNode} */ (output.closest('w-graph-node'))
       return {
         toX: graphNode.x,
         toY: graphNode.y + output.offsetTop + output.offsetHeight / 2,
@@ -128,11 +128,11 @@ export default defineCustomElement('w-graph-link', {
       const { from, to } = host
       const root = /** @type {Document | ShadowRoot} */ (host.getRootNode())
 
-      const output = /** @type {HTMLElement} */ (from &&
-        root.querySelector(`w-graph-node-output#${host.from}`))
+      /** @type {HTMLElement} */
+      const output = from && root.querySelector(`w-graph-node-output#${host.from}`)
 
-      const input = /** @type {HTMLElement} */ (to &&
-        root.querySelector(`w-graph-node-input#${host.to}`))
+      /** @type {HTMLElement} */
+      const input = to && root.querySelector(`w-graph-node-input#${host.to}`)
 
       observer.disconnect()
 

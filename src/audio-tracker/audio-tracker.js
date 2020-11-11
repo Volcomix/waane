@@ -15,8 +15,7 @@ export default defineCustomElement('audio-tracker', {
       left: 8px;
       opacity: 0;
       transform: translateY(-50%) scale(0.3);
-      transition: opacity 75ms linear 75ms,
-        transform 150ms var(--easing-accelerated);
+      transition: opacity 75ms linear 75ms, transform 150ms var(--easing-accelerated);
       --color-fab: var(--color-secondary);
       --color-on-fab: var(--color-on-secondary);
     }
@@ -40,15 +39,13 @@ export default defineCustomElement('audio-tracker', {
       background-color: rgb(var(--color-surface));
       opacity: 0;
       transform: translateX(-100px);
-      transition: opacity 150ms var(--easing-accelerated),
-        transform 150ms var(--easing-accelerated);
+      transition: opacity 150ms var(--easing-accelerated), transform 150ms var(--easing-accelerated);
     }
 
     :host([active]) div {
       opacity: 1;
       transform: none;
-      transition-timing-function: var(--easing-decelerated),
-        var(--easing-decelerated);
+      transition-timing-function: var(--easing-decelerated), var(--easing-decelerated);
     }
 
     div::before {
@@ -88,14 +85,14 @@ export default defineCustomElement('audio-tracker', {
     active: Boolean,
   },
   setup({ host, connected, disconnected }) {
-    const fab = /** @type {HTMLElement} */ (host.shadowRoot.querySelector(
-      'w-fab',
-    ))
+    /** @type {HTMLElement} */
+    const fab = host.shadowRoot.querySelector('w-fab')
+
     const div = host.shadowRoot.querySelector('div')
     const menu = /** @type {Menu} */ (host.shadowRoot.querySelector('w-menu'))
-    const menuItemDelete = /** @type {HTMLElement} */ (host.shadowRoot.querySelector(
-      '#delete',
-    ))
+
+    /** @type {HTMLElement} */
+    const menuItemDelete = host.shadowRoot.querySelector('#delete')
 
     useKeyboardNavigation(div)
     const { start, stop } = useAudioTracker()
@@ -114,14 +111,10 @@ export default defineCustomElement('audio-tracker', {
     })
 
     fab.addEventListener('click', () => {
-      const audioTrack = /** @type {AudioTrack} */ (document.createElement(
-        'audio-track',
-      ))
+      const audioTrack = /** @type {AudioTrack} */ (document.createElement('audio-track'))
       audioTrack.label = `${trackId++}`
       for (let i = 0; i < 16; i++) {
-        const trackEffect = /** @type {TrackEffect} */ (document.createElement(
-          'track-effect',
-        ))
+        const trackEffect = /** @type {TrackEffect} */ (document.createElement('track-effect'))
         trackEffect.beat = i % 4 === 0
         audioTrack.appendChild(trackEffect)
       }
