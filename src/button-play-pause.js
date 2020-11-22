@@ -10,7 +10,7 @@ export default defineCustomElement('button-play-pause', {
     }
 
     w-tooltip {
-      transition: opacity 200ms var(--easing-standard), transform 200ms var(--easing-standard);
+      transition: opacity 200ms var(--easing-standard);
     }
 
     w-tooltip[text='${pauseTooltip}'] {
@@ -21,15 +21,25 @@ export default defineCustomElement('button-play-pause', {
       left: 0;
     }
 
+    w-icon {
+      transition: transform 200ms var(--easing-standard);
+    }
+
     :host([active]) w-tooltip[text='${playTooltip}'] {
       opacity: 0;
+    }
+
+    :host([active]) w-tooltip[text='${playTooltip}'] w-icon {
       transform: rotate(90deg);
     }
 
     :host(:not([active])) w-tooltip[text='${pauseTooltip}'] {
       opacity: 0;
-      transform: rotate(-90deg);
       pointer-events: none;
+    }
+
+    :host(:not([active])) w-tooltip[text='${pauseTooltip}'] w-icon {
+      transform: rotate(-90deg);
     }
   `,
   template: html`
