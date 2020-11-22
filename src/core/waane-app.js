@@ -1,15 +1,15 @@
-import useAudioTracker from './audio-tracker/use-audio-tracker.js'
-import { css, defineCustomElement, html } from './shared/core/element.js'
-import elevation from './shared/core/elevation.js'
-import useExport from './use-export.js'
-import useImport, { clearAll } from './use-import.js'
+import useAudioTracker from '../audio-tracker/use-audio-tracker.js'
+import useExport from '../helpers/use-export.js'
+import useImport, { clearAll } from '../helpers/use-import.js'
+import { css, defineCustomElement, html } from '../shared/core/element.js'
+import elevation from '../shared/core/elevation.js'
 
 /**
- * @typedef {import('./shared/base/tab.js').default} Tab
+ * @typedef {import('../shared/base/tab.js').default} Tab
  * @typedef {import('./button-play-pause.js').default} ButtonPlayPause
- * @typedef {import('./shared/base/menu.js').default} Menu
- * @typedef {import('./audio-tracker/audio-tracker.js').default} AudioTracker
- * @typedef {import('./audio-node-editor/audio-node-editor.js').default} AudioNodeEditor
+ * @typedef {import('../shared/base/menu.js').default} Menu
+ * @typedef {import('../audio-tracker/audio-tracker.js').default} AudioTracker
+ * @typedef {import('../audio-node-editor/audio-node-editor.js').default} AudioNodeEditor
  */
 
 export default defineCustomElement('waane-app', {

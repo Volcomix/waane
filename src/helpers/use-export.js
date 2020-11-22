@@ -1,8 +1,8 @@
 /**
- * @typedef {import('./shared/node-editor/graph-node.js').default} GraphNode
- * @typedef {import('./shared/node-editor/graph-link.js').default} GraphLink
- * @typedef {import('./audio-tracker/track-effect.js').default} TrackEffect
- * @typedef {import('./audio-tracker/audio-track.js').default} AudioTrack
+ * @typedef {import('../shared/node-editor/graph-node.js').default} GraphNode
+ * @typedef {import('../shared/node-editor/graph-link.js').default} GraphLink
+ * @typedef {import('../audio-tracker/track-effect.js').default} TrackEffect
+ * @typedef {import('../audio-tracker/audio-track.js').default} AudioTrack
  */
 
 /**

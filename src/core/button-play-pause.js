@@ -1,4 +1,4 @@
-import { css, defineCustomElement, html } from './shared/core/element.js'
+import { css, defineCustomElement, html } from '../shared/core/element.js'
 
 const playTooltip = 'Play'
 const pauseTooltip = 'Pause'

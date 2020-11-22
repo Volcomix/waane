@@ -1,10 +1,10 @@
-import { clearAllIds } from './shared/helpers/id.js'
+import { clearAllIds } from '../shared/helpers/id.js'
 
 /**
- * @typedef {import('./audio-tracker/audio-track.js').default} AudioTrack
- * @typedef {import('./audio-tracker/track-effect.js').default} TrackEffect
- * @typedef {import('./shared/node-editor/graph-node.js').default} GraphNode
- * @typedef {import('./shared/node-editor/graph-link.js').default} GraphLink
+ * @typedef {import('../audio-tracker/audio-track.js').default} AudioTrack
+ * @typedef {import('../audio-tracker/track-effect.js').default} TrackEffect
+ * @typedef {import('../shared/node-editor/graph-node.js').default} GraphNode
+ * @typedef {import('../shared/node-editor/graph-link.js').default} GraphLink
  *
  * @typedef {object} ImportNode
  * @property {string} name
