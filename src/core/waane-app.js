@@ -1,15 +1,16 @@
 import useAudioTracker from '../audio-tracker/use-audio-tracker.js'
+import openFile, { clearAll } from '../helpers/open-file.js'
 import useExport from '../helpers/use-export.js'
-import useImport, { clearAll } from '../helpers/use-import.js'
 import { css, defineCustomElement, html } from '../shared/core/element.js'
 import elevation from '../shared/core/elevation.js'
 
 /**
  * @typedef {import('../shared/base/tab.js').default} Tab
- * @typedef {import('./button-play-pause.js').default} ButtonPlayPause
  * @typedef {import('../shared/base/menu.js').default} Menu
+ * @typedef {import('./button-play-pause.js').default} ButtonPlayPause
  * @typedef {import('../audio-tracker/audio-tracker.js').default} AudioTracker
  * @typedef {import('../audio-node-editor/audio-node-editor.js').default} AudioNodeEditor
+ * @typedef {import('../helpers/open-file.js').ImportContent} ImportContent
  */
 
 export default defineCustomElement('waane-app', {
@@ -111,7 +112,6 @@ export default defineCustomElement('waane-app', {
     let isMenuOpenOnMouseDown
 
     const { startAudioTracker, stopAudioTracker, isAudioTrackerStarted } = useAudioTracker()
-    useImport(menuItemOpen, audioTracker, audioNodeEditor)
     useExport(menuItemExport, audioTracker, audioNodeEditor)
 
     host.addEventListener('contextmenu', (event) => {
@@ -162,6 +162,26 @@ export default defineCustomElement('waane-app', {
 
     menuItemNew.addEventListener('click', () => {
       clearAll(audioTracker, audioNodeEditor)
+    })
+
+    menuItemOpen.addEventListener('click', () => {
+      const input = document.createElement('input')
+      input.type = 'file'
+      input.addEventListener('change', async () => {
+        if (input.files.length !== 1) {
+          return
+        }
+        const file = input.files[0]
+        const fileReader = new FileReader()
+        fileReader.addEventListener('load', () => {
+          /** @type {ImportContent} */
+          const content = JSON.parse(/** @type {string} */ (fileReader.result))
+
+          openFile(content, audioTracker, audioNodeEditor)
+        })
+        fileReader.readAsText(file)
+      })
+      input.click()
     })
   },
 })

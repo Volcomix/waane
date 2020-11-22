@@ -136,46 +136,29 @@ function importLinks(content, outputs, inputs, nodeEditor) {
 }
 
 /**
- * @param {HTMLElement} element
- * @param {HTMLElement} audioTracker
+ *
+ * @param {ImportContent} content
  * @param {HTMLElement} audioNodeEditor
+ * @param {HTMLElement} audioTracker
  */
-export default function useImport(element, audioTracker, audioNodeEditor) {
-  element.addEventListener('click', () => {
-    const input = document.createElement('input')
-    input.type = 'file'
-    input.addEventListener('change', async () => {
-      if (input.files.length !== 1) {
-        return
-      }
-      const file = input.files[0]
-      const fileReader = new FileReader()
-      fileReader.addEventListener('load', () => {
-        /** @type {ImportContent} */
-        const content = JSON.parse(/** @type {string} */ (fileReader.result))
+export default function openFile(content, audioTracker, audioNodeEditor) {
+  /** @type {HTMLElement} */
+  const nodeEditor = audioNodeEditor.shadowRoot.querySelector('w-node-editor')
 
-        /** @type {HTMLElement} */
-        const nodeEditor = audioNodeEditor.shadowRoot.querySelector('w-node-editor')
+  clearAll(audioTracker, audioNodeEditor)
+  const trackLabels = importTracks(content, audioTracker)
+  importAttributes(content.nodeEditor, nodeEditor)
+  const { nodeOutputs, nodeInputs } = importNodes(content, trackLabels, nodeEditor)
+  let wasAudioNodeEditorHidden = false
+  if (audioNodeEditor.hidden) {
+    wasAudioNodeEditorHidden = true
 
-        clearAll(audioTracker, audioNodeEditor)
-        const trackLabels = importTracks(content, audioTracker)
-        importAttributes(content.nodeEditor, nodeEditor)
-        const { nodeOutputs, nodeInputs } = importNodes(content, trackLabels, nodeEditor)
-        let wasAudioNodeEditorHidden = false
-        if (audioNodeEditor.hidden) {
-          wasAudioNodeEditorHidden = true
-
-          // Audio node editor must not be hidden for the graph links
-          // to be positionned correctly
-          audioNodeEditor.hidden = false
-        }
-        importLinks(content, nodeOutputs, nodeInputs, nodeEditor)
-        if (wasAudioNodeEditorHidden) {
-          audioNodeEditor.hidden = true
-        }
-      })
-      fileReader.readAsText(file)
-    })
-    input.click()
-  })
+    // Audio node editor must not be hidden for the graph links
+    // to be positionned correctly
+    audioNodeEditor.hidden = false
+  }
+  importLinks(content, nodeOutputs, nodeInputs, nodeEditor)
+  if (wasAudioNodeEditorHidden) {
+    audioNodeEditor.hidden = true
+  }
 }
