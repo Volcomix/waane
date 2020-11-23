@@ -1,50 +1,12 @@
-import { clearAllIds } from '../shared/helpers/id.js'
+import { clearAll } from './file-helper.js'
 
 /**
  * @typedef {import('../audio-tracker/audio-track.js').default} AudioTrack
  * @typedef {import('../audio-tracker/track-effect.js').default} TrackEffect
  * @typedef {import('../shared/node-editor/graph-node.js').default} GraphNode
  * @typedef {import('../shared/node-editor/graph-link.js').default} GraphLink
- *
- * @typedef {object} ImportNode
- * @property {string} name
- * @property {number} x
- * @property {number} y
- * @property {Object<string, string>} attributes
- * @property {string[]} outputs
- * @property {string[]} inputs
- *
- * @typedef {object} ImportLink
- * @property {string} from
- * @property {string} to
- *
- * @typedef {object} ImportTrack
- * @property {string} label
- * @property {Object<number, string>} effects
- *
- * @typedef {object} ImportContent
- * @property {Object<string, string>} nodeEditor
- * @property {ImportNode[]} nodes
- * @property {ImportLink[]} links
- * @property {ImportTrack[]} tracks
+ * @typedef {import('./file-helper.js').FileContent} FileContent
  */
-
-/**
- * @param {HTMLElement} audioTracker
- * @param {HTMLElement} audioNodeEditor
- */
-export function clearAll(audioTracker, audioNodeEditor) {
-  audioNodeEditor.shadowRoot.querySelectorAll('w-graph-node').forEach((graphNode) => {
-    graphNode.parentElement.remove()
-  })
-  audioNodeEditor.shadowRoot.querySelectorAll('w-graph-link').forEach((graphLink) => {
-    graphLink.remove()
-  })
-  audioTracker.shadowRoot.querySelectorAll('audio-track').forEach((audioTrack) => {
-    audioTrack.remove()
-  })
-  clearAllIds()
-}
 
 /**
  * @param {Object<string, string>} attributes
@@ -57,7 +19,7 @@ function importAttributes(attributes, element) {
 }
 
 /**
- * @param {ImportContent} content
+ * @param {FileContent} content
  * @param {HTMLElement} audioTracker
  */
 function importTracks(content, audioTracker) {
@@ -81,7 +43,7 @@ function importTracks(content, audioTracker) {
 }
 
 /**
- * @param {ImportContent} content
+ * @param {FileContent} content
  * @param {Map<string, string>} trackLabels
  * @param {HTMLElement} nodeEditor
  */
@@ -113,7 +75,7 @@ function importNodes(content, trackLabels, nodeEditor) {
 }
 
 /**
- * @param {ImportContent} content
+ * @param {FileContent} content
  * @param {Map<string, string>} outputs
  * @param {Map<string, string>} inputs
  * @param {HTMLElement} nodeEditor
@@ -137,11 +99,11 @@ function importLinks(content, outputs, inputs, nodeEditor) {
 
 /**
  *
- * @param {ImportContent} content
+ * @param {FileContent} content
  * @param {HTMLElement} audioNodeEditor
  * @param {HTMLElement} audioTracker
  */
-export default function openFile(content, audioTracker, audioNodeEditor) {
+export default function importFile(content, audioTracker, audioNodeEditor) {
   /** @type {HTMLElement} */
   const nodeEditor = audioNodeEditor.shadowRoot.querySelector('w-node-editor')
 

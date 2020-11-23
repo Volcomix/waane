@@ -3,6 +3,7 @@
  * @typedef {import('../shared/node-editor/graph-link.js').default} GraphLink
  * @typedef {import('../audio-tracker/track-effect.js').default} TrackEffect
  * @typedef {import('../audio-tracker/audio-track.js').default} AudioTrack
+ * @typedef {import('./file-helper.js').FileContent} FileContent
  */
 
 /**
@@ -72,22 +73,15 @@ function exportTracks(audioTracker) {
 }
 
 /**
- * @param {HTMLElement} element
  * @param {HTMLElement} audioTracker
  * @param {HTMLElement} audioNodeEditor
+ * @returns {FileContent}
  */
-export default function useExport(element, audioTracker, audioNodeEditor) {
-  element.addEventListener('click', () => {
-    const nodeEditor = exportAttributes(audioNodeEditor.shadowRoot.querySelector('w-node-editor').attributes)
-    const nodes = exportNodes(audioNodeEditor)
-    const links = exportLinks(audioNodeEditor)
-    const tracks = exportTracks(audioTracker)
-    const blob = new Blob([JSON.stringify({ nodeEditor, nodes, links, tracks }, null, 2)], { type: 'application/json' })
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement('a')
-    link.href = url
-    link.download = 'waane-export.json'
-    link.click()
-    URL.revokeObjectURL(url)
-  })
+export default function exportFile(audioTracker, audioNodeEditor) {
+  return {
+    nodeEditor: exportAttributes(audioNodeEditor.shadowRoot.querySelector('w-node-editor').attributes),
+    nodes: exportNodes(audioNodeEditor),
+    links: exportLinks(audioNodeEditor),
+    tracks: exportTracks(audioTracker),
+  }
 }
