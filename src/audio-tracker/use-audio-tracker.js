@@ -104,19 +104,19 @@ export default function useAudioTracker() {
   }
 
   return {
-    startAudioTracker() {
+    play() {
       triggerTime = audioContext.currentTime
       line = 0
       scheduleTrigger()
     },
-    stopAudioTracker() {
+    pause() {
       if (timeoutID === null) {
         return
       }
       window.clearTimeout(timeoutID)
       timeoutID = null
     },
-    isAudioTrackerStarted() {
+    isPlaying() {
       return timeoutID !== null
     },
   }

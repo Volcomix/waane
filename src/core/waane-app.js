@@ -112,7 +112,7 @@ export default defineCustomElement('waane-app', {
     /** @type {boolean} */
     let isMenuOpenOnMouseDown
 
-    const { startAudioTracker, stopAudioTracker, isAudioTrackerStarted } = useAudioTracker()
+    const { play, pause, isPlaying } = useAudioTracker()
 
     host.addEventListener('contextmenu', (event) => {
       event.preventDefault()
@@ -141,11 +141,11 @@ export default defineCustomElement('waane-app', {
     })
 
     buttonPlayPause.addEventListener('click', () => {
-      if (isAudioTrackerStarted()) {
-        stopAudioTracker()
+      if (isPlaying()) {
+        pause()
         buttonPlayPause.active = false
       } else {
-        startAudioTracker()
+        play()
         buttonPlayPause.active = true
       }
     })

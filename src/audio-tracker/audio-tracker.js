@@ -95,13 +95,13 @@ export default defineCustomElement('audio-tracker', {
     const menuItemDelete = host.shadowRoot.querySelector('#delete')
 
     useKeyboardNavigation(div)
-    const { stopAudioTracker } = useAudioTracker()
+    const { pause } = useAudioTracker()
 
     /** @type {AudioTrack} */
     let selectedAudioTrack = null
 
     disconnected(() => {
-      stopAudioTracker()
+      pause()
     })
 
     fab.addEventListener('click', () => {
