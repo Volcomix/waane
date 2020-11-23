@@ -20,11 +20,38 @@ const oscillatorMock = {
   disconnect: jest.fn(),
 }
 
+const constantSourceMock = {
+  offset: { value: 1 },
+  start: jest.fn(),
+  stop: jest.fn(),
+  connect: jest.fn(),
+  disconnect: jest.fn(),
+}
+
+const gainMock = {
+  gain: { value: 0 },
+  connect: jest.fn(),
+  disconnect: jest.fn(),
+}
+
+const biquadFilterMock = {
+  type: 'lowpass',
+  frequency: { value: 350 },
+  detune: { value: 0 },
+  Q: { value: 1 },
+  gain: { value: 0 },
+  connect: jest.fn(),
+  disconnect: jest.fn(),
+}
+
 Object.defineProperty(window, 'AudioContext', {
   writable: true,
   value: class {
     destination = {}
     createOscillator = () => oscillatorMock
+    createConstantSource = () => constantSourceMock
+    createGain = () => gainMock
+    createBiquadFilter = () => biquadFilterMock
   },
 })
 
@@ -109,11 +136,13 @@ export function setup(initialTabTextContent) {
   const waaneApp = document.body.querySelector('waane-app')
   const tabs = [.../** @type {NodeListOf<HTMLElement>} */ (waaneApp.shadowRoot.querySelectorAll('w-tab'))]
 
+  /** @type {HTMLElement} */
   const audioNodeEditor = waaneApp.shadowRoot.querySelector('audio-node-editor')
 
   /** @type {HTMLElement} */
   const nodeEditor = audioNodeEditor.shadowRoot.querySelector('w-node-editor')
 
+  /** @type {HTMLElement} */
   const audioTracker = waaneApp.shadowRoot.querySelector('audio-tracker')
 
   /** @type {HTMLElement} */
@@ -207,8 +236,12 @@ export function setup(initialTabTextContent) {
 
   return {
     oscillatorMock,
+    constantSourceMock,
+    gainMock,
+    biquadFilterMock,
 
     nodeEditor,
+    audioNodeEditor,
     audioTracker,
 
     navigateTo,
