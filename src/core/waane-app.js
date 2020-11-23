@@ -112,7 +112,17 @@ export default defineCustomElement('waane-app', {
     /** @type {boolean} */
     let isMenuOpenOnMouseDown
 
-    const { play, pause, isPlaying } = useAudioTracker()
+    const { startAudioTracker, stopAudioTracker, isAudioTrackerStarted } = useAudioTracker()
+
+    function play() {
+      startAudioTracker()
+      buttonPlayPause.active = true
+    }
+
+    function pause() {
+      stopAudioTracker()
+      buttonPlayPause.active = false
+    }
 
     host.addEventListener('contextmenu', (event) => {
       event.preventDefault()
@@ -141,12 +151,10 @@ export default defineCustomElement('waane-app', {
     })
 
     buttonPlayPause.addEventListener('click', () => {
-      if (isPlaying()) {
+      if (isAudioTrackerStarted()) {
         pause()
-        buttonPlayPause.active = false
       } else {
         play()
-        buttonPlayPause.active = true
       }
     })
 
@@ -161,6 +169,7 @@ export default defineCustomElement('waane-app', {
     })
 
     menuItemNew.addEventListener('click', () => {
+      pause()
       clearAll(audioTracker, audioNodeEditor)
     })
 
@@ -171,6 +180,7 @@ export default defineCustomElement('waane-app', {
         if (input.files.length !== 1) {
           return
         }
+        pause()
         const file = input.files[0]
         const fileReader = new FileReader()
         fileReader.addEventListener('load', () => {

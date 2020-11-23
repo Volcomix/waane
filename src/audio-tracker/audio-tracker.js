@@ -1,5 +1,4 @@
 import { css, defineCustomElement, html } from '../shared/core/element.js'
-import useAudioTracker from './use-audio-tracker.js'
 import useKeyboardNavigation from './use-keyboard-navigation.js'
 
 /**
@@ -84,7 +83,7 @@ export default defineCustomElement('audio-tracker', {
   properties: {
     active: Boolean,
   },
-  setup({ host, disconnected }) {
+  setup({ host }) {
     /** @type {HTMLElement} */
     const fab = host.shadowRoot.querySelector('w-fab')
 
@@ -95,14 +94,9 @@ export default defineCustomElement('audio-tracker', {
     const menuItemDelete = host.shadowRoot.querySelector('#delete')
 
     useKeyboardNavigation(div)
-    const { pause } = useAudioTracker()
 
     /** @type {AudioTrack} */
     let selectedAudioTrack = null
-
-    disconnected(() => {
-      pause()
-    })
 
     fab.addEventListener('click', () => {
       const audioTrack = /** @type {AudioTrack} */ (document.createElement('audio-track'))
