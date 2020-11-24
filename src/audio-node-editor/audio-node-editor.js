@@ -64,6 +64,7 @@ export default defineCustomElement('audio-node-editor', {
       <w-menu-item value="node-schedule">Schedule</w-menu-item>
       <w-menu-item value="node-oscillator">Oscillator</w-menu-item>
       <w-menu-item value="node-constant">Constant</w-menu-item>
+      <w-menu-item value="node-white-noise">White noise</w-menu-item>
       <w-menu-item value="node-gain">Gain</w-menu-item>
       <w-menu-item value="node-biquad-filter">Biquad filter</w-menu-item>
       <w-menu-item value="node-audio-destination">Audio destination</w-menu-item>

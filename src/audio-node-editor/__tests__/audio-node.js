@@ -21,6 +21,7 @@ test('opens context menu on node editor', () => {
     expect.stringContaining('Schedule'),
     expect.stringContaining('Oscillator'),
     expect.stringContaining('Constant'),
+    expect.stringContaining('White noise'),
     expect.stringContaining('Gain'),
     expect.stringContaining('Biquad filter'),
     expect.stringContaining('Audio destination'),
