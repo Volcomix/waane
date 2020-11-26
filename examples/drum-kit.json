@@ -1,8 +1,8 @@
 {
   "nodeEditor": {
-    "zoom": "0.3669999999999999",
-    "pan-x": "-2245.5587895236463",
-    "pan-y": "-441.2322210393967"
+    "zoom": "0.6300000000000002",
+    "pan-x": "-267.49210197704053",
+    "pan-y": "-7004.00626789646"
   },
   "nodes": [
     {
@@ -148,8 +148,8 @@
     },
     {
       "name": "node-audio-destination",
-      "x": 2347.131483130379,
-      "y": -602.9348037627931,
+      "x": 3116.777785381184,
+      "y": 2388.9623023465315,
       "attributes": {},
       "outputs": [],
       "inputs": [
@@ -310,8 +310,8 @@
     },
     {
       "name": "node-track",
-      "x": 2537.5269157842986,
-      "y": 48.74919689474461,
+      "x": -1054.4730842157014,
+      "y": 2528.7491968947447,
       "attributes": {
         "track": "2"
       },
@@ -322,11 +322,11 @@
     },
     {
       "name": "node-schedule",
-      "x": 2881.684718031144,
-      "y": -986.5136097922532,
+      "x": -710.3152819688562,
+      "y": 1493.4863902077468,
       "attributes": {
         "start-time": "0.003",
-        "time-constant": "0.018"
+        "time-constant": "0.03"
       },
       "outputs": [
         "output-20"
@@ -337,11 +337,11 @@
     },
     {
       "name": "node-schedule",
-      "x": 2879.9576023143904,
-      "y": -515.0110191186798,
+      "x": -712.0423976856096,
+      "y": 1964.9889808813205,
       "attributes": {
         "start-time": "0.003",
-        "time-constant": "0.025"
+        "time-constant": "0.04"
       },
       "outputs": [
         "output-21"
@@ -352,8 +352,8 @@
     },
     {
       "name": "node-schedule",
-      "x": 2881.310966648433,
-      "y": -46.624078782223044,
+      "x": -710.6890333515671,
+      "y": 2433.375921217777,
       "attributes": {
         "start-time": "0",
         "time-constant": "0.001",
@@ -368,8 +368,8 @@
     },
     {
       "name": "node-schedule",
-      "x": 2879.9576023143904,
-      "y": 414.17723649445065,
+      "x": -712.0423976856096,
+      "y": 2894.177236494451,
       "attributes": {
         "start-time": "0.003",
         "time-constant": "0.08"
@@ -383,11 +383,11 @@
     },
     {
       "name": "node-schedule",
-      "x": 2878.230486597638,
-      "y": 885.6798271680249,
+      "x": -713.769513402362,
+      "y": 3365.679827168025,
       "attributes": {
         "start-time": "0.003",
-        "time-constant": "0.05"
+        "time-constant": "0.06"
       },
       "outputs": [
         "output-24"
@@ -398,8 +398,8 @@
     },
     {
       "name": "node-oscillator",
-      "x": 3236.965123287208,
-      "y": -820.0715183129868,
+      "x": -355.0348767127921,
+      "y": 1659.9284816870131,
       "attributes": {
         "type": "triangle",
         "frequency": "330",
@@ -415,8 +415,8 @@
     },
     {
       "name": "node-oscillator",
-      "x": 3623.1997168699386,
-      "y": -174.77458076461915,
+      "x": 31.199716869938584,
+      "y": 2305.2254192353807,
       "attributes": {
         "type": "triangle",
         "frequency": "180",
@@ -432,8 +432,8 @@
     },
     {
       "name": "node-gain",
-      "x": 3985.609929990127,
-      "y": -882.2324560819767,
+      "x": 393.60992999012706,
+      "y": 1597.7675439180234,
       "attributes": {
         "gain": "0"
       },
@@ -447,8 +447,8 @@
     },
     {
       "name": "node-gain",
-      "x": 3994.720530547315,
-      "y": -505.24851049620605,
+      "x": 402.72053054731487,
+      "y": 1974.751489503794,
       "attributes": {
         "gain": "0"
       },
@@ -462,8 +462,8 @@
     },
     {
       "name": "node-gain",
-      "x": 4653.660529374423,
-      "y": -351.7789514845247,
+      "x": 1061.6605293744233,
+      "y": 2128.2210485154756,
       "attributes": {
         "gain": "1"
       },
@@ -476,19 +476,9 @@
       ]
     },
     {
-      "name": "node-audio-destination",
-      "x": 5107.823532538778,
-      "y": -188.45816869196037,
-      "attributes": {},
-      "outputs": [],
-      "inputs": [
-        "input-55"
-      ]
-    },
-    {
       "name": "node-white-noise",
-      "x": 2925.09268036198,
-      "y": 1365.7834842185612,
+      "x": -666.90731963802,
+      "y": 3845.783484218561,
       "attributes": {},
       "outputs": [
         "output-30"
@@ -497,8 +487,8 @@
     },
     {
       "name": "node-biquad-filter",
-      "x": 3292.627490422125,
-      "y": 994.6133298597132,
+      "x": -299.372509577875,
+      "y": 3474.6133298597133,
       "attributes": {
         "type": "lowpass",
         "frequency": "7000",
@@ -510,17 +500,17 @@
         "output-31"
       ],
       "inputs": [
+        "input-55",
         "input-56",
         "input-57",
         "input-58",
-        "input-59",
-        "input-60"
+        "input-59"
       ]
     },
     {
       "name": "node-gain",
-      "x": 3993.2338398706793,
-      "y": 216.5013352616651,
+      "x": 401.2338398706793,
+      "y": 2696.501335261665,
       "attributes": {
         "gain": "0"
       },
@@ -528,29 +518,29 @@
         "output-32"
       ],
       "inputs": [
-        "input-61",
-        "input-62"
+        "input-60",
+        "input-61"
       ]
     },
     {
       "name": "node-gain",
-      "x": 4657.521533235427,
-      "y": -44.82914453471589,
+      "x": 1065.5215332354273,
+      "y": 2435.170855465284,
       "attributes": {
-        "gain": "0.15"
+        "gain": "0.2"
       },
       "outputs": [
         "output-33"
       ],
       "inputs": [
-        "input-63",
-        "input-64"
+        "input-62",
+        "input-63"
       ]
     },
     {
       "name": "node-biquad-filter",
-      "x": 3768.594508957162,
-      "y": 831.8714203543121,
+      "x": 176.5945089571619,
+      "y": 3311.8714203543122,
       "attributes": {
         "type": "highpass",
         "frequency": "523",
@@ -562,17 +552,17 @@
         "output-34"
       ],
       "inputs": [
+        "input-64",
         "input-65",
         "input-66",
         "input-67",
-        "input-68",
-        "input-69"
+        "input-68"
       ]
     },
     {
       "name": "node-gain",
-      "x": 4176.517304535162,
-      "y": 565.0895253697043,
+      "x": 584.5173045351621,
+      "y": 3045.0895253697045,
       "attributes": {
         "gain": "0"
       },
@@ -580,14 +570,14 @@
         "output-35"
       ],
       "inputs": [
-        "input-70",
-        "input-71"
+        "input-69",
+        "input-70"
       ]
     },
     {
       "name": "node-gain",
-      "x": 1999.1688664009348,
-      "y": -680.8778779420643,
+      "x": 2759.168866400935,
+      "y": 1999.1221220579357,
       "attributes": {
         "gain": "0.6"
       },
@@ -595,8 +585,480 @@
         "output-36"
       ],
       "inputs": [
-        "input-72",
+        "input-71",
+        "input-72"
+      ]
+    },
+    {
+      "name": "node-track",
+      "x": -1486.1688095357974,
+      "y": 6017.940045446946,
+      "attributes": {
+        "track": "3"
+      },
+      "outputs": [
+        "output-37"
+      ],
+      "inputs": []
+    },
+    {
+      "name": "node-schedule",
+      "x": -695.2136107347302,
+      "y": 5371.575515629393,
+      "attributes": {
+        "target-value": "1",
+        "time-constant": "0.001"
+      },
+      "outputs": [
+        "output-38"
+      ],
+      "inputs": [
         "input-73"
+      ]
+    },
+    {
+      "name": "node-schedule",
+      "x": -704.456466864026,
+      "y": 4408.049668507946,
+      "attributes": {
+        "target-value": "0",
+        "start-time": "0.003",
+        "time-constant": "0.02"
+      },
+      "outputs": [
+        "output-39"
+      ],
+      "inputs": [
+        "input-74"
+      ]
+    },
+    {
+      "name": "node-gain",
+      "x": 2142.904108622568,
+      "y": 5585.538607681584,
+      "attributes": {
+        "gain": "0"
+      },
+      "outputs": [
+        "output-40"
+      ],
+      "inputs": [
+        "input-75",
+        "input-76"
+      ]
+    },
+    {
+      "name": "node-gain",
+      "x": 2765.238195160864,
+      "y": 2638.426508827067,
+      "attributes": {
+        "gain": "0.05"
+      },
+      "outputs": [
+        "output-41"
+      ],
+      "inputs": [
+        "input-77",
+        "input-78"
+      ]
+    },
+    {
+      "name": "node-oscillator",
+      "x": -31.376135563678556,
+      "y": 6339.628989627099,
+      "attributes": {
+        "type": "square",
+        "frequency": "2490",
+        "detune": "0"
+      },
+      "outputs": [
+        "output-42"
+      ],
+      "inputs": [
+        "input-79",
+        "input-80"
+      ]
+    },
+    {
+      "name": "node-oscillator",
+      "x": -675.3883001337005,
+      "y": 6367.193530173434,
+      "attributes": {
+        "type": "square",
+        "frequency": "1047",
+        "detune": "0"
+      },
+      "outputs": [
+        "output-43"
+      ],
+      "inputs": [
+        "input-81",
+        "input-82"
+      ]
+    },
+    {
+      "name": "node-gain",
+      "x": -340.57458685851054,
+      "y": 6400.713083246059,
+      "attributes": {
+        "gain": "2000"
+      },
+      "outputs": [
+        "output-44"
+      ],
+      "inputs": [
+        "input-83",
+        "input-84"
+      ]
+    },
+    {
+      "name": "node-biquad-filter",
+      "x": 784.2744023414483,
+      "y": 6045.046052914769,
+      "attributes": {
+        "type": "bandpass",
+        "frequency": "2000",
+        "detune": "0",
+        "q": "0.6",
+        "gain": "0"
+      },
+      "outputs": [
+        "output-45"
+      ],
+      "inputs": [
+        "input-85",
+        "input-86",
+        "input-87",
+        "input-88",
+        "input-89"
+      ]
+    },
+    {
+      "name": "node-schedule",
+      "x": -684.8467662198415,
+      "y": 5860.237691442407,
+      "attributes": {
+        "target-value": "0",
+        "start-time": "0.003",
+        "time-constant": "0.12"
+      },
+      "outputs": [
+        "output-46"
+      ],
+      "inputs": [
+        "input-90"
+      ]
+    },
+    {
+      "name": "node-gain",
+      "x": 1191.0634405906185,
+      "y": 5793.067062944938,
+      "attributes": {
+        "gain": "0"
+      },
+      "outputs": [
+        "output-47"
+      ],
+      "inputs": [
+        "input-91",
+        "input-92"
+      ]
+    },
+    {
+      "name": "node-gain",
+      "x": -49.99136493043502,
+      "y": 5864.638275925203,
+      "attributes": {
+        "gain": "8000"
+      },
+      "outputs": [
+        "output-48"
+      ],
+      "inputs": [
+        "input-93",
+        "input-94"
+      ]
+    },
+    {
+      "name": "node-constant",
+      "x": -337.5371524762164,
+      "y": 5653.018414305339,
+      "attributes": {
+        "offset": "0"
+      },
+      "outputs": [
+        "output-49"
+      ],
+      "inputs": [
+        "input-95"
+      ]
+    },
+    {
+      "name": "node-biquad-filter",
+      "x": 789.9492279944019,
+      "y": 6715.484541451168,
+      "attributes": {
+        "type": "highpass",
+        "frequency": "1500",
+        "detune": "0",
+        "q": "1",
+        "gain": "0"
+      },
+      "outputs": [
+        "output-50"
+      ],
+      "inputs": [
+        "input-96",
+        "input-97",
+        "input-98",
+        "input-99",
+        "input-100"
+      ]
+    },
+    {
+      "name": "node-schedule",
+      "x": -688.9575273449469,
+      "y": 8113.19778359039,
+      "attributes": {
+        "target-value": "0",
+        "start-time": "0.01",
+        "time-constant": "2"
+      },
+      "outputs": [
+        "output-51"
+      ],
+      "inputs": [
+        "input-101"
+      ]
+    },
+    {
+      "name": "node-schedule",
+      "x": -687.819974076289,
+      "y": 7642.424086358562,
+      "attributes": {
+        "target-value": "1",
+        "time-constant": "0.003"
+      },
+      "outputs": [
+        "output-52"
+      ],
+      "inputs": [
+        "input-102"
+      ]
+    },
+    {
+      "name": "node-constant",
+      "x": -359.9785144567719,
+      "y": 7847.662249884741,
+      "attributes": {
+        "offset": "0"
+      },
+      "outputs": [
+        "output-53"
+      ],
+      "inputs": [
+        "input-103"
+      ]
+    },
+    {
+      "name": "node-gain",
+      "x": -46.25269282721606,
+      "y": 7830.566790525599,
+      "attributes": {
+        "gain": "2000"
+      },
+      "outputs": [
+        "output-54"
+      ],
+      "inputs": [
+        "input-104",
+        "input-105"
+      ]
+    },
+    {
+      "name": "node-gain",
+      "x": 1576.6844369222563,
+      "y": 6244.481063462844,
+      "attributes": {
+        "gain": "0.4"
+      },
+      "outputs": [
+        "output-55"
+      ],
+      "inputs": [
+        "input-106",
+        "input-107"
+      ]
+    },
+    {
+      "name": "node-gain",
+      "x": 1583.395846318228,
+      "y": 5904.436320733536,
+      "attributes": {
+        "gain": "1"
+      },
+      "outputs": [
+        "output-56"
+      ],
+      "inputs": [
+        "input-108",
+        "input-109"
+      ]
+    },
+    {
+      "name": "node-gain",
+      "x": 343.4648363686068,
+      "y": 6765.90601512417,
+      "attributes": {
+        "gain": "1"
+      },
+      "outputs": [
+        "output-57"
+      ],
+      "inputs": [
+        "input-110",
+        "input-111"
+      ]
+    },
+    {
+      "name": "node-oscillator",
+      "x": -36.100545012497285,
+      "y": 6725.45576128064,
+      "attributes": {
+        "type": "square",
+        "frequency": "1056",
+        "detune": "0"
+      },
+      "outputs": [
+        "output-58"
+      ],
+      "inputs": [
+        "input-112",
+        "input-113"
+      ]
+    },
+    {
+      "name": "node-oscillator",
+      "x": -680.1127095825192,
+      "y": 6753.020301826975,
+      "attributes": {
+        "type": "square",
+        "frequency": "1109",
+        "detune": "0"
+      },
+      "outputs": [
+        "output-59"
+      ],
+      "inputs": [
+        "input-114",
+        "input-115"
+      ]
+    },
+    {
+      "name": "node-gain",
+      "x": -345.2989963073293,
+      "y": 6786.5398548996,
+      "attributes": {
+        "gain": "2000"
+      },
+      "outputs": [
+        "output-60"
+      ],
+      "inputs": [
+        "input-116",
+        "input-117"
+      ]
+    },
+    {
+      "name": "node-oscillator",
+      "x": -43.97456076052517,
+      "y": 7158.526627422372,
+      "attributes": {
+        "type": "square",
+        "frequency": "2490",
+        "detune": "0"
+      },
+      "outputs": [
+        "output-61"
+      ],
+      "inputs": [
+        "input-118",
+        "input-119"
+      ]
+    },
+    {
+      "name": "node-oscillator",
+      "x": -687.9867253305471,
+      "y": 7186.091167968707,
+      "attributes": {
+        "type": "square",
+        "frequency": "1503",
+        "detune": "0"
+      },
+      "outputs": [
+        "output-62"
+      ],
+      "inputs": [
+        "input-120",
+        "input-121"
+      ]
+    },
+    {
+      "name": "node-gain",
+      "x": -353.17301205535716,
+      "y": 7219.610721041333,
+      "attributes": {
+        "gain": "2000"
+      },
+      "outputs": [
+        "output-63"
+      ],
+      "inputs": [
+        "input-122",
+        "input-123"
+      ]
+    },
+    {
+      "name": "node-gain",
+      "x": 2761.1044755627627,
+      "y": 2320.8847256455183,
+      "attributes": {
+        "gain": "0.3"
+      },
+      "outputs": [
+        "output-64"
+      ],
+      "inputs": [
+        "input-124",
+        "input-125"
+      ]
+    },
+    {
+      "name": "node-track",
+      "x": -1487.605115396078,
+      "y": 6951.263979786286,
+      "attributes": {
+        "track": "4"
+      },
+      "outputs": [
+        "output-65"
+      ],
+      "inputs": []
+    },
+    {
+      "name": "node-schedule",
+      "x": -704.4564668640259,
+      "y": 4887.0915846756125,
+      "attributes": {
+        "target-value": "0",
+        "start-time": "0.003",
+        "time-constant": "0.2"
+      },
+      "outputs": [
+        "output-66"
+      ],
+      "inputs": [
+        "input-126"
       ]
     }
   ],
@@ -738,59 +1200,235 @@
       "to": "input-54"
     },
     {
-      "from": "output-29",
-      "to": "input-55"
-    },
-    {
       "from": "output-30",
-      "to": "input-60"
+      "to": "input-59"
     },
     {
-      "from": "output-22",
-      "to": "input-61"
-    },
-    {
-      "from": "output-23",
+      "from": "output-31",
       "to": "input-61"
     },
     {
       "from": "output-31",
-      "to": "input-62"
-    },
-    {
-      "from": "output-33",
-      "to": "input-55"
-    },
-    {
-      "from": "output-31",
-      "to": "input-69"
+      "to": "input-68"
     },
     {
       "from": "output-34",
-      "to": "input-71"
+      "to": "input-70"
     },
     {
       "from": "output-24",
-      "to": "input-70"
+      "to": "input-69"
     },
     {
       "from": "output-22",
-      "to": "input-70"
+      "to": "input-69"
     },
     {
       "from": "output-35",
-      "to": "input-64"
+      "to": "input-63"
     },
     {
       "from": "output-32",
-      "to": "input-64"
+      "to": "input-63"
     },
     {
       "from": "output-9",
+      "to": "input-72"
+    },
+    {
+      "from": "output-22",
+      "to": "input-60"
+    },
+    {
+      "from": "output-23",
+      "to": "input-60"
+    },
+    {
+      "from": "output-37",
       "to": "input-73"
     },
     {
+      "from": "output-37",
+      "to": "input-74"
+    },
+    {
+      "from": "output-38",
+      "to": "input-75"
+    },
+    {
+      "from": "output-39",
+      "to": "input-75"
+    },
+    {
+      "from": "output-40",
+      "to": "input-78"
+    },
+    {
+      "from": "output-43",
+      "to": "input-84"
+    },
+    {
+      "from": "output-37",
+      "to": "input-90"
+    },
+    {
+      "from": "output-45",
+      "to": "input-92"
+    },
+    {
+      "from": "output-46",
+      "to": "input-95"
+    },
+    {
+      "from": "output-38",
+      "to": "input-95"
+    },
+    {
+      "from": "output-49",
+      "to": "input-94"
+    },
+    {
+      "from": "output-49",
+      "to": "input-91"
+    },
+    {
+      "from": "output-48",
+      "to": "input-85"
+    },
+    {
+      "from": "output-44",
+      "to": "input-80"
+    },
+    {
+      "from": "output-44",
+      "to": "input-79"
+    },
+    {
+      "from": "output-37",
+      "to": "input-102"
+    },
+    {
+      "from": "output-37",
+      "to": "input-101"
+    },
+    {
+      "from": "output-52",
+      "to": "input-103"
+    },
+    {
+      "from": "output-51",
+      "to": "input-103"
+    },
+    {
+      "from": "output-53",
+      "to": "input-105"
+    },
+    {
+      "from": "output-54",
+      "to": "input-96"
+    },
+    {
+      "from": "output-50",
+      "to": "input-107"
+    },
+    {
+      "from": "output-55",
+      "to": "input-76"
+    },
+    {
+      "from": "output-47",
+      "to": "input-109"
+    },
+    {
+      "from": "output-56",
+      "to": "input-76"
+    },
+    {
+      "from": "output-42",
+      "to": "input-111"
+    },
+    {
+      "from": "output-57",
+      "to": "input-89"
+    },
+    {
+      "from": "output-57",
+      "to": "input-100"
+    },
+    {
+      "from": "output-60",
+      "to": "input-113"
+    },
+    {
+      "from": "output-60",
+      "to": "input-112"
+    },
+    {
+      "from": "output-59",
+      "to": "input-117"
+    },
+    {
+      "from": "output-63",
+      "to": "input-119"
+    },
+    {
+      "from": "output-63",
+      "to": "input-118"
+    },
+    {
+      "from": "output-62",
+      "to": "input-123"
+    },
+    {
+      "from": "output-61",
+      "to": "input-111"
+    },
+    {
+      "from": "output-58",
+      "to": "input-111"
+    },
+    {
+      "from": "output-29",
+      "to": "input-125"
+    },
+    {
+      "from": "output-33",
+      "to": "input-125"
+    },
+    {
+      "from": "output-65",
+      "to": "input-101"
+    },
+    {
+      "from": "output-65",
+      "to": "input-102"
+    },
+    {
+      "from": "output-65",
+      "to": "input-90"
+    },
+    {
+      "from": "output-65",
+      "to": "input-73"
+    },
+    {
+      "from": "output-65",
+      "to": "input-126"
+    },
+    {
+      "from": "output-66",
+      "to": "input-75"
+    },
+    {
+      "from": "output-41",
+      "to": "input-17"
+    },
+    {
       "from": "output-36",
+      "to": "input-17"
+    },
+    {
+      "from": "output-64",
       "to": "input-17"
     }
   ],
@@ -809,6 +1447,27 @@
       "effects": {
         "4": "FF",
         "12": "FF"
+      }
+    },
+    {
+      "label": "3",
+      "effects": {
+        "0": "FF",
+        "2": "FF",
+        "3": "FF",
+        "5": "FF",
+        "6": "FF",
+        "8": "FF",
+        "9": "FF",
+        "11": "FF",
+        "13": "FF"
+      }
+    },
+    {
+      "label": "4",
+      "effects": {
+        "7": "FF",
+        "14": "FF"
       }
     }
   ]
