@@ -1,8 +1,8 @@
 {
   "nodeEditor": {
-    "zoom": "0.65",
-    "pan-x": "-188.69849323487753",
-    "pan-y": "-5146.925519614428"
+    "zoom": "0.6360000000000003",
+    "pan-x": "-189.44367591468637",
+    "pan-y": "-5170.0193077616"
   },
   "nodes": [
     {
@@ -652,7 +652,7 @@
       "x": 2765.238195160864,
       "y": 2638.426508827067,
       "attributes": {
-        "gain": "0.2"
+        "gain": "0.15"
       },
       "outputs": [
         "output-41"
@@ -670,11 +670,11 @@
         "gain": "0.3"
       },
       "outputs": [
-        "output-64"
+        "output-42"
       ],
       "inputs": [
-        "input-124",
-        "input-125"
+        "input-79",
+        "input-80"
       ]
     },
     {
@@ -685,7 +685,7 @@
         "track": "4"
       },
       "outputs": [
-        "output-65"
+        "output-43"
       ],
       "inputs": []
     },
@@ -696,13 +696,13 @@
       "attributes": {
         "target-value": "0",
         "start-time": "0.0033",
-        "time-constant": "0.15"
+        "time-constant": "0.2"
       },
       "outputs": [
-        "output-66"
+        "output-44"
       ],
       "inputs": [
-        "input-126"
+        "input-81"
       ]
     },
     {
@@ -715,11 +715,11 @@
         "detune": "0"
       },
       "outputs": [
-        "output-67"
+        "output-45"
       ],
       "inputs": [
-        "input-127",
-        "input-128"
+        "input-82",
+        "input-83"
       ]
     },
     {
@@ -732,11 +732,11 @@
         "detune": "0"
       },
       "outputs": [
-        "output-68"
+        "output-46"
       ],
       "inputs": [
-        "input-129",
-        "input-130"
+        "input-84",
+        "input-85"
       ]
     },
     {
@@ -749,11 +749,11 @@
         "detune": "0"
       },
       "outputs": [
-        "output-69"
+        "output-47"
       ],
       "inputs": [
-        "input-131",
-        "input-132"
+        "input-86",
+        "input-87"
       ]
     },
     {
@@ -766,11 +766,11 @@
         "detune": "0"
       },
       "outputs": [
-        "output-70"
+        "output-48"
       ],
       "inputs": [
-        "input-133",
-        "input-134"
+        "input-88",
+        "input-89"
       ]
     },
     {
@@ -783,11 +783,11 @@
         "detune": "0"
       },
       "outputs": [
-        "output-71"
+        "output-49"
       ],
       "inputs": [
-        "input-135",
-        "input-136"
+        "input-90",
+        "input-91"
       ]
     },
     {
@@ -800,11 +800,11 @@
         "detune": "0"
       },
       "outputs": [
-        "output-72"
+        "output-50"
       ],
       "inputs": [
-        "input-137",
-        "input-138"
+        "input-92",
+        "input-93"
       ]
     },
     {
@@ -815,10 +815,10 @@
         "offset": "40"
       },
       "outputs": [
-        "output-73"
+        "output-51"
       ],
       "inputs": [
-        "input-139"
+        "input-94"
       ]
     },
     {
@@ -829,11 +829,11 @@
         "gain": "2"
       },
       "outputs": [
-        "output-74"
+        "output-52"
       ],
       "inputs": [
-        "input-140",
-        "input-141"
+        "input-95",
+        "input-96"
       ]
     },
     {
@@ -844,11 +844,11 @@
         "gain": "3.01"
       },
       "outputs": [
-        "output-75"
+        "output-53"
       ],
       "inputs": [
-        "input-142",
-        "input-143"
+        "input-97",
+        "input-98"
       ]
     },
     {
@@ -859,11 +859,11 @@
         "gain": "4.17"
       },
       "outputs": [
-        "output-76"
+        "output-54"
       ],
       "inputs": [
-        "input-144",
-        "input-145"
+        "input-99",
+        "input-100"
       ]
     },
     {
@@ -874,11 +874,11 @@
         "gain": "5.43"
       },
       "outputs": [
-        "output-77"
+        "output-55"
       ],
       "inputs": [
-        "input-146",
-        "input-147"
+        "input-101",
+        "input-102"
       ]
     },
     {
@@ -889,11 +889,11 @@
         "gain": "6.8"
       },
       "outputs": [
-        "output-78"
+        "output-56"
       ],
       "inputs": [
-        "input-148",
-        "input-149"
+        "input-103",
+        "input-104"
       ]
     },
     {
@@ -904,11 +904,11 @@
         "gain": "8.22"
       },
       "outputs": [
-        "output-79"
+        "output-57"
       ],
       "inputs": [
-        "input-150",
-        "input-151"
+        "input-105",
+        "input-106"
       ]
     },
     {
@@ -917,20 +917,20 @@
       "y": 6270.865734256238,
       "attributes": {
         "type": "bandpass",
-        "frequency": "15800",
+        "frequency": "10000",
         "detune": "0",
         "q": "1",
         "gain": "0"
       },
       "outputs": [
-        "output-80"
+        "output-58"
       ],
       "inputs": [
-        "input-152",
-        "input-153",
-        "input-154",
-        "input-155",
-        "input-156"
+        "input-107",
+        "input-108",
+        "input-109",
+        "input-110",
+        "input-111"
       ]
     },
     {
@@ -943,10 +943,10 @@
         "time-constant": "0.01"
       },
       "outputs": [
-        "output-81"
+        "output-59"
       ],
       "inputs": [
-        "input-157"
+        "input-112"
       ]
     },
     {
@@ -955,20 +955,20 @@
       "y": 4568.539363933481,
       "attributes": {
         "type": "highpass",
-        "frequency": "1570",
+        "frequency": "2000",
         "detune": "0",
         "q": "1",
         "gain": "0"
       },
       "outputs": [
-        "output-82"
+        "output-60"
       ],
       "inputs": [
-        "input-158",
-        "input-159",
-        "input-160",
-        "input-161",
-        "input-162"
+        "input-113",
+        "input-114",
+        "input-115",
+        "input-116",
+        "input-117"
       ]
     }
   ],
@@ -1163,94 +1163,94 @@
     },
     {
       "from": "output-29",
-      "to": "input-125"
+      "to": "input-80"
     },
     {
       "from": "output-33",
-      "to": "input-125"
+      "to": "input-80"
     },
     {
-      "from": "output-66",
+      "from": "output-44",
       "to": "input-75"
     },
     {
-      "from": "output-73",
-      "to": "input-141"
+      "from": "output-51",
+      "to": "input-96"
     },
     {
-      "from": "output-74",
-      "to": "input-127"
+      "from": "output-52",
+      "to": "input-82"
     },
     {
-      "from": "output-73",
-      "to": "input-143"
+      "from": "output-51",
+      "to": "input-98"
     },
     {
-      "from": "output-75",
-      "to": "input-129"
+      "from": "output-53",
+      "to": "input-84"
     },
     {
-      "from": "output-73",
-      "to": "input-145"
+      "from": "output-51",
+      "to": "input-100"
     },
     {
-      "from": "output-76",
-      "to": "input-131"
+      "from": "output-54",
+      "to": "input-86"
     },
     {
-      "from": "output-77",
-      "to": "input-133"
+      "from": "output-55",
+      "to": "input-88"
     },
     {
-      "from": "output-73",
-      "to": "input-147"
+      "from": "output-51",
+      "to": "input-102"
     },
     {
-      "from": "output-78",
-      "to": "input-135"
+      "from": "output-56",
+      "to": "input-90"
     },
     {
-      "from": "output-73",
-      "to": "input-149"
+      "from": "output-51",
+      "to": "input-104"
     },
     {
-      "from": "output-73",
-      "to": "input-151"
+      "from": "output-51",
+      "to": "input-106"
     },
     {
-      "from": "output-79",
-      "to": "input-137"
+      "from": "output-57",
+      "to": "input-92"
     },
     {
-      "from": "output-68",
-      "to": "input-156"
+      "from": "output-46",
+      "to": "input-111"
     },
     {
-      "from": "output-69",
-      "to": "input-156"
+      "from": "output-47",
+      "to": "input-111"
     },
     {
-      "from": "output-70",
-      "to": "input-156"
+      "from": "output-48",
+      "to": "input-111"
     },
     {
-      "from": "output-71",
-      "to": "input-156"
+      "from": "output-49",
+      "to": "input-111"
     },
     {
-      "from": "output-67",
-      "to": "input-156"
+      "from": "output-45",
+      "to": "input-111"
     },
     {
-      "from": "output-72",
-      "to": "input-156"
+      "from": "output-50",
+      "to": "input-111"
     },
     {
-      "from": "output-80",
+      "from": "output-58",
       "to": "input-76"
     },
     {
-      "from": "output-81",
+      "from": "output-59",
       "to": "input-75"
     },
     {
@@ -1259,42 +1259,42 @@
     },
     {
       "from": "output-37",
-      "to": "input-157"
+      "to": "input-112"
     },
     {
       "from": "output-37",
       "to": "input-74"
     },
     {
-      "from": "output-65",
+      "from": "output-43",
       "to": "input-73"
     },
     {
-      "from": "output-65",
-      "to": "input-157"
+      "from": "output-43",
+      "to": "input-112"
     },
     {
-      "from": "output-65",
-      "to": "input-126"
+      "from": "output-43",
+      "to": "input-81"
+    },
+    {
+      "from": "output-40",
+      "to": "input-117"
+    },
+    {
+      "from": "output-60",
+      "to": "input-78"
     },
     {
       "from": "output-41",
       "to": "input-17"
     },
     {
-      "from": "output-40",
-      "to": "input-162"
-    },
-    {
-      "from": "output-82",
-      "to": "input-78"
-    },
-    {
-      "from": "output-64",
+      "from": "output-36",
       "to": "input-17"
     },
     {
-      "from": "output-36",
+      "from": "output-42",
       "to": "input-17"
     }
   ],
@@ -1325,7 +1325,7 @@
         "6": "FF",
         "9": "FF",
         "11": "FF",
-        "12": "FF"
+        "13": "FF"
       }
     },
     {
