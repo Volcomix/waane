@@ -112,7 +112,7 @@ export default defineCustomElement('waane-app', {
     /** @type {boolean} */
     let isMenuOpenOnMouseDown
 
-    const { startAudioTracker, stopAudioTracker, isAudioTrackerStarted } = useAudioTracker()
+    const { startAudioTracker, stopAudioTracker, isAudioTrackerStarted, setTempo } = useAudioTracker()
 
     function play() {
       startAudioTracker()
@@ -206,6 +206,10 @@ export default defineCustomElement('waane-app', {
       link.download = 'waane-export.json'
       link.click()
       URL.revokeObjectURL(url)
+    })
+
+    audioTracker.addEventListener('tempo-change', (/** @type {CustomEvent<number>} */ event) => {
+      setTempo(event.detail)
     })
   },
 })

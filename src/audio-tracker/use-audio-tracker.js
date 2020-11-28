@@ -68,6 +68,9 @@ export default function useAudioTracker() {
   const audioContext = useAudioContext()
 
   /** @type {number} */
+  let tempo = 140
+
+  /** @type {number} */
   let timeoutID = null
 
   /** @type {number} */
@@ -93,7 +96,7 @@ export default function useAudioTracker() {
   function scheduleTrigger() {
     while (triggerTime < audioContext.currentTime + 0.1) {
       trigger()
-      const secondsPerBeat = 60 / 140
+      const secondsPerBeat = 60 / tempo
       triggerTime += 0.25 * secondsPerBeat
       line++
       if (line === 32) {
@@ -109,6 +112,7 @@ export default function useAudioTracker() {
       line = 0
       scheduleTrigger()
     },
+
     stopAudioTracker() {
       if (timeoutID === null) {
         return
@@ -116,8 +120,16 @@ export default function useAudioTracker() {
       window.clearTimeout(timeoutID)
       timeoutID = null
     },
+
     isAudioTrackerStarted() {
       return timeoutID !== null
+    },
+
+    /**
+     * @param {number} newTempo
+     */
+    setTempo(newTempo) {
+      tempo = newTempo
     },
   }
 }

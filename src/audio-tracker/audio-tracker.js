@@ -2,10 +2,13 @@ import { css, defineCustomElement, html } from '../shared/core/element.js'
 import useKeyboardNavigation from './use-keyboard-navigation.js'
 
 /**
- * @typedef {import('../shared/base/menu').default} Menu
+ * @typedef {import('../shared/base/number-field.js').default} NumberField
+ * @typedef {import('../shared/base/menu.js').default} Menu
  * @typedef {import('./audio-track.js').default} AudioTrack
  * @typedef {import('./track-effect.js').default} TrackEffect
  */
+
+const tempoLabel = 'Tempo'
 
 export default defineCustomElement('audio-tracker', {
   styles: css`
@@ -84,7 +87,7 @@ export default defineCustomElement('audio-tracker', {
     </w-fab>
     <div class="root">
       <aside>
-        <w-number-field label="Tempo" value="140"></w-number-field>
+        <w-number-field label="${tempoLabel}" value="140"></w-number-field>
       </aside>
       <div class="tracks"></div>
     </div>
@@ -105,6 +108,10 @@ export default defineCustomElement('audio-tracker', {
     /** @type {HTMLElement} */
     const tracks = host.shadowRoot.querySelector('.tracks')
 
+    const tempoField = /** @type {NumberField} */ (host.shadowRoot.querySelector(
+      `w-number-field[label='${tempoLabel}']`,
+    ))
+
     const menu = /** @type {Menu} */ (host.shadowRoot.querySelector('w-menu'))
 
     /** @type {HTMLElement} */
@@ -123,6 +130,10 @@ export default defineCustomElement('audio-tracker', {
         audioTrack.appendChild(trackEffect)
       }
       tracks.appendChild(audioTrack)
+    })
+
+    tempoField.addEventListener('input', () => {
+      host.dispatchEvent(new CustomEvent('tempo-change', { detail: tempoField.value }))
     })
 
     tracks.addEventListener('contextmenu', (event) => {
