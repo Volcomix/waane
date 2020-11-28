@@ -1,8 +1,8 @@
 {
   "nodeEditor": {
-    "zoom": "0.49599999999999994",
-    "pan-x": "-952.5481674693126",
-    "pan-y": "-6067.3160219895335"
+    "zoom": "0.655",
+    "pan-x": "-1597.5955695870166",
+    "pan-y": "-2441.0724859146726"
   },
   "nodes": [
     {
@@ -402,7 +402,7 @@
       "y": 1587.9284816870131,
       "attributes": {
         "type": "triangle",
-        "frequency": "330",
+        "frequency": "305",
         "detune": "0"
       },
       "outputs": [
@@ -419,7 +419,7 @@
       "y": 2233.2254192353807,
       "attributes": {
         "type": "triangle",
-        "frequency": "180",
+        "frequency": "195",
         "detune": "0"
       },
       "outputs": [
@@ -527,7 +527,7 @@
       "x": 1065.5215332354273,
       "y": 2363.170855465284,
       "attributes": {
-        "gain": "0.15"
+        "gain": "0.1"
       },
       "outputs": [
         "output-33"
@@ -979,11 +979,11 @@
         "gain": "0.16"
       },
       "outputs": [
-        "output-63"
+        "output-61"
       ],
       "inputs": [
-        "input-122",
-        "input-123"
+        "input-118",
+        "input-119"
       ]
     }
   ],
@@ -1281,32 +1281,32 @@
       "to": "input-17"
     },
     {
-      "from": "output-63",
+      "from": "output-61",
       "to": "input-111"
     },
     {
       "from": "output-47",
-      "to": "input-123"
+      "to": "input-119"
     },
     {
       "from": "output-45",
-      "to": "input-123"
+      "to": "input-119"
     },
     {
       "from": "output-46",
-      "to": "input-123"
+      "to": "input-119"
     },
     {
       "from": "output-48",
-      "to": "input-123"
+      "to": "input-119"
     },
     {
       "from": "output-49",
-      "to": "input-123"
+      "to": "input-119"
     },
     {
       "from": "output-50",
-      "to": "input-123"
+      "to": "input-119"
     },
     {
       "from": "output-36",
