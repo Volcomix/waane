@@ -1,8 +1,8 @@
 {
   "nodeEditor": {
-    "zoom": "0.655",
-    "pan-x": "-1597.5955695870166",
-    "pan-y": "-2441.0724859146726"
+    "zoom": "0.5489999999999999",
+    "pan-x": "-1104.1100113135835",
+    "pan-y": "-2527.423894902905"
   },
   "nodes": [
     {
@@ -634,8 +634,8 @@
     },
     {
       "name": "node-gain",
-      "x": 279.6734965276133,
-      "y": 4360.789466081497,
+      "x": 318.40589089381024,
+      "y": 4297.409184391353,
       "attributes": {
         "gain": "0"
       },
@@ -652,7 +652,7 @@
       "x": 2669.238195160864,
       "y": 2342.426508827067,
       "attributes": {
-        "gain": "1.5"
+        "gain": "0.3"
       },
       "outputs": [
         "output-41"
@@ -913,8 +913,8 @@
     },
     {
       "name": "node-biquad-filter",
-      "x": 1259.4494538142224,
-      "y": 5574.9285345862045,
+      "x": 843.956496067744,
+      "y": 5585.491914867891,
       "attributes": {
         "type": "bandpass",
         "frequency": "10000",
@@ -969,21 +969,6 @@
         "input-115",
         "input-116",
         "input-117"
-      ]
-    },
-    {
-      "name": "node-gain",
-      "x": 851.8633238071919,
-      "y": 5876.828286618057,
-      "attributes": {
-        "gain": "0.16"
-      },
-      "outputs": [
-        "output-61"
-      ],
-      "inputs": [
-        "input-118",
-        "input-119"
       ]
     }
   ],
@@ -1281,39 +1266,35 @@
       "to": "input-17"
     },
     {
-      "from": "output-61",
+      "from": "output-45",
+      "to": "input-111"
+    },
+    {
+      "from": "output-46",
       "to": "input-111"
     },
     {
       "from": "output-47",
-      "to": "input-119"
-    },
-    {
-      "from": "output-45",
-      "to": "input-119"
-    },
-    {
-      "from": "output-46",
-      "to": "input-119"
+      "to": "input-111"
     },
     {
       "from": "output-48",
-      "to": "input-119"
+      "to": "input-111"
     },
     {
       "from": "output-49",
-      "to": "input-119"
+      "to": "input-111"
     },
     {
       "from": "output-50",
-      "to": "input-119"
-    },
-    {
-      "from": "output-36",
-      "to": "input-17"
+      "to": "input-111"
     },
     {
       "from": "output-42",
+      "to": "input-17"
+    },
+    {
+      "from": "output-36",
       "to": "input-17"
     }
   ],
