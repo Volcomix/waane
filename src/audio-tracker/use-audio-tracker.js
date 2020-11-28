@@ -93,10 +93,10 @@ export default function useAudioTracker() {
   function scheduleTrigger() {
     while (triggerTime < audioContext.currentTime + 0.1) {
       trigger()
-      const secondsPerBeat = 60 / 120
+      const secondsPerBeat = 60 / 140
       triggerTime += 0.25 * secondsPerBeat
       line++
-      if (line === 16) {
+      if (line === 32) {
         line = 0
       }
     }

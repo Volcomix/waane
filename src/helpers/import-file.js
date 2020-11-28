@@ -28,7 +28,7 @@ function importTracks(content, audioTracker) {
 
   content.tracks.forEach((track) => {
     const audioTrack = /** @type {AudioTrack} */ (document.createElement('audio-track'))
-    for (let i = 0; i < 16; i++) {
+    for (let i = 0; i < 32; i++) {
       const trackEffect = /** @type {TrackEffect} */ (document.createElement('track-effect'))
       trackEffect.beat = i % 4 === 0
       if (i in track.effects) {

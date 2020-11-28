@@ -84,7 +84,7 @@ export default defineCustomElement('audio-tracker', {
     </w-fab>
     <div class="root">
       <aside>
-        <w-number-field label="Tempo" value="120"></w-number-field>
+        <w-number-field label="Tempo" value="140"></w-number-field>
       </aside>
       <div class="tracks"></div>
     </div>
@@ -117,7 +117,7 @@ export default defineCustomElement('audio-tracker', {
 
     fab.addEventListener('click', () => {
       const audioTrack = /** @type {AudioTrack} */ (document.createElement('audio-track'))
-      for (let i = 0; i < 16; i++) {
+      for (let i = 0; i < 32; i++) {
         const trackEffect = /** @type {TrackEffect} */ (document.createElement('track-effect'))
         trackEffect.beat = i % 4 === 0
         audioTrack.appendChild(trackEffect)
