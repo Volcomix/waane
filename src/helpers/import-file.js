@@ -36,7 +36,7 @@ function importTracks(content, audioTracker) {
       }
       audioTrack.appendChild(trackEffect)
     }
-    audioTracker.shadowRoot.querySelector('div').appendChild(audioTrack)
+    audioTracker.shadowRoot.querySelector('.tracks').appendChild(audioTrack)
     trackLabels.set(track.label, audioTrack.label)
   })
   return trackLabels
