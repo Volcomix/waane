@@ -92,9 +92,9 @@ export default function useAudioTracker(host) {
       if (trackLabel === null) {
         return
       }
-      /** @type {NodeListOf<TrackEffect>} */
-      const trackEffects = audioTracksByTrackLabel.get(trackLabel).querySelectorAll('track-effect')
-      const value = trackEffects[line].value
+      /** @type {TrackEffect} */
+      const trackEffect = audioTracksByTrackLabel.get(trackLabel).querySelector(`track-effect:nth-of-type(${line})`)
+      const value = trackEffect.value
       if (value === null) {
         return
       }
@@ -104,8 +104,8 @@ export default function useAudioTracker(host) {
 
   function scheduleTrigger() {
     while (triggerTime < audioContext.currentTime + 0.1) {
-      if (line >= host.lines) {
-        line = 0
+      if (line > host.lines) {
+        line = 1
       }
       trigger()
       const secondsPerBeat = 60 / host.tempo
@@ -118,7 +118,7 @@ export default function useAudioTracker(host) {
   return {
     startAudioTracker() {
       triggerTime = audioContext.currentTime
-      line = 0
+      line = 1
       scheduleTrigger()
     },
 
