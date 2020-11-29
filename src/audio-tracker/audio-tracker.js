@@ -54,21 +54,9 @@ export default defineCustomElement('audio-tracker', {
 
     .tracks {
       flex: 1;
-      padding-top: 16px;
       display: flex;
       align-items: flex-start;
       overflow: auto;
-    }
-
-    .tracks::before {
-      content: '';
-      position: fixed;
-      right: 0;
-      left: 0;
-      z-index: 1;
-      height: 33px;
-      margin-top: -16px;
-      background-color: rgb(var(--color-surface));
     }
 
     .tracks > *:last-child::after {

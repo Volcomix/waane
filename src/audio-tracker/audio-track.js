@@ -11,7 +11,7 @@ document.head.appendChild(link)
 export default defineCustomElement('audio-track', {
   styles: css`
     :host,
-    div {
+    .border {
       border: 1px solid rgba(var(--color-on-surface) / 0.42);
     }
 
@@ -19,31 +19,37 @@ export default defineCustomElement('audio-track', {
       position: relative;
       border-top: none;
       border-radius: 0 0 4px 4px;
-      margin: 17px 8px 0 0;
+      margin: 33px 8px 0 0;
       padding-bottom: 8px;
       display: flex;
       flex-direction: column;
     }
 
-    div {
+    .overlay {
       position: sticky;
       top: 0;
       right: 0;
       left: 0;
-      z-index: 1;
+      height: 17px;
+      margin: -33px -1px 0 -1px;
+      padding-top: 16px;
+      background-color: rgb(var(--color-surface));
+    }
+
+    .border {
+      position: relative;
       height: 16px;
-      margin: -17px -1px 0 -1px;
       border-bottom: none;
       border-radius: 4px 4px 0 0;
     }
 
     :host(:hover),
-    :host(:hover) div {
+    :host(:hover) .border {
       border-color: rgba(var(--color-on-surface) / var(--text-high-emphasis));
     }
 
     :host::before,
-    div::before {
+    .border::before {
       content: '';
       position: absolute;
       top: -1px;
@@ -61,14 +67,14 @@ export default defineCustomElement('audio-track', {
       border-radius: 0 0 4px 4px;
     }
 
-    div::before {
+    .border::before {
       bottom: 0;
       border-bottom: none;
       border-radius: 4px 4px 0 0;
     }
 
     :host(:focus-within)::before,
-    :host(:focus-within) div::before {
+    :host(:focus-within) .border::before {
       border-color: rgb(var(--color-primary));
     }
 
@@ -90,7 +96,11 @@ export default defineCustomElement('audio-track', {
     }
   `,
   template: html`
-    <div><label></label></div>
+    <div class="overlay">
+      <div class="border">
+        <label></label>
+      </div>
+    </div>
     <slot></slot>
   `,
   properties: {
