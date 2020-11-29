@@ -218,6 +218,12 @@ export function defineCustomElement(
         this.shadowRoot.appendChild(templateElement.content.cloneNode(true))
       }
 
+      const propertiesBackup = Object.keys(reflectedProperties).reduce(
+        (result, propertyName) =>
+          this[propertyName] === undefined ? result : Object.assign(result, { [propertyName]: this[propertyName] }),
+        /** @type {Properties<T>} */ ({}),
+      )
+
       Object.defineProperties(this, reflectedProperties)
 
       setup({
@@ -232,6 +238,12 @@ export function defineCustomElement(
           const attributeName = attributesByProperty[propertyName]
           this._attributeChangedCallbacks[attributeName] = callback
         }),
+      })
+
+      Object.entries(propertiesBackup).forEach(([propertyName, value]) => {
+        this[/** @type {keyof T} */ (propertyName)] = value
+        const attributeName = attributesByProperty[propertyName]
+        this._attributeChangedCallbacks[attributeName]()
       })
     }
 

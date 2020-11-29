@@ -125,6 +125,10 @@ export default function useAudioTracker() {
       return timeoutID !== null
     },
 
+    getTempo() {
+      return tempo
+    },
+
     /**
      * @param {number} newTempo
      */

@@ -87,7 +87,7 @@ export default defineCustomElement('audio-tracker', {
     </w-fab>
     <div class="root">
       <aside>
-        <w-number-field label="${tempoLabel}" value="140"></w-number-field>
+        <w-number-field label="${tempoLabel}"></w-number-field>
       </aside>
       <div class="tracks"></div>
     </div>
@@ -100,8 +100,9 @@ export default defineCustomElement('audio-tracker', {
   `,
   properties: {
     active: Boolean,
+    tempo: Number,
   },
-  setup({ host }) {
+  setup({ host, observe }) {
     /** @type {HTMLElement} */
     const fab = host.shadowRoot.querySelector('w-fab')
 
@@ -121,6 +122,10 @@ export default defineCustomElement('audio-tracker', {
 
     /** @type {AudioTrack} */
     let selectedAudioTrack = null
+
+    observe('tempo', () => {
+      tempoField.value = host.tempo
+    })
 
     fab.addEventListener('click', () => {
       const audioTrack = /** @type {AudioTrack} */ (document.createElement('audio-track'))
