@@ -25,7 +25,7 @@ function importAttributes(attributes, element) {
  */
 function importTracker(content, audioTracker) {
   if (content.tracker && isFinite(content.tracker.tempo)) {
-    audioTracker.dispatchEvent(new CustomEvent('tempo-change', { detail: content.tracker.tempo }))
+    audioTracker.tempo = content.tracker.tempo
   }
 }
 

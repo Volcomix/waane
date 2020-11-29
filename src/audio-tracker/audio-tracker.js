@@ -138,7 +138,7 @@ export default defineCustomElement('audio-tracker', {
     })
 
     tempoField.addEventListener('input', () => {
-      host.dispatchEvent(new CustomEvent('tempo-change', { detail: tempoField.value }))
+      host.tempo = tempoField.value
     })
 
     tracks.addEventListener('contextmenu', (event) => {

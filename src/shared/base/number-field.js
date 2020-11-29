@@ -5,14 +5,13 @@ import { defineCustomElement, html } from '../core/element.js'
  */
 
 export default defineCustomElement('w-number-field', {
-  template: html`<w-text-field type="number" step="any"></w-text-field>`,
+  template: html`<w-text-field type="number" step="any" value="0"></w-text-field>`,
   properties: {
     label: String,
     value: Number,
   },
   setup({ host, observe }) {
     const textField = /** @type {TextField} */ (host.shadowRoot.querySelector('w-text-field'))
-    textField.value = '0'
 
     observe('label', () => {
       textField.label = host.label

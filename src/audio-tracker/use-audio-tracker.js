@@ -2,6 +2,7 @@ import useAudioContext from '../audio-node-editor/use-audio-context.js'
 import { html } from '../shared/core/element.js'
 
 /**
+ * @typedef {import('./audio-tracker.js').default} AudioTracker
  * @typedef {import('./audio-track.js').default} AudioTrack
  * @typedef {import('./track-effect.js').default} TrackEffect
  * @typedef {import('../audio-node-editor/node-track.js').Track} Track
@@ -64,11 +65,11 @@ export function unbindAudioTrack(selectField) {
   tracksByField.delete(selectField)
 }
 
-export default function useAudioTracker() {
+/**
+ * @param {AudioTracker} host
+ */
+export default function useAudioTracker(host) {
   const audioContext = useAudioContext()
-
-  /** @type {number} */
-  let tempo = 120
 
   /** @type {number} */
   let timeoutID = null
@@ -96,7 +97,7 @@ export default function useAudioTracker() {
   function scheduleTrigger() {
     while (triggerTime < audioContext.currentTime + 0.1) {
       trigger()
-      const secondsPerBeat = 60 / tempo
+      const secondsPerBeat = 60 / host.tempo
       triggerTime += 0.25 * secondsPerBeat
       line++
       if (line === 32) {
@@ -123,17 +124,6 @@ export default function useAudioTracker() {
 
     isAudioTrackerStarted() {
       return timeoutID !== null
-    },
-
-    getTempo() {
-      return tempo
-    },
-
-    /**
-     * @param {number} newTempo
-     */
-    setTempo(newTempo) {
-      tempo = newTempo
     },
   }
 }
