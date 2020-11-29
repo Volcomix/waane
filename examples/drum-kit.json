@@ -1318,7 +1318,9 @@
     }
   ],
   "tracker": {
-    "tempo": 140
+    "tempo": 140,
+    "lines": 32,
+    "linesPerBeat": 4
   },
   "tracks": [
     {

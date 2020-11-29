@@ -9,6 +9,8 @@ import useKeyboardNavigation from './use-keyboard-navigation.js'
  */
 
 const tempoLabel = 'Tempo'
+const linesLabel = 'Lines'
+const linesPerBeatLabel = 'Lines per beat'
 
 export default defineCustomElement('audio-tracker', {
   styles: css`
@@ -48,8 +50,15 @@ export default defineCustomElement('audio-tracker', {
     }
 
     aside {
-      margin: 40px 16px 16px 16px;
+      margin: 32px 16px 16px 16px;
       width: 160px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    aside > * {
+      margin-top: 8px;
+      margin-bottom: 16px;
     }
 
     .tracks {
@@ -76,6 +85,8 @@ export default defineCustomElement('audio-tracker', {
     <div class="root">
       <aside>
         <w-number-field label="${tempoLabel}"></w-number-field>
+        <w-number-field label="${linesLabel}"></w-number-field>
+        <w-number-field label="${linesPerBeatLabel}"></w-number-field>
       </aside>
       <div class="tracks"></div>
     </div>
@@ -89,6 +100,8 @@ export default defineCustomElement('audio-tracker', {
   properties: {
     active: Boolean,
     tempo: Number,
+    lines: Number,
+    linesPerBeat: Number,
   },
   setup({ host, observe }) {
     /** @type {HTMLElement} */
@@ -97,11 +110,17 @@ export default defineCustomElement('audio-tracker', {
     /** @type {HTMLElement} */
     const tracks = host.shadowRoot.querySelector('.tracks')
 
-    const tempoField = /** @type {NumberField} */ (host.shadowRoot.querySelector(
-      `w-number-field[label='${tempoLabel}']`,
-    ))
+    /** @type {NumberField} */
+    const tempoField = host.shadowRoot.querySelector(`w-number-field[label='${tempoLabel}']`)
 
-    const menu = /** @type {Menu} */ (host.shadowRoot.querySelector('w-menu'))
+    /** @type {NumberField} */
+    const linesField = host.shadowRoot.querySelector(`w-number-field[label='${linesLabel}']`)
+
+    /** @type {NumberField} */
+    const linesPerBeatField = host.shadowRoot.querySelector(`w-number-field[label='${linesPerBeatLabel}']`)
+
+    /** @type {Menu} */
+    const menu = host.shadowRoot.querySelector('w-menu')
 
     /** @type {HTMLElement} */
     const menuItemDelete = host.shadowRoot.querySelector('#delete')
@@ -115,11 +134,40 @@ export default defineCustomElement('audio-tracker', {
       tempoField.value = host.tempo
     })
 
+    observe('lines', () => {
+      linesField.value = host.lines
+      tracks.querySelectorAll('audio-track').forEach((audioTrack) => {
+        const trackEffects = audioTrack.querySelectorAll('track-effect')
+        if (trackEffects.length < host.lines) {
+          for (let i = trackEffects.length; i < host.lines; i++) {
+            const trackEffect = /** @type {TrackEffect} */ (document.createElement('track-effect'))
+            trackEffect.beat = i % host.linesPerBeat === 0
+            audioTrack.appendChild(trackEffect)
+          }
+        } else {
+          trackEffects.forEach((trackEffect, i) => {
+            if (i >= host.lines) {
+              trackEffect.remove()
+            }
+          })
+        }
+      })
+    })
+
+    observe('linesPerBeat', () => {
+      linesPerBeatField.value = host.linesPerBeat
+      tracks.querySelectorAll('audio-track').forEach((audioTrack) => {
+        audioTrack.querySelectorAll('track-effect').forEach((/** @type {TrackEffect} */ trackEffect, i) => {
+          trackEffect.beat = i % host.linesPerBeat === 0
+        })
+      })
+    })
+
     fab.addEventListener('click', () => {
       const audioTrack = /** @type {AudioTrack} */ (document.createElement('audio-track'))
-      for (let i = 0; i < 32; i++) {
+      for (let i = 0; i < host.lines; i++) {
         const trackEffect = /** @type {TrackEffect} */ (document.createElement('track-effect'))
-        trackEffect.beat = i % 4 === 0
+        trackEffect.beat = i % host.linesPerBeat === 0
         audioTrack.appendChild(trackEffect)
       }
       tracks.appendChild(audioTrack)
@@ -127,6 +175,14 @@ export default defineCustomElement('audio-tracker', {
 
     tempoField.addEventListener('input', () => {
       host.tempo = tempoField.value
+    })
+
+    linesField.addEventListener('input', () => {
+      host.lines = linesField.value
+    })
+
+    linesPerBeatField.addEventListener('input', () => {
+      host.linesPerBeat = linesPerBeatField.value
     })
 
     tracks.addEventListener('contextmenu', (event) => {

@@ -308,6 +308,8 @@ export default {
   ],
   tracker: {
     tempo: 120,
+    lines: 64,
+    linesPerBeat: 4,
   },
   tracks: [
     {

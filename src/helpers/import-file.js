@@ -24,14 +24,23 @@ function importAttributes(attributes, element) {
  * @param {AudioTracker} audioTracker
  */
 function importTracker(content, audioTracker) {
-  if (content.tracker && isFinite(content.tracker.tempo)) {
+  if (!content.tracker) {
+    return
+  }
+  if (isFinite(content.tracker.tempo)) {
     audioTracker.tempo = content.tracker.tempo
+  }
+  if (isFinite(content.tracker.lines)) {
+    audioTracker.lines = content.tracker.lines
+  }
+  if (isFinite(content.tracker.linesPerBeat)) {
+    audioTracker.linesPerBeat = content.tracker.linesPerBeat
   }
 }
 
 /**
  * @param {FileContent} content
- * @param {HTMLElement} audioTracker
+ * @param {AudioTracker} audioTracker
  */
 function importTracks(content, audioTracker) {
   /** @type {Map<string, string>} */
@@ -39,9 +48,9 @@ function importTracks(content, audioTracker) {
 
   content.tracks.forEach((track) => {
     const audioTrack = /** @type {AudioTrack} */ (document.createElement('audio-track'))
-    for (let i = 0; i < 32; i++) {
+    for (let i = 0; i < audioTracker.lines; i++) {
       const trackEffect = /** @type {TrackEffect} */ (document.createElement('track-effect'))
-      trackEffect.beat = i % 4 === 0
+      trackEffect.beat = i % audioTracker.linesPerBeat === 0
       if (i in track.effects) {
         trackEffect.value = track.effects[i]
       }

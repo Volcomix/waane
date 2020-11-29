@@ -1,4 +1,4 @@
-import { defaultTempo } from '../audio-tracker/use-audio-tracker.js'
+import { defaultLines, defaultLinesPerBeat, defaultTempo } from '../audio-tracker/use-audio-tracker.js'
 import { clearAllIds } from '../shared/helpers/id.js'
 import { defaultPanX, defaultPanY, defaultZoom } from '../shared/node-editor/use-mouse-navigation.js'
 
@@ -20,6 +20,8 @@ import { defaultPanX, defaultPanY, defaultZoom } from '../shared/node-editor/use
  *
  * @typedef {object} FileContentTracker
  * @property {number} tempo
+ * @property {number} lines
+ * @property {number} linesPerBeat
  *
  * @typedef {object} FileContentTrack
  * @property {string} label
@@ -56,4 +58,6 @@ export function clearAll(audioTracker, audioNodeEditor) {
   nodeEditor.panX = defaultPanX
   nodeEditor.panY = defaultPanY
   audioTracker.tempo = defaultTempo
+  audioTracker.lines = defaultLines
+  audioTracker.linesPerBeat = defaultLinesPerBeat
 }

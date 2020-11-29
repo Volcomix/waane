@@ -65,7 +65,11 @@ function exportEffects(audioTrack) {
  * @param {AudioTracker} audioTracker
  */
 function exportTracker(audioTracker) {
-  return { tempo: audioTracker.tempo }
+  return {
+    tempo: audioTracker.tempo,
+    lines: audioTracker.lines,
+    linesPerBeat: audioTracker.linesPerBeat,
+  }
 }
 
 /**

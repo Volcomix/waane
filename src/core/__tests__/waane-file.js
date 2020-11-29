@@ -1,5 +1,5 @@
 import { expect, test } from '@jest/globals'
-import { defaultTempo } from '../../audio-tracker/use-audio-tracker'
+import { defaultLines, defaultLinesPerBeat, defaultTempo } from '../../audio-tracker/use-audio-tracker'
 import exportFile from '../../helpers/export-file'
 import { clearAll } from '../../helpers/file-helper'
 import importFile from '../../helpers/import-file'
@@ -33,6 +33,8 @@ test('imports and exports', () => {
     links: [],
     tracker: {
       tempo: defaultTempo,
+      lines: defaultLines,
+      linesPerBeat: defaultLinesPerBeat,
     },
     tracks: [],
   }

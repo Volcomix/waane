@@ -10,21 +10,21 @@ import { html } from '../shared/core/element.js'
  * @typedef {import('../shared/base/menu-item.js').default} MenuItem
  */
 
-/** @type {Map<string, TrackEffect[]>} */
-const trackEffectsByTrackLabel = new Map()
+/** @type {Map<string, AudioTrack>} */
+const audioTracksByTrackLabel = new Map()
 
 /** @type {Map<Select, Track>} */
 const tracksByField = new Map()
 
 export const defaultTempo = 120
+export const defaultLines = 64
+export const defaultLinesPerBeat = 4
 
 /**
  * @param {AudioTrack} audioTrack
  */
 export function registerAudioTrack(audioTrack) {
-  trackEffectsByTrackLabel.set(audioTrack.label, [
-    .../** @type {NodeListOf<TrackEffect>} */ (audioTrack.querySelectorAll('track-effect')),
-  ])
+  audioTracksByTrackLabel.set(audioTrack.label, audioTrack)
   const template = document.createElement('template')
   template.innerHTML = html`<w-menu-item value="${audioTrack.label}">${audioTrack.label}</w-menu-item>`
   tracksByField.forEach((_, selectField) => {
@@ -36,7 +36,7 @@ export function registerAudioTrack(audioTrack) {
  * @param {AudioTrack} audioTrack
  */
 export function deregisterAudioTrack(audioTrack) {
-  trackEffectsByTrackLabel.delete(audioTrack.label)
+  audioTracksByTrackLabel.delete(audioTrack.label)
   tracksByField.forEach((_, selectField) => {
     if (selectField.value === audioTrack.label) {
       selectField.value = null
@@ -51,7 +51,7 @@ export function deregisterAudioTrack(audioTrack) {
  * @param {Track} track
  */
 export function bindAudioTrack(selectField, track) {
-  trackEffectsByTrackLabel.forEach((_, trackLabel) => {
+  audioTracksByTrackLabel.forEach((_, trackLabel) => {
     const menuItem = /** @type {MenuItem} */ (document.createElement('w-menu-item'))
     menuItem.textContent = trackLabel
     menuItem.value = trackLabel
@@ -74,6 +74,8 @@ export default function useAudioTracker(host) {
   const audioContext = useAudioContext()
 
   host.tempo = defaultTempo
+  host.lines = defaultLines
+  host.linesPerBeat = defaultLinesPerBeat
 
   /** @type {number} */
   let timeoutID = null
@@ -90,7 +92,9 @@ export default function useAudioTracker(host) {
       if (trackLabel === null) {
         return
       }
-      const value = trackEffectsByTrackLabel.get(trackLabel)[line].value
+      /** @type {NodeListOf<TrackEffect>} */
+      const trackEffects = audioTracksByTrackLabel.get(trackLabel).querySelectorAll('track-effect')
+      const value = trackEffects[line].value
       if (value === null) {
         return
       }
@@ -100,13 +104,13 @@ export default function useAudioTracker(host) {
 
   function scheduleTrigger() {
     while (triggerTime < audioContext.currentTime + 0.1) {
-      trigger()
-      const secondsPerBeat = 60 / host.tempo
-      triggerTime += 0.25 * secondsPerBeat
-      line++
-      if (line === 32) {
+      if (line >= host.lines) {
         line = 0
       }
+      trigger()
+      const secondsPerBeat = 60 / host.tempo
+      triggerTime += secondsPerBeat / host.linesPerBeat
+      line++
     }
     timeoutID = window.setTimeout(scheduleTrigger, 25)
   }
