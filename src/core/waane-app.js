@@ -82,7 +82,7 @@ export default defineCustomElement('waane-app', {
       </div>
     </header>
     <main>
-      <audio-tracker tempo="120" hidden></audio-tracker>
+      <audio-tracker hidden></audio-tracker>
       <audio-node-editor active></audio-node-editor>
     </main>
   `,

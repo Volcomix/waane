@@ -2,13 +2,17 @@
  * @typedef {import('./node-editor.js').default} NodeEditor
  */
 
+export const defaultZoom = 1
+export const defaultPanX = 0
+export const defaultPanY = 0
+
 /**
  * @param {NodeEditor} host
  */
 export default function useMouseNavigation(host) {
-  host.zoom = 1
-  host.panX = 0
-  host.panY = 0
+  host.zoom = defaultZoom
+  host.panX = defaultPanX
+  host.panY = defaultPanY
 
   host.addEventListener('wheel', (event) => {
     event.preventDefault()

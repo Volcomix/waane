@@ -16,6 +16,8 @@ const trackEffectsByTrackLabel = new Map()
 /** @type {Map<Select, Track>} */
 const tracksByField = new Map()
 
+export const defaultTempo = 120
+
 /**
  * @param {AudioTrack} audioTrack
  */
@@ -70,6 +72,8 @@ export function unbindAudioTrack(selectField) {
  */
 export default function useAudioTracker(host) {
   const audioContext = useAudioContext()
+
+  host.tempo = defaultTempo
 
   /** @type {number} */
   let timeoutID = null

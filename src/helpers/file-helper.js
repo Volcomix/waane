@@ -1,6 +1,11 @@
+import { defaultTempo } from '../audio-tracker/use-audio-tracker.js'
 import { clearAllIds } from '../shared/helpers/id.js'
+import { defaultPanX, defaultPanY, defaultZoom } from '../shared/node-editor/use-mouse-navigation.js'
 
 /**
+ * @typedef {import('../audio-tracker/audio-tracker.js').default} AudioTracker
+ * @typedef {import('../shared/node-editor/node-editor.js').default} NodeEditor
+ *
  * @typedef {object} FileContentNode
  * @property {string} name
  * @property {number} x
@@ -29,7 +34,7 @@ import { clearAllIds } from '../shared/helpers/id.js'
  */
 
 /**
- * @param {HTMLElement} audioTracker
+ * @param {AudioTracker} audioTracker
  * @param {HTMLElement} audioNodeEditor
  */
 export function clearAll(audioTracker, audioNodeEditor) {
@@ -43,4 +48,12 @@ export function clearAll(audioTracker, audioNodeEditor) {
     audioTrack.remove()
   })
   clearAllIds()
+
+  /** @type {NodeEditor} */
+  const nodeEditor = audioNodeEditor.shadowRoot.querySelector('w-node-editor')
+
+  nodeEditor.zoom = defaultZoom
+  nodeEditor.panX = defaultPanX
+  nodeEditor.panY = defaultPanY
+  audioTracker.tempo = defaultTempo
 }
