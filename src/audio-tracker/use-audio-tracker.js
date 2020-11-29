@@ -68,7 +68,7 @@ export default function useAudioTracker() {
   const audioContext = useAudioContext()
 
   /** @type {number} */
-  let tempo = 140
+  let tempo = 120
 
   /** @type {number} */
   let timeoutID = null

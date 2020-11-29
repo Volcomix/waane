@@ -1317,6 +1317,9 @@
       "to": "input-119"
     }
   ],
+  "tracker": {
+    "tempo": 140
+  },
   "tracks": [
     {
       "label": "1",

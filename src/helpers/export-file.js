@@ -1,8 +1,9 @@
 /**
  * @typedef {import('../shared/node-editor/graph-node.js').default} GraphNode
  * @typedef {import('../shared/node-editor/graph-link.js').default} GraphLink
- * @typedef {import('../audio-tracker/track-effect.js').default} TrackEffect
+ * @typedef {import('../audio-tracker/audio-tracker.js').default} AudioTracker
  * @typedef {import('../audio-tracker/audio-track.js').default} AudioTrack
+ * @typedef {import('../audio-tracker/track-effect.js').default} TrackEffect
  * @typedef {import('./file-helper.js').FileContent} FileContent
  */
 
@@ -61,6 +62,13 @@ function exportEffects(audioTrack) {
 }
 
 /**
+ * @param {AudioTracker} audioTracker
+ */
+function exportTracker(audioTracker) {
+  return { tempo: audioTracker.tempo }
+}
+
+/**
  * @param {HTMLElement} audioTracker
  */
 function exportTracks(audioTracker) {
@@ -73,7 +81,7 @@ function exportTracks(audioTracker) {
 }
 
 /**
- * @param {HTMLElement} audioTracker
+ * @param {AudioTracker} audioTracker
  * @param {HTMLElement} audioNodeEditor
  * @returns {FileContent}
  */
@@ -82,6 +90,7 @@ export default function exportFile(audioTracker, audioNodeEditor) {
     nodeEditor: exportAttributes(audioNodeEditor.shadowRoot.querySelector('w-node-editor').attributes),
     nodes: exportNodes(audioNodeEditor),
     links: exportLinks(audioNodeEditor),
+    tracker: exportTracker(audioTracker),
     tracks: exportTracks(audioTracker),
   }
 }

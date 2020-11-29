@@ -306,6 +306,9 @@ export default {
       to: 'input-17',
     },
   ],
+  tracker: {
+    tempo: 120,
+  },
   tracks: [
     {
       label: '1',

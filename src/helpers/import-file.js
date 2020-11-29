@@ -1,6 +1,7 @@
 import { clearAll } from './file-helper.js'
 
 /**
+ * @typedef {import('../audio-tracker/audio-tracker.js').default} AudioTracker
  * @typedef {import('../audio-tracker/audio-track.js').default} AudioTrack
  * @typedef {import('../audio-tracker/track-effect.js').default} TrackEffect
  * @typedef {import('../shared/node-editor/graph-node.js').default} GraphNode
@@ -16,6 +17,16 @@ function importAttributes(attributes, element) {
   Object.entries(attributes).forEach(([attributeName, attributeValue]) => {
     element.setAttribute(attributeName, attributeValue)
   })
+}
+
+/**
+ * @param {FileContent} content
+ * @param {AudioTracker} audioTracker
+ */
+function importTracker(content, audioTracker) {
+  if (content.tracker && isFinite(content.tracker.tempo)) {
+    audioTracker.dispatchEvent(new CustomEvent('tempo-change', { detail: content.tracker.tempo }))
+  }
 }
 
 /**
@@ -101,13 +112,14 @@ function importLinks(content, outputs, inputs, nodeEditor) {
  *
  * @param {FileContent} content
  * @param {HTMLElement} audioNodeEditor
- * @param {HTMLElement} audioTracker
+ * @param {AudioTracker} audioTracker
  */
 export default function importFile(content, audioTracker, audioNodeEditor) {
   /** @type {HTMLElement} */
   const nodeEditor = audioNodeEditor.shadowRoot.querySelector('w-node-editor')
 
   clearAll(audioTracker, audioNodeEditor)
+  importTracker(content, audioTracker)
   const trackLabels = importTracks(content, audioTracker)
   importAttributes(content.nodeEditor, nodeEditor)
   const { nodeOutputs, nodeInputs } = importNodes(content, trackLabels, nodeEditor)

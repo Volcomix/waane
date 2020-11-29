@@ -5,6 +5,7 @@ import { clearAllIds } from '../shared/helpers/id'
 
 /**
  * @typedef {import('../shared/node-editor/graph-node.js').default} GraphNode
+ * @typedef {import('../audio-tracker/audio-tracker.js').default} AudioTracker
  * @typedef {import('../audio-tracker/audio-track.js').default} AudioTrack
  */
 
@@ -26,6 +27,17 @@ const constantSourceMock = {
   stop: jest.fn(),
   connect: jest.fn(),
   disconnect: jest.fn(),
+}
+
+const bufferSourceMock = {
+  start: jest.fn(),
+  stop: jest.fn(),
+  connect: jest.fn(),
+  disconnect: jest.fn(),
+}
+
+const bufferMock = {
+  getChannelData: jest.fn(),
 }
 
 const gainMock = {
@@ -50,6 +62,8 @@ Object.defineProperty(window, 'AudioContext', {
     destination = {}
     createOscillator = () => oscillatorMock
     createConstantSource = () => constantSourceMock
+    createBufferSource = () => bufferSourceMock
+    createBuffer = () => bufferMock
     createGain = () => gainMock
     createBiquadFilter = () => biquadFilterMock
   },
@@ -142,7 +156,7 @@ export function setup(initialTabTextContent) {
   /** @type {HTMLElement} */
   const nodeEditor = audioNodeEditor.shadowRoot.querySelector('w-node-editor')
 
-  /** @type {HTMLElement} */
+  /** @type {AudioTracker} */
   const audioTracker = waaneApp.shadowRoot.querySelector('audio-tracker')
 
   /** @type {HTMLElement} */

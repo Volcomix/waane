@@ -13,6 +13,9 @@ import { clearAllIds } from '../shared/helpers/id.js'
  * @property {string} from
  * @property {string} to
  *
+ * @typedef {object} FileContentTracker
+ * @property {number} tempo
+ *
  * @typedef {object} FileContentTrack
  * @property {string} label
  * @property {Object<number, string>} effects
@@ -21,6 +24,7 @@ import { clearAllIds } from '../shared/helpers/id.js'
  * @property {Object<string, string>} nodeEditor
  * @property {FileContentNode[]} nodes
  * @property {FileContentLink[]} links
+ * @property {FileContentTracker} tracker
  * @property {FileContentTrack[]} tracks
  */
 
