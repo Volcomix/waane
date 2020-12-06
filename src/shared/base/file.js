@@ -2,6 +2,12 @@ import { css, defineCustomElement, html } from '../core/element.js'
 
 /**
  * @typedef {import('./tooltip.js').default} Tooltip
+ *
+ * @typedef {object} FileLoadEventDetail
+ * @property {string} name
+ * @property {ArrayBuffer} content
+ *
+ * @typedef {CustomEvent<FileLoadEventDetail>} FileLoadEvent
  */
 
 export default defineCustomElement('w-file', {
@@ -69,6 +75,18 @@ export default defineCustomElement('w-file', {
       fileName.textContent = file.name
       fileName.classList.add('file-selected')
       button.classList.add('file-selected')
+
+      const content = await file.arrayBuffer()
+
+      /** @type {FileLoadEvent} */
+      const fileLoadEvent = new CustomEvent('file-load', {
+        detail: {
+          name: file.name,
+          content,
+        },
+      })
+
+      host.dispatchEvent(fileLoadEvent)
     })
   },
 })
