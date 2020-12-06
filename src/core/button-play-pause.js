@@ -44,14 +44,14 @@ export default defineCustomElement('button-play-pause', {
   `,
   template: html`
     <w-tooltip text="${playTooltip}">
-      <w-button>
+      <w-icon-button>
         <w-icon>play_arrow</w-icon>
-      </w-button>
+      </w-icon-button>
     </w-tooltip>
     <w-tooltip text="${pauseTooltip}">
-      <w-button>
+      <w-icon-button>
         <w-icon>pause</w-icon>
-      </w-button>
+      </w-icon-button>
     </w-tooltip>
   `,
   properties: {

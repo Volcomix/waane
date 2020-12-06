@@ -61,9 +61,9 @@ export default defineCustomElement('waane-app', {
       <w-tab active>Nodes</w-tab>
       <div class="actions">
         <button-play-pause></button-play-pause>
-        <w-button>
+        <w-icon-button>
           <w-icon>more_vert</w-icon>
-        </w-button>
+        </w-icon-button>
         <w-menu>
           <w-menu-item id="new">
             <w-icon>create_new_folder</w-icon>
@@ -92,7 +92,7 @@ export default defineCustomElement('waane-app', {
     const buttonPlayPause = /** @type {ButtonPlayPause} */ (host.shadowRoot.querySelector('button-play-pause'))
 
     /** @type {HTMLElement} */
-    const buttonMore = host.shadowRoot.querySelector('w-button')
+    const buttonMore = host.shadowRoot.querySelector('w-icon-button')
 
     /** @type {Menu} */
     const menu = host.shadowRoot.querySelector('w-menu')

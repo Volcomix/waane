@@ -1,20 +1,17 @@
 import { css, defineCustomElement } from '../core/element.js'
-import typography from '../core/typography.js'
 
-export default defineCustomElement('w-button', {
+export default defineCustomElement('w-icon-button', {
   styles: css`
     :host {
+      width: 36px;
       height: 36px;
-      border-radius: 4px;
-      padding: 0 8px;
+      border-radius: 50%;
       display: flex;
       justify-content: center;
       align-items: center;
-      white-space: nowrap;
       cursor: pointer;
       user-select: none;
       transition: background-color 100ms var(--easing-standard);
-      ${typography('button')}
     }
 
     :host(:hover) {
