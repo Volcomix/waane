@@ -1,5 +1,9 @@
 import { css, defineCustomElement, html } from '../core/element.js'
 
+/**
+ * @typedef {import('./tooltip.js').default} Tooltip
+ */
+
 export default defineCustomElement('w-file', {
   styles: css`
     :host {
@@ -26,7 +30,6 @@ export default defineCustomElement('w-file', {
 
     span {
       overflow: hidden;
-      text-align: center;
       text-overflow: ellipsis;
       color: rgba(var(--color-on-surface) / var(--text-medium-emphasis));
       transition: color 200ms var(--easing-standard);
@@ -38,10 +41,16 @@ export default defineCustomElement('w-file', {
   `,
   template: html`
     <w-button><w-icon>cloud_upload</w-icon>Choose a file</w-button>
-    <span>No file selected</span>
+    <w-tooltip text="No file selected">
+      <span>No file selected</span>
+    </w-tooltip>
   `,
   setup({ host }) {
     const button = host.shadowRoot.querySelector('w-button')
+
+    /** @type {Tooltip} */
+    const tooltip = host.shadowRoot.querySelector('w-tooltip')
+
     const fileName = host.shadowRoot.querySelector('span')
 
     const input = document.createElement('input')
@@ -56,9 +65,10 @@ export default defineCustomElement('w-file', {
         return
       }
       const file = input.files[0]
+      tooltip.text = file.name
       fileName.textContent = file.name
-      button.classList.add('file-selected')
       fileName.classList.add('file-selected')
+      button.classList.add('file-selected')
     })
   },
 })
