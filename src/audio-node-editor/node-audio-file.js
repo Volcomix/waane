@@ -1,4 +1,5 @@
 import { defineCustomElement, html } from '../shared/core/element.js'
+import useAudioContext from './use-audio-context.js'
 
 /**
  * @typedef {import('../shared/base/file.js').FileLoadEvent} FileLoadEvent
@@ -14,11 +15,15 @@ export default defineCustomElement('node-audio-file', {
   `,
   shadow: false,
   setup({ host, connected }) {
+    const audioContext = useAudioContext()
+
     connected(() => {
       const fileInput = host.querySelector('w-file')
 
-      fileInput.addEventListener('file-load', (/** @type {FileLoadEvent} */ event) => {
-        console.log(event.detail.name, event.detail.content)
+      fileInput.addEventListener('file-load', async (event) => {
+        const fileLoadEvent = /** @type {FileLoadEvent} */ (event)
+        const audioBuffer = await audioContext.decodeAudioData(fileLoadEvent.detail.content)
+        console.log(fileLoadEvent.detail.name, audioBuffer.duration)
       })
     })
   },
