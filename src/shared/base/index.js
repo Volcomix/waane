@@ -1,5 +1,6 @@
 import './button.js'
 import './fab.js'
+import './file.js'
 import './icon-button.js'
 import './icon.js'
 import './menu-item.js'
