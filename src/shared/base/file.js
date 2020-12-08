@@ -1,4 +1,5 @@
 import { css, defineCustomElement, html } from '../core/element.js'
+import typography from '../core/typography.js'
 
 /**
  * @typedef {import('./tooltip.js').default} Tooltip
@@ -13,14 +14,14 @@ import { css, defineCustomElement, html } from '../core/element.js'
 export default defineCustomElement('w-file', {
   styles: css`
     :host {
-      width: 256px;
+      width: 208px;
       display: flex;
       flex-direction: column;
     }
 
     w-button {
       margin-bottom: 8px;
-      align-self: stretch;
+      align-self: center;
       color: rgba(var(--color-on-surface) / var(--text-high-emphasis));
       transition: color 200ms var(--easing-standard);
     }
@@ -37,8 +38,10 @@ export default defineCustomElement('w-file', {
     span {
       overflow: hidden;
       text-overflow: ellipsis;
+      white-space: nowrap;
       color: rgba(var(--color-on-surface) / var(--text-medium-emphasis));
       transition: color 200ms var(--easing-standard);
+      ${typography('body2')}
     }
 
     span.file-selected {
