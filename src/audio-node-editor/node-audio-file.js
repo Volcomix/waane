@@ -3,6 +3,7 @@ import useAudioContext from './use-audio-context.js'
 import { bindAudioInput, bindAudioOutput } from './use-audio-link.js'
 
 /**
+ * @typedef {import('../shared/base/file.js').default} FileInput
  * @typedef {import('../shared/base/file.js').FileLoadEvent} FileLoadEvent
  */
 
@@ -16,7 +17,11 @@ export default defineCustomElement('node-audio-file', {
     </w-graph-node>
   `,
   shadow: false,
-  setup({ host, connected }) {
+  properties: {
+    name: String,
+    hash: String,
+  },
+  setup({ host, connected, observe }) {
     const audioContext = useAudioContext()
 
     /** @type {Set<AudioNode>} */
@@ -58,15 +63,45 @@ export default defineCustomElement('node-audio-file', {
     }
 
     connected(() => {
+      /** @type {FileInput} */
       const fileInput = host.querySelector('w-file')
+
+      fileInput.name = host.name
+      audioBuffer = audioBuffers.get(host.hash)
 
       bindAudioOutput(host.querySelector('w-graph-node-output'), audioFile)
       bindAudioInput(host.querySelector('w-graph-node-input'), audioFile)
 
+      observe('name', () => {
+        fileInput.name = host.name
+      })
+
+      observe('hash', () => {
+        audioBuffer = audioBuffers.get(host.hash)
+      })
+
       fileInput.addEventListener('file-load', async (event) => {
-        const fileLoadEvent = /** @type {FileLoadEvent} */ (event)
-        audioBuffer = await audioContext.decodeAudioData(fileLoadEvent.detail.content)
+        const { name, content } = /** @type {FileLoadEvent} */ (event).detail
+        host.name = name
+
+        // Do not update host.hash before decoding audio data
+        const hash = await computeHash(content)
+        if (!audioBuffers.has(hash)) {
+          audioBuffers.set(hash, await audioContext.decodeAudioData(content))
+        }
+        host.hash = hash
       })
     })
   },
 })
+
+/** @type {Map<string, AudioBuffer>} */
+const audioBuffers = new Map()
+
+/**
+ * @param {ArrayBuffer} arrayBuffer
+ */
+async function computeHash(arrayBuffer) {
+  const digest = await crypto.subtle.digest('SHA-256', arrayBuffer)
+  return [...new Uint8Array(digest)].map((v) => v.toString(16).padStart(2, '0')).join('')
+}

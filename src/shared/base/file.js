@@ -26,7 +26,7 @@ export default defineCustomElement('w-file', {
       transition: color 200ms var(--easing-standard);
     }
 
-    w-button.file-selected {
+    :host([name]) w-button {
       color: rgba(var(--color-on-surface) / var(--text-medium-emphasis));
     }
 
@@ -44,7 +44,7 @@ export default defineCustomElement('w-file', {
       ${typography('body2')}
     }
 
-    span.file-selected {
+    :host([name]) span {
       color: rgba(var(--color-on-surface) / var(--text-high-emphasis));
     }
   `,
@@ -54,9 +54,10 @@ export default defineCustomElement('w-file', {
       <span>No file selected</span>
     </w-tooltip>
   `,
-  setup({ host }) {
-    const button = host.shadowRoot.querySelector('w-button')
-
+  properties: {
+    name: String,
+  },
+  setup({ host, observe }) {
     /** @type {Tooltip} */
     const tooltip = host.shadowRoot.querySelector('w-tooltip')
 
@@ -64,6 +65,11 @@ export default defineCustomElement('w-file', {
 
     const input = document.createElement('input')
     input.type = 'file'
+
+    observe('name', () => {
+      tooltip.text = host.name
+      fileName.textContent = host.name
+    })
 
     host.addEventListener('click', () => {
       input.click()
@@ -74,11 +80,7 @@ export default defineCustomElement('w-file', {
         return
       }
       const file = input.files[0]
-      tooltip.text = file.name
-      fileName.textContent = file.name
-      fileName.classList.add('file-selected')
-      button.classList.add('file-selected')
-
+      host.name = file.name
       const content = await file.arrayBuffer()
 
       /** @type {FileLoadEvent} */
