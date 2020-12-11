@@ -25,6 +25,7 @@ test('opens context menu on node editor', () => {
     expect.stringContaining('White noise'),
     expect.stringContaining('Gain'),
     expect.stringContaining('Biquad filter'),
+    expect.stringContaining('Analyser'),
     expect.stringContaining('Audio destination'),
   ])
   document.body.dispatchEvent(new MouseEvent('mousedown'))

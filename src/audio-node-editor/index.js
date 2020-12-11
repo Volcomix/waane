@@ -1,4 +1,5 @@
 import './audio-node-editor.js'
+import './node-analyser.js'
 import './node-audio-destination.js'
 import './node-audio-file.js'
 import './node-biquad-filter.js'

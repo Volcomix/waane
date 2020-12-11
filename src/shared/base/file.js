@@ -21,18 +21,11 @@ export default defineCustomElement('w-file', {
 
     w-button {
       margin-bottom: 8px;
-      align-self: center;
-      color: rgba(var(--color-on-surface) / var(--text-high-emphasis));
       transition: color 200ms var(--easing-standard);
     }
 
     :host([name]) w-button {
       color: rgba(var(--color-on-surface) / var(--text-medium-emphasis));
-    }
-
-    w-icon {
-      margin-right: 8px;
-      font-size: 18px;
     }
 
     span {

@@ -24,5 +24,10 @@ export default defineCustomElement('w-button', {
     :host(:active) {
       background-color: rgba(var(--color-on-surface) / 0.16);
     }
+
+    ::slotted(w-icon) {
+      margin-right: 8px;
+      font-size: 18px;
+    }
   `,
 })

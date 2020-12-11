@@ -1,4 +1,5 @@
 import { css, defineCustomElement, html } from '../core/element.js'
+import typography from '../core/typography.js'
 import { nextId } from '../helpers/id.js'
 
 /**
@@ -8,9 +9,12 @@ import { nextId } from '../helpers/id.js'
 export default defineCustomElement('w-graph-node-output', {
   styles: css`
     :host {
+      min-height: 48px;
       display: flex;
       justify-content: flex-end;
       align-items: center;
+      color: rgba(var(--color-on-surface) / var(--text-medium-emphasis));
+      ${typography('body1')}
     }
 
     w-graph-node-socket {
