@@ -67,6 +67,11 @@ const biquadFilterMock = {
   disconnect: jest.fn(),
 }
 
+const analyserMock = {
+  connect: jest.fn(),
+  disconnect: jest.fn(),
+}
+
 Object.defineProperty(window, 'AudioContext', {
   writable: true,
   value: class {
@@ -77,7 +82,7 @@ Object.defineProperty(window, 'AudioContext', {
     createBuffer = bufferMock
     createGain = () => gainMock
     createBiquadFilter = () => biquadFilterMock
-    createAnalyser = jest.fn()
+    createAnalyser = () => analyserMock
   },
 })
 

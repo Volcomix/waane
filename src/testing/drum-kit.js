@@ -1,8 +1,8 @@
 export default {
   nodeEditor: {
-    zoom: '0.44299999999999995',
-    'pan-x': '-911.6745857876055',
-    'pan-y': '-440.19788067128013',
+    zoom: '0.5489999999999999',
+    'pan-x': '-724.2746514513758',
+    'pan-y': '-74.4442450575581',
   },
   nodes: [
     {
@@ -709,8 +709,8 @@ export default {
     },
     {
       name: 'node-analyser',
-      x: 2129.5864318954846,
-      y: -661.7715651685855,
+      x: 1979.1003764087022,
+      y: -666.2862378548158,
       attributes: {},
       outputs: ['output-64'],
       inputs: ['input-122'],
@@ -886,10 +886,6 @@ export default {
       to: 'input-63',
     },
     {
-      from: 'output-9',
-      to: 'input-72',
-    },
-    {
       from: 'output-22',
       to: 'input-60',
     },
@@ -1056,6 +1052,10 @@ export default {
     {
       from: 'output-9',
       to: 'input-122',
+    },
+    {
+      from: 'output-64',
+      to: 'input-72',
     },
   ],
   tracker: {
