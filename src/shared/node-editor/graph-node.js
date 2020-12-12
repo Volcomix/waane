@@ -69,14 +69,9 @@ export default defineCustomElement('w-graph-node', {
       display: flex;
       align-items: center;
       height: 32px;
-      margin-right: 24px;
+      margin-right: 32px;
       white-space: nowrap;
       ${typography('headline6')}
-    }
-
-    slot:not([name])::slotted(*) {
-      margin-top: 8px;
-      margin-bottom: 16px;
     }
   `,
   template: html`

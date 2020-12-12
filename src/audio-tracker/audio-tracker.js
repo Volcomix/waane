@@ -56,11 +56,6 @@ export default defineCustomElement('audio-tracker', {
       flex-direction: column;
     }
 
-    aside > * {
-      margin-top: 8px;
-      margin-bottom: 16px;
-    }
-
     .tracks {
       flex: 1;
       display: flex;

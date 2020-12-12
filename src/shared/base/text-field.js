@@ -13,6 +13,8 @@ export default defineCustomElement('w-text-field', {
       position: relative;
       min-width: 140px;
       height: 48px;
+      margin-top: 8px;
+      margin-bottom: 16px;
       display: flex;
       border-bottom: 1px solid rgba(var(--color-on-surface) / 0.42);
       border-radius: 4px 4px 0 0;

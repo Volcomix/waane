@@ -29,6 +29,7 @@ export default defineCustomElement('w-file', {
     }
 
     span {
+      margin-bottom: 8px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;

@@ -16,6 +16,7 @@ export default defineCustomElement('w-select', {
       position: absolute;
       top: 100%;
       width: 100%;
+      margin-top: -16px;
     }
 
     w-text-field {
