@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Viz</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      html,
+      body {
+        height: 100%;
+      }
+
+      body {
+        margin: 0;
+      }
+
+      input {
+        position: absolute;
+        outline: none;
+      }
+
+      canvas {
+        position: relative;
+        z-index: 1;
+        pointer-events: none;
+      }
+
+      input,
+      canvas {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <input type="file" oninput="handleFileInput(event)" />
+    <canvas></canvas>
+
+    <script>
+      /** @type {AudioContext} */
+      let audioContext = null
+
+      /** @type {number} */
+      let drawVisual = null
+
+      const canvas = document.body.querySelector('canvas')
+      const canvasContext = canvas.getContext('2d')
+
+      /** @type {AudioBuffer} */
+      let audioBuffer = null
+
+      /** @type {AnalyserNode} */
+      let analyzer = null
+
+      /** @type {Uint8Array} */
+      let analyserDataArray = null
+
+      let nextColumn = 0
+
+      async function handleFileInput(event) {
+        if (audioContext === null) {
+          audioContext = new AudioContext()
+        }
+
+        if (event.target.files.length === 0) {
+          cancelAnimationFrame(drawVisual)
+          drawVisual = null
+          canvasContext.clearRect(0, 0, canvas.width, canvas.height)
+          nextColumn = 0
+          return
+        }
+
+        /** @type {File} */
+        const file = event.target.files[0]
+        const fileBuffer = await file.arrayBuffer()
+
+        audioBuffer = await audioContext.decodeAudioData(fileBuffer)
+
+        const bufferSource = audioContext.createBufferSource()
+        bufferSource.buffer = audioBuffer
+
+        analyser = audioContext.createAnalyser()
+        analyser.fftSize = 2048
+        analyser.smoothingTimeConstant = 0
+        bufferSource.connect(analyser)
+
+        analyserDataArray = new Uint8Array(analyser.frequencyBinCount)
+
+        bufferSource.start()
+
+        if (drawVisual !== null) {
+          cancelAnimationFrame(drawVisual)
+          drawVisual = null
+        }
+
+        canvas.width = audioBuffer.duration * 60
+        canvas.height = analyser.frequencyBinCount
+
+        canvasContext.clearRect(0, 0, canvas.width, canvas.height)
+        nextColumn = 0
+        draw()
+      }
+
+      function draw() {
+        if (nextColumn >= canvas.width) {
+          return
+        }
+        drawVisual = requestAnimationFrame(draw)
+        analyser.getByteFrequencyData(analyserDataArray)
+        for (let i = 0; i < analyser.frequencyBinCount; i++) {
+          const value = analyserDataArray[i]
+          const [r, g, b] = getColor(value)
+          canvasContext.fillStyle = `rgb(${r} ${g} ${b})`
+          canvasContext.fillRect(nextColumn, analyser.frequencyBinCount - i, 1, 1)
+        }
+        nextColumn++
+      }
+
+      const colors = [
+        [0, 0, 0],
+        [0, 0, 128],
+        [0, 128, 255],
+        [0, 255, 0],
+        [255, 255, 0],
+        [255, 128, 0],
+        [255, 0, 0],
+      ]
+
+      /**
+       * @param {number} value
+       */
+      function getColor(value) {
+        const colorPosition = ((colors.length - 1) * value) / 256
+        const colorIndex = Math.floor(colorPosition)
+        const positionInColor = colorPosition - colorIndex
+        const [r1, g1, b1] = colors[colorIndex]
+        const [r2, g2, b2] = colors[colorIndex + 1]
+        return [
+          Math.min(r1, r2) + Math.abs(r1 - r2) * positionInColor,
+          Math.min(g1, g2) + Math.abs(g1 - g2) * positionInColor,
+          Math.min(b1, b2) + Math.abs(b1 - b2) * positionInColor,
+        ]
+      }
+    </script>
+  </body>
+</html>
