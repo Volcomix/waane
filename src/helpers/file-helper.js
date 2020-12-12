@@ -27,12 +27,19 @@ import { defaultPanX, defaultPanY, defaultZoom } from '../shared/node-editor/use
  * @property {string} label
  * @property {Object<number, string>} effects
  *
+ * @typedef {object} FileContentAudioFile
+ * @property {string} hash
+ * @property {number} length
+ * @property {number} sampleRate
+ * @property {string[]} channels
+ *
  * @typedef {object} FileContent
  * @property {Object<string, string>} nodeEditor
  * @property {FileContentNode[]} nodes
  * @property {FileContentLink[]} links
  * @property {FileContentTracker} tracker
  * @property {FileContentTrack[]} tracks
+ * @property {FileContentAudioFile[]} audioFiles
  */
 
 /**

@@ -1,3 +1,5 @@
+import { audioBuffers } from '../audio-node-editor/node-audio-file.js'
+import useAudioContext from '../audio-node-editor/use-audio-context.js'
 import { clearAll } from './file-helper.js'
 
 /**
@@ -60,6 +62,27 @@ function importTracks(content, audioTracker) {
     trackLabels.set(track.label, audioTrack.label)
   })
   return trackLabels
+}
+
+/**
+ * @param {FileContent} content
+ */
+function importAudioFiles(content) {
+  if (!content.audioFiles) {
+    return
+  }
+  const audioContext = useAudioContext()
+  content.audioFiles.forEach((audioFile) => {
+    const audioBuffer = audioContext.createBuffer(audioFile.channels.length, audioFile.length, audioFile.sampleRate)
+    audioFile.channels.forEach((encodedchannelData, channel) => {
+      const channelData = new Uint8Array(audioBuffer.getChannelData(channel).buffer)
+      const decodedChannelData = atob(encodedchannelData)
+      for (let i = 0; i < decodedChannelData.length; i++) {
+        channelData[i] = decodedChannelData.charCodeAt(i)
+      }
+    })
+    audioBuffers.set(audioFile.hash, audioBuffer)
+  })
 }
 
 /**
@@ -131,6 +154,7 @@ export default function importFile(content, audioTracker, audioNodeEditor) {
   importTracker(content, audioTracker)
   const trackLabels = importTracks(content, audioTracker)
   importAttributes(content.nodeEditor, nodeEditor)
+  importAudioFiles(content)
   const { nodeOutputs, nodeInputs } = importNodes(content, trackLabels, nodeEditor)
   let wasAudioNodeEditorHidden = false
   if (audioNodeEditor.hidden) {

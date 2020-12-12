@@ -1,6 +1,9 @@
+import { audioBuffers } from '../audio-node-editor/node-audio-file.js'
+
 /**
  * @typedef {import('../shared/node-editor/graph-node.js').default} GraphNode
  * @typedef {import('../shared/node-editor/graph-link.js').default} GraphLink
+ * @typedef {import('../audio-node-editor/node-audio-file.js').default} NodeAudioFile
  * @typedef {import('../audio-tracker/audio-tracker.js').default} AudioTracker
  * @typedef {import('../audio-tracker/audio-track.js').default} AudioTrack
  * @typedef {import('../audio-tracker/track-effect.js').default} TrackEffect
@@ -83,6 +86,27 @@ function exportTracks(audioTracker) {
     }),
   )
 }
+/**
+ * @param {HTMLElement} audioNodeEditor
+ */
+function exportAudioFiles(audioNodeEditor) {
+  const audioFiles = [
+    .../** @type {NodeListOf<NodeAudioFile>} */ (audioNodeEditor.shadowRoot.querySelectorAll('node-audio-file')),
+  ]
+  const hashes = [...new Set(audioFiles.map((audioFile) => audioFile.hash).filter((hash) => hash))]
+  return hashes.map((hash) => {
+    const audioBuffer = audioBuffers.get(hash)
+    return {
+      hash,
+      length: audioBuffer.length,
+      sampleRate: audioBuffer.sampleRate,
+      channels: Array.from({ length: audioBuffer.numberOfChannels }, (_, channel) => {
+        const channelData = new Uint8Array(audioBuffer.getChannelData(channel).buffer)
+        return btoa([...channelData].map((codeUnit) => String.fromCharCode(codeUnit)).join(''))
+      }),
+    }
+  })
+}
 
 /**
  * @param {AudioTracker} audioTracker
@@ -96,5 +120,6 @@ export default function exportFile(audioTracker, audioNodeEditor) {
     links: exportLinks(audioNodeEditor),
     tracker: exportTracker(audioTracker),
     tracks: exportTracks(audioTracker),
+    audioFiles: exportAudioFiles(audioNodeEditor),
   }
 }

@@ -1073,4 +1073,5 @@ export default {
       },
     },
   ],
+  audioFiles: [],
 }

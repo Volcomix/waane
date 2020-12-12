@@ -96,7 +96,7 @@ export default defineCustomElement('node-audio-file', {
 })
 
 /** @type {Map<string, AudioBuffer>} */
-const audioBuffers = new Map()
+export const audioBuffers = new Map()
 
 /**
  * @param {ArrayBuffer} arrayBuffer
