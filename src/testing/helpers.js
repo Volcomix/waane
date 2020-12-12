@@ -165,16 +165,17 @@ export function setup(initialTabTextContent) {
 
   document.body.innerHTML = html`<waane-app></waane-app>`
   const waaneApp = document.body.querySelector('waane-app')
-  const tabs = [.../** @type {NodeListOf<HTMLElement>} */ (waaneApp.shadowRoot.querySelectorAll('w-tab'))]
+  const audioEditor = waaneApp.shadowRoot.querySelector('audio-editor')
+  const tabs = [.../** @type {NodeListOf<HTMLElement>} */ (audioEditor.shadowRoot.querySelectorAll('w-tab'))]
 
   /** @type {HTMLElement} */
-  const audioNodeEditor = waaneApp.shadowRoot.querySelector('audio-node-editor')
+  const audioNodeEditor = audioEditor.shadowRoot.querySelector('audio-node-editor')
 
   /** @type {HTMLElement} */
   const nodeEditor = audioNodeEditor.shadowRoot.querySelector('w-node-editor')
 
   /** @type {AudioTracker} */
-  const audioTracker = waaneApp.shadowRoot.querySelector('audio-tracker')
+  const audioTracker = audioEditor.shadowRoot.querySelector('audio-tracker')
 
   /** @type {HTMLElement} */
   const addButton = audioTracker.shadowRoot.querySelector('w-fab')
@@ -188,7 +189,7 @@ export function setup(initialTabTextContent) {
   }
 
   function getMenuItems() {
-    const view = waaneApp.shadowRoot.querySelector('main > [active]')
+    const view = audioEditor.shadowRoot.querySelector('main > [active]')
     return [.../** @type {NodeListOf<HTMLElement>} */ (view.shadowRoot.querySelectorAll('w-menu[open] w-menu-item'))]
   }
 

@@ -17,8 +17,15 @@ export default defineCustomElement('node-analyser', {
     const analyser = audioContext.createAnalyser()
 
     connected(() => {
+      /** @type {HTMLElement} */
+      const button = host.querySelector('w-button')
+
       bindAudioOutput(host.querySelector('w-graph-node-output'), analyser)
       bindAudioInput(host.querySelector('w-graph-node-input'), analyser)
+
+      button.addEventListener('click', () => {
+        window.open('/analyser')
+      })
     })
   },
 })

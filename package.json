@@ -7,8 +7,7 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "start": "live-server --no-browser src",
-    "serve": "cd src && python3 -m http.server 8080",
+    "start": "live-server --entry-file=/ --no-browser src",
     "jest": "npx --node-arg=--experimental-vm-modules jest",
     "test": "yarn jest --watch",
     "test:ci": "yarn jest",
