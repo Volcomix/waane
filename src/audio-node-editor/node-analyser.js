@@ -24,7 +24,7 @@ export default defineCustomElement('node-analyser', {
       bindAudioInput(host.querySelector('w-graph-node-input'), analyser)
 
       button.addEventListener('click', () => {
-        window.open('/analyser')
+        window.open('analyser')
       })
     })
   },
