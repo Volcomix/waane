@@ -7,6 +7,17 @@ import { bindAudioInput, bindAudioOutput } from './use-audio-link.js'
  * @typedef {import('../shared/base/file.js').FileLoadEvent} FileLoadEvent
  */
 
+/** @type {Map<string, AudioBuffer>} */
+export const audioBuffers = new Map()
+
+/**
+ * @param {ArrayBuffer} arrayBuffer
+ */
+async function computeHash(arrayBuffer) {
+  const digest = await crypto.subtle.digest('SHA-256', arrayBuffer)
+  return [...new Uint8Array(digest)].map((v) => v.toString(16).padStart(2, '0')).join('')
+}
+
 export default defineCustomElement('node-audio-file', {
   template: html`
     <w-graph-node>
@@ -94,14 +105,3 @@ export default defineCustomElement('node-audio-file', {
     })
   },
 })
-
-/** @type {Map<string, AudioBuffer>} */
-export const audioBuffers = new Map()
-
-/**
- * @param {ArrayBuffer} arrayBuffer
- */
-async function computeHash(arrayBuffer) {
-  const digest = await crypto.subtle.digest('SHA-256', arrayBuffer)
-  return [...new Uint8Array(digest)].map((v) => v.toString(16).padStart(2, '0')).join('')
-}
