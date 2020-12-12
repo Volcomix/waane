@@ -28,6 +28,7 @@ export default defineCustomElement('w-button', {
     ::slotted(w-icon) {
       margin-right: 8px;
       font-size: 18px;
+      pointer-events: none;
     }
   `,
 })
