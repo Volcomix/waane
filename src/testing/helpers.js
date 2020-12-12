@@ -36,8 +36,19 @@ const bufferSourceMock = {
   disconnect: jest.fn(),
 }
 
-const bufferMock = {
-  getChannelData: jest.fn(),
+/**
+ * @param {number} numberOfChannels
+ * @param {number} length
+ * @param {number} sampleRate
+ */
+function bufferMock(numberOfChannels, length, sampleRate) {
+  const channels = Array.from({ length: numberOfChannels }, () => new Float32Array(length))
+  return {
+    numberOfChannels,
+    length,
+    sampleRate,
+    getChannelData: jest.fn((/** @type {number} */ channel) => channels[channel]),
+  }
 }
 
 const gainMock = {
@@ -63,9 +74,10 @@ Object.defineProperty(window, 'AudioContext', {
     createOscillator = () => oscillatorMock
     createConstantSource = () => constantSourceMock
     createBufferSource = () => bufferSourceMock
-    createBuffer = () => bufferMock
+    createBuffer = bufferMock
     createGain = () => gainMock
     createBiquadFilter = () => biquadFilterMock
+    createAnalyser = jest.fn()
   },
 })
 
