@@ -16,6 +16,7 @@ export default defineCustomElement('node-analyser', {
   setup({ host, connected, disconnected }) {
     const audioContext = useAudioContext()
     const analyser = audioContext.createAnalyser()
+    analyser.smoothingTimeConstant = 0
     const frequencyData = new Uint8Array(analyser.frequencyBinCount)
 
     const analyserId = `analyser-${nextId('analyser')}`
@@ -37,9 +38,28 @@ export default defineCustomElement('node-analyser', {
       if (!analyserWindow?.document?.body) {
         return
       }
+      const waaneApp = analyserWindow.document.body.querySelector('waane-app')
+      if (!waaneApp?.shadowRoot) {
+        return
+      }
+      const audioAnalyser = waaneApp.shadowRoot.querySelector('audio-analyser')
+      if (!audioAnalyser?.shadowRoot) {
+        return
+      }
+      const canvas = audioAnalyser.shadowRoot.querySelector('canvas')
+      if (!canvas) {
+        return
+      }
       analyser.getByteFrequencyData(frequencyData)
-      const maxDecibel = frequencyData.reduce((max, value) => Math.max(value, max), -Infinity)
-      analyserWindow.document.body.innerText = `Max decibel: ${maxDecibel}`
+      const x = canvas.width - 1
+      const canvasContext = canvas.getContext('2d')
+      const previousImageData = canvasContext.getImageData(1, 0, x, canvas.height)
+      canvasContext.putImageData(previousImageData, 0, 0)
+      const newColumn = canvasContext.getImageData(x, 0, 1, canvas.height)
+      for (let y = 0; y < frequencyData.length; y++) {
+        newColumn.data[frequencyData.length - y - 1] = frequencyData[y]
+      }
+      canvasContext.putImageData(newColumn, x, 0)
     }
 
     connected(() => {
