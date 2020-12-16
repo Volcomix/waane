@@ -41,8 +41,12 @@ export default defineCustomElement('node-analyser', {
       const previousImageData = canvasContext.getImageData(1, 0, x, canvas.height)
       canvasContext.putImageData(previousImageData, 0, 0)
       const newColumn = canvasContext.getImageData(x, 0, 1, canvas.height)
-      for (let y = 0; y < frequencyData.length; y++) {
-        newColumn.data[frequencyData.length - y - 1] = frequencyData[y]
+      for (let i = 0; i < frequencyData.length; i++) {
+        const y = 4 * (frequencyData.length - i - 1)
+        newColumn.data[y] = frequencyData[i]
+        newColumn.data[y + 1] = frequencyData[i]
+        newColumn.data[y + 2] = frequencyData[i]
+        newColumn.data[y + 3] = frequencyData[i]
       }
       canvasContext.putImageData(newColumn, x, 0)
     }
@@ -64,9 +68,10 @@ export default defineCustomElement('node-analyser', {
       const waaneApp = analyserWindow.document.body.querySelector('waane-app')
       const audioAnalyser = waaneApp.shadowRoot.querySelector('audio-analyser')
       canvas = audioAnalyser.shadowRoot.querySelector('canvas')
-      canvas.width = 10 * 60
+      canvas.width = 2 * 60
       canvas.height = analyser.frequencyBinCount
       canvasContext = canvas.getContext('2d')
+
       analyse()
 
       analyserWindow.addEventListener('unload', handleAnalyserWindowUnload)
