@@ -12,9 +12,4 @@ defineCustomElement('audio-analyser', {
     }
   `,
   template: html`<canvas></canvas>`,
-  setup({ host }) {
-    const canvas = host.shadowRoot.querySelector('canvas')
-    canvas.width = 10 * 60
-    canvas.height = 1024
-  },
 })

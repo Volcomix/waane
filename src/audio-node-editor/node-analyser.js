@@ -27,32 +27,17 @@ export default defineCustomElement('node-analyser', {
     /** @type {number} */
     let analyseRequestId = null
 
-    function closeAnalyserWindow() {
-      if (analyserWindow) {
-        analyserWindow.close()
-      }
-    }
+    /** @type {HTMLCanvasElement} */
+    let canvas = null
+
+    /** @type {CanvasRenderingContext2D} */
+    let canvasContext = null
 
     function analyse() {
-      analyseRequestId = requestAnimationFrame(analyse)
-      if (!analyserWindow?.document?.body) {
-        return
-      }
-      const waaneApp = analyserWindow.document.body.querySelector('waane-app')
-      if (!waaneApp?.shadowRoot) {
-        return
-      }
-      const audioAnalyser = waaneApp.shadowRoot.querySelector('audio-analyser')
-      if (!audioAnalyser?.shadowRoot) {
-        return
-      }
-      const canvas = audioAnalyser.shadowRoot.querySelector('canvas')
-      if (!canvas) {
-        return
-      }
+      analyseRequestId = analyserWindow.requestAnimationFrame(analyse)
+
       analyser.getByteFrequencyData(frequencyData)
       const x = canvas.width - 1
-      const canvasContext = canvas.getContext('2d')
       const previousImageData = canvasContext.getImageData(1, 0, x, canvas.height)
       canvasContext.putImageData(previousImageData, 0, 0)
       const newColumn = canvasContext.getImageData(x, 0, 1, canvas.height)
@@ -62,6 +47,31 @@ export default defineCustomElement('node-analyser', {
       canvasContext.putImageData(newColumn, x, 0)
     }
 
+    function closeAnalyserWindow() {
+      if (analyserWindow) {
+        analyserWindow.close()
+      }
+    }
+
+    function handleAnalyserWindowUnload() {
+      analyserWindow.cancelAnimationFrame(analyseRequestId)
+      analyserWindow = null
+      canvas = null
+      canvasContext = null
+    }
+
+    function handleAnalyserWindowLoad() {
+      const waaneApp = analyserWindow.document.body.querySelector('waane-app')
+      const audioAnalyser = waaneApp.shadowRoot.querySelector('audio-analyser')
+      canvas = audioAnalyser.shadowRoot.querySelector('canvas')
+      canvas.width = 10 * 60
+      canvas.height = analyser.frequencyBinCount
+      canvasContext = canvas.getContext('2d')
+      analyse()
+
+      analyserWindow.addEventListener('unload', handleAnalyserWindowUnload)
+    }
+
     connected(() => {
       /** @type {HTMLElement} */
       const button = host.querySelector('w-button')
@@ -69,17 +79,19 @@ export default defineCustomElement('node-analyser', {
       bindAudioOutput(host.querySelector('w-graph-node-output'), analyser)
       bindAudioInput(host.querySelector('w-graph-node-input'), analyser)
 
-      analyse()
-
       window.addEventListener('unload', closeAnalyserWindow)
 
       button.addEventListener('click', () => {
-        analyserWindow = window.open('analyser', analyserId, 'width=800,height=600')
+        if (analyserWindow === null) {
+          analyserWindow = window.open('analyser', analyserId, 'width=800,height=600')
+          analyserWindow.addEventListener('load', handleAnalyserWindowLoad)
+        } else {
+          analyserWindow.focus()
+        }
       })
     })
 
     disconnected(() => {
-      cancelAnimationFrame(analyseRequestId)
       closeAnalyserWindow()
       window.removeEventListener('unload', closeAnalyserWindow)
     })
