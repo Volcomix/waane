@@ -8,7 +8,7 @@
   "type": "module",
   "scripts": {
     "start": "live-server --entry-file=/ --no-browser src",
-    "jest": "NODE_OPTIONS=--experimental-vm-modules npx jest",
+    "jest": "NODE_OPTIONS=--experimental-vm-modules npx jest --env=jsdom",
     "test": "yarn jest --watch",
     "test:ci": "yarn jest",
     "typecheck": "npx -p typescript tsc -p jsconfig.json"
