@@ -1,33 +1,15 @@
 name: CI
 on: push
 jobs:
-  build:
-    name: Test and deploy
+  test:
+    name: Test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Setup node
-        uses: actions/setup-node@v1
-        with:
-          node-version: '14'
+        uses: actions/checkout@main
 
       - name: Install dependencies
         run: yarn
 
       - name: Test
         run: yarn test:ci
-
-      - name: Deploy
-        if: ${{ github.ref == 'refs/heads/master' }}
-        run: |
-          rsync -r --exclude=__tests__ src/ dist
-          cd dist
-          cp index.html 404.html
-          git init
-          git config user.email "github-actions@users.noreply.github.com"
-          git config user.name "GitHub Actions"
-          git add -A
-          git commit -m 'deploy'
-          git push -f https://x-access-token:${{ github.token }}@github.com/${{ github.repository }} master:gh-pages
