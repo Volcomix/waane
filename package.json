@@ -15,7 +15,7 @@
   },
   "devDependencies": {
     "@jest/globals": "^27.0.6",
-    "jest": "^27.0.6",
+    "jest": "^27.2.4",
     "live-server": "^1.2.1"
   }
 }
