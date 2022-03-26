@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Web Audio API Node Editor</title>
+    <meta name="description" content="Digital Audio Workstation combining a tracker and a node editor" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      html,
+      body {
+        height: 100%;
+      }
+
+      body.dark {
+        --color-primary: 187 134 252;
+        --color-secondary: 3 218 198;
+        --color-additional1: 134 140 252;
+        --color-additional2: 204 204 204;
+        --color-background: 18 18 18;
+        --color-surface: 18 18 18;
+        --color-error: 207 102 121;
+
+        --color-on-primary: 0 0 0;
+        --color-on-secondary: 0 0 0;
+        --color-on-background: 255 255 255;
+        --color-on-surface: 255 255 255;
+
+        --shadow: initial;
+        --overlay: initial;
+      }
+    </style>
+  </head>
+  <body class="dark">
+    <waane-app></waane-app>
+    <script async type="module" src="./index.js"></script>
+  </body>
+</html>
