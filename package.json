@@ -14,7 +14,7 @@
     "typecheck": "npx -p typescript tsc -p jsconfig.json"
   },
   "devDependencies": {
-    "@jest/globals": "^27.5.1",
+    "@jest/globals": "^29.2.2",
     "jest": "^27.5.1",
     "live-server": "^1.2.1"
   }
